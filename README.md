@@ -1,6 +1,6 @@
 # Vektoranalysis
 
-![AVR Logo](http://webhome.hs-kl.de/~brill/Assets/images/vrlogo.jpg)
+![AVR Logo](http://webhome.hs-kl.de/~brill/Assets/images/compuMath.jpg)
 
 Demos für das Praktikum zur Lehrveranstaltung Augmented und Virtual Reality. 
 VR-Anwendungen für den Einsatz von Immersive Learning in Mathematik-Lehrversstaltungen zum Thema **Vektoranalysis**.
