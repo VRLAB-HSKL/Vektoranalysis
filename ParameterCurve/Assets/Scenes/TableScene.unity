@@ -10685,7 +10685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RootElement: {fileID: 1491645188}
   DisplayLR: {fileID: 1689212564}
-  CSV_File: {fileID: 4900000, guid: 1ceba3d2d99de3c4583d62b1dde36167, type: 3}
+  CSV_File: {fileID: 4900000, guid: a3e3b04062f996245ba82a45908f0f48, type: 3}
   rangeStart: -2
   rangeEnd: 4
   numPoints: 100

@@ -13,17 +13,21 @@ public class ParamCurve : MonoBehaviour
     public GameObject RootElement;
     public LineRenderer DisplayLR;
     public TextAsset CSV_File;
+    public float PointScaleFactor = 1f;
+    public bool SwapYZCoordinates = false;
 
-    public float rangeStart = -2f;
-    public float rangeEnd = 4f;
-    public float numPoints = 100f;
+    //public float rangeStart = -2f;
+    //public float rangeEnd = 4f;
+    //public float numPoints = 100f;
 
-    private List<Vector2> points;
+    private List<Vector3> points;
     private List<Vector3> worldPoints;
     private Func<float, float> current_f_Function = FCalc01;
     private Func<float, float> current_g_Function = FCalc02;
     
-    private NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };    
+    private NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+
+    private bool csvIs3D = false;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +35,7 @@ public class ParamCurve : MonoBehaviour
         current_f_Function = FCalc01;
         current_g_Function = GCalc01;
         //displayLR = GetComponent<LineRenderer>();
-        WriteSampleCurveCoordinates(@"C:\Users\user\Desktop\curveTest\");
+        //WriteSampleCurveCoordinates(@"C:\Users\user\Desktop\curveTest\");
 
         if(CSV_File != null)
         {
@@ -56,46 +60,47 @@ public class ParamCurve : MonoBehaviour
         if (DisplayLR is null)
             Debug.Log("Failed to get line renderer component");
 
-        DisplayLR.positionCount = 100;
+        DisplayLR.positionCount = worldPoints.Count;
         DisplayLR.SetPositions(worldPoints.ToArray());
     }
 
-    private void CalculatePoints()
-    {
-        points = new List<Vector2>();
-        worldPoints = new List<Vector3>();
-        float increment = (rangeEnd - rangeStart) / (float)numPoints;
+    //private void CalculatePoints()
+    //{
+    //    points = new List<Vector2>();
+    //    worldPoints = new List<Vector3>();
+    //    float increment = (rangeEnd - rangeStart) / (float)numPoints;
 
-        //float yOffset = 1;
+    //    //float yOffset = 1;
 
-        //Debug.Log("Increment: " + increment);
+    //    //Debug.Log("Increment: " + increment);
 
-        for (int i = 0; i < numPoints; i++)
-        {
-            float tVal = rangeStart + i * increment;
-            //Debug.Log("i: " + i + ", tVal: " + tVal);
-            float ft = current_f_Function(tVal);
-            float gt = current_g_Function(tVal);
-            points.Add(new Vector2((float)ft, (float)gt));
+    //    for (int i = 0; i < numPoints; i++)
+    //    {
+    //        float tVal = rangeStart + i * increment;
+    //        //Debug.Log("i: " + i + ", tVal: " + tVal);
+    //        float ft = current_f_Function(tVal);
+    //        float gt = current_g_Function(tVal);
+    //        points.Add(new Vector2((float)ft, (float)gt));
 
-            Vector3 worldVec = new Vector3((float)ft, (float)(gt), 0f);
-            //Debug.Log("WorldVec: " + worldVec);
-            //Debug.Log("RootElemPos: " + RootElement.transform.TransformPoint(RootElement.transform.position));
-            //worldVec += RootElement.transform.position;
-            //new Vector3(-4.25f, 2f, 1.75f); //RootElement.transform.TransformPoint(RootElement.transform.position);
-            //worldVec.x += RootElement.transform.position.x;
-            //worldVec.x *= 0.05f;
+    //        Vector3 worldVec = new Vector3((float)ft, (float)(gt), 0f);
+    //        //Debug.Log("WorldVec: " + worldVec);
+    //        //Debug.Log("RootElemPos: " + RootElement.transform.TransformPoint(RootElement.transform.position));
+    //        //worldVec += RootElement.transform.position;
+    //        //new Vector3(-4.25f, 2f, 1.75f); //RootElement.transform.TransformPoint(RootElement.transform.position);
+    //        //worldVec.x += RootElement.transform.position.x;
+    //        //worldVec.x *= 0.05f;
 
-            //worldVec.y += 2f;//RootElement.position.y;            
-            //worldVec.y *= 0.05f;
+    //        //worldVec.y += 2f;//RootElement.position.y;            
+    //        //worldVec.y *= 0.05f;
 
-            //worldVec.z = 2f;
+    //        //worldVec.z = 2f;
 
-            //Debug.Log("FinalWorldVec: " + worldVec);
-            worldPoints.Add(worldVec);
-        }
+    //        //Debug.Log("FinalWorldVec: " + worldVec);
+    //        worldPoints.Add(worldVec);
+    //    }
 
-    }
+    //}
+
 
     public void UpdateFFunction(int index)
     {        
@@ -205,9 +210,9 @@ public class ParamCurve : MonoBehaviour
         {
             current_f_Function = fFuncArr[i];
             current_g_Function = gFuncArr[i];
-            rangeStart = rangeArr[i].x;
-            rangeEnd = rangeArr[i].y;
-            CalculatePoints();
+            //rangeStart = rangeArr[i].x;
+            //rangeEnd = rangeArr[i].y;
+            //CalculatePoints();
 
             sb.AppendLine("x,y");
             for (int j = 0; j < points.Count; j++)
@@ -236,7 +241,7 @@ public class ParamCurve : MonoBehaviour
 
     public void ImportPointsFromCSVResource()
     {
-        points = new List<Vector2>();
+        points = new List<Vector3>();
         worldPoints = new List<Vector3>();
 
         var lineArr = CSV_File.text.Split('\n'); //Regex.Split(textfile.text, "\n|\r|\r\n");
@@ -259,21 +264,24 @@ public class ParamCurve : MonoBehaviour
         //    worldPoints.Add(new Vector3(x, y, 0f));
         //}
 
-
+        if (lineArr[0].Split(',').Length == 3) csvIs3D = true;
 
         //Skip header
         for (int i = 1; i < lineArr.Length; i++)
         {
             string line = lineArr[i];
             if (string.IsNullOrEmpty(line)) continue;
-            Debug.Log("Line[" + i + "]: " + line);
+            //Debug.Log("Line[" + i + "]: " + line);
             string[] values = line.Split(',');
-            Debug.Log("val0: " + values[0]);
-            Debug.Log("val1: " + values[1]);
+            //Debug.Log("val0: " + values[0]);
+            //Debug.Log("val1: " + values[1]);
             float x = float.Parse(values[0], nfi);
             float y = float.Parse(values[1], nfi);
-            points.Add(new Vector2(x, y));
-            worldPoints.Add(new Vector3(x, y, 0f));
+            float z = csvIs3D ? float.Parse(values[2], nfi) : 0f;
+            points.Add(new Vector3(x, y, z));
+            worldPoints.Add(SwapYZCoordinates ?
+                new Vector3(x, z, y) * PointScaleFactor :  
+                new Vector3(x, y, z) * PointScaleFactor);
 
         }
 
