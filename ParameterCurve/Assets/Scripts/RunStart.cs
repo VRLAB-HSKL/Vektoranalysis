@@ -9,32 +9,54 @@ public class RunStart : MonoBehaviour,
     HTC.UnityPlugin.ColliderEvent.IColliderEventHoverExitHandler
 
 {
-    public ParamCurve Target;
+    public GameObject Target;
+
+    public Material PressedMat;
+    private Material InitMat;
+    
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
+        if (msr != null)
+        {
+            InitMat = msr.material;
+        }
+    }
 
     public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
     {
-        //ParamCurve pm = Target.GetComponent<ParamCurve>();
-        
-        if(Target != null)
+        ParamCurve pm = Target.GetComponent<ParamCurve>();        
+        if(pm != null)
         {
-            if(!Target.IsDriving)
+            if(!pm.IsDriving)
             {
-                Target.StartRun();
-            }                
+                pm.StartRun();
+            }
+            
+        }
+
+        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
+        if(msr != null)
+        {
+            //if (msr.material == InitMat)
+                msr.material = PressedMat;
         }
     }
 
     public void OnColliderEventHoverExit(ColliderHoverEventData eventData)
     {
-        
+        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
+        if (msr != null)
+        {
+            //if (msr.material == PressedMat)
+                msr.material = InitMat;
+        }
     }
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
 
     // Update is called once per frame
     void Update()
