@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NextDataSet : MonoBehaviour,
+public class PreviousDataSet : MonoBehaviour,
     HTC.UnityPlugin.ColliderEvent.IColliderEventHoverEnterHandler
 {
     public GameObject Target;
@@ -13,7 +13,8 @@ public class NextDataSet : MonoBehaviour,
         ParamCurve pm = Target.GetComponent<ParamCurve>();
         if(pm != null)
         {
-            pm.SwitchToNextDataset();
+            pm.SwitchToPreviousDataset();
         }
     }
+
 }

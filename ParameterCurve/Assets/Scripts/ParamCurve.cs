@@ -21,6 +21,7 @@ public class ParamCurve : MonoBehaviour
     //public bool SwapYZCoordinates = false;
 
     public Transform TravelObject;
+    
 
     public TextMeshProUGUI SourceLabel;
     public TextMeshProUGUI IndexLabel;
@@ -34,7 +35,7 @@ public class ParamCurve : MonoBehaviour
     public bool IsDriving = true;
 
     private List<PointDataset> datasets = new List<PointDataset>();
-    private int currentDataSetIndex = 2;
+    private int currentDataSetIndex = 0;
     private int currentPointIndex = 0;
 
     private NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
@@ -43,12 +44,15 @@ public class ParamCurve : MonoBehaviour
 
     private float pointStepDuration = 0f;
 
+    private LineRenderer VelocityLR;
+    private Vector3[] velocityArr = new Vector3[2];
+
     //private bool csvIs3D = false;
 
-    
-    
-    
-    
+
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +60,13 @@ public class ParamCurve : MonoBehaviour
         pointStepDuration = (1f / 60f) * PointScaleFactor;
 
         InitTravelObjPos = TravelObject.position;
+        if(TravelObject.childCount > 0)
+        {
+            GameObject firstChild = TravelObject.GetChild(0).gameObject;
+            VelocityLR = firstChild.GetComponent<LineRenderer>();
+            VelocityLR.positionCount = 2;
+        }
+
 
         ImportAllCSVResources();
 
@@ -88,7 +99,8 @@ public class ParamCurve : MonoBehaviour
             Debug.Log("Failed to get line renderer component");
 
         DisplayLR.positionCount = datasets[currentDataSetIndex].worldPoints.Count;
-        DisplayLR.SetPositions(datasets[currentDataSetIndex].worldPoints.ToArray());        
+        DisplayLR.SetPositions(datasets[currentDataSetIndex].worldPoints.ToArray());
+
     }
 
     public void StartRun()
@@ -116,6 +128,27 @@ public class ParamCurve : MonoBehaviour
         UpdateWorldObjects();
     }
 
+    public void SwitchToPreviousDataset()
+    {
+        // Stop driving
+        if (IsDriving)
+        {
+            IsDriving = false;
+        }
+
+        // Decrement data set index, reset to last element on negative index
+        --currentDataSetIndex;
+        if (currentDataSetIndex < 0)
+            currentDataSetIndex = datasets.Count - 1;
+
+        // Reset point index
+        currentPointIndex = 0;
+
+        UpdateWorldObjects();
+    }
+
+
+
     private void UpdateWorldObjects()
     {
         UpdateLineRenderer();
@@ -137,12 +170,15 @@ public class ParamCurve : MonoBehaviour
         }
 
         TravelObject.position = datasets[currentDataSetIndex].worldPoints[currentPointIndex];
+        velocityArr[0] = TravelObject.position;
+        velocityArr[1] = TravelObject.position + datasets[currentDataSetIndex].velocityVectors[currentPointIndex];
+        VelocityLR.SetPositions(velocityArr);
 
         IndexLabel.text = (currentPointIndex + 1) + 
             " / " + 
             datasets[currentDataSetIndex].points.Count;
 
-        SourceLabel.text = datasets[currentDataSetIndex].name;
+        SourceLabel.text = datasets[currentDataSetIndex].Name;
         TLabel.text = datasets[currentDataSetIndex].paramValues[currentPointIndex].ToString("0.#####");
         XLabel.text = datasets[currentDataSetIndex].points[currentPointIndex].x.ToString("0.#####");
         YLabel.text = datasets[currentDataSetIndex].points[currentPointIndex].y.ToString("0.#####");
@@ -157,16 +193,9 @@ public class ParamCurve : MonoBehaviour
         bool swapYZCoordinates = false;
 
         PointDataset pd = new PointDataset();
-        pd.name = txt.name;
-        pd.points = new List<Vector3>();
-        pd.worldPoints = new List<Vector3>();
-        pd.paramValues = new List<float>();
+        pd.Name = txt.name;
 
         string[] lineArr = txt.text.Split('\n'); //Regex.Split(textfile.text, "\n|\r|\r\n");
-
-        //Debug.Log("SplitLength: " + lineArr[0].Split(',').Length);
-        //if (lineArr[0].Split(',').Length == 4) csvIs3D = true;
-        //Debug.Log("csvIs3D: " + ((csvIs3D == true) ? "true" : "false"));
 
         //Skip header
         for (int i = 1; i < lineArr.Length; i++)
@@ -191,6 +220,38 @@ public class ParamCurve : MonoBehaviour
                 new Vector3(x, y, z) * PointScaleFactor);
             pd.paramValues.Add(t);
 
+            //int rndIdx = i % 4;
+
+            //switch(rndIdx)
+            //{
+            //    case 0:
+            //        velVec = Vector3.up;
+            //        break;
+
+            //    case 1:
+            //        velVec = Vector3.right;
+            //        break;
+
+            //    case 2:
+            //        velVec = Vector3.down;
+            //        break;
+
+            //    case 3:
+            //        velVec = Vector3.left;
+            //        break;
+            //}
+
+            Vector3 velVec = Vector3.zero;
+
+            
+            // On first point, velocity is zero, so only calculate points after that
+            if(i > 0)
+            {
+                
+            }
+
+
+            pd.velocityVectors.Add(velVec);
         }       
 
         return pd;
@@ -212,11 +273,51 @@ public class ParamCurve : MonoBehaviour
 
 public class PointDataset
 {
-    public string name;    
+    public string Name = string.Empty;    
 
-    public List<Vector3> points;
-    public List<Vector3> worldPoints;
-    public List<float> paramValues;
+    public List<Vector3> points = new List<Vector3>();
+    public List<Vector3> worldPoints = new List<Vector3>();
+    public List<float> paramValues = new List<float>();
+    public List<Vector3> velocityVectors = new List<Vector3>();
 
+}
+
+public class FresnetSerretApparatus
+{
+    /// <summary>
+    /// Unit vector tangent to the curve, pointing in the direction of motion
+    /// Source: Fresnet-Serret formulas (Wikipedia)
+    /// 
+    ///           r'(t)
+    /// T(t) = -----------
+    ///         ||r'(t)||
+    /// 
+    /// </summary> 
+    public Vector3 Tangent = Vector3.zero;
+
+    /// <summary>
+    /// Normal unit vector, derivative of Tangent with respect to the arclength
+    /// parameter of the curve, divided by its length (normalized)
+    /// Source: Fresnet-Serret formulas (Wikipedia)
+    /// 
+    ///           T'(t)
+    /// N(t) = -----------
+    ///         ||T'(t)||
+    ///
+    /// </summary> 
+    public Vector3 Normal = Vector3.zero;
+
+    /// <summary>
+    /// Binormal unit vector, crossproduct of Tangent and Normal
+    /// Source: Fresnet-Serret formulas (Wikipedia)
+    /// 
+    /// B(t) = T x N
+    /// 
+    /// </summary> 
+    public Vector3 Binormal = Vector3.zero;
+
+    public float Curvature;
+
+    public float Torsion;
 
 }
