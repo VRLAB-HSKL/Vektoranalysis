@@ -11,6 +11,8 @@
 **/ProjectSettings/*
 **/Logs/*
 
+**/Packages/*
+
 # Assets wie MiddleVR, Steam, VRTK oder GitHub
 # Aktuell gehen wir davon aus, dass wir dies rekonstruieren können.
 # Wenn wir diese Verzeichnisse jedes mal in Git schreiben wird das repo
