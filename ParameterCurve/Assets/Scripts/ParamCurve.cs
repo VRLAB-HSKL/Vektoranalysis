@@ -5,8 +5,12 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+//using System.Text.Json;
+
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+
 
 using TMPro;
 
@@ -44,8 +48,14 @@ public class ParamCurve : MonoBehaviour
 
     private float pointStepDuration = 0f;
 
-    private LineRenderer VelocityLR;
-    private Vector3[] velocityArr = new Vector3[2];
+    private LineRenderer TangentLR;
+    private Vector3[] tangentArr = new Vector3[2];
+
+    private LineRenderer NormalLR;
+    private Vector3[] normalArr = new Vector3[2];
+
+    private LineRenderer BinormalLR;
+    private Vector3[] binormalArr = new Vector3[2];
 
     //private bool csvIs3D = false;
 
@@ -63,12 +73,26 @@ public class ParamCurve : MonoBehaviour
         if(TravelObject.childCount > 0)
         {
             GameObject firstChild = TravelObject.GetChild(0).gameObject;
-            VelocityLR = firstChild.GetComponent<LineRenderer>();
-            VelocityLR.positionCount = 2;
+            TangentLR = firstChild.GetComponent<LineRenderer>();
+            TangentLR.positionCount = 2;
+        }
+
+        if (TravelObject.childCount > 1)
+        {
+            GameObject secondChild = TravelObject.GetChild(1).gameObject;
+            NormalLR = secondChild.GetComponent<LineRenderer>();
+            NormalLR.positionCount = 2;
+        }
+
+        if (TravelObject.childCount > 2)
+        {
+            GameObject thirdChild = TravelObject.GetChild(2).gameObject;
+            BinormalLR = thirdChild.GetComponent<LineRenderer>();
+            BinormalLR.positionCount = 2;
         }
 
 
-        ImportAllCSVResources();
+        ImportAllResources();
 
         UpdateWorldObjects();
     }
@@ -169,22 +193,35 @@ public class ParamCurve : MonoBehaviour
             return;
         }
 
-        TravelObject.position = datasets[currentDataSetIndex].worldPoints[currentPointIndex];
-        velocityArr[0] = TravelObject.position;
-        velocityArr[1] = TravelObject.position + datasets[currentDataSetIndex].velocityVectors[currentPointIndex];
-        VelocityLR.SetPositions(velocityArr);
+        int pointIndex = currentPointIndex;
 
-        IndexLabel.text = (currentPointIndex + 1) + 
+        TravelObject.position = datasets[currentDataSetIndex].worldPoints[pointIndex];
+        
+        tangentArr[0] = TravelObject.position;
+        tangentArr[1] = TravelObject.position + datasets[currentDataSetIndex].fresnetApparatuses[pointIndex].Tangent;
+        TangentLR.SetPositions(tangentArr);
+
+        normalArr[0] = TravelObject.position;
+        normalArr[1] = TravelObject.position + datasets[currentDataSetIndex].fresnetApparatuses[pointIndex].Normal;
+        NormalLR.SetPositions(normalArr);
+
+        binormalArr[0] = TravelObject.position;
+        binormalArr[1] = TravelObject.position + datasets[currentDataSetIndex].fresnetApparatuses[pointIndex].Binormal;
+        BinormalLR.SetPositions(binormalArr);
+        
+
+        IndexLabel.text = (pointIndex + 1) + 
             " / " + 
             datasets[currentDataSetIndex].points.Count;
 
         SourceLabel.text = datasets[currentDataSetIndex].Name;
-        TLabel.text = datasets[currentDataSetIndex].paramValues[currentPointIndex].ToString("0.#####");
-        XLabel.text = datasets[currentDataSetIndex].points[currentPointIndex].x.ToString("0.#####");
-        YLabel.text = datasets[currentDataSetIndex].points[currentPointIndex].y.ToString("0.#####");
-        ZLabel.text = datasets[currentDataSetIndex].points[currentPointIndex].z.ToString("0.#####");
+        TLabel.text = datasets[currentDataSetIndex].paramValues[pointIndex].ToString("0.#####");
+        XLabel.text = datasets[currentDataSetIndex].points[pointIndex].x.ToString("0.#####");
+        YLabel.text = datasets[currentDataSetIndex].points[pointIndex].y.ToString("0.#####");
+        ZLabel.text = datasets[currentDataSetIndex].points[pointIndex].z.ToString("0.#####");
 
         ++currentPointIndex;
+
     }
 
 
@@ -220,52 +257,95 @@ public class ParamCurve : MonoBehaviour
                 new Vector3(x, y, z) * PointScaleFactor);
             pd.paramValues.Add(t);
 
-            //int rndIdx = i % 4;
-
-            //switch(rndIdx)
-            //{
-            //    case 0:
-            //        velVec = Vector3.up;
-            //        break;
-
-            //    case 1:
-            //        velVec = Vector3.right;
-            //        break;
-
-            //    case 2:
-            //        velVec = Vector3.down;
-            //        break;
-
-            //    case 3:
-            //        velVec = Vector3.left;
-            //        break;
-            //}
-
-            Vector3 velVec = Vector3.zero;
-
             
-            // On first point, velocity is zero, so only calculate points after that
-            if(i > 0)
-            {
-                
-            }
-
-
-            pd.velocityVectors.Add(velVec);
+            FresnetSerretApparatus fsa = new FresnetSerretApparatus();
+            fsa.Tangent = Vector3.zero;
+            pd.fresnetApparatuses.Add(fsa);
         }       
 
         return pd;
     }
 
-    private void ImportAllCSVResources()
+    private PointDataset ImportFromJSONResource(TextAsset json)
     {
-        UnityEngine.Object[] ressources = Resources.LoadAll("csv/exercises/", typeof(TextAsset));
+        Debug.Log("TxtAsset_Text: " + json.text);
 
-        for(int i = 0; i < ressources.Length; i++)
+        JsonRoot jsr = JsonConvert.DeserializeObject<JsonRoot>(json.text); 
+            //JsonUtility.FromJson<JsonRoot>(json.text); //JsonSerializer.Deserialize<JsonRoot>(txt.text);
+
+        //Debug.Log("JsonName: " + jsr.name);
+
+        PointDataset pds = new PointDataset();
+        pds.Name = jsr.name + "_JSON";
+
+
+
+        bool swapYZCoordinates = false;
+
+        for (int i = 0; i < jsr.pointData.Count; i++)
         {
-            datasets.Add(ImportPointsFromCSVResource(ressources[i] as TextAsset));
+            PointData pd = jsr.pointData[i];
+            float t = float.Parse(pd.t, nfi);
+            float x = float.Parse(pd.x, nfi);
+            float y = float.Parse(pd.y, nfi);
+            float z = 0f;
+
+            float tx = float.Parse(pd.tan[0], nfi);
+            float ty = float.Parse(pd.tan[1], nfi);
+            float tz = float.Parse(pd.tan[2], nfi);
+
+            float nx = float.Parse(pd.norm[0], nfi);
+            float ny = float.Parse(pd.norm[1], nfi);
+            float nz = float.Parse(pd.norm[2], nfi);
+
+            float bnx = float.Parse(pd.binorm[0], nfi);
+            float bny = float.Parse(pd.binorm[1], nfi);
+            float bnz = float.Parse(pd.binorm[2], nfi);
+
+            //float t = float.Parse(pd.t, nfi);
+
+            pds.points.Add(new Vector3(x, y, z));
+            pds.worldPoints.Add(swapYZCoordinates ?
+                new Vector3(x, z, y) * PointScaleFactor :
+                new Vector3(x, y, z) * PointScaleFactor);
+            pds.paramValues.Add(t);
+
+            FresnetSerretApparatus fsp = new FresnetSerretApparatus();
+            fsp.Tangent = swapYZCoordinates ? 
+                new Vector3(tx, tz, ty) * PointScaleFactor :
+                new Vector3(tx, ty, tz) * PointScaleFactor;
+
+            fsp.Normal = swapYZCoordinates ?
+                new Vector3(nx, nz, ny) * PointScaleFactor :
+                new Vector3(nx, ny, nz) * PointScaleFactor;
+
+            fsp.Binormal = swapYZCoordinates ?
+                new Vector3(bnx, bnz, bny) * PointScaleFactor :
+                new Vector3(bnx, bny, bnz) * PointScaleFactor;
+
+            pds.fresnetApparatuses.Add(fsp);
         }
 
+        return pds;
+    }
+
+    private void ImportAllResources()
+    {
+        // CSV Resources
+        UnityEngine.Object[] csv_resources = Resources.LoadAll("csv/exercises/", typeof(TextAsset));
+
+        for(int i = 0; i < csv_resources.Length; i++)
+        {
+            datasets.Add(ImportPointsFromCSVResource(csv_resources[i] as TextAsset));
+        }
+
+        // JSON Resources
+        UnityEngine.Object[] json_resources = Resources.LoadAll("json/exercises/", typeof(TextAsset));
+
+        for (int i = 0; i < json_resources.Length; i++)
+        {
+            datasets.Add(ImportFromJSONResource(json_resources[i] as TextAsset));
+        }
     }    
 
 
@@ -278,8 +358,8 @@ public class PointDataset
     public List<Vector3> points = new List<Vector3>();
     public List<Vector3> worldPoints = new List<Vector3>();
     public List<float> paramValues = new List<float>();
-    public List<Vector3> velocityVectors = new List<Vector3>();
-
+    // public List<Vector3> velocityVectors = new List<Vector3>();
+    public List<FresnetSerretApparatus> fresnetApparatuses = new List<FresnetSerretApparatus>();
 }
 
 public class FresnetSerretApparatus
@@ -321,3 +401,25 @@ public class FresnetSerretApparatus
     public float Torsion;
 
 }
+
+[Serializable]
+public class JsonRoot
+{
+    public string name { get; set; }
+    public List<PointData> pointData { get; set; } = new List<PointData>();
+}
+
+
+[Serializable]
+public class PointData
+{
+    public string t { get; set; }
+    public string x { get; set; }
+    public string y { get; set; }
+    public List<string> tan { get; set; } = new List<string>();
+    public List<string> norm { get; set; } = new List<string>();
+    public List<string> binorm { get; set; } = new List<string>();
+}
+
+
+

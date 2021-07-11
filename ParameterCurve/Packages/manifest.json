@@ -43,10 +43,10 @@
   },
   "scopedRegistries": [
     {
-      "name": "VIVE",
-      "url": "https://npm-registry.vive.com/",
+      "name": "VIU",
+      "url": "https://npm-registry.vive.com",
       "scopes": [
-        "com.htc.upm"
+        "com.htc.upm.vive-input-utility"
       ]
     }
   ]
