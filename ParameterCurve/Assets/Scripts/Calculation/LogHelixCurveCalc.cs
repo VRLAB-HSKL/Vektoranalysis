@@ -12,7 +12,7 @@ public class LogHelixCurveCalc : AbstractCurveCalc
     public LogHelixCurveCalc()
     {
         Name = "logHelix";
-        ParameterIntervall = new List<float>(linspace(0f, 8f * Mathf.PI, 2000));
+        ParameterIntervall = new List<float>(linspace(0f, 8f * Mathf.PI, 200));
         Is3DCurve = true;
 
         PointCalcFunc = CalculatePoint;

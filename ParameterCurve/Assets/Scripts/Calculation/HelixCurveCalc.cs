@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HelixCalcCurve : AbstractCurveCalc
+public class HelixCurveCalc : AbstractCurveCalc
 {
     private float Radius = 2f;
     private float Height = 4f;
 
-    public HelixCalcCurve()
+    public HelixCurveCalc()
     {
         Name = "helix";
         ParameterIntervall = new List<float>(linspace(-1f, 1f, 200));

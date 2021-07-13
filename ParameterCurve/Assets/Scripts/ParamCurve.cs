@@ -57,6 +57,23 @@ public class ParamCurve : MonoBehaviour
     private LineRenderer BinormalLR;
     private Vector3[] binormalArr = new Vector3[2];
 
+
+    private readonly List<AbstractCurveCalc> LocalCalcList = new List<AbstractCurveCalc>()
+    {
+        new HelixCurveCalc(),
+        new LogHelixCurveCalc(),
+        new Param4aCurveCalc(),
+        new Param4bCurveCalc(),
+        new Param18CurveCalc(),
+        new Param41CurveCalc(),
+        new Param56CurveCalc(),
+        new Param57CurveCalc(),
+        new Param58CurveCalc(),
+        new Param59CurveCalc(),
+        new Param60CurveCalc(),
+    };
+
+
     //private bool csvIs3D = false;
 
 
@@ -331,6 +348,29 @@ public class ParamCurve : MonoBehaviour
         return pds;
     }
 
+    private PointDataset CreateDatasetFormLocalCalculation(AbstractCurveCalc curveCalc)
+    {
+        // Local Calculation
+        PointDataset pdsa = new PointDataset();
+        //var calc01 = new LogHelixCurveCalc();
+        pdsa.Name = curveCalc.Name + "_LocalCalc";
+        pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
+        pdsa.points = curveCalc.CalculatePoints();
+
+        for (int i = 0; i < pdsa.points.Count; i++)
+        {
+            Vector3 pv = pdsa.points[i];
+            pdsa.worldPoints.Add(curveCalc.Is3DCurve ?
+                new Vector3(pv.x, pv.z, pv.y) * PointScaleFactor :
+                pv * PointScaleFactor);
+
+        }
+
+        pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
+
+        return pdsa;
+    }
+
     private void ImportAllResources()
     {
         // CSV Resources
@@ -349,26 +389,16 @@ public class ParamCurve : MonoBehaviour
             datasets.Add(ImportFromJSONResource(json_resources[i] as TextAsset));
         }
 
-
-        // Local Calculation
-        PointDataset pdsa = new PointDataset();
-        var calc01 = new LogHelixCurveCalc();
-        pdsa.Name = calc01.Name + "_LocalCalc";
-        pdsa.paramValues = new List<float>(calc01.ParameterIntervall);
-        pdsa.points = calc01.CalculatePoints();
-
-        for(int i = 0; i < pdsa.points.Count; i++)
+        // Local calculation
+        for(int i = 0; i < LocalCalcList.Count; i++)
         {
-            Vector3 pv = pdsa.points[i];
-            pdsa.worldPoints.Add(calc01.Is3DCurve ?
-                new Vector3(pv.x, pv.z, pv.y) * PointScaleFactor :
-                pv * PointScaleFactor);
-
+            AbstractCurveCalc calc = LocalCalcList[i];
+            datasets.Add(CreateDatasetFormLocalCalculation(calc));
         }
+        
 
-        pdsa.fresnetApparatuses = calc01.CalculateFresnetApparatuses();
+        
 
-        datasets.Add(pdsa);
     }    
 
 
