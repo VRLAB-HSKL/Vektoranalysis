@@ -67,7 +67,9 @@ public class ParamCurve : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pointStepDuration = (1f / 60f) * PointScaleFactor;
+        pointStepDuration = 
+            0f //(1f / 30f) //60f) 
+            * RunSpeedFactor;
 
         InitTravelObjPos = TravelObject.position;
         if(TravelObject.childCount > 0)
@@ -346,61 +348,33 @@ public class ParamCurve : MonoBehaviour
         {
             datasets.Add(ImportFromJSONResource(json_resources[i] as TextAsset));
         }
+
+
+        // Local Calculation
+        PointDataset pdsa = new PointDataset();
+        var calc01 = new LogHelixCurveCalc();
+        pdsa.Name = calc01.Name + "_LocalCalc";
+        pdsa.paramValues = new List<float>(calc01.ParameterIntervall);
+        pdsa.points = calc01.CalculatePoints();
+
+        for(int i = 0; i < pdsa.points.Count; i++)
+        {
+            Vector3 pv = pdsa.points[i];
+            pdsa.worldPoints.Add(calc01.Is3DCurve ?
+                new Vector3(pv.x, pv.z, pv.y) * PointScaleFactor :
+                pv * PointScaleFactor);
+
+        }
+
+        pdsa.fresnetApparatuses = calc01.CalculateFresnetApparatuses();
+
+        datasets.Add(pdsa);
     }    
 
 
 }
 
-public class PointDataset
-{
-    public string Name = string.Empty;    
 
-    public List<Vector3> points = new List<Vector3>();
-    public List<Vector3> worldPoints = new List<Vector3>();
-    public List<float> paramValues = new List<float>();
-    // public List<Vector3> velocityVectors = new List<Vector3>();
-    public List<FresnetSerretApparatus> fresnetApparatuses = new List<FresnetSerretApparatus>();
-}
-
-public class FresnetSerretApparatus
-{
-    /// <summary>
-    /// Unit vector tangent to the curve, pointing in the direction of motion
-    /// Source: Fresnet-Serret formulas (Wikipedia)
-    /// 
-    ///           r'(t)
-    /// T(t) = -----------
-    ///         ||r'(t)||
-    /// 
-    /// </summary> 
-    public Vector3 Tangent = Vector3.zero;
-
-    /// <summary>
-    /// Normal unit vector, derivative of Tangent with respect to the arclength
-    /// parameter of the curve, divided by its length (normalized)
-    /// Source: Fresnet-Serret formulas (Wikipedia)
-    /// 
-    ///           T'(t)
-    /// N(t) = -----------
-    ///         ||T'(t)||
-    ///
-    /// </summary> 
-    public Vector3 Normal = Vector3.zero;
-
-    /// <summary>
-    /// Binormal unit vector, crossproduct of Tangent and Normal
-    /// Source: Fresnet-Serret formulas (Wikipedia)
-    /// 
-    /// B(t) = T x N
-    /// 
-    /// </summary> 
-    public Vector3 Binormal = Vector3.zero;
-
-    public float Curvature;
-
-    public float Torsion;
-
-}
 
 [Serializable]
 public class JsonRoot
