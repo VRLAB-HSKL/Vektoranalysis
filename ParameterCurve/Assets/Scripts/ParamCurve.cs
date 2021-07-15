@@ -71,6 +71,8 @@ public class ParamCurve : MonoBehaviour
         new Param58CurveCalc(),
         new Param59CurveCalc(),
         new Param60CurveCalc(),
+        new ArchimedeanSpiralCurveCalc(),
+        new InvoluteCurveCalc(),
     };
 
 
@@ -287,17 +289,10 @@ public class ParamCurve : MonoBehaviour
 
     private PointDataset ImportFromJSONResource(TextAsset json)
     {
-        Debug.Log("TxtAsset_Text: " + json.text);
-
         JsonRoot jsr = JsonConvert.DeserializeObject<JsonRoot>(json.text); 
-            //JsonUtility.FromJson<JsonRoot>(json.text); //JsonSerializer.Deserialize<JsonRoot>(txt.text);
-
-        //Debug.Log("JsonName: " + jsr.name);
-
+     
         PointDataset pds = new PointDataset();
         pds.Name = jsr.name + "_JSON";
-
-
 
         bool swapYZCoordinates = false;
 
