@@ -5,6 +5,7 @@ using UnityEngine;
 public class PointDataset
 {
     public string Name = string.Empty;
+    public string DisplayURL = string.Empty;
 
     public List<Vector3> points = new List<Vector3>();
     public List<Vector3> worldPoints = new List<Vector3>();

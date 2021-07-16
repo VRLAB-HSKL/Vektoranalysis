@@ -564,6 +564,8 @@ MonoBehaviour:
   XLabel: {fileID: 1537640459}
   YLabel: {fileID: 1203359436}
   ZLabel: {fileID: 195036769}
+  IngameBrowser: {fileID: 1557279499}
+  filePrePath: 
   IsDriving: 0
 --- !u!120 &26821157
 LineRenderer:
@@ -2450,7 +2452,7 @@ PrefabInstance:
     - target: {fileID: 114000013142423658, guid: 39bf41b66f565fa48b3db156956ceac1,
         type: 3}
       propertyPath: InitialURL
-      value: file:///C:/Users/user/Masterarbeit/html/Helix.html
+      value: http://www.hs-kl.de
       objectReference: {fileID: 0}
     - target: {fileID: 114000013142423658, guid: 39bf41b66f565fa48b3db156956ceac1,
         type: 3}
@@ -2787,6 +2789,8 @@ MonoBehaviour:
   XLabel: {fileID: 0}
   YLabel: {fileID: 0}
   ZLabel: {fileID: 0}
+  IngameBrowser: {fileID: 0}
+  filePrePath: 
   IsDriving: 1
 --- !u!120 &377768450
 LineRenderer:
@@ -2977,6 +2981,8 @@ MonoBehaviour:
   XLabel: {fileID: 0}
   YLabel: {fileID: 0}
   ZLabel: {fileID: 0}
+  IngameBrowser: {fileID: 0}
+  filePrePath: 
   IsDriving: 1
 --- !u!120 &389395132
 LineRenderer:
@@ -4343,19 +4349,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 574559606}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.675, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1289210646}
   - {fileID: 451157730}
   - {fileID: 1500437710}
   m_Father: {fileID: 0}
   m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 7.5, y: 1.5}
+  m_AnchoredPosition: {x: 0, y: 1.5}
   m_SizeDelta: {x: 200, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &616668359
@@ -9956,6 +9962,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553106888}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1557279499 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000013142423658, guid: 39bf41b66f565fa48b3db156956ceac1,
+    type: 3}
+  m_PrefabInstance: {fileID: 329683539}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09a92a8b67d7db478e44160fa5f5d37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1559169833
 GameObject:
   m_ObjectHideFlags: 0
@@ -10591,6 +10609,8 @@ MonoBehaviour:
   XLabel: {fileID: 0}
   YLabel: {fileID: 0}
   ZLabel: {fileID: 0}
+  IngameBrowser: {fileID: 0}
+  filePrePath: 
   IsDriving: 1
 --- !u!120 &1689212564
 LineRenderer:
@@ -12566,6 +12586,8 @@ MonoBehaviour:
   XLabel: {fileID: 0}
   YLabel: {fileID: 0}
   ZLabel: {fileID: 0}
+  IngameBrowser: {fileID: 0}
+  filePrePath: 
   IsDriving: 1
 --- !u!120 &2134659878
 LineRenderer:

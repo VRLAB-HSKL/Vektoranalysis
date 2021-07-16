@@ -35,6 +35,8 @@ public class ParamCurve : MonoBehaviour
     public TextMeshProUGUI ZLabel;
 
 
+    public SimpleWebBrowser.WebBrowser IngameBrowser;
+    public string filePrePath; 
 
     public bool IsDriving = true;
 
@@ -73,6 +75,7 @@ public class ParamCurve : MonoBehaviour
         new Param60CurveCalc(),
         new ArchimedeanSpiralCurveCalc(),
         new InvoluteCurveCalc(),
+        new CardioidCurveCalc(),
     };
 
 
@@ -112,8 +115,14 @@ public class ParamCurve : MonoBehaviour
             BinormalLR.positionCount = 2;
         }
 
+        filePrePath = Application.dataPath + "/Resources/html/";
 
         ImportAllResources();
+
+        // Display html resource
+        IngameBrowser.OpenCommentFile(
+            datasets[currentDataSetIndex].DisplayURL);
+
 
         UpdateWorldObjects();
     }
@@ -170,6 +179,10 @@ public class ParamCurve : MonoBehaviour
         // Reset point index
         currentPointIndex = 0;
 
+        // Display html resource
+        IngameBrowser.OpenCommentFile(
+            datasets[currentDataSetIndex].DisplayURL);
+
         UpdateWorldObjects();
     }
 
@@ -188,6 +201,10 @@ public class ParamCurve : MonoBehaviour
 
         // Reset point index
         currentPointIndex = 0;
+
+        // Display html resource
+        IngameBrowser.OpenCommentFile(
+            datasets[currentDataSetIndex].DisplayURL);
 
         UpdateWorldObjects();
     }
@@ -252,6 +269,7 @@ public class ParamCurve : MonoBehaviour
 
         PointDataset pd = new PointDataset();
         pd.Name = txt.name;
+        pd.DisplayURL = filePrePath + txt.name + ".html";
 
         string[] lineArr = txt.text.Split('\n'); //Regex.Split(textfile.text, "\n|\r|\r\n");
 
@@ -293,6 +311,7 @@ public class ParamCurve : MonoBehaviour
      
         PointDataset pds = new PointDataset();
         pds.Name = jsr.name + "_JSON";
+        pds.DisplayURL = filePrePath + jsr.name + ".html";
 
         bool swapYZCoordinates = false;
 
@@ -349,6 +368,8 @@ public class ParamCurve : MonoBehaviour
         PointDataset pdsa = new PointDataset();
         //var calc01 = new LogHelixCurveCalc();
         pdsa.Name = curveCalc.Name + "_LocalCalc";
+        pdsa.DisplayURL = filePrePath + curveCalc.Name + ".html";
+
         pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
         pdsa.points = curveCalc.CalculatePoints();
 
@@ -358,7 +379,6 @@ public class ParamCurve : MonoBehaviour
             pdsa.worldPoints.Add(curveCalc.Is3DCurve ?
                 new Vector3(pv.x, pv.z, pv.y) * PointScaleFactor :
                 pv * PointScaleFactor);
-
         }
 
         pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
@@ -373,7 +393,8 @@ public class ParamCurve : MonoBehaviour
 
         for(int i = 0; i < csv_resources.Length; i++)
         {
-            datasets.Add(ImportPointsFromCSVResource(csv_resources[i] as TextAsset));
+            TextAsset csvRes = csv_resources[i] as TextAsset;
+            datasets.Add(ImportPointsFromCSVResource(csvRes));            
         }
 
         // JSON Resources
@@ -389,12 +410,9 @@ public class ParamCurve : MonoBehaviour
         {
             AbstractCurveCalc calc = LocalCalcList[i];
             datasets.Add(CreateDatasetFormLocalCalculation(calc));
-        }
-        
+        }        
 
-        
-
-    }    
+    }
 
 
 }
@@ -405,6 +423,7 @@ public class ParamCurve : MonoBehaviour
 public class JsonRoot
 {
     public string name { get; set; }
+
     public List<PointData> pointData { get; set; } = new List<PointData>();
 }
 
