@@ -79,6 +79,7 @@ public class ParamCurve : MonoBehaviour
         new LemniskateBernoulliCurveCalc(),
         new LemniskateGeronoCurveCalc(),
         new LimaconCurveCalc(),
+        new CycloidCurveCalc(),
     };
 
 
