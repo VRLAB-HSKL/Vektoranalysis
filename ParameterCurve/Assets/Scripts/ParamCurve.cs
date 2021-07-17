@@ -76,6 +76,9 @@ public class ParamCurve : MonoBehaviour
         new ArchimedeanSpiralCurveCalc(),
         new InvoluteCurveCalc(),
         new CardioidCurveCalc(),
+        new LemniskateBernoulliCurveCalc(),
+        new LemniskateGeronoCurveCalc(),
+        new LimaconCurveCalc(),
     };
 
 
