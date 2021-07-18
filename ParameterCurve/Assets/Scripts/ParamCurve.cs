@@ -73,6 +73,8 @@ public class ParamCurve : MonoBehaviour
         new Param58CurveCalc(),
         new Param59CurveCalc(),
         new Param60CurveCalc(),
+        new Param61CurveCalc(),
+        new Param62CurveCalc(),
         new ArchimedeanSpiralCurveCalc(),
         new InvoluteCurveCalc(),
         new CardioidCurveCalc(),
