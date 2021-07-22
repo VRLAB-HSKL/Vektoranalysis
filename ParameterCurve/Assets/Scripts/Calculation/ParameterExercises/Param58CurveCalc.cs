@@ -8,7 +8,7 @@ public class Param58CurveCalc : AbstractCurveCalc
 
     public Param58CurveCalc()
     {
-        Name = "param58";
+        Name = "Param58";
         ParameterIntervall = new List<float>(linspace(-8f, 8f, 100));
         Is3DCurve = false;
     }

@@ -7,6 +7,15 @@ public class ArchimedeanSpiralCurveCalc : AbstractCurveCalc
     public static float A = 0.125f;
     public static float B = 0.25f;
 
+    public new string DisplayString
+    {
+        get
+        {
+            return "Archimedean-" + System.Environment.NewLine + "Spiral";
+        }
+    }
+
+
     public ArchimedeanSpiralCurveCalc()
     {
         Name = "ArchimedeanSpiral";

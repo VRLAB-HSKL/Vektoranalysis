@@ -11,6 +11,14 @@ public abstract class AbstractCurveCalc
     /// </summary>
     public string Name;
 
+    public string DisplayString
+    {
+        get
+        {
+            return Name;
+        }
+    }
+
     /// <summary>
     /// Collection of parameter values, usually as a range
     /// </summary>
@@ -104,6 +112,7 @@ public abstract class AbstractCurveCalc
     protected abstract Vector3 CalculateVelocityPoint(float t);
     protected abstract Vector3 CalculateAccelerationPoint(float t);
 
+    //protected abstract float CalculateArcLength();
 
     protected List<Vector3> CalculateAllPointsIntoList(Func<float, Vector3> f)
     {

@@ -40,7 +40,37 @@ public class ParamCurve : MonoBehaviour
 
     public bool IsDriving = true;
 
-    private List<PointDataset> datasets = new List<PointDataset>();
+
+    public GameObject CurveMenuContent;
+    public GameObject CurveMenuButtonPrefab;
+
+
+    public enum CurveDisplayGroup { Named, Parameter, Exercises }
+    private CurveDisplayGroup currDisplayGrp = CurveDisplayGroup.Named;
+    
+    private List<PointDataset> CurrentDataset
+    {
+        get
+        { 
+            switch(currDisplayGrp)
+            {
+                default:
+                case CurveDisplayGroup.Named:
+                    return NamedCurveDatasets;
+
+                case CurveDisplayGroup.Parameter:
+                    return paramCurveDatasets;
+
+                case CurveDisplayGroup.Exercises:
+                    return exerciseCurveDatasets;
+            }
+        }
+    }
+
+    private List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
+    private List<PointDataset> paramCurveDatasets = new List<PointDataset>();
+    private List<PointDataset> exerciseCurveDatasets = new List<PointDataset>();
+
     private int currentDataSetIndex = 0;
     private int currentPointIndex = 0;
 
@@ -60,10 +90,21 @@ public class ParamCurve : MonoBehaviour
     private Vector3[] binormalArr = new Vector3[2];
 
 
-    private readonly List<AbstractCurveCalc> LocalCalcList = new List<AbstractCurveCalc>()
+    private readonly List<AbstractCurveCalc> LocalNamedCalcList = new List<AbstractCurveCalc>()
     {
         new HelixCurveCalc(),
-        new LogHelixCurveCalc(),
+        new LogHelixCurveCalc(),        
+        new ArchimedeanSpiralCurveCalc(),
+        new InvoluteCurveCalc(),
+        new CardioidCurveCalc(),
+        new LemniskateBernoulliCurveCalc(),
+        new LemniskateGeronoCurveCalc(),
+        new LimaconCurveCalc(),
+        new CycloidCurveCalc(),
+    };
+
+    private readonly List<AbstractCurveCalc> LocalParamCalcList = new List<AbstractCurveCalc>()
+    {
         new Param4aCurveCalc(),
         new Param4bCurveCalc(),
         new Param18CurveCalc(),
@@ -75,13 +116,6 @@ public class ParamCurve : MonoBehaviour
         new Param60CurveCalc(),
         new Param61CurveCalc(),
         new Param62CurveCalc(),
-        new ArchimedeanSpiralCurveCalc(),
-        new InvoluteCurveCalc(),
-        new CardioidCurveCalc(),
-        new LemniskateBernoulliCurveCalc(),
-        new LemniskateGeronoCurveCalc(),
-        new LimaconCurveCalc(),
-        new CycloidCurveCalc(),
     };
 
 
@@ -127,10 +161,28 @@ public class ParamCurve : MonoBehaviour
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
-            datasets[currentDataSetIndex].DisplayURL);
+            NamedCurveDatasets[currentDataSetIndex].NotebookURL);
 
 
         UpdateWorldObjects();
+
+        // Create buttons
+        Debug.Log("namedCurveDsSize: " + NamedCurveDatasets.Count);
+        for(int i = 0; i < NamedCurveDatasets.Count; i++)
+        {
+            PointDataset pds = NamedCurveDatasets[i];
+            GameObject tmpButton = Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
+
+            tmpButton.name = pds.Name + "Button";
+
+            // ToDo: Set button curve icon
+            RawImage img = tmpButton.GetComponentInChildren<RawImage>();
+
+
+            TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
+            label.text = pds.DisplayString;
+        }
+
     }
 
     private float updateTimer = 0f;
@@ -153,13 +205,13 @@ public class ParamCurve : MonoBehaviour
 
     public void UpdateLineRenderer()
     {        
-        if (datasets[currentDataSetIndex].worldPoints is null) return;
+        if (CurrentDataset[currentDataSetIndex].worldPoints is null) return;
 
         if (DisplayLR is null)
             Debug.Log("Failed to get line renderer component");
 
-        DisplayLR.positionCount = datasets[currentDataSetIndex].worldPoints.Count;
-        DisplayLR.SetPositions(datasets[currentDataSetIndex].worldPoints.ToArray());
+        DisplayLR.positionCount = CurrentDataset[currentDataSetIndex].worldPoints.Count;
+        DisplayLR.SetPositions(CurrentDataset[currentDataSetIndex].worldPoints.ToArray());
 
     }
 
@@ -179,7 +231,7 @@ public class ParamCurve : MonoBehaviour
 
         // Increment data set index, reset to 0 on overflow
         ++currentDataSetIndex;
-        if (currentDataSetIndex >= datasets.Count)
+        if (currentDataSetIndex >= CurrentDataset.Count)
             currentDataSetIndex = 0;
 
         // Reset point index
@@ -187,7 +239,7 @@ public class ParamCurve : MonoBehaviour
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
-            datasets[currentDataSetIndex].DisplayURL);
+            CurrentDataset[currentDataSetIndex].NotebookURL);
 
         UpdateWorldObjects();
     }
@@ -203,14 +255,14 @@ public class ParamCurve : MonoBehaviour
         // Decrement data set index, reset to last element on negative index
         --currentDataSetIndex;
         if (currentDataSetIndex < 0)
-            currentDataSetIndex = datasets.Count - 1;
+            currentDataSetIndex = CurrentDataset.Count - 1;
 
         // Reset point index
         currentPointIndex = 0;
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
-            datasets[currentDataSetIndex].DisplayURL);
+            CurrentDataset[currentDataSetIndex].NotebookURL);
 
         UpdateWorldObjects();
     }
@@ -227,11 +279,11 @@ public class ParamCurve : MonoBehaviour
     {
         // Null checks
         if (TravelObject is null) return;
-        if (datasets[currentDataSetIndex].worldPoints is null) return;
+        if (CurrentDataset[currentDataSetIndex].worldPoints is null) return;
         if (currentPointIndex < 0 ) return;
         
         // On arrival at the last point, stop driving
-        if (currentPointIndex >= datasets[currentDataSetIndex].worldPoints.Count)
+        if (currentPointIndex >= CurrentDataset[currentDataSetIndex].worldPoints.Count)
         {
             IsDriving = false;
             return;
@@ -239,30 +291,30 @@ public class ParamCurve : MonoBehaviour
 
         int pointIndex = currentPointIndex;
 
-        TravelObject.position = datasets[currentDataSetIndex].worldPoints[pointIndex];
+        TravelObject.position = CurrentDataset[currentDataSetIndex].worldPoints[pointIndex];
         
         tangentArr[0] = TravelObject.position;
-        tangentArr[1] = TravelObject.position + datasets[currentDataSetIndex].fresnetApparatuses[pointIndex].Tangent;
+        tangentArr[1] = TravelObject.position + CurrentDataset[currentDataSetIndex].fresnetApparatuses[pointIndex].Tangent;
         TangentLR.SetPositions(tangentArr);
 
         normalArr[0] = TravelObject.position;
-        normalArr[1] = TravelObject.position + datasets[currentDataSetIndex].fresnetApparatuses[pointIndex].Normal;
+        normalArr[1] = TravelObject.position + CurrentDataset[currentDataSetIndex].fresnetApparatuses[pointIndex].Normal;
         NormalLR.SetPositions(normalArr);
 
         binormalArr[0] = TravelObject.position;
-        binormalArr[1] = TravelObject.position + datasets[currentDataSetIndex].fresnetApparatuses[pointIndex].Binormal;
+        binormalArr[1] = TravelObject.position + CurrentDataset[currentDataSetIndex].fresnetApparatuses[pointIndex].Binormal;
         BinormalLR.SetPositions(binormalArr);
         
 
         IndexLabel.text = (pointIndex + 1) + 
-            " / " + 
-            datasets[currentDataSetIndex].points.Count;
+            " / " +
+            CurrentDataset[currentDataSetIndex].points.Count;
 
-        SourceLabel.text = datasets[currentDataSetIndex].Name;
-        TLabel.text = datasets[currentDataSetIndex].paramValues[pointIndex].ToString("0.#####");
-        XLabel.text = datasets[currentDataSetIndex].points[pointIndex].x.ToString("0.#####");
-        YLabel.text = datasets[currentDataSetIndex].points[pointIndex].y.ToString("0.#####");
-        ZLabel.text = datasets[currentDataSetIndex].points[pointIndex].z.ToString("0.#####");
+        SourceLabel.text = CurrentDataset[currentDataSetIndex].Name;
+        TLabel.text = CurrentDataset[currentDataSetIndex].paramValues[pointIndex].ToString("0.#####");
+        XLabel.text = CurrentDataset[currentDataSetIndex].points[pointIndex].x.ToString("0.#####");
+        YLabel.text = CurrentDataset[currentDataSetIndex].points[pointIndex].y.ToString("0.#####");
+        ZLabel.text = CurrentDataset[currentDataSetIndex].points[pointIndex].z.ToString("0.#####");
 
         ++currentPointIndex;
 
@@ -275,7 +327,8 @@ public class ParamCurve : MonoBehaviour
 
         PointDataset pd = new PointDataset();
         pd.Name = txt.name;
-        pd.DisplayURL = filePrePath + txt.name + ".html";
+        pd.DisplayString = txt.name;
+        pd.NotebookURL = filePrePath + txt.name + ".html";
 
         string[] lineArr = txt.text.Split('\n'); //Regex.Split(textfile.text, "\n|\r|\r\n");
 
@@ -317,7 +370,8 @@ public class ParamCurve : MonoBehaviour
      
         PointDataset pds = new PointDataset();
         pds.Name = jsr.name + "_JSON";
-        pds.DisplayURL = filePrePath + jsr.name + ".html";
+        pds.DisplayString = jsr.name;
+        pds.NotebookURL = filePrePath + jsr.name + ".html";
 
         bool swapYZCoordinates = false;
 
@@ -373,8 +427,9 @@ public class ParamCurve : MonoBehaviour
         // Local Calculation
         PointDataset pdsa = new PointDataset();
         //var calc01 = new LogHelixCurveCalc();
-        pdsa.Name = curveCalc.Name + "_LocalCalc";
-        pdsa.DisplayURL = filePrePath + curveCalc.Name + ".html";
+        pdsa.Name = curveCalc.Name; // + "_LocalCalc";
+        pdsa.DisplayString = curveCalc.DisplayString;
+        pdsa.NotebookURL = filePrePath + curveCalc.Name + ".html";
 
         pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
         pdsa.points = curveCalc.CalculatePoints();
@@ -400,7 +455,7 @@ public class ParamCurve : MonoBehaviour
         for(int i = 0; i < csv_resources.Length; i++)
         {
             TextAsset csvRes = csv_resources[i] as TextAsset;
-            datasets.Add(ImportPointsFromCSVResource(csvRes));            
+            NamedCurveDatasets.Add(ImportPointsFromCSVResource(csvRes));            
         }
 
         // JSON Resources
@@ -408,15 +463,21 @@ public class ParamCurve : MonoBehaviour
 
         for (int i = 0; i < json_resources.Length; i++)
         {
-            datasets.Add(ImportFromJSONResource(json_resources[i] as TextAsset));
+            NamedCurveDatasets.Add(ImportFromJSONResource(json_resources[i] as TextAsset));
         }
 
         // Local calculation
-        for(int i = 0; i < LocalCalcList.Count; i++)
+        for(int i = 0; i < LocalNamedCalcList.Count; i++)
         {
-            AbstractCurveCalc calc = LocalCalcList[i];
-            datasets.Add(CreateDatasetFormLocalCalculation(calc));
-        }        
+            AbstractCurveCalc calc = LocalNamedCalcList[i];
+            NamedCurveDatasets.Add(CreateDatasetFormLocalCalculation(calc));
+        }
+
+        for (int i = 0; i < LocalParamCalcList.Count; i++)
+        {
+            AbstractCurveCalc calc = LocalParamCalcList[i];
+            paramCurveDatasets.Add(CreateDatasetFormLocalCalculation(calc));
+        }
 
     }
 

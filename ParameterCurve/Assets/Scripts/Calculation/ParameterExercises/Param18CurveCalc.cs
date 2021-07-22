@@ -6,7 +6,7 @@ public class Param18CurveCalc : AbstractCurveCalc
 {
     public Param18CurveCalc()
     {
-        Name = "param18";
+        Name = "Param18";
         ParameterIntervall = new List<float>(linspace(1f, Mathf.Epsilon, 2000));
         Is3DCurve = true;
     }

@@ -9,7 +9,7 @@ public class HelixCurveCalc : AbstractCurveCalc
 
     public HelixCurveCalc()
     {
-        Name = "helix";
+        Name = "Helix";
         ParameterIntervall = new List<float>(linspace(-1f, 1f, 200));
         Is3DCurve = true;
 

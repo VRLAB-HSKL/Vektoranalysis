@@ -6,7 +6,7 @@ public class Param59CurveCalc : AbstractCurveCalc
 {
     public Param59CurveCalc()
     {
-        Name = "param59";
+        Name = "Param59";
         ParameterIntervall = new List<float>(linspace(-2f, 2f, 200));
         Is3DCurve = false;
     }

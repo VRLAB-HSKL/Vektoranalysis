@@ -6,7 +6,7 @@ public class Param4aCurveCalc : AbstractCurveCalc
 {
     public Param4aCurveCalc() : base()
     {
-        Name = "param4a";
+        Name = "Param4a";
         ParameterIntervall = new List<float>(linspace(-2.5f, 2.5f, 2000));        
         Is3DCurve = false;
 

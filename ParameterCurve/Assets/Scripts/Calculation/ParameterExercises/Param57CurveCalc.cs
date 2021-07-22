@@ -11,7 +11,7 @@ public class Param57CurveCalc : AbstractCurveCalc
 
     public Param57CurveCalc()
     {
-        Name = "param57";
+        Name = "Param57";
 
         float rangeEnd = 2f * V0 * Mathf.Sin(ALPHA * Mathf.Deg2Rad) / GRAVITY;
         ParameterIntervall = new List<float>(linspace(0f, rangeEnd, 200));
