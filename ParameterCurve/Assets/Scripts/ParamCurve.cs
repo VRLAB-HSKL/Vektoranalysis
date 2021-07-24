@@ -261,10 +261,16 @@ public class ParamCurve : MonoBehaviour
 
     public void SwitchCurveGroup(GlobalData.CurveDisplayGroup cdg)
     {
-        GlobalData.currDisplayGrp = cdg;
+        // Update current display group
+        GlobalData.CurrentDisplayGroup = cdg;
 
-        // Reset point index
+        // Reset curve and point indices
+        GlobalData.currentCurveIndex = 0;
         GlobalData.currentPointIndex = 0;
+
+
+        //Debug.Log("CurrDataSetCount: " + GlobalData.CurrentDataset.Count);
+        //Debug.Log("CurrentCurveIndex: " + GlobalData.currentCurveIndex);
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
@@ -272,7 +278,6 @@ public class ParamCurve : MonoBehaviour
 
         UpdateCurveMenuButtons();
         UpdateWorldObjects();
-
     }
     
 
@@ -331,16 +336,22 @@ public class ParamCurve : MonoBehaviour
     private void UpdateCurveMenuButtons()
     {
         // Clear old buttons
-        List<GameObject> children = new List<GameObject>();
+        //while (CurveMenuContent.transform.childCount > 0)
+        //{
+        //    DestroyImmediate(transform.GetChild(0).gameObject);
+        //}
+
+        GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
         for (int i = 0; i < CurveMenuContent.transform.childCount; i++)
         {
             GameObject child = CurveMenuContent.transform.GetChild(i).gameObject;
-            children.Add(child);
+            children[i] = child;
         }
 
-        foreach (GameObject child in children)
+        for(int i = 0; i < children.Length; i++)
         {
-            Destroy(child);
+            GameObject child = children[i];
+            DestroyImmediate(child);
         }
 
 
@@ -354,7 +365,10 @@ public class ParamCurve : MonoBehaviour
 
             // ToDo: Set button curve icon
             RawImage img = tmpButton.GetComponentInChildren<RawImage>();
-
+            if (pds.MenuButtonImage != null)
+            {
+                img.texture = pds.MenuButtonImage;
+            }
 
             TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
             label.text = pds.DisplayString;

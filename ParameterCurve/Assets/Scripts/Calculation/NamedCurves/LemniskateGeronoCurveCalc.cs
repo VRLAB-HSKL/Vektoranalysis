@@ -8,7 +8,7 @@ public class LemniskateGeronoCurveCalc : AbstractCurveCalc
 
     public LemniskateGeronoCurveCalc()
     {
-        Name = "LeminskateGerono";
+        Name = "LemniskateGerono";
         ParameterIntervall = new List<float>(linspace(-Mathf.PI, Mathf.PI, 200));
         Is3DCurve = false;
     }

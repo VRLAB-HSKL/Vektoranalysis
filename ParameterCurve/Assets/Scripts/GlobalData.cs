@@ -8,25 +8,19 @@ public static class GlobalData
     public static float RunSpeedFactor = 1f;
 
 
-    public enum CurveDisplayGroup { Named, Parameter, Exercises }
-    public static CurveDisplayGroup currDisplayGrp = CurveDisplayGroup.Named;
+    public enum CurveDisplayGroup { Named = 0, Parameter = 1, Exercises = 2 }
+    public static CurveDisplayGroup CurrentDisplayGroup = CurveDisplayGroup.Named;
 
     public static List<PointDataset> CurrentDataset
     {
         get
         {
-            switch (currDisplayGrp)
+            return CurrentDisplayGroup switch
             {
-                default:
-                case CurveDisplayGroup.Named:
-                    return GlobalData.NamedCurveDatasets;
-
-                case CurveDisplayGroup.Parameter:
-                    return GlobalData.ParamCurveDatasets;
-
-                case CurveDisplayGroup.Exercises:
-                    return GlobalData.ExerciseCurveDatasets;
-            }
+                CurveDisplayGroup.Parameter => ParamCurveDatasets,
+                CurveDisplayGroup.Exercises => ExerciseCurveDatasets,
+                _ => NamedCurveDatasets,
+            };
         }
     }
 
@@ -63,10 +57,11 @@ public static class GlobalData
         new Param62CurveCalc(),
     };
 
-    private static List<AbstractCurveCalc> LocalExerciseCalcList = new List<AbstractCurveCalc>()
-    {
-        new HelixCurveCalc(),
-    };
+    private static List<AbstractCurveCalc> LocalExerciseCalcList = new List<AbstractCurveCalc>(LocalNamedCalcList)
+    //{
+    //    new HelixCurveCalc(),
+    //}
+    ;
 
 
 
@@ -74,7 +69,7 @@ public static class GlobalData
     public static int currentPointIndex = 0;
 
     public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
-
+    public static string ImageResourcePath = "img/";
     public static void InitializeData()
     {
         ImportAllResources();
@@ -110,6 +105,12 @@ public static class GlobalData
         {
             AbstractCurveCalc calc = LocalParamCalcList[i];
             ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+        }
+
+        for (int i = 0; i < LocalExerciseCalcList.Count; i++)
+        {
+            AbstractCurveCalc calc = LocalExerciseCalcList[i];
+            ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
 
     }

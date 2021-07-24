@@ -118,6 +118,18 @@ public static class DataImport
         pdsa.DisplayString = curveCalc.DisplayString;
         pdsa.NotebookURL = GlobalData.LocalHTMLResourcePath + curveCalc.Name + ".html";
 
+        string path = GlobalData.ImageResourcePath + curveCalc.Name;
+        //Debug.Log("ImgResPath: " + path);
+        Texture2D imgRes = Resources.Load(path) as Texture2D;
+
+
+        if (imgRes != null)
+        {
+            //Debug.Log("ResType: " + imgRes.GetType().ToString());
+            pdsa.MenuButtonImage = imgRes;
+        }
+
+
         pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
         pdsa.points = curveCalc.CalculatePoints();
 
