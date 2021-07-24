@@ -13,14 +13,14 @@ using Newtonsoft.Json;
 
 
 using TMPro;
+using UnityEngine.Events;
 
 public class ParamCurve : MonoBehaviour
 {
     public GameObject RootElement;
     public LineRenderer DisplayLR;
     //public TextAsset CSV_File;
-    public float PointScaleFactor = 1f;
-    public float RunSpeedFactor = 1f;
+    
     
     //public bool SwapYZCoordinates = false;
 
@@ -36,45 +36,28 @@ public class ParamCurve : MonoBehaviour
 
 
     public SimpleWebBrowser.WebBrowser IngameBrowser;
-    public string filePrePath; 
+    
 
     public bool IsDriving = true;
 
+
+    public GameObject MainMenuButtonsParent;
+    public GameObject MainMenuButtonPrefab;
 
     public GameObject CurveMenuContent;
     public GameObject CurveMenuButtonPrefab;
 
 
-    public enum CurveDisplayGroup { Named, Parameter, Exercises }
-    private CurveDisplayGroup currDisplayGrp = CurveDisplayGroup.Named;
     
-    private List<PointDataset> CurrentDataset
-    {
-        get
-        { 
-            switch(currDisplayGrp)
-            {
-                default:
-                case CurveDisplayGroup.Named:
-                    return NamedCurveDatasets;
 
-                case CurveDisplayGroup.Parameter:
-                    return paramCurveDatasets;
+    //private List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
+    //private List<PointDataset> paramCurveDatasets = new List<PointDataset>();
+    //private List<PointDataset> exerciseCurveDatasets = new List<PointDataset>();
 
-                case CurveDisplayGroup.Exercises:
-                    return exerciseCurveDatasets;
-            }
-        }
-    }
+    //private int currentCurveIndex = 0;
+    //private int currentPointIndex = 0;
 
-    private List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
-    private List<PointDataset> paramCurveDatasets = new List<PointDataset>();
-    private List<PointDataset> exerciseCurveDatasets = new List<PointDataset>();
-
-    private int currentDataSetIndex = 0;
-    private int currentPointIndex = 0;
-
-    private NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+    
 
     private Vector3 InitTravelObjPos;
 
@@ -90,38 +73,10 @@ public class ParamCurve : MonoBehaviour
     private Vector3[] binormalArr = new Vector3[2];
 
 
-    private readonly List<AbstractCurveCalc> LocalNamedCalcList = new List<AbstractCurveCalc>()
-    {
-        new HelixCurveCalc(),
-        new LogHelixCurveCalc(),        
-        new ArchimedeanSpiralCurveCalc(),
-        new InvoluteCurveCalc(),
-        new CardioidCurveCalc(),
-        new LemniskateBernoulliCurveCalc(),
-        new LemniskateGeronoCurveCalc(),
-        new LimaconCurveCalc(),
-        new CycloidCurveCalc(),
-    };
-
-    private readonly List<AbstractCurveCalc> LocalParamCalcList = new List<AbstractCurveCalc>()
-    {
-        new Param4aCurveCalc(),
-        new Param4bCurveCalc(),
-        new Param18CurveCalc(),
-        new Param41CurveCalc(),
-        new Param56CurveCalc(),
-        new Param57CurveCalc(),
-        new Param58CurveCalc(),
-        new Param59CurveCalc(),
-        new Param60CurveCalc(),
-        new Param61CurveCalc(),
-        new Param62CurveCalc(),
-    };
+    
 
 
     //private bool csvIs3D = false;
-
-
 
 
 
@@ -131,7 +86,7 @@ public class ParamCurve : MonoBehaviour
     {
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
-            * RunSpeedFactor;
+            * GlobalData.RunSpeedFactor;
 
         InitTravelObjPos = TravelObject.position;
         if(TravelObject.childCount > 0)
@@ -155,33 +110,41 @@ public class ParamCurve : MonoBehaviour
             BinormalLR.positionCount = 2;
         }
 
-        filePrePath = Application.dataPath + "/Resources/html/";
 
-        ImportAllResources();
+
+        GlobalData.InitializeData();
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
-            NamedCurveDatasets[currentDataSetIndex].NotebookURL);
+            GlobalData.NamedCurveDatasets[GlobalData.currentCurveIndex].NotebookURL);
 
 
+        UpdateCurveMenuButtons();
         UpdateWorldObjects();
 
-        // Create buttons
-        Debug.Log("namedCurveDsSize: " + NamedCurveDatasets.Count);
-        for(int i = 0; i < NamedCurveDatasets.Count; i++)
+
+        string[] displayGrps = Enum.GetNames(typeof(GlobalData.CurveDisplayGroup));
+        GlobalData.CurveDisplayGroup[] displayGrpValues = (GlobalData.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalData.CurveDisplayGroup));
+        for (int i = 0; i < displayGrps.Length; i++)
         {
-            PointDataset pds = NamedCurveDatasets[i];
-            GameObject tmpButton = Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
+            string dgrpName = displayGrps[i];
+            GlobalData.CurveDisplayGroup dgrpVal = displayGrpValues[i];
+            GameObject tmpButton = Instantiate(MainMenuButtonPrefab, MainMenuButtonsParent.transform);
 
-            tmpButton.name = pds.Name + "Button";
-
-            // ToDo: Set button curve icon
-            RawImage img = tmpButton.GetComponentInChildren<RawImage>();
-
+            tmpButton.name = dgrpName + "GrpButton";
+            Destroy(tmpButton.GetComponent<RawImage>());
 
             TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
-            label.text = pds.DisplayString;
+            label.text = dgrpName;
+
+            Button b = tmpButton.GetComponent<Button>();
+
+            b.onClick.AddListener(() => SwitchCurveGroup(dgrpVal));
+
         }
+
+
+        
 
     }
 
@@ -205,19 +168,19 @@ public class ParamCurve : MonoBehaviour
 
     public void UpdateLineRenderer()
     {        
-        if (CurrentDataset[currentDataSetIndex].worldPoints is null) return;
+        if (GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints is null) return;
 
         if (DisplayLR is null)
             Debug.Log("Failed to get line renderer component");
 
-        DisplayLR.positionCount = CurrentDataset[currentDataSetIndex].worldPoints.Count;
-        DisplayLR.SetPositions(CurrentDataset[currentDataSetIndex].worldPoints.ToArray());
+        DisplayLR.positionCount = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.Count;
+        DisplayLR.SetPositions(GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.ToArray());
 
     }
 
     public void StartRun()
     {
-        currentPointIndex = 0;
+        GlobalData.currentPointIndex = 0;
         IsDriving = true;        
     }
 
@@ -230,16 +193,16 @@ public class ParamCurve : MonoBehaviour
         }
 
         // Increment data set index, reset to 0 on overflow
-        ++currentDataSetIndex;
-        if (currentDataSetIndex >= CurrentDataset.Count)
-            currentDataSetIndex = 0;
+        ++GlobalData.currentCurveIndex;
+        if (GlobalData.currentCurveIndex >= GlobalData.CurrentDataset.Count)
+            GlobalData.currentCurveIndex = 0;
 
         // Reset point index
-        currentPointIndex = 0;
+        GlobalData.currentPointIndex = 0;
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
-            CurrentDataset[currentDataSetIndex].NotebookURL);
+            GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
 
         UpdateWorldObjects();
     }
@@ -253,21 +216,65 @@ public class ParamCurve : MonoBehaviour
         }
 
         // Decrement data set index, reset to last element on negative index
-        --currentDataSetIndex;
-        if (currentDataSetIndex < 0)
-            currentDataSetIndex = CurrentDataset.Count - 1;
+        --GlobalData.currentCurveIndex;
+        if (GlobalData.currentCurveIndex < 0)
+            GlobalData.currentCurveIndex = GlobalData.CurrentDataset.Count - 1;
 
         // Reset point index
-        currentPointIndex = 0;
+        GlobalData.currentPointIndex = 0;
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
-            CurrentDataset[currentDataSetIndex].NotebookURL);
+            GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
 
         UpdateWorldObjects();
     }
 
 
+    public void SwitchToSpecificDataset(string name)
+    {
+        // Stop driving
+        if (IsDriving)
+        {
+            IsDriving = false;
+        }
+
+        //// Increment data set index, reset to 0 on overflow
+        //++currentDataSetIndex;
+        //if (currentDataSetIndex >= CurrentDataset.Count)
+        //    currentDataSetIndex = 0;
+
+        int index = GlobalData.CurrentDataset.FindIndex(x => x.Name.Equals(name));
+        if (index == -1) return;
+
+        GlobalData.currentCurveIndex = index;
+
+        // Reset point index
+        GlobalData.currentPointIndex = 0;
+
+        // Display html resource
+        IngameBrowser.OpenCommentFile(
+            GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
+
+        UpdateWorldObjects();
+    }
+
+    public void SwitchCurveGroup(GlobalData.CurveDisplayGroup cdg)
+    {
+        GlobalData.currDisplayGrp = cdg;
+
+        // Reset point index
+        GlobalData.currentPointIndex = 0;
+
+        // Display html resource
+        IngameBrowser.OpenCommentFile(
+            GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
+
+        UpdateCurveMenuButtons();
+        UpdateWorldObjects();
+
+    }
+    
 
     private void UpdateWorldObjects()
     {
@@ -279,208 +286,89 @@ public class ParamCurve : MonoBehaviour
     {
         // Null checks
         if (TravelObject is null) return;
-        if (CurrentDataset[currentDataSetIndex].worldPoints is null) return;
-        if (currentPointIndex < 0 ) return;
+        if (GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints is null) return;
+        if (GlobalData.currentPointIndex < 0 ) return;
         
         // On arrival at the last point, stop driving
-        if (currentPointIndex >= CurrentDataset[currentDataSetIndex].worldPoints.Count)
+        if (GlobalData.currentPointIndex >= GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.Count)
         {
             IsDriving = false;
             return;
         }
 
-        int pointIndex = currentPointIndex;
+        int pointIndex = GlobalData.currentPointIndex;
 
-        TravelObject.position = CurrentDataset[currentDataSetIndex].worldPoints[pointIndex];
+        TravelObject.position = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints[pointIndex];
         
         tangentArr[0] = TravelObject.position;
-        tangentArr[1] = TravelObject.position + CurrentDataset[currentDataSetIndex].fresnetApparatuses[pointIndex].Tangent;
+        tangentArr[1] = TravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].fresnetApparatuses[pointIndex].Tangent;
         TangentLR.SetPositions(tangentArr);
 
         normalArr[0] = TravelObject.position;
-        normalArr[1] = TravelObject.position + CurrentDataset[currentDataSetIndex].fresnetApparatuses[pointIndex].Normal;
+        normalArr[1] = TravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].fresnetApparatuses[pointIndex].Normal;
         NormalLR.SetPositions(normalArr);
 
         binormalArr[0] = TravelObject.position;
-        binormalArr[1] = TravelObject.position + CurrentDataset[currentDataSetIndex].fresnetApparatuses[pointIndex].Binormal;
+        binormalArr[1] = TravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].fresnetApparatuses[pointIndex].Binormal;
         BinormalLR.SetPositions(binormalArr);
         
 
         IndexLabel.text = (pointIndex + 1) + 
             " / " +
-            CurrentDataset[currentDataSetIndex].points.Count;
+            GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points.Count;
 
-        SourceLabel.text = CurrentDataset[currentDataSetIndex].Name;
-        TLabel.text = CurrentDataset[currentDataSetIndex].paramValues[pointIndex].ToString("0.#####");
-        XLabel.text = CurrentDataset[currentDataSetIndex].points[pointIndex].x.ToString("0.#####");
-        YLabel.text = CurrentDataset[currentDataSetIndex].points[pointIndex].y.ToString("0.#####");
-        ZLabel.text = CurrentDataset[currentDataSetIndex].points[pointIndex].z.ToString("0.#####");
+        SourceLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].Name;
+        TLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].paramValues[pointIndex].ToString("0.#####");
+        XLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].x.ToString("0.#####");
+        YLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].y.ToString("0.#####");
+        ZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].z.ToString("0.#####");
 
-        ++currentPointIndex;
+        ++GlobalData.currentPointIndex;
 
     }
 
 
-    private PointDataset ImportPointsFromCSVResource(TextAsset txt)
+    private void UpdateCurveMenuButtons()
     {
-        bool swapYZCoordinates = false;
-
-        PointDataset pd = new PointDataset();
-        pd.Name = txt.name;
-        pd.DisplayString = txt.name;
-        pd.NotebookURL = filePrePath + txt.name + ".html";
-
-        string[] lineArr = txt.text.Split('\n'); //Regex.Split(textfile.text, "\n|\r|\r\n");
-
-        //Skip header
-        for (int i = 1; i < lineArr.Length; i++)
+        // Clear old buttons
+        List<GameObject> children = new List<GameObject>();
+        for (int i = 0; i < CurveMenuContent.transform.childCount; i++)
         {
-            string line = lineArr[i];
-            if (string.IsNullOrEmpty(line)) continue;
-            
-            string[] values = line.Split(',');
-            //Debug.Log("valuesArrSize: " + values.Length);
-            float t = float.Parse(values[0], nfi);
-            float x = float.Parse(values[1], nfi);
-            float y = float.Parse(values[2], nfi);
-            float z = 0f;
-            if(values.Length == 4)
-            {
-                swapYZCoordinates = true; //Debug.Log("csvIs3dValuesSize: " + values.Length);
-                z = float.Parse(values[3], nfi);
-            }
-            pd.points.Add(new Vector3(x, y, z));
-            pd.worldPoints.Add(swapYZCoordinates ?
-                new Vector3(x, z, y) * PointScaleFactor :  
-                new Vector3(x, y, z) * PointScaleFactor);
-            pd.paramValues.Add(t);
+            GameObject child = CurveMenuContent.transform.GetChild(i).gameObject;
+            children.Add(child);
+        }
 
-            
-            FresnetSerretApparatus fsa = new FresnetSerretApparatus();
-            fsa.Tangent = Vector3.zero;
-            pd.fresnetApparatuses.Add(fsa);
-        }       
+        foreach (GameObject child in children)
+        {
+            Destroy(child);
+        }
 
-        return pd;
+
+        // Create buttons        
+        for (int i = 0; i < GlobalData.CurrentDataset.Count; i++)
+        {
+            PointDataset pds = GlobalData.CurrentDataset[i];
+            GameObject tmpButton = Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
+
+            tmpButton.name = pds.Name + "Button";
+
+            // ToDo: Set button curve icon
+            RawImage img = tmpButton.GetComponentInChildren<RawImage>();
+
+
+            TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
+            label.text = pds.DisplayString;
+
+            Button b = tmpButton.GetComponent<Button>();
+            b.onClick.AddListener(() => SwitchToSpecificDataset(pds.Name));
+        }
     }
 
-    private PointDataset ImportFromJSONResource(TextAsset json)
-    {
-        JsonRoot jsr = JsonConvert.DeserializeObject<JsonRoot>(json.text); 
-     
-        PointDataset pds = new PointDataset();
-        pds.Name = jsr.name + "_JSON";
-        pds.DisplayString = jsr.name;
-        pds.NotebookURL = filePrePath + jsr.name + ".html";
+    
 
-        bool swapYZCoordinates = false;
+    
 
-        for (int i = 0; i < jsr.pointData.Count; i++)
-        {
-            PointData pd = jsr.pointData[i];
-            float t = float.Parse(pd.t, nfi);
-            float x = float.Parse(pd.x, nfi);
-            float y = float.Parse(pd.y, nfi);
-            float z = 0f;
-
-            float tx = float.Parse(pd.tan[0], nfi);
-            float ty = float.Parse(pd.tan[1], nfi);
-            float tz = float.Parse(pd.tan[2], nfi);
-
-            float nx = float.Parse(pd.norm[0], nfi);
-            float ny = float.Parse(pd.norm[1], nfi);
-            float nz = float.Parse(pd.norm[2], nfi);
-
-            float bnx = float.Parse(pd.binorm[0], nfi);
-            float bny = float.Parse(pd.binorm[1], nfi);
-            float bnz = float.Parse(pd.binorm[2], nfi);
-
-            //float t = float.Parse(pd.t, nfi);
-
-            pds.points.Add(new Vector3(x, y, z));
-            pds.worldPoints.Add(swapYZCoordinates ?
-                new Vector3(x, z, y) * PointScaleFactor :
-                new Vector3(x, y, z) * PointScaleFactor);
-            pds.paramValues.Add(t);
-
-            FresnetSerretApparatus fsp = new FresnetSerretApparatus();
-            fsp.Tangent = swapYZCoordinates ? 
-                new Vector3(tx, tz, ty) * PointScaleFactor :
-                new Vector3(tx, ty, tz) * PointScaleFactor;
-
-            fsp.Normal = swapYZCoordinates ?
-                new Vector3(nx, nz, ny) * PointScaleFactor :
-                new Vector3(nx, ny, nz) * PointScaleFactor;
-
-            fsp.Binormal = swapYZCoordinates ?
-                new Vector3(bnx, bnz, bny) * PointScaleFactor :
-                new Vector3(bnx, bny, bnz) * PointScaleFactor;
-
-            pds.fresnetApparatuses.Add(fsp);
-        }
-
-        return pds;
-    }
-
-    private PointDataset CreateDatasetFormLocalCalculation(AbstractCurveCalc curveCalc)
-    {
-        // Local Calculation
-        PointDataset pdsa = new PointDataset();
-        //var calc01 = new LogHelixCurveCalc();
-        pdsa.Name = curveCalc.Name; // + "_LocalCalc";
-        pdsa.DisplayString = curveCalc.DisplayString;
-        pdsa.NotebookURL = filePrePath + curveCalc.Name + ".html";
-
-        pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
-        pdsa.points = curveCalc.CalculatePoints();
-
-        for (int i = 0; i < pdsa.points.Count; i++)
-        {
-            Vector3 pv = pdsa.points[i];
-            pdsa.worldPoints.Add(curveCalc.Is3DCurve ?
-                new Vector3(pv.x, pv.z, pv.y) * PointScaleFactor :
-                pv * PointScaleFactor);
-        }
-
-        pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
-
-        return pdsa;
-    }
-
-    private void ImportAllResources()
-    {
-        // CSV Resources
-        UnityEngine.Object[] csv_resources = Resources.LoadAll("csv/exercises/", typeof(TextAsset));
-
-        for(int i = 0; i < csv_resources.Length; i++)
-        {
-            TextAsset csvRes = csv_resources[i] as TextAsset;
-            NamedCurveDatasets.Add(ImportPointsFromCSVResource(csvRes));            
-        }
-
-        // JSON Resources
-        UnityEngine.Object[] json_resources = Resources.LoadAll("json/exercises/", typeof(TextAsset));
-
-        for (int i = 0; i < json_resources.Length; i++)
-        {
-            NamedCurveDatasets.Add(ImportFromJSONResource(json_resources[i] as TextAsset));
-        }
-
-        // Local calculation
-        for(int i = 0; i < LocalNamedCalcList.Count; i++)
-        {
-            AbstractCurveCalc calc = LocalNamedCalcList[i];
-            NamedCurveDatasets.Add(CreateDatasetFormLocalCalculation(calc));
-        }
-
-        for (int i = 0; i < LocalParamCalcList.Count; i++)
-        {
-            AbstractCurveCalc calc = LocalParamCalcList[i];
-            paramCurveDatasets.Add(CreateDatasetFormLocalCalculation(calc));
-        }
-
-    }
-
+    
 
 }
 
@@ -505,6 +393,7 @@ public class PointData
     public List<string> norm { get; set; } = new List<string>();
     public List<string> binorm { get; set; } = new List<string>();
 }
+
 
 
 
