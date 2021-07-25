@@ -27,12 +27,12 @@ public class RunStart : MonoBehaviour,
 
     public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
     {
-        ParamCurve pm = Target.GetComponent<ParamCurve>();        
-        if(pm != null)
+        WorldStateController world = Target.GetComponent<WorldStateController>();        
+        if(world != null)
         {
-            if(!pm.IsDriving)
+            if(!GlobalData.IsDriving)
             {
-                pm.StartRun();
+                world.StartRun();
             }
             
         }

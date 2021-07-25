@@ -11,7 +11,7 @@ public class NextDataSet : MonoBehaviour,
 
     public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
     {
-        ParamCurve pm = Target.GetComponent<ParamCurve>();
+        WorldStateController pm = Target.GetComponent<WorldStateController>();
         if(pm != null)
         {
             pm.SwitchToNextDataset();

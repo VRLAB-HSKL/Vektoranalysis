@@ -7,6 +7,7 @@ public static class GlobalData
     public static float PointScaleFactor = 1f;
     public static float RunSpeedFactor = 1f;
 
+    public static bool IsDriving = false;
 
     public enum CurveDisplayGroup { Named = 0, Parameter = 1, Exercises = 2 }
     public static CurveDisplayGroup CurrentDisplayGroup = CurveDisplayGroup.Named;
@@ -66,7 +67,7 @@ public static class GlobalData
 
 
     public static int currentCurveIndex = 0;
-    public static int currentPointIndex = 0;
+    public static int CurrentPointIndex = 0;
 
     public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
     public static string ImageResourcePath = "img/";
@@ -74,6 +75,86 @@ public static class GlobalData
     {
         ImportAllResources();
     }
+
+
+    //public static void SwitchToNextDataset()
+    //{
+    //    // Stop driving
+    //    if (IsDriving)
+    //    {
+    //        IsDriving = false;
+    //    }
+
+    //    // Increment data set index, reset to 0 on overflow
+    //    ++GlobalData.currentCurveIndex;
+    //    if (GlobalData.currentCurveIndex >= GlobalData.CurrentDataset.Count)
+    //        GlobalData.currentCurveIndex = 0;
+
+    //    // Reset point index
+    //    GlobalData.CurrentPointIndex = 0;
+
+    //    // Display html resource
+    //    IngameBrowser.OpenCommentFile(
+    //        GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
+
+    //    UpdateWorldObjects();
+    //}
+
+    //public static void SwitchToPreviousDataset()
+    //{
+    //    // Stop driving
+    //    if (IsDriving)
+    //    {
+    //        IsDriving = false;
+    //    }
+
+    //    // Decrement data set index, reset to last element on negative index
+    //    --GlobalData.currentCurveIndex;
+    //    if (GlobalData.currentCurveIndex < 0)
+    //        GlobalData.currentCurveIndex = GlobalData.CurrentDataset.Count - 1;
+
+    //    // Reset point index
+    //    GlobalData.CurrentPointIndex = 0;
+
+    //    // Display html resource
+    //    IngameBrowser.OpenCommentFile(
+    //        GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
+
+    //    UpdateWorldObjects();
+    //}
+
+
+    //public void SwitchToSpecificDataset(string name)
+    //{
+    //    // Stop driving
+    //    if (IsDriving)
+    //    {
+    //        IsDriving = false;
+    //    }
+
+    //    //// Increment data set index, reset to 0 on overflow
+    //    //++currentDataSetIndex;
+    //    //if (currentDataSetIndex >= CurrentDataset.Count)
+    //    //    currentDataSetIndex = 0;
+
+    //    int index = GlobalData.CurrentDataset.FindIndex(x => x.Name.Equals(name));
+    //    if (index == -1) return;
+
+    //    GlobalData.currentCurveIndex = index;
+
+    //    // Reset point index
+    //    GlobalData.CurrentPointIndex = 0;
+
+    //    // Display html resource
+    //    IngameBrowser.OpenCommentFile(
+    //        GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
+
+    //    UpdateWorldObjects();
+    //}
+
+
+
+
 
     private static void ImportAllResources()
     {
@@ -114,6 +195,9 @@ public static class GlobalData
         }
 
     }
+
+
+
 
 
 }

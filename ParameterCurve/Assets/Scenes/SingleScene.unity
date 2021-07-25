@@ -154,7 +154,7 @@ Transform:
   - {fileID: 438037833}
   - {fileID: 1906314124}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8764980
 GameObject:
@@ -556,28 +556,9 @@ MonoBehaviour:
   RootElement: {fileID: 1491645188}
   DisplayLR: {fileID: 26821157}
   TravelObject: {fileID: 1600616504}
-  SourceLabel: {fileID: 997031699}
-  IndexLabel: {fileID: 974421273}
-  TLabel: {fileID: 2063077901}
-  XLabel: {fileID: 1537640459}
-  YLabel: {fileID: 1203359436}
-  ZLabel: {fileID: 195036769}
-  IngameBrowser: {fileID: 1557279499}
-  IsDriving: 0
-  MainMenuButtonsParent: {fileID: 1187910000}
-  MainMenuButtonPrefab: {fileID: 5485140406154464302, guid: e429efa0e9c530c43b26505faa40b500,
-    type: 3}
-  CurveMenuContent: {fileID: 99440963}
-  CurveMenuButtonPrefab: {fileID: 3674468508832717730, guid: b40898bfde376f345b0b2fe0ec7c2cb1,
-    type: 3}
-  TimeDistanceStart: {fileID: 859447187}
-  TimeDistanceXAxis: {fileID: 759189381}
-  TimeDistanceYAxis: {fileID: 1290486274}
-  TimeDistanceTravelObject: {fileID: 1728777734}
-  TimeVelocityStart: {fileID: 905920051}
-  TimeVelocityXAxis: {fileID: 1708795556}
-  TimeVelocityYAxis: {fileID: 2063002720}
-  TimeVelocityTravelObject: {fileID: 214085816}
+  BrowserWall: {fileID: 0}
+  InfoWall: {fileID: 0}
+  CurveSelectWall: {fileID: 0}
 --- !u!120 &26821157
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -688,7 +669,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &27408751
 GameObject:
@@ -1574,7 +1555,7 @@ Transform:
   - {fileID: 1577831186}
   - {fileID: 2114959046}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &171171339
 PrefabInstance:
@@ -2706,7 +2687,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 2130566546}
     m_Modifications:
     - target: {fileID: 1000010501866246, guid: 39bf41b66f565fa48b3db156956ceac1, type: 3}
       propertyPath: m_IsActive
@@ -2722,7 +2703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010952822568, guid: 39bf41b66f565fa48b3db156956ceac1, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010952822568, guid: 39bf41b66f565fa48b3db156956ceac1, type: 3}
       propertyPath: m_LocalScale.x
@@ -2738,11 +2719,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010952822568, guid: 39bf41b66f565fa48b3db156956ceac1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010952822568, guid: 39bf41b66f565fa48b3db156956ceac1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010952822568, guid: 39bf41b66f565fa48b3db156956ceac1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2936,6 +2917,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 348517407}
+  - component: {fileID: 348517408}
   - component: {fileID: 348517406}
   - component: {fileID: 348517405}
   - component: {fileID: 348517404}
@@ -3023,13 +3005,32 @@ RectTransform:
   - {fileID: 1768755574}
   - {fileID: 1294974257}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 7.5, y: 2.5}
   m_SizeDelta: {x: 15, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &348517408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348517403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c86b32e17dda2e45a27efba7c05fc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainMenuButtonsParent: {fileID: 1187910000}
+  MainMenuButtonPrefab: {fileID: 5485140406154464302, guid: e429efa0e9c530c43b26505faa40b500,
+    type: 3}
+  CurveMenuContent: {fileID: 99440963}
+  CurveMenuButtonPrefab: {fileID: 3674468508832717730, guid: b40898bfde376f345b0b2fe0ec7c2cb1,
+    type: 3}
+  world: {fileID: 26821156}
 --- !u!1 &373948457
 GameObject:
   m_ObjectHideFlags: 0
@@ -3211,26 +3212,9 @@ MonoBehaviour:
   RootElement: {fileID: 773664009}
   DisplayLR: {fileID: 0}
   TravelObject: {fileID: 0}
-  SourceLabel: {fileID: 0}
-  IndexLabel: {fileID: 0}
-  TLabel: {fileID: 0}
-  XLabel: {fileID: 0}
-  YLabel: {fileID: 0}
-  ZLabel: {fileID: 0}
-  IngameBrowser: {fileID: 0}
-  IsDriving: 1
-  MainMenuButtonsParent: {fileID: 0}
-  MainMenuButtonPrefab: {fileID: 0}
-  CurveMenuContent: {fileID: 0}
-  CurveMenuButtonPrefab: {fileID: 0}
-  TimeDistanceStart: {fileID: 0}
-  TimeDistanceXAxis: {fileID: 0}
-  TimeDistanceYAxis: {fileID: 0}
-  TimeDistanceTravelObject: {fileID: 0}
-  TimeVelocityStart: {fileID: 0}
-  TimeVelocityXAxis: {fileID: 0}
-  TimeVelocityYAxis: {fileID: 0}
-  TimeVelocityTravelObject: {fileID: 0}
+  BrowserWall: {fileID: 0}
+  InfoWall: {fileID: 0}
+  CurveSelectWall: {fileID: 0}
 --- !u!120 &377768450
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -3412,26 +3396,9 @@ MonoBehaviour:
   RootElement: {fileID: 331380903}
   DisplayLR: {fileID: 389395132}
   TravelObject: {fileID: 0}
-  SourceLabel: {fileID: 0}
-  IndexLabel: {fileID: 0}
-  TLabel: {fileID: 0}
-  XLabel: {fileID: 0}
-  YLabel: {fileID: 0}
-  ZLabel: {fileID: 0}
-  IngameBrowser: {fileID: 0}
-  IsDriving: 1
-  MainMenuButtonsParent: {fileID: 0}
-  MainMenuButtonPrefab: {fileID: 0}
-  CurveMenuContent: {fileID: 0}
-  CurveMenuButtonPrefab: {fileID: 0}
-  TimeDistanceStart: {fileID: 0}
-  TimeDistanceXAxis: {fileID: 0}
-  TimeDistanceYAxis: {fileID: 0}
-  TimeDistanceTravelObject: {fileID: 0}
-  TimeVelocityStart: {fileID: 0}
-  TimeVelocityXAxis: {fileID: 0}
-  TimeVelocityYAxis: {fileID: 0}
-  TimeVelocityTravelObject: {fileID: 0}
+  BrowserWall: {fileID: 0}
+  InfoWall: {fileID: 0}
+  CurveSelectWall: {fileID: 0}
 --- !u!120 &389395132
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -4220,7 +4187,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &451157729
 GameObject:
@@ -4881,6 +4848,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 574559610}
+  - component: {fileID: 574559611}
   - component: {fileID: 574559609}
   - component: {fileID: 574559608}
   - component: {fileID: 574559607}
@@ -4976,6 +4944,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.5}
   m_SizeDelta: {x: 15, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &574559611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574559606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ba998ab2fecc12479a8e44824333fc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SourceLabel: {fileID: 997031699}
+  IndexLabel: {fileID: 974421273}
+  TLabel: {fileID: 2063077901}
+  XLabel: {fileID: 1537640459}
+  YLabel: {fileID: 1203359436}
+  ZLabel: {fileID: 195036769}
+  TimeDistanceStart: {fileID: 859447187}
+  TimeDistanceXAxis: {fileID: 759189381}
+  TimeDistanceYAxis: {fileID: 1290486274}
+  TimeDistanceTravelObject: {fileID: 1728777734}
+  TimeVelocityStart: {fileID: 905920051}
+  TimeVelocityXAxis: {fileID: 1708795556}
+  TimeVelocityYAxis: {fileID: 2063002720}
+  TimeVelocityTravelObject: {fileID: 214085816}
 --- !u!1 &616668359
 GameObject:
   m_ObjectHideFlags: 0
@@ -5408,8 +5402,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!4 &708766645 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4000010952822568, guid: 39bf41b66f565fa48b3db156956ceac1,
+    type: 3}
+  m_PrefabInstance: {fileID: 329683539}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &732224383
 GameObject:
   m_ObjectHideFlags: 0
@@ -7349,7 +7349,7 @@ Transform:
   - {fileID: 188854554}
   - {fileID: 1440134125}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &934271473
 GameObject:
@@ -7709,7 +7709,7 @@ Transform:
   - {fileID: 768647270}
   - {fileID: 1587524373}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &962696184
 GameObject:
@@ -9182,7 +9182,7 @@ GameObject:
   - component: {fileID: 1187910003}
   - component: {fileID: 1187910002}
   m_Layer: 5
-  m_Name: Content
+  m_Name: MainMenuContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9624,7 +9624,7 @@ Transform:
   - {fileID: 84392396}
   - {fileID: 1343888306}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1249439706
 GameObject:
@@ -10559,7 +10559,7 @@ Transform:
   m_Children:
   - {fileID: 171171340}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1391057795
 GameObject:
@@ -12390,7 +12390,7 @@ Transform:
   - {fileID: 1607268809}
   - {fileID: 72699484}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1605630809
 GameObject:
@@ -12968,26 +12968,9 @@ MonoBehaviour:
   RootElement: {fileID: 1491645188}
   DisplayLR: {fileID: 1689212564}
   TravelObject: {fileID: 0}
-  SourceLabel: {fileID: 0}
-  IndexLabel: {fileID: 0}
-  TLabel: {fileID: 0}
-  XLabel: {fileID: 0}
-  YLabel: {fileID: 0}
-  ZLabel: {fileID: 0}
-  IngameBrowser: {fileID: 0}
-  IsDriving: 1
-  MainMenuButtonsParent: {fileID: 0}
-  MainMenuButtonPrefab: {fileID: 0}
-  CurveMenuContent: {fileID: 0}
-  CurveMenuButtonPrefab: {fileID: 0}
-  TimeDistanceStart: {fileID: 0}
-  TimeDistanceXAxis: {fileID: 0}
-  TimeDistanceYAxis: {fileID: 0}
-  TimeDistanceTravelObject: {fileID: 0}
-  TimeVelocityStart: {fileID: 0}
-  TimeVelocityXAxis: {fileID: 0}
-  TimeVelocityYAxis: {fileID: 0}
-  TimeVelocityTravelObject: {fileID: 0}
+  BrowserWall: {fileID: 0}
+  InfoWall: {fileID: 0}
+  CurveSelectWall: {fileID: 0}
 --- !u!120 &1689212564
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -13314,7 +13297,7 @@ Transform:
   - {fileID: 377768448}
   - {fileID: 773664009}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1728777734
 GameObject:
@@ -15703,6 +15686,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2114959045}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2130566544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2130566546}
+  - component: {fileID: 2130566545}
+  m_Layer: 0
+  m_Name: NotebookDisplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2130566545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130566544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3a9548c6729da42ad20de6e8534fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Browser: {fileID: 1557279499}
+--- !u!4 &2130566546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130566544}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.5, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 708766645}
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2134659875
 GameObject:
   m_ObjectHideFlags: 0
@@ -15751,26 +15779,9 @@ MonoBehaviour:
   RootElement: {fileID: 2142928281}
   DisplayLR: {fileID: 2134659878}
   TravelObject: {fileID: 0}
-  SourceLabel: {fileID: 0}
-  IndexLabel: {fileID: 0}
-  TLabel: {fileID: 0}
-  XLabel: {fileID: 0}
-  YLabel: {fileID: 0}
-  ZLabel: {fileID: 0}
-  IngameBrowser: {fileID: 0}
-  IsDriving: 1
-  MainMenuButtonsParent: {fileID: 0}
-  MainMenuButtonPrefab: {fileID: 0}
-  CurveMenuContent: {fileID: 0}
-  CurveMenuButtonPrefab: {fileID: 0}
-  TimeDistanceStart: {fileID: 0}
-  TimeDistanceXAxis: {fileID: 0}
-  TimeDistanceYAxis: {fileID: 0}
-  TimeDistanceTravelObject: {fileID: 0}
-  TimeVelocityStart: {fileID: 0}
-  TimeVelocityXAxis: {fileID: 0}
-  TimeVelocityYAxis: {fileID: 0}
-  TimeVelocityTravelObject: {fileID: 0}
+  BrowserWall: {fileID: 0}
+  InfoWall: {fileID: 0}
+  CurveSelectWall: {fileID: 0}
 --- !u!120 &2134659878
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -15933,7 +15944,7 @@ Transform:
   m_Children:
   - {fileID: 1203035603}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2142928281
 GameObject:
