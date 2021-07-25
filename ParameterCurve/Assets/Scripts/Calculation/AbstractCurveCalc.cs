@@ -90,6 +90,56 @@ public abstract class AbstractCurveCalc
         return fresnetList;
     }
 
+    public List<Vector2> CalculateTimeDistancePoints()
+    {
+        List<Vector2> tdPoints = new List<Vector2>();
+        var curvePoints = CalculatePoints();
+        int numSteps = ParameterIntervall.Count;
+
+        float maxDistance = CalculateRawDistance(curvePoints);
+        float currentDistance = 0f;
+
+        for(int i = 0; i < numSteps; i++)
+        {
+            float x = i / (float)numSteps;  //ParameterIntervall[i];
+
+
+            float y;
+            if (i == 0)
+            {
+                y = 0f;
+            }
+            else
+            {
+                float d = Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
+                //Debug.Log("VecDist: " + y);
+                currentDistance += d;
+                y = currentDistance;
+                y /= maxDistance;
+                //Debug.Log("ScaledVecDist: " + y);
+
+            }
+
+            tdPoints.Add(new Vector2(x, y));
+        }
+
+        return tdPoints;
+    }
+
+    public static float CalculateRawDistance(List<Vector3> pointList)
+    {
+        if (pointList.Count < 2) return 0f;
+
+        float distance = 0f;
+        for(int i = 1; i < pointList.Count; i++)
+        {
+            distance += Vector3.Distance(pointList[i -1], pointList[i]);
+        }
+
+        return distance;
+    }
+
+
 
     /// <summary>
     /// Source: https://stackoverflow.com/questions/17046293/is-there-a-linspace-like-method-in-math-net/67131017#67131017 

@@ -48,6 +48,13 @@ public class ParamCurve : MonoBehaviour
     public GameObject CurveMenuButtonPrefab;
 
 
+    [Header("TimeDistance")]
+    public GameObject TimeDistanceStart;
+    public GameObject TimeDistanceXAxis;
+    public GameObject TimeDistanceYAxis;
+    private LineRenderer TimeDistLR;
+
+
     
 
     //private List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
@@ -71,15 +78,6 @@ public class ParamCurve : MonoBehaviour
 
     private LineRenderer BinormalLR;
     private Vector3[] binormalArr = new Vector3[2];
-
-
-    
-
-
-    //private bool csvIs3D = false;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -110,9 +108,20 @@ public class ParamCurve : MonoBehaviour
             BinormalLR.positionCount = 2;
         }
 
+        var xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
+        var yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();
 
+        DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
+        DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
+        TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
+
+        //Debug.Log("TDXAxisLength: " + DataImport.TimeDistanceXAxisLength);
+        //Debug.Log("TDYAxisLength: " + DataImport.TimeDistanceYAxisLength);
 
         GlobalData.InitializeData();
+
+        
+
 
         // Display html resource
         IngameBrowser.OpenCommentFile(
@@ -175,6 +184,17 @@ public class ParamCurve : MonoBehaviour
 
         DisplayLR.positionCount = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.Count;
         DisplayLR.SetPositions(GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.ToArray());
+
+        TimeDistLR.positionCount = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints.Count;
+        for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints.Count; i++)
+        {
+            Vector2 p = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints[i];
+            Vector3 newPos = TimeDistanceStart.transform.position;
+            newPos.x += p.x;
+            newPos.y += p.y;
+            TimeDistLR.SetPosition(i, newPos);
+        }
+
 
     }
 
@@ -301,6 +321,7 @@ public class ParamCurve : MonoBehaviour
             return;
         }
 
+        
         int pointIndex = GlobalData.currentPointIndex;
 
         TravelObject.position = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints[pointIndex];

@@ -6,6 +6,9 @@ using UnityEngine;
 
 public static class DataImport
 {
+    public static float TimeDistanceXAxisLength;
+    public static float TimeDistanceYAxisLength;
+
     private static NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
     public static PointDataset ImportPointsFromCSVResource(TextAsset txt)
@@ -142,6 +145,18 @@ public static class DataImport
         }
 
         pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
+
+        pdsa.timeDistancePoints = curveCalc.CalculateTimeDistancePoints();        
+
+        for(int i = 0; i < pdsa.timeDistancePoints.Count; i++)
+        {
+            Vector2 p = pdsa.timeDistancePoints[i];
+            p.x *= TimeDistanceXAxisLength;
+            p.y *= TimeDistanceYAxisLength;
+            pdsa.timeDistancePoints[i] = new Vector2(p.x, p.y);
+        }
+
+        pdsa.Distance = AbstractCurveCalc.CalculateRawDistance(pdsa.points);
 
         return pdsa;
     }
