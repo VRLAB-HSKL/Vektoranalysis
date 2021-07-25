@@ -556,9 +556,9 @@ MonoBehaviour:
   RootElement: {fileID: 1491645188}
   DisplayLR: {fileID: 26821157}
   TravelObject: {fileID: 1600616504}
-  BrowserWall: {fileID: 0}
-  InfoWall: {fileID: 0}
-  CurveSelectWall: {fileID: 0}
+  BrowserWall: {fileID: 2130566545}
+  InfoWall: {fileID: 574559611}
+  CurveSelectWall: {fileID: 348517408}
 --- !u!120 &26821157
 LineRenderer:
   m_ObjectHideFlags: 0
