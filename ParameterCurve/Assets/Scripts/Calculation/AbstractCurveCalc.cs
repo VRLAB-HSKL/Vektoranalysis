@@ -111,19 +111,61 @@ public abstract class AbstractCurveCalc
             }
             else
             {
-                float d = Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
-                //Debug.Log("VecDist: " + y);
-                currentDistance += d;
+                currentDistance += Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
                 y = currentDistance;
                 y /= maxDistance;
-                //Debug.Log("ScaledVecDist: " + y);
-
             }
 
             tdPoints.Add(new Vector2(x, y));
         }
 
         return tdPoints;
+    }
+
+    public List<Vector2> CalculateTimeVelocityPoints()
+    {
+        List<Vector2> tvPoints = new List<Vector2>();
+        var curvePoints = CalculatePoints();
+        int numSteps = ParameterIntervall.Count;
+
+        //float maxDistance =  CalculateRawDistance(curvePoints);
+        //float currentDistance = 0f;
+        float maxVelocity = 0f;
+
+        for (int i = 0; i < numSteps; i++)
+        {
+            float x = i / (float)numSteps;
+
+            float y;
+            if(i == 0)
+            {
+                y = 0f;
+            }
+            else
+            {
+                float distance = Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
+                //Debug.Log("VecDist: " + y);
+                //currentDistance += d;
+                y = distance;
+
+                if(y > maxVelocity)
+                {
+                    maxVelocity = y;
+                }
+                //y /= maxDistance;
+                //Debug.Log("ScaledVecDist: " + y);
+            }
+
+            tvPoints.Add(new Vector2(x, y));
+        }
+
+        foreach(Vector2 v in tvPoints)
+        {
+            v.Set(v.x, v.y / maxVelocity);
+        }
+        
+
+        return tvPoints;
     }
 
     public static float CalculateRawDistance(List<Vector3> pointList)

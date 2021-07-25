@@ -9,6 +9,10 @@ public static class DataImport
     public static float TimeDistanceXAxisLength;
     public static float TimeDistanceYAxisLength;
 
+    public static float TimeVelocityXAxisLength;
+    public static float TimeVelocityYAxisLength;
+
+
     private static NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
     public static PointDataset ImportPointsFromCSVResource(TextAsset txt)
@@ -154,6 +158,22 @@ public static class DataImport
             p.x *= TimeDistanceXAxisLength;
             p.y *= TimeDistanceYAxisLength;
             pdsa.timeDistancePoints[i] = new Vector2(p.x, p.y);
+        }
+
+        pdsa.timeVelocityPoints = curveCalc.CalculateTimeVelocityPoints();
+
+        for(int i = 0; i < pdsa.timeVelocityPoints.Count; i++)
+        {
+            Vector2 p = pdsa.timeVelocityPoints[i];
+
+            //Debug.Log("VelVec: " + p);
+
+            p.x *= TimeVelocityXAxisLength;
+            p.y *= TimeVelocityYAxisLength;
+
+            //Debug.Log("VelVecAxisScale: " + p);
+
+            pdsa.timeVelocityPoints[i] = new Vector2(p.x, p.y);            
         }
 
         pdsa.Distance = AbstractCurveCalc.CalculateRawDistance(pdsa.points);

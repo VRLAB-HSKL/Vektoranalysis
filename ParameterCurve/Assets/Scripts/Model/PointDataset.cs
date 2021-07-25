@@ -17,7 +17,7 @@ public class PointDataset
     public List<float> paramValues = new List<float>();
 
     public List<Vector2> timeDistancePoints = new List<Vector2>();
-
+    public List<Vector2> timeVelocityPoints = new List<Vector2>();
 
     public List<FresnetSerretApparatus> fresnetApparatuses = new List<FresnetSerretApparatus>();
 

@@ -52,10 +52,17 @@ public class ParamCurve : MonoBehaviour
     public GameObject TimeDistanceStart;
     public GameObject TimeDistanceXAxis;
     public GameObject TimeDistanceYAxis;
+    public GameObject TimeDistanceTravelObject;
     private LineRenderer TimeDistLR;
+    private Vector3 initTimeDistTravelPos;
 
+    public GameObject TimeVelocityStart;
+    public GameObject TimeVelocityXAxis;
+    public GameObject TimeVelocityYAxis;
+    public GameObject TimeVelocityTravelObject;
+    private LineRenderer TimeVelocityLR;
+    private Vector3 initTimeVelocityTravelPos;
 
-    
 
     //private List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
     //private List<PointDataset> paramCurveDatasets = new List<PointDataset>();
@@ -64,7 +71,7 @@ public class ParamCurve : MonoBehaviour
     //private int currentCurveIndex = 0;
     //private int currentPointIndex = 0;
 
-    
+
 
     private Vector3 InitTravelObjPos;
 
@@ -108,15 +115,26 @@ public class ParamCurve : MonoBehaviour
             BinormalLR.positionCount = 2;
         }
 
-        var xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
-        var yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();
+        MeshRenderer xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
+        MeshRenderer yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();
 
         DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
         DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
         TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
+        initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
 
-        //Debug.Log("TDXAxisLength: " + DataImport.TimeDistanceXAxisLength);
-        //Debug.Log("TDYAxisLength: " + DataImport.TimeDistanceYAxisLength);
+        xrenderer = TimeVelocityXAxis.GetComponent<MeshRenderer>();
+        yrenderer = TimeVelocityYAxis.GetComponent<MeshRenderer>();
+
+        DataImport.TimeVelocityXAxisLength = xrenderer.bounds.size.x;
+        DataImport.TimeVelocityYAxisLength = yrenderer.bounds.size.y;
+        TimeVelocityLR = TimeVelocityStart.GetComponent<LineRenderer>();
+        initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
+
+
+
+        Debug.Log("TDXAxisLength: " + DataImport.TimeDistanceXAxisLength);
+        Debug.Log("TDYAxisLength: " + DataImport.TimeDistanceYAxisLength);
 
         GlobalData.InitializeData();
 
@@ -175,7 +193,7 @@ public class ParamCurve : MonoBehaviour
             
     }
 
-    public void UpdateLineRenderer()
+    public void UpdateLineRenderers()
     {        
         if (GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints is null) return;
 
@@ -195,6 +213,15 @@ public class ParamCurve : MonoBehaviour
             TimeDistLR.SetPosition(i, newPos);
         }
 
+        TimeVelocityLR.positionCount = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints.Count;
+        for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints.Count; i++)
+        {
+            Vector2 p = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints[i];
+            Vector3 newPos = TimeVelocityStart.transform.position;
+            newPos.x += p.x;
+            newPos.y += p.y;
+            TimeVelocityLR.SetPosition(i, newPos);
+        }
 
     }
 
@@ -288,10 +315,6 @@ public class ParamCurve : MonoBehaviour
         GlobalData.currentCurveIndex = 0;
         GlobalData.currentPointIndex = 0;
 
-
-        //Debug.Log("CurrDataSetCount: " + GlobalData.CurrentDataset.Count);
-        //Debug.Log("CurrentCurveIndex: " + GlobalData.currentCurveIndex);
-
         // Display html resource
         IngameBrowser.OpenCommentFile(
             GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
@@ -303,7 +326,7 @@ public class ParamCurve : MonoBehaviour
 
     private void UpdateWorldObjects()
     {
-        UpdateLineRenderer();
+        UpdateLineRenderers();
         SetTravelPointAndDisplay();
     }
 
@@ -349,6 +372,17 @@ public class ParamCurve : MonoBehaviour
         YLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].y.ToString("0.#####");
         ZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].z.ToString("0.#####");
 
+        // Set info plot travel objects
+        Vector2 tdPosVec = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints[pointIndex];
+        Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
+        TimeDistanceTravelObject.transform.position =
+            initTimeDistTravelPos + tdVec;
+
+        Vector2 tvPosVec = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints[pointIndex];
+        Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
+        TimeVelocityTravelObject.transform.position =
+            initTimeVelocityTravelPos + tvVec;
+
         ++GlobalData.currentPointIndex;
 
     }
@@ -357,10 +391,6 @@ public class ParamCurve : MonoBehaviour
     private void UpdateCurveMenuButtons()
     {
         // Clear old buttons
-        //while (CurveMenuContent.transform.childCount > 0)
-        //{
-        //    DestroyImmediate(transform.GetChild(0).gameObject);
-        //}
 
         GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
         for (int i = 0; i < CurveMenuContent.transform.childCount; i++)
