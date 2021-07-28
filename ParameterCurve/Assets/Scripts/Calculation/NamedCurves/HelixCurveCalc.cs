@@ -16,9 +16,7 @@ public class HelixCurveCalc : AbstractCurveCalc
         PointCalcFunc = CalculatePoint;
         VelocityCalcFunc = CalculateVelocityPoint;
         AccelerationCalcFunc = CalculateAccelerationPoint;
-    }
-
-    
+    }    
 
     protected override Vector3 CalculatePoint(float t)
     {

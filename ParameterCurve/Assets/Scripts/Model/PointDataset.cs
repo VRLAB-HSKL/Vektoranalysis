@@ -22,6 +22,11 @@ public class PointDataset
     public List<FresnetSerretApparatus> fresnetApparatuses = new List<FresnetSerretApparatus>();
 
 
+    public List<Vector3> arcLenghtPoints = new List<Vector3>();
+    public List<Vector3> arcLengthWorldPoints = new List<Vector3>();
+    public List<float> arcLengthParamValues = new List<float>();
+
+    public List<FresnetSerretApparatus> arcLengthFresnetApparatuses = new List<FresnetSerretApparatus>();
 
 
 }

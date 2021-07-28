@@ -175,11 +175,12 @@ public abstract class AbstractCurveCalc
         float distance = 0f;
         for(int i = 1; i < pointList.Count; i++)
         {
-            distance += Vector3.Distance(pointList[i -1], pointList[i]);
+            distance += Mathf.Abs(Vector3.Distance(pointList[i - 1], pointList[i]));
         }
 
         return distance;
     }
+
 
 
 

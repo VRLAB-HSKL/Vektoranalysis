@@ -20,12 +20,14 @@ public class WorldStateController : MonoBehaviour
     public GameObject RootElement;
     public LineRenderer DisplayLR;
     public Transform TravelObject;
+    public Transform ArcLengthTravelObject;
 
     public BrowserControl BrowserWall;
     public InformationControl InfoWall;
     public CurveSelectionControl CurveSelectWall;
 
     private Vector3 InitTravelObjPos;
+    private Vector3 InitArcLengthTravelObjPos;
 
     private float pointStepDuration = 0f;
 
@@ -38,6 +40,16 @@ public class WorldStateController : MonoBehaviour
     private LineRenderer BinormalLR;
     private Vector3[] binormalArr = new Vector3[2];
 
+    private LineRenderer ArcLengthTangentLR;
+    private Vector3[] arcLengthTangentArr = new Vector3[2];
+
+    private LineRenderer ArcLengthNormalLR;
+    private Vector3[] arcLengthNormalArr = new Vector3[2];
+
+    private LineRenderer ArcLengthBinormalLR;
+    private Vector3[] arcLengthBinormalArr = new Vector3[2];
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +57,7 @@ public class WorldStateController : MonoBehaviour
             0f //(1f / 30f) //60f) 
             * GlobalData.RunSpeedFactor;
 
+        // Setup travel object line renderers
         InitTravelObjPos = TravelObject.position;
         if(TravelObject.childCount > 0)
         {
@@ -66,6 +79,30 @@ public class WorldStateController : MonoBehaviour
             BinormalLR = thirdChild.GetComponent<LineRenderer>();
             BinormalLR.positionCount = 2;
         }
+
+        // Setup arc length travel object
+        InitArcLengthTravelObjPos = ArcLengthTravelObject.position;
+        if (ArcLengthTravelObject.childCount > 0)
+        {
+            GameObject firstChild = ArcLengthTravelObject.GetChild(0).gameObject;
+            ArcLengthTangentLR = firstChild.GetComponent<LineRenderer>();
+            ArcLengthTangentLR.positionCount = 2;
+        }
+
+        if (ArcLengthTravelObject.childCount > 1)
+        {
+            GameObject secondChild = ArcLengthTravelObject.GetChild(1).gameObject;
+            ArcLengthNormalLR = secondChild.GetComponent<LineRenderer>();
+            ArcLengthNormalLR.positionCount = 2;
+        }
+
+        if (ArcLengthTravelObject.childCount > 2)
+        {
+            GameObject thirdChild = ArcLengthTravelObject.GetChild(2).gameObject;
+            ArcLengthBinormalLR = thirdChild.GetComponent<LineRenderer>();
+            ArcLengthBinormalLR.positionCount = 2;
+        }
+
 
         GlobalData.InitializeData();
 
@@ -211,9 +248,7 @@ public class WorldStateController : MonoBehaviour
         int pointIndex = GlobalData.CurrentPointIndex;
 
         TravelObject.position = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints[pointIndex];
-
-        
-
+        ArcLengthTravelObject.position = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLengthWorldPoints[pointIndex];
 
         tangentArr[0] = TravelObject.position;
         tangentArr[1] = TravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].fresnetApparatuses[pointIndex].Tangent;
@@ -228,6 +263,20 @@ public class WorldStateController : MonoBehaviour
         BinormalLR.SetPositions(binormalArr);
 
 
+        arcLengthTangentArr[0] = ArcLengthTravelObject.position;
+        arcLengthTangentArr[1] = ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLengthFresnetApparatuses[pointIndex].Tangent;
+        ArcLengthTangentLR.SetPositions(arcLengthTangentArr);
+
+        arcLengthNormalArr[0] = ArcLengthTravelObject.position;
+        arcLengthNormalArr[1] = ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLengthFresnetApparatuses[pointIndex].Normal;
+        ArcLengthNormalLR.SetPositions(arcLengthNormalArr);
+
+        arcLengthBinormalArr[0] = ArcLengthTravelObject.position;
+        arcLengthBinormalArr[1] = ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLengthFresnetApparatuses[pointIndex].Binormal;
+        ArcLengthBinormalLR.SetPositions(arcLengthBinormalArr);
+
+
+
         Vector3 nextPos = Vector3.zero;
         if (pointIndex < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.Count - 1)
         {
@@ -239,6 +288,9 @@ public class WorldStateController : MonoBehaviour
         }
 
         TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
+
+
+        // ToDo: Add arc length travel object rotation ?
 
 
         InfoWall.UpdateInfoLabels();

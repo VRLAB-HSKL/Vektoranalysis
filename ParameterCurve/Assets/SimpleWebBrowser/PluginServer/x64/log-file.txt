@@ -595,3 +595,15 @@
 2021-07-28 14:23:59,588 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
 2021-07-28 14:23:59,643 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:d15f7e35-70b8-4131-8b60-1a01e80aa4e9,port:8237
 2021-07-28 14:29:23,159 [9] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-07-28 15:56:13,769 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-07-28 15:56:13,825 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:f3b2db2f-ef4a-4e5e-8085-53feb003eea2,port:8675
+2021-07-28 15:56:24,814 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-07-28 15:56:37,369 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-07-28 15:56:37,424 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:5d92e1b7-2e0f-4466-a263-2e759d2ad1c1,port:8081
+2021-07-28 15:56:51,514 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-07-28 15:57:07,976 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-07-28 15:57:08,035 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:b40956af-9922-45a6-8bb7-09e6596e6857,port:8639
+2021-07-28 15:57:56,659 [9] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-07-28 15:59:55,929 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-07-28 15:59:55,988 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:1e084ad8-7b24-4b69-a10f-0cf5d81c0100,port:8896
+2021-07-28 16:04:43,200 [14] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========

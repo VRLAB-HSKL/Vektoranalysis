@@ -168,6 +168,24 @@ public static class DataImport
 
         pdsa.Distance = AbstractCurveCalc.CalculateRawDistance(pdsa.points);
 
+        // Calculate arc length param valus
+        var initParamIntervall = curveCalc.ParameterIntervall;
+        curveCalc.ParameterIntervall = new List<float>(AbstractCurveCalc.linspace(0f, pdsa.Distance, initParamIntervall.Count));
+
+        pdsa.arcLenghtPoints = curveCalc.CalculatePoints();
+
+        for (int i = 0; i < pdsa.arcLenghtPoints.Count; i++)
+        {
+            Vector3 pv = pdsa.arcLenghtPoints[i];
+            pdsa.arcLengthWorldPoints.Add(curveCalc.Is3DCurve ?
+                new Vector3(pv.x, pv.z, pv.y) * GlobalData.PointScaleFactor :
+                pv * GlobalData.PointScaleFactor);
+        }
+
+        pdsa.arcLengthFresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
+
+        curveCalc.ParameterIntervall = initParamIntervall;
+
         return pdsa;
     }
 }
