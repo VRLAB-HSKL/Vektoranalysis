@@ -20,6 +20,8 @@ public class InformationControl : MonoBehaviour
     public GameObject TimeDistanceYAxis;
     public GameObject TimeDistanceTravelObject;
     private LineRenderer TimeDistLR;
+    
+
     private Vector3 initTimeDistTravelPos;
 
     [Header("TimeVelocity")]
@@ -28,12 +30,14 @@ public class InformationControl : MonoBehaviour
     public GameObject TimeVelocityYAxis;
     public GameObject TimeVelocityTravelObject;
     private LineRenderer TimeVelocityLR;
+    
+
     private Vector3 initTimeVelocityTravelPos;
 
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         MeshRenderer xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
         MeshRenderer yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();
@@ -41,6 +45,7 @@ public class InformationControl : MonoBehaviour
         DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
         DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
         TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
+        //Debug.Log("TiDiLRStart");
         initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
 
         xrenderer = TimeVelocityXAxis.GetComponent<MeshRenderer>();
@@ -88,7 +93,7 @@ public class InformationControl : MonoBehaviour
         for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints.Count; i++)
         {
             Vector2 p = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints[i];
-            Vector3 newPos = TimeDistanceStart.transform.position;
+            Vector3 newPos = TimeDistanceStart.transform.position;            
             newPos.x += p.x;
             newPos.y += p.y;
             TimeDistLR.SetPosition(i, newPos);

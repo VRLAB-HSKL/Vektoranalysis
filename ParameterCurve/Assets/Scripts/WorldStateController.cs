@@ -67,27 +67,13 @@ public class WorldStateController : MonoBehaviour
             BinormalLR.positionCount = 2;
         }
 
-       
-
-
-
-        //Debug.Log("TDXAxisLength: " + DataImport.TimeDistanceXAxisLength);
-        //Debug.Log("TDYAxisLength: " + DataImport.TimeDistanceYAxisLength);
-
         GlobalData.InitializeData();
-
-        
-
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.NamedCurveDatasets[GlobalData.currentCurveIndex].NotebookURL);
 
-
         CurveSelectWall.UpdateCurveMenuButtons();
-        UpdateWorldObjects();
-
-
-        
+        UpdateWorldObjects();        
     }
 
     //private float updateTimer = 0f;
@@ -225,7 +211,10 @@ public class WorldStateController : MonoBehaviour
         int pointIndex = GlobalData.CurrentPointIndex;
 
         TravelObject.position = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints[pointIndex];
+
         
+
+
         tangentArr[0] = TravelObject.position;
         tangentArr[1] = TravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].fresnetApparatuses[pointIndex].Tangent;
         TangentLR.SetPositions(tangentArr);
@@ -237,6 +226,19 @@ public class WorldStateController : MonoBehaviour
         binormalArr[0] = TravelObject.position;
         binormalArr[1] = TravelObject.position + GlobalData.CurrentDataset[GlobalData.currentCurveIndex].fresnetApparatuses[pointIndex].Binormal;
         BinormalLR.SetPositions(binormalArr);
+
+
+        Vector3 nextPos = Vector3.zero;
+        if (pointIndex < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints.Count - 1)
+        {
+            nextPos = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints[pointIndex + 1];
+        }
+        else
+        {
+            nextPos = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].worldPoints[pointIndex];
+        }
+
+        TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
 
 
         InfoWall.UpdateInfoLabels();

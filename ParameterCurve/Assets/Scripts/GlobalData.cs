@@ -25,7 +25,6 @@ public static class GlobalData
         }
     }
 
-
     public static List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
     public static List<PointDataset> ParamCurveDatasets = new List<PointDataset>();
     public static List<PointDataset> ExerciseCurveDatasets = new List<PointDataset>();

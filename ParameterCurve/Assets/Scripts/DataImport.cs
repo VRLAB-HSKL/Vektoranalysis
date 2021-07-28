@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class DataImport
 {
-    public static float TimeDistanceXAxisLength;
+    public static float TimeDistanceXAxisLength { get; set; }
     public static float TimeDistanceYAxisLength;
 
     public static float TimeVelocityXAxisLength;
@@ -119,23 +119,20 @@ public static class DataImport
     public static PointDataset CreateDatasetFormLocalCalculation(AbstractCurveCalc curveCalc)
     {
         // Local Calculation
-        PointDataset pdsa = new PointDataset();
-        //var calc01 = new LogHelixCurveCalc();
-        pdsa.Name = curveCalc.Name; // + "_LocalCalc";
-        pdsa.DisplayString = curveCalc.DisplayString;
-        pdsa.NotebookURL = GlobalData.LocalHTMLResourcePath + curveCalc.Name + ".html";
+        PointDataset pdsa = new PointDataset
+        {
+            Name = curveCalc.Name,
+            DisplayString = curveCalc.DisplayString,
+            NotebookURL = GlobalData.LocalHTMLResourcePath + curveCalc.Name + ".html"
+        };
 
-        string path = GlobalData.ImageResourcePath + curveCalc.Name;
-        //Debug.Log("ImgResPath: " + path);
-        Texture2D imgRes = Resources.Load(path) as Texture2D;
-
+        string imgResPath = GlobalData.ImageResourcePath + curveCalc.Name;
+        Texture2D imgRes = Resources.Load(imgResPath) as Texture2D;
 
         if (imgRes != null)
         {
-            //Debug.Log("ResType: " + imgRes.GetType().ToString());
             pdsa.MenuButtonImage = imgRes;
         }
-
 
         pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
         pdsa.points = curveCalc.CalculatePoints();
@@ -149,14 +146,13 @@ public static class DataImport
         }
 
         pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
-
         pdsa.timeDistancePoints = curveCalc.CalculateTimeDistancePoints();        
 
         for(int i = 0; i < pdsa.timeDistancePoints.Count; i++)
         {
             Vector2 p = pdsa.timeDistancePoints[i];
             p.x *= TimeDistanceXAxisLength;
-            p.y *= TimeDistanceYAxisLength;
+            p.y *= TimeDistanceYAxisLength;            
             pdsa.timeDistancePoints[i] = new Vector2(p.x, p.y);
         }
 
@@ -165,14 +161,8 @@ public static class DataImport
         for(int i = 0; i < pdsa.timeVelocityPoints.Count; i++)
         {
             Vector2 p = pdsa.timeVelocityPoints[i];
-
-            //Debug.Log("VelVec: " + p);
-
             p.x *= TimeVelocityXAxisLength;
             p.y *= TimeVelocityYAxisLength;
-
-            //Debug.Log("VelVecAxisScale: " + p);
-
             pdsa.timeVelocityPoints[i] = new Vector2(p.x, p.y);            
         }
 
@@ -180,5 +170,4 @@ public static class DataImport
 
         return pdsa;
     }
-
 }
