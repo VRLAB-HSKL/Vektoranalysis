@@ -169,10 +169,13 @@ public static class DataImport
         pdsa.Distance = AbstractCurveCalc.CalculateRawDistance(pdsa.points);
 
         // Calculate arc length param valus
-        var initParamIntervall = curveCalc.ParameterIntervall;
-        curveCalc.ParameterIntervall = new List<float>(AbstractCurveCalc.linspace(0f, pdsa.Distance, initParamIntervall.Count));
-
-        pdsa.arcLenghtPoints = curveCalc.CalculatePoints();
+        //var initParamIntervall = curveCalc.ParameterIntervall;
+        
+        pdsa.arcLengthParamValues = curveCalc.CalculateArcLengthParamRange();
+        //curveCalc.ParameterIntervall = pdsa.arcLengthParamValues;
+        
+        pdsa.arcLength = pdsa.arcLengthParamValues[pdsa.arcLengthParamValues.Count - 1];      
+        pdsa.arcLenghtPoints = curveCalc.CalculateArcLengthParameterizedPoints(); //curveCalc.CalculatePoints();
 
         for (int i = 0; i < pdsa.arcLenghtPoints.Count; i++)
         {
@@ -184,7 +187,7 @@ public static class DataImport
 
         pdsa.arcLengthFresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
 
-        curveCalc.ParameterIntervall = initParamIntervall;
+        //curveCalc.ParameterIntervall = initParamIntervall;
 
         return pdsa;
     }

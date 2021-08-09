@@ -19,10 +19,15 @@ public abstract class AbstractCurveCalc
         }
     }
 
+    public int NumOfSamples;
+
     /// <summary>
     /// Collection of parameter values, usually as a range
     /// </summary>
     public List<float> ParameterIntervall;
+
+    public List<float> ArcLengthParameterIntervall { get; set; } = new List<float>();
+    
 
     /// <summary>
     /// Signals wether this curve is 3D oder 2D, i.e. has a non-null z value
@@ -43,6 +48,9 @@ public abstract class AbstractCurveCalc
     /// Function object to calculate a single acceleration point based on a float parameter
     /// </summary>
     protected Func<float, Vector3> AccelerationCalcFunc;
+
+
+    protected Func<float, Vector3> ArcLengthPointCalcFunc;
 
 
     public AbstractCurveCalc()
@@ -181,7 +189,17 @@ public abstract class AbstractCurveCalc
         return distance;
     }
 
+    public abstract List<float> CalculateArcLengthParamRange();
 
+    public abstract List<Vector3> CalculateArcLengthParameterizedPoints();
+    //{
+    //    List<Vector3> retList = new List<Vector3>();
+    //    for(int i = 0; i < 10000; i++)
+    //    {
+    //        retList.Add(Vector3.up);
+    //    }
+    //    return retList;
+    //}
 
 
     /// <summary>

@@ -5,13 +5,23 @@ using UnityEngine;
 
 public class InformationControl : MonoBehaviour
 {
-    [Header("PointInfo")]
+    [Header("Header")]
     public TextMeshProUGUI SourceLabel;
     public TextMeshProUGUI IndexLabel;
+
+    [Header("PointInfo")]
     public TextMeshProUGUI TLabel;
     public TextMeshProUGUI XLabel;
     public TextMeshProUGUI YLabel;
     public TextMeshProUGUI ZLabel;
+
+    [Header("ArcLengthPointInfo")]
+    public TextMeshProUGUI ArcLengthLabel;
+    public TextMeshProUGUI ArcTLabel;
+    public TextMeshProUGUI ArcXLabel;
+    public TextMeshProUGUI ArcYLabel;
+    public TextMeshProUGUI ArcZLabel;
+
 
 
     [Header("TimeDistance")]
@@ -65,11 +75,19 @@ public class InformationControl : MonoBehaviour
             " / " +
             GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points.Count;
 
+        string floatFormat = "0.#####";
+
         SourceLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].Name;
-        TLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].paramValues[pointIndex].ToString("0.#####");
-        XLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].x.ToString("0.#####");
-        YLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].y.ToString("0.#####");
-        ZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].z.ToString("0.#####");
+        TLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].paramValues[pointIndex].ToString(floatFormat);
+        XLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].x.ToString(floatFormat);
+        YLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].y.ToString(floatFormat);
+        ZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].z.ToString(floatFormat);
+
+        ArcLengthLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLength.ToString("0.###");
+        ArcTLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLengthParamValues[pointIndex].ToString(floatFormat);
+        ArcXLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLenghtPoints[pointIndex].x.ToString(floatFormat);
+        ArcYLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLenghtPoints[pointIndex].y.ToString(floatFormat);
+        ArcZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLenghtPoints[pointIndex].z.ToString(floatFormat);
     }
 
     public void UpdatePlotTravelObjects()

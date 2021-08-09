@@ -19,7 +19,9 @@ public class ArchimedeanSpiralCurveCalc : AbstractCurveCalc
     public ArchimedeanSpiralCurveCalc()
     {
         Name = "ArchimedeanSpiral";
-        ParameterIntervall = new List<float>(linspace(0f, 6f * Mathf.PI, 200));
+        NumOfSamples = 200;
+        ParameterIntervall = new List<float>(linspace(0f, 6f * Mathf.PI, NumOfSamples));
+        ArcLengthParameterIntervall = CalculateArcLengthParamRange();
         Is3DCurve = false;
     }
 
@@ -47,6 +49,42 @@ public class ArchimedeanSpiralCurveCalc : AbstractCurveCalc
         return new Vector3(x, y, 0f).normalized;
     }
 
+    public float CalculateArcLength()
+    {
+        
+        //float velMag = Mathf.Sqrt(Height * Height + 4f * Mathf.PI * Mathf.PI * Radius * Radius);
+        float t = 6f;
+        float r_i = A + B * t;       
+        float dist = (Mathf.Sqrt( Mathf.Pow((-r_i * Mathf.Sin(t)), 2f) + Mathf.Pow((r_i * Mathf.Cos(t)), 2f)) ) * t;
+        //for (int i = 0; i < NumOfSamples; i++)
+        //{
+        //    float t = ParameterIntervall[i];
+        //    dist += sqab * t;
+        //}
+        return dist;
+    }
+
+    public override List<float> CalculateArcLengthParamRange()
+    {
+        return new List<float>(
+            linspace(0f, 
+            CalculateArcLength(),//CalculateRawDistance(CalculatePoints()), 
+            NumOfSamples));
+    }
+
+    public override List<Vector3> CalculateArcLengthParameterizedPoints()
+    {
+        List<Vector3> retList = new List<Vector3>();
+        //float dist = CalculateArcLength();
+        for (int i = 0; i < NumOfSamples; i++)
+        {
+            float t = ArcLengthParameterIntervall[i];
+            float r_i = A + B * t;//6f;
+            float s = t / (Mathf.Sqrt(Mathf.Pow((-r_i * Mathf.Sin(t)), 2f) + Mathf.Pow((r_i * Mathf.Cos(t)), 2f)));
+            retList.Add(CalculatePoint(s));
+        }
+        return retList;
+    }
 }
     
 
