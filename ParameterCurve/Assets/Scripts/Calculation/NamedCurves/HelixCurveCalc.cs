@@ -54,7 +54,7 @@ public class HelixCurveCalc : AbstractCurveCalc
     {
         float dist = 0f;
         float velMag = Mathf.Sqrt(Height * Height + 4f * Mathf.PI * Mathf.PI * Radius * Radius);
-        dist = 1f * velMag - (-1f) * velMag;
+        dist = (1f * velMag) - ((-1f) * velMag);
         //for (int i = 0; i < NumOfSamples; i++)
         //{
         //    float t = ParameterIntervall[i];
@@ -100,7 +100,7 @@ public class HelixCurveCalc : AbstractCurveCalc
         for (int i = 0; i < NumOfSamples; i++)
         {
             float t = ArcLengthParameterIntervall[i];
-            float s = t / velMag; 
+            float s = t / velMag;            
             retList.Add(CalculatePoint(s));
         }
         return retList;

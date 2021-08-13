@@ -73,33 +73,33 @@ public class InformationControl : MonoBehaviour
         int pointIndex = GlobalData.CurrentPointIndex;
         IndexLabel.text = (pointIndex + 1) +
             " / " +
-            GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points.Count;
+            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points.Count;
 
         string floatFormat = "0.#####";
 
-        SourceLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].Name;
-        TLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].paramValues[pointIndex].ToString(floatFormat);
-        XLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].x.ToString(floatFormat);
-        YLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].y.ToString(floatFormat);
-        ZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].points[pointIndex].z.ToString(floatFormat);
+        SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].Name;
+        TLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].paramValues[pointIndex].ToString(floatFormat);
+        XLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].x.ToString(floatFormat);
+        YLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].y.ToString(floatFormat);
+        ZLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].z.ToString(floatFormat);
 
-        ArcLengthLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLength.ToString("0.###");
-        ArcTLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLengthParamValues[pointIndex].ToString(floatFormat);
-        ArcXLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLenghtPoints[pointIndex].x.ToString(floatFormat);
-        ArcYLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLenghtPoints[pointIndex].y.ToString(floatFormat);
-        ArcZLabel.text = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].arcLenghtPoints[pointIndex].z.ToString(floatFormat);
+        ArcLengthLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLength.ToString("0.###");
+        ArcTLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthParamValues[pointIndex].ToString(floatFormat);
+        ArcXLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLenghtPoints[pointIndex].x.ToString(floatFormat);
+        ArcYLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLenghtPoints[pointIndex].y.ToString(floatFormat);
+        ArcZLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLenghtPoints[pointIndex].z.ToString(floatFormat);
     }
 
     public void UpdatePlotTravelObjects()
     {
         int pointIndex = GlobalData.CurrentPointIndex;
         // Set info plot travel objects
-        Vector2 tdPosVec = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints[pointIndex];
+        Vector2 tdPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints[pointIndex];
         Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
         TimeDistanceTravelObject.transform.position =
             initTimeDistTravelPos + tdVec;
 
-        Vector2 tvPosVec = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints[pointIndex];
+        Vector2 tvPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints[pointIndex];
         Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
         TimeVelocityTravelObject.transform.position =
             initTimeVelocityTravelPos + tvVec;
@@ -107,20 +107,20 @@ public class InformationControl : MonoBehaviour
 
     public void UpdatePlotLineRenderers()
     {
-        TimeDistLR.positionCount = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints.Count;
-        for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints.Count; i++)
+        TimeDistLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints.Count;
+        for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints.Count; i++)
         {
-            Vector2 p = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeDistancePoints[i];
+            Vector2 p = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints[i];
             Vector3 newPos = TimeDistanceStart.transform.position;            
             newPos.x += p.x;
             newPos.y += p.y;
             TimeDistLR.SetPosition(i, newPos);
         }
 
-        TimeVelocityLR.positionCount = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints.Count;
-        for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints.Count; i++)
+        TimeVelocityLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints.Count;
+        for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints.Count; i++)
         {
-            Vector2 p = GlobalData.CurrentDataset[GlobalData.currentCurveIndex].timeVelocityPoints[i];
+            Vector2 p = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints[i];
             Vector3 newPos = TimeVelocityStart.transform.position;
             newPos.x += p.x;
             newPos.y += p.y;

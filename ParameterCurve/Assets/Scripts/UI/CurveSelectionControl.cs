@@ -15,9 +15,21 @@ public class CurveSelectionControl : MonoBehaviour
 
     public WorldStateController world;
 
+    public CurveSelectionStateContext CurveSelectionFSM;
+
+    public NamedCurvesState namedState;
+    public ParameterCurvesState paramState;
+    public ExerciseCurvesState exerciseState;
+
     // Start is called before the first frame update
     void Start()
     {
+        namedState = new NamedCurvesState(CurveMenuContent, CurveMenuButtonPrefab, world);
+        paramState = new ParameterCurvesState(CurveMenuContent, CurveMenuButtonPrefab, world);
+        exerciseState = new ExerciseCurvesState(CurveMenuContent, CurveMenuButtonPrefab, world);
+        CurveSelectionFSM = new CurveSelectionStateContext(namedState);
+
+        
         string[] displayGrps = Enum.GetNames(typeof(GlobalData.CurveDisplayGroup));
         GlobalData.CurveDisplayGroup[] displayGrpValues = (GlobalData.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalData.CurveDisplayGroup));
         for (int i = 0; i < displayGrps.Length; i++)
@@ -33,9 +45,24 @@ public class CurveSelectionControl : MonoBehaviour
             label.text = dgrpName;
 
             Button b = tmpButton.GetComponent<Button>();
+            switch(i)
+            {
+                default:
+                case 0:
+                    b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Named));
+                    break;
 
-            b.onClick.AddListener(() => SwitchCurveGroup(dgrpVal));
+                case 1:
+                    b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Parameter));
+                    break;
+
+                case 2:
+                    b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Exercises));
+                    break;
+            }
         }
+
+        SwitchCurveGroup(GlobalData.CurveDisplayGroup.Named);
     }
 
 
@@ -45,61 +72,77 @@ public class CurveSelectionControl : MonoBehaviour
         GlobalData.CurrentDisplayGroup = cdg;
 
         // Reset curve and point indices
-        GlobalData.currentCurveIndex = 0;
+        GlobalData.CurrentCurveIndex = 0;
         GlobalData.CurrentPointIndex = 0;
 
+        switch(cdg)
+        {
+            default:
+            case GlobalData.CurveDisplayGroup.Named:
+                CurveSelectionFSM.State = namedState;                
+                break;
+
+            case GlobalData.CurveDisplayGroup.Parameter:
+                CurveSelectionFSM.State = paramState;
+                break;
+
+            case GlobalData.CurveDisplayGroup.Exercises:
+                CurveSelectionFSM.State = exerciseState;
+                break;
+        }
+        CurveSelectionFSM.State.OnStateUpdate();
+
+
         // Display html resource
-        world.BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.currentCurveIndex].NotebookURL);
+        world.BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
-        UpdateCurveMenuButtons();
+        //UpdateCurveMenuButtons();
 
-
-
-        world.UpdateWorldObjects();
+        //world.UpdateWorldObjects();
     }
 
 
 
-    public void UpdateCurveMenuButtons()
-    {
-        // Clear old buttons
+    //public void UpdateCurveMenuButtons()
+    //{
+    //    //// Clear old buttons
 
-        GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
-        for (int i = 0; i < CurveMenuContent.transform.childCount; i++)
-        {
-            GameObject child = CurveMenuContent.transform.GetChild(i).gameObject;
-            children[i] = child;
-        }
+    //    //GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
+    //    //for (int i = 0; i < CurveMenuContent.transform.childCount; i++)
+    //    //{
+    //    //    GameObject child = CurveMenuContent.transform.GetChild(i).gameObject;
+    //    //    children[i] = child;
+    //    //}
 
-        for (int i = 0; i < children.Length; i++)
-        {
-            GameObject child = children[i];
-            DestroyImmediate(child);
-        }
+    //    //for (int i = 0; i < children.Length; i++)
+    //    //{
+    //    //    GameObject child = children[i];
+    //    //    DestroyImmediate(child);
+    //    //}
 
 
-        // Create buttons        
-        for (int i = 0; i < GlobalData.CurrentDataset.Count; i++)
-        {
-            PointDataset pds = GlobalData.CurrentDataset[i];
-            GameObject tmpButton = Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
+    //    //// Create buttons        
+    //    //for (int i = 0; i < GlobalData.CurrentDataset.Count; i++)
+    //    //{
+    //    //    PointDataset pds = GlobalData.CurrentDataset[i];
+    //    //    GameObject tmpButton = Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
 
-            tmpButton.name = pds.Name + "Button";
+    //    //    tmpButton.name = pds.Name + "Button";
 
-            // ToDo: Set button curve icon
-            RawImage img = tmpButton.GetComponentInChildren<RawImage>();
-            if (pds.MenuButtonImage != null)
-            {
-                img.texture = pds.MenuButtonImage;
-            }
+    //    //    // ToDo: Set button curve icon
+    //    //    RawImage img = tmpButton.GetComponentInChildren<RawImage>();
+    //    //    if (pds.MenuButtonImage != null)
+    //    //    {
+    //    //        img.texture = pds.MenuButtonImage;
+    //    //    }
 
-            TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
-            label.text = pds.DisplayString;
+    //    //    TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
+    //    //    label.text = pds.DisplayString;
 
-            Button b = tmpButton.GetComponent<Button>();
-            b.onClick.AddListener(() => world.SwitchToSpecificDataset(pds.Name));
-        }
-    }
+    //    //    Button b = tmpButton.GetComponent<Button>();
+    //    //    b.onClick.AddListener(() => world.SwitchToSpecificDataset(pds.Name));
+    //    //}
+    //}
 
 
 }
