@@ -22,6 +22,7 @@ public class WorldStateController : MonoBehaviour
     public Transform TravelObject;
     public Transform ArcLengthTravelObject;
 
+
     private AbstractCurveView currentView;
     public AbstractCurveView CurrentView
     {
@@ -29,6 +30,10 @@ public class WorldStateController : MonoBehaviour
         set
         {
             currentView = value;
+            currentView.UpdateView();
+
+            TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
+            ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
         }
     }
 
@@ -138,6 +143,8 @@ public class WorldStateController : MonoBehaviour
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
+
+        CurrentView.UpdateView();
         //UpdateWorldObjects();
     }
 
@@ -166,6 +173,7 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
         //UpdateWorldObjects();
+        CurrentView.UpdateView();
     }
 
 
@@ -196,88 +204,7 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
         //UpdateWorldObjects();
+        CurrentView.UpdateView();
     }
-
-
-
-    //private void SetTravelPointAndDisplay()
-    //{
-    //    // Null checks
-    //    if (CurrentView.TravelObject is null) return;
-    //    if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
-    //    if (GlobalData.CurrentPointIndex < 0) return;
-
-    //    // On arrival at the last point, stop driving
-    //    if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
-    //    {
-    //        GlobalData.IsDriving = false;
-    //        return;
-    //    }
-
-
-    //    int pointIndex = GlobalData.CurrentPointIndex;
-
-    //    CurrentView.TravelObject.position = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex];
-    //    CurrentView.ArcLengthTravelObject.position = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex];
-
-    //    tangentArr[0] = CurrentView.TravelObject.position;
-    //    tangentArr[1] = CurrentView.TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[pointIndex].Tangent;
-    //    TangentLR.SetPositions(tangentArr);
-
-    //    normalArr[0] = CurrentView.TravelObject.position;
-    //    normalArr[1] = CurrentView.TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[pointIndex].Normal;
-    //    NormalLR.SetPositions(normalArr);
-
-    //    binormalArr[0] = CurrentView.TravelObject.position;
-    //    binormalArr[1] = CurrentView.TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[pointIndex].Binormal;
-    //    BinormalLR.SetPositions(binormalArr);
-
-
-    //    arcLengthTangentArr[0] = CurrentView.ArcLengthTravelObject.position;
-    //    arcLengthTangentArr[1] = CurrentView.ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[pointIndex].Tangent;
-    //    ArcLengthTangentLR.SetPositions(arcLengthTangentArr);
-
-    //    arcLengthNormalArr[0] = CurrentView.ArcLengthTravelObject.position;
-    //    arcLengthNormalArr[1] = CurrentView.ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[pointIndex].Normal;
-    //    ArcLengthNormalLR.SetPositions(arcLengthNormalArr);
-
-    //    arcLengthBinormalArr[0] = CurrentView.ArcLengthTravelObject.position;
-    //    arcLengthBinormalArr[1] = CurrentView.ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[pointIndex].Binormal;
-    //    ArcLengthBinormalLR.SetPositions(arcLengthBinormalArr);
-
-    //    Vector3 nextPos;
-    //    if (pointIndex < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count - 1)
-    //    {
-    //        nextPos = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex + 1];
-    //    }
-    //    else
-    //    {
-    //        nextPos = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex];
-    //    }
-
-    //    CurrentView.TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
-
-
-    //    // ToDo: Add arc length travel object rotation ?
-
-
-    //    InfoWall.UpdateInfoLabels();
-    //    InfoWall.UpdatePlotTravelObjects();
-
-
-    //    ++GlobalData.CurrentPointIndex;
-    //}
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

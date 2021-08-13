@@ -11,10 +11,10 @@ public class NextDataSet : MonoBehaviour,
 
     public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
     {
-        WorldStateController pm = Target.GetComponent<WorldStateController>();
-        if(pm != null)
+        WorldStateController world = Target.GetComponent<WorldStateController>();
+        if(world != null)
         {
-            pm.SwitchToNextDataset();
+            world.SwitchToNextDataset();
         }
     }
 }
