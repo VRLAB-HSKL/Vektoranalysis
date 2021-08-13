@@ -22,7 +22,16 @@ public class WorldStateController : MonoBehaviour
     public Transform TravelObject;
     public Transform ArcLengthTravelObject;
 
-    public AbstractCurveView CurrentView;
+    private AbstractCurveView currentView;
+    public AbstractCurveView CurrentView
+    {
+        get { return currentView; }
+        set
+        {
+            currentView = value;
+        }
+    }
+
     public SimpleCurveView simpleView;
     public SimpleRunCurveView simpleRunView;
     public SimpleRunCurveWithArcLength simpleRunWithArcLengthView;
@@ -51,7 +60,12 @@ public class WorldStateController : MonoBehaviour
         simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(DisplayLR, TravelObject, ArcLengthTravelObject);
         simpleRunWithArcLengthView.UpdateView();
 
-        CurrentView = simpleView;
+        CurrentView = simpleRunWithArcLengthView;
+        
+        TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
+        ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
+
+
 
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
@@ -77,7 +91,7 @@ public class WorldStateController : MonoBehaviour
 
     //private float updateTimer = 0f;
 
-    private void Update()
+    void Update()
     {
         if (GlobalData.IsDriving)
         {
@@ -87,10 +101,12 @@ public class WorldStateController : MonoBehaviour
             //    updateTimer = 0f;
             // SetTravelPointAndDisplay();                
             //}
-
-            
-
             CurrentView.UpdateView();
+
+            //if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
+            //{
+            //    GlobalData.IsDriving = false;
+            //}
         }
             
     }
@@ -265,29 +281,3 @@ public class WorldStateController : MonoBehaviour
 
 
 }
-
-
-
-[Serializable]
-public class JsonRoot
-{
-    public string name { get; set; }
-
-    public List<PointData> pointData { get; set; } = new List<PointData>();
-}
-
-
-[Serializable]
-public class PointData
-{
-    public string t { get; set; }
-    public string x { get; set; }
-    public string y { get; set; }
-    public List<string> tan { get; set; } = new List<string>();
-    public List<string> norm { get; set; } = new List<string>();
-    public List<string> binorm { get; set; } = new List<string>();
-}
-
-
-
-

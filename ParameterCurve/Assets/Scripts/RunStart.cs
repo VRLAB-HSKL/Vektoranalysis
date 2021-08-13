@@ -4,56 +4,82 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class RunStart : MonoBehaviour, 
-    HTC.UnityPlugin.ColliderEvent.IColliderEventHoverEnterHandler,
-    HTC.UnityPlugin.ColliderEvent.IColliderEventHoverExitHandler
-
+public class RunStart : AbstractButtonCollisionHandler
 {
-    public GameObject Target;
 
-    public Material PressedMat;
-    private Material InitMat;
-    
-
-    // Start is called before the first frame update
-    void Start()
+    public RunStart()
     {
-        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
-        if (msr != null)
-        {
-            InitMat = msr.material;
-        }
+        OnHitFunc = HandleCollision;
     }
 
-    public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
+    private void HandleCollision()
     {
-        WorldStateController world = Target.GetComponent<WorldStateController>();        
-        if(world != null)
+        //Debug.Log("RunStartHit!");
+
+        WorldStateController world = Target.GetComponent<WorldStateController>();
+        if (world != null)
         {
-            if(!GlobalData.IsDriving)
+            if (!GlobalData.IsDriving)
             {
                 world.StartRun();
             }
-            
+
         }
 
-        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
-        if(msr != null)
-        {
-            //if (msr.material == InitMat)
-                msr.material = PressedMat;
-        }
-    }
-
-    public void OnColliderEventHoverExit(ColliderHoverEventData eventData)
-    {
         MeshRenderer msr = Target.GetComponent<MeshRenderer>();
         if (msr != null)
         {
-            //if (msr.material == PressedMat)
-                msr.material = InitMat;
+            //if (msr.material == InitMat)
+            msr.material = PressedMat;
         }
     }
+
+
+    //public GameObject Target;
+
+    //public Material PressedMat;
+    //private Material InitMat;
+    
+
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    MeshRenderer msr = Target.GetComponent<MeshRenderer>();
+    //    if (msr != null)
+    //    {
+    //        InitMat = msr.material;
+    //    }
+    //}
+
+    //public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
+    //{
+    //    WorldStateController world = Target.GetComponent<WorldStateController>();        
+    //    if(world != null)
+    //    {
+    //        if(!GlobalData.IsDriving)
+    //        {
+    //            world.StartRun();
+    //        }
+            
+    //    }
+
+    //    MeshRenderer msr = Target.GetComponent<MeshRenderer>();
+    //    if(msr != null)
+    //    {
+    //        //if (msr.material == InitMat)
+    //            msr.material = PressedMat;
+    //    }
+    //}
+
+    //public void OnColliderEventHoverExit(ColliderHoverEventData eventData)
+    //{
+    //    MeshRenderer msr = Target.GetComponent<MeshRenderer>();
+    //    if (msr != null)
+    //    {
+    //        //if (msr.material == PressedMat)
+    //            msr.material = InitMat;
+    //    }
+    //}
 
 
 

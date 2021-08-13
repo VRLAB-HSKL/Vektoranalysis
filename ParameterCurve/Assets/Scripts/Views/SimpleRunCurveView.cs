@@ -18,7 +18,6 @@ public class SimpleRunCurveView : SimpleCurveView
 
     public SimpleRunCurveView(LineRenderer displayLR, Transform travelObject) : base(displayLR)
     {        
-
         TravelObject = travelObject;
 
         if (travelObject is null)
@@ -58,6 +57,8 @@ public class SimpleRunCurveView : SimpleCurveView
         base.UpdateView();
         SetTravelPoint();
         SetMovingFrame();
+
+        //Debug.Log("RunCurveView - UpdateView");
     }
 
     private void SetTravelPoint()
@@ -67,16 +68,20 @@ public class SimpleRunCurveView : SimpleCurveView
         if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
         if (GlobalData.CurrentPointIndex < 0) return;
 
+        int pointIndex = GlobalData.CurrentPointIndex;
         // On arrival at the last point, stop driving
-        if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
+        if (pointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
         {
+            //Debug.Log("Stop");
             GlobalData.IsDriving = false;
             return;
         }
 
-        int pointIndex = GlobalData.CurrentPointIndex;
+        
         TravelObject.position = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex];
         //ArcLengthTravelObject.position = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex];
+
+        //Debug.Log("TravelObjectPos: " + TravelObject.position);
 
         Vector3 nextPos = Vector3.zero;
         if (pointIndex < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count - 1)
@@ -89,10 +94,21 @@ public class SimpleRunCurveView : SimpleCurveView
         }
 
         TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
+
+        ++GlobalData.CurrentPointIndex;
+
+        
     }
 
     private void SetMovingFrame()
     {
+        if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
+        {
+            //Debug.Log("Stop");
+            GlobalData.IsDriving = false;
+            return;
+        }
+
         tangentArr[0] = TravelObject.position;
         tangentArr[1] = TravelObject.position + 
             GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Tangent;
