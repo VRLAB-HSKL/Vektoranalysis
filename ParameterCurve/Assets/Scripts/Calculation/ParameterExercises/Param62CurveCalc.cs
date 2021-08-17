@@ -7,7 +7,9 @@ public class Param62CurveCalc : AbstractCurveCalc
     public Param62CurveCalc()
     {
         Name = "Param62";
-        ParameterIntervall = new List<float>(linspace(0f, 2f * Mathf.PI, 200));
+        NumOfSamples = 200;
+        ParameterIntervall = new List<float>(linspace(0f, 2f * Mathf.PI, NumOfSamples));
+        ArcLengthParameterIntervall = new List<float>(new float[NumOfSamples]);
         Is3DCurve = false;
     }
 
@@ -33,6 +35,24 @@ public class Param62CurveCalc : AbstractCurveCalc
         float x = -Mathf.Cos(t);
         float y = -4f * Mathf.Sin(t) * Mathf.Cos(t);
         return new Vector3(x, y, 0f).normalized;
+    }
+
+    public override List<float> CalculateArcLengthParamRange()
+    {
+        return new List<float>(
+            linspace(0f,
+            CalculateRawDistance(CalculatePoints()),
+            ParameterIntervall.Count));
+    }
+
+    public override List<Vector3> CalculateArcLengthParameterizedPoints()
+    {
+        List<Vector3> retList = new List<Vector3>();
+        for (int i = 0; i < NumOfSamples; i++)
+        {
+            retList.Add(Vector3.up);
+        }
+        return retList;
     }
 
 }

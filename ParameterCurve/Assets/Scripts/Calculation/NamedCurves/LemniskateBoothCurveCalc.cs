@@ -25,4 +25,22 @@ public class LemniskateBoothCurveCalc : AbstractCurveCalc
         throw new System.NotImplementedException();
     }
 
+    public override List<float> CalculateArcLengthParamRange()
+    {
+        return new List<float>(
+            linspace(0f,
+            CalculateRawDistance(CalculatePoints()),
+            ParameterIntervall.Count));
+    }
+
+    public override List<Vector3> CalculateArcLengthParameterizedPoints()
+    {
+        List<Vector3> retList = new List<Vector3>();
+        for (int i = 0; i < NumOfSamples; i++)
+        {
+            retList.Add(Vector3.up);
+        }
+        return retList;
+    }
+
 }

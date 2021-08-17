@@ -11,10 +11,23 @@ public abstract class AbstractCurveCalc
     /// </summary>
     public string Name;
 
+    public string DisplayString
+    {
+        get
+        {
+            return Name;
+        }
+    }
+
+    public int NumOfSamples;
+
     /// <summary>
     /// Collection of parameter values, usually as a range
     /// </summary>
     public List<float> ParameterIntervall;
+
+    public List<float> ArcLengthParameterIntervall { get; set; } = new List<float>();
+    
 
     /// <summary>
     /// Signals wether this curve is 3D oder 2D, i.e. has a non-null z value
@@ -35,6 +48,9 @@ public abstract class AbstractCurveCalc
     /// Function object to calculate a single acceleration point based on a float parameter
     /// </summary>
     protected Func<float, Vector3> AccelerationCalcFunc;
+
+
+    protected Func<float, Vector3> ArcLengthPointCalcFunc;
 
 
     public AbstractCurveCalc()
@@ -82,6 +98,109 @@ public abstract class AbstractCurveCalc
         return fresnetList;
     }
 
+    public List<Vector2> CalculateTimeDistancePoints()
+    {
+        List<Vector2> tdPoints = new List<Vector2>();
+        var curvePoints = CalculatePoints();
+        int numSteps = ParameterIntervall.Count;
+
+        float maxDistance = CalculateRawDistance(curvePoints);
+        float currentDistance = 0f;
+
+        for(int i = 0; i < numSteps; i++)
+        {
+            float x = i / (float)numSteps;  //ParameterIntervall[i];
+
+
+            float y;
+            if (i == 0)
+            {
+                y = 0f;
+            }
+            else
+            {
+                currentDistance += Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
+                y = currentDistance;
+                y /= maxDistance;
+            }
+
+            tdPoints.Add(new Vector2(x, y));
+        }
+
+        return tdPoints;
+    }
+
+    public List<Vector2> CalculateTimeVelocityPoints()
+    {
+        List<Vector2> tvPoints = new List<Vector2>();
+        var curvePoints = CalculatePoints();
+        int numSteps = ParameterIntervall.Count;
+
+        //float maxDistance =  CalculateRawDistance(curvePoints);
+        //float currentDistance = 0f;
+        float maxVelocity = 0f;
+
+        for (int i = 0; i < numSteps; i++)
+        {
+            float x = i / (float)numSteps;
+
+            float y;
+            if(i == 0)
+            {
+                y = 0f;
+            }
+            else
+            {
+                float distance = Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
+                //Debug.Log("VecDist: " + y);
+                //currentDistance += d;
+                y = distance;
+
+                if(y > maxVelocity)
+                {
+                    maxVelocity = y;
+                }
+                //y /= maxDistance;
+                //Debug.Log("ScaledVecDist: " + y);
+            }
+
+            tvPoints.Add(new Vector2(x, y));
+        }
+
+        foreach(Vector2 v in tvPoints)
+        {
+            v.Set(v.x, v.y / maxVelocity);
+        }
+        
+
+        return tvPoints;
+    }
+
+    public static float CalculateRawDistance(List<Vector3> pointList)
+    {
+        if (pointList.Count < 2) return 0f;
+
+        float distance = 0f;
+        for(int i = 1; i < pointList.Count; i++)
+        {
+            distance += Mathf.Abs(Vector3.Distance(pointList[i - 1], pointList[i]));
+        }
+
+        return distance;
+    }
+
+    public abstract List<float> CalculateArcLengthParamRange();
+
+    public abstract List<Vector3> CalculateArcLengthParameterizedPoints();
+    //{
+    //    List<Vector3> retList = new List<Vector3>();
+    //    for(int i = 0; i < 10000; i++)
+    //    {
+    //        retList.Add(Vector3.up);
+    //    }
+    //    return retList;
+    //}
+
 
     /// <summary>
     /// Source: https://stackoverflow.com/questions/17046293/is-there-a-linspace-like-method-in-math-net/67131017#67131017 
@@ -104,6 +223,7 @@ public abstract class AbstractCurveCalc
     protected abstract Vector3 CalculateVelocityPoint(float t);
     protected abstract Vector3 CalculateAccelerationPoint(float t);
 
+    //protected abstract float CalculateArcLength();
 
     protected List<Vector3> CalculateAllPointsIntoList(Func<float, Vector3> f)
     {

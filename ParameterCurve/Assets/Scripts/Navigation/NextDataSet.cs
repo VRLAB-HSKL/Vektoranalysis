@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PreviousDataSet : MonoBehaviour,
+public class NextDataSet : MonoBehaviour,
     HTC.UnityPlugin.ColliderEvent.IColliderEventHoverEnterHandler
 {
     public GameObject Target;
 
+
     public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
     {
-        ParamCurve pm = Target.GetComponent<ParamCurve>();
-        if(pm != null)
+        WorldStateController world = Target.GetComponent<WorldStateController>();
+        if(world != null)
         {
-            pm.SwitchToPreviousDataset();
+            world.SwitchToNextDataset();
         }
     }
-
 }
