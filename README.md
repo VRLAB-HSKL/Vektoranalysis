@@ -2,7 +2,6 @@
 
 ![AVR Logo](http://webhome.hs-kl.de/~brill/Assets/images/compuMath.png)
 
-Demos für das Praktikum zur Lehrveranstaltung Augmented und Virtual Reality. 
 VR-Anwendungen für den Einsatz von Immersive Learning in Mathematik-Lehrversstaltungen zum Thema **Vektoranalysis**.
 
 Passend zu den Inhalten der Lehrveranstaltung **Computerorientierte Mathematik** im Master Informatik behandeln wir die folgenden Themen:
