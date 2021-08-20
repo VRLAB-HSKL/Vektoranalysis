@@ -1,0 +1,3 @@
+[0813/104913.035:ERROR:broker_win.cc(59)] Error reading broker pipe: Die Pipe wurde beendet. (0x6D)
+[0813/104913.065:ERROR:broker_win.cc(59)] Error reading broker pipe: Die Pipe wurde beendet. (0x6D)
+[0819/220047.382:ERROR:broker_win.cc(59)] Error reading broker pipe: Die Pipe wurde beendet. (0x6D)
