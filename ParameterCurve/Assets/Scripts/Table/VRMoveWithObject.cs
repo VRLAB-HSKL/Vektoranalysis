@@ -21,35 +21,44 @@ public class VRMoveWithObject : MonoBehaviour
     /// <summary>
     /// First GameObject
     /// </summary>
-    public GameObject Object1;
+    public GameObject SourceObject;
+    
     /// <summary>
     /// Second GameObject
     /// </summary>
-    public GameObject Object2;
+    public GameObject TargetObject;
+
     /// <summary>
     /// Name of the first GameObject
     /// </summary>
-    public string ObjectName1 = "";
+    public string SourceObjectName = string.Empty;
+    
     /// <summary>
     /// Name of the second GameObject
     /// </summary>
-    public string ObjectName2 = "";
-    /// <summary>
-    /// Displacementvalue
-    /// </summary>
-    public float Origin = 0;
-    /// <summary>
-    /// Check if the movement is in x-Direction
-    /// </summary>
-    public bool XDirection;
-    /// <summary>
-    /// Check if the movement is in y-Direction
-    /// </summary>
-    public bool YDirection;
-    /// <summary>
-    /// Check if the movement is in z-Direction
-    /// </summary>
-    public bool ZDirection;
+    public string TargetObjectName = string.Empty;
+
+    ///// <summary>
+    ///// Displacementvalue
+    ///// </summary>
+    //public float Origin = 0;
+
+    ///// <summary>
+    ///// Check if the movement is in x-Direction
+    ///// </summary>
+    //public bool XDirection;
+    ///// <summary>
+    ///// Check if the movement is in y-Direction
+    ///// </summary>
+    //public bool YDirection;
+    ///// <summary>
+    ///// Check if the movement is in z-Direction
+    ///// </summary>
+    //public bool ZDirection;
+
+
+    public Vector3 DisplacementVector = Vector3.zero;
+
 
     // Start is called before the first frame update
 
@@ -64,8 +73,8 @@ public class VRMoveWithObject : MonoBehaviour
     void Start()
     {
         //
-        Object1 = GameObject.Find(ObjectName1);
-        Object2 = GameObject.Find(ObjectName2);
+        SourceObject = GameObject.Find(SourceObjectName);
+        TargetObject = GameObject.Find(TargetObjectName);
 
     }
 
@@ -89,34 +98,29 @@ public class VRMoveWithObject : MonoBehaviour
     void Update()
     {
         // obj.transform.position = this.transform.position;
-        if (Object1 != null)
+        if (SourceObject != null)
         {
+            //if (ZDirection)
+            //{
+            //    SourceObject.transform.localPosition = new Vector3(0, -(TargetObject.transform.position.z - Origin), 0);
+            //}
 
+            //if (XDirection)
+            //{
+            //    SourceObject.transform.localPosition = new Vector3((TargetObject.transform.position.x - Origin), 0, 0);
+            //}
 
-            if (ZDirection)
-            {
-                Object1.transform.localPosition = new Vector3(0, -(Object2.transform.position.z - Origin), 0);
-            }
+            //if (YDirection)
+            //{
+            //    SourceObject.transform.localPosition = new Vector3(0, 0, -(TargetObject.transform.position.z - Origin));
+            //}
 
-            if (XDirection)
-            {
-                Object1.transform.localPosition = new Vector3((Object2.transform.position.x - Origin), 0, 0);
-            }
-
-            if (YDirection)
-            {
-                Object1.transform.localPosition = new Vector3(0, 0, -(Object2.transform.position.z - Origin));
-            }
-
-
-
+            TargetObject.transform.localPosition = (TargetObject.transform.position - DisplacementVector);
         }
         else
         {
-
-            Object1 = GameObject.Find(ObjectName1);
-            Object2 = GameObject.Find(ObjectName2);
-
+            SourceObject = GameObject.Find(SourceObjectName);
+            TargetObject = GameObject.Find(TargetObjectName);
         }
     }
 
@@ -136,31 +140,31 @@ public class VRMoveWithObject : MonoBehaviour
     /// <param name="name2"></param>
     /// <param name="dir"></param>
     /// <returns>void</returns>
-    public void initObj(string name1, string name2, string dir)
-    {
-        ObjectName1 = name1;
-        ObjectName2 = name2;
+    //public void initObj(string name1, string name2, string dir)
+    //{
+    //    SourceObjectName = name1;
+    //    TargetObjectName = name2;
 
 
-        if (dir.Equals("x"))
-        {
-            XDirection = true;
+    //    if (dir.Equals("x"))
+    //    {
+    //        XDirection = true;
 
-        }
+    //    }
 
-        if (dir.Equals("y"))
-        {
-            YDirection = true;
+    //    if (dir.Equals("y"))
+    //    {
+    //        YDirection = true;
 
-        }
+    //    }
 
-        if (dir.Equals("z"))
-        {
-            ZDirection = true;
+    //    if (dir.Equals("z"))
+    //    {
+    //        ZDirection = true;
 
-        }
+    //    }
 
-    }
+    //}
 
 
 }

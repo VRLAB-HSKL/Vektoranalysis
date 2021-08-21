@@ -36,6 +36,15 @@ public class VRClampDirection : MonoBehaviour
     public Vector3 StartPosition;
 
 
+    private float XDirUpperBound;
+    private float XDirLowerBound;
+    
+    private float YDirUpperBound;
+    private float YDirLowerBound;
+
+    private float ZDirUpperBound;
+    private float ZDirLowerBound;
+
 
     /// <summary>
     ///  Sets the Startposition
@@ -46,7 +55,13 @@ public class VRClampDirection : MonoBehaviour
     /// <returns>void</returns>
     void Start()
     {
-        StartPosition = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        StartPosition = transform.position; //new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        XDirUpperBound = StartPosition.x + OffsetX;
+        XDirLowerBound = StartPosition.x - OffsetX;
+        YDirUpperBound = StartPosition.y + OffsetY;
+        YDirLowerBound = StartPosition.y - OffsetY;
+        ZDirUpperBound = StartPosition.z + OffsetZ;
+        ZDirLowerBound = StartPosition.z - OffsetZ;
     }
 
     // Update is called once per frame
@@ -71,13 +86,21 @@ public class VRClampDirection : MonoBehaviour
     {
         if (XDirection)
         {
-            if (this.gameObject.transform.localPosition.x >= StartPosition.x + OffsetX)
-            { this.gameObject.transform.localPosition = new Vector3(StartPosition.x + OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
+            //if (this.gameObject.transform.localPosition.x >= StartPosition.x + OffsetX)
+            //{ this.gameObject.transform.localPosition = new Vector3(StartPosition.x + OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
 
-            if (this.gameObject.transform.localPosition.x <= StartPosition.x - OffsetX)
-            { this.gameObject.transform.localPosition = new Vector3(StartPosition.x - OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
+            //if (this.gameObject.transform.localPosition.x <= StartPosition.x - OffsetX)
+            //{ this.gameObject.transform.localPosition = new Vector3(StartPosition.x - OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
 
-
+            if (transform.localPosition.x >= XDirUpperBound)
+            {
+                transform.localPosition = new Vector3(XDirUpperBound, transform.localPosition.y, transform.localPosition.z);
+            }
+                
+            if(transform.localPosition.x <= XDirLowerBound)
+            {
+                transform.localPosition = new Vector3(XDirLowerBound, transform.localPosition.y, transform.localPosition.z);
+            }
         }
 
 
@@ -87,11 +110,21 @@ public class VRClampDirection : MonoBehaviour
         {
 
 
-            if (this.gameObject.transform.localPosition.y >= StartPosition.y + OffsetY)
-            { this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y + OffsetY, this.gameObject.transform.localPosition.z); }
+            //if (this.gameObject.transform.localPosition.y >= StartPosition.y + OffsetY)
+            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y + OffsetY, this.gameObject.transform.localPosition.z); }
 
-            if (this.gameObject.transform.localPosition.y <= StartPosition.y - OffsetY)
-            { this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y - OffsetY, this.gameObject.transform.localPosition.z); }
+            //if (this.gameObject.transform.localPosition.y <= StartPosition.y - OffsetY)
+            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y - OffsetY, this.gameObject.transform.localPosition.z); }
+
+            if (transform.localPosition.y >= YDirUpperBound)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, YDirUpperBound, transform.localPosition.z);
+            }
+
+            if (transform.localPosition.y <= YDirLowerBound)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, YDirLowerBound, transform.localPosition.z);
+            }
 
         }
 
@@ -100,30 +133,22 @@ public class VRClampDirection : MonoBehaviour
 
         if (ZDirection)
         {
-            if (this.gameObject.transform.localPosition.z >= StartPosition.z + OffsetZ)
-            { this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y + OffsetY, StartPosition.z + OffsetZ); }
+            //if (this.gameObject.transform.localPosition.z >= StartPosition.z + OffsetZ)
+            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y + OffsetY, StartPosition.z + OffsetZ); }
 
-            if (this.gameObject.transform.localPosition.z <= StartPosition.z - OffsetZ)
-            { this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y - OffsetY, StartPosition.z - OffsetZ); }
+            //if (this.gameObject.transform.localPosition.z <= StartPosition.z - OffsetZ)
+            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y - OffsetY, StartPosition.z - OffsetZ); }
 
+            if (transform.localPosition.z >= ZDirUpperBound)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, ZDirUpperBound);
+            }
 
+            if (transform.localPosition.z <= ZDirLowerBound)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, ZDirLowerBound);
+            }
         }
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
 }
 

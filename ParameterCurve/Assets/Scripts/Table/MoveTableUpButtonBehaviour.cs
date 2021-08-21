@@ -5,32 +5,38 @@ using UnityEngine;
 
 /// <summary>
 /// This class handles Logic of the Upbutton 
+/// Source: ImmersiveVolume Project
 /// </summary>
 /// 
 
-public class VRUpButton : AbstractButtonBehaviour
+public class MoveTableUpButtonBehaviour : AbstractButtonBehaviour
     //MonoBehaviour, IColliderEventPressEnterHandler
     //, IColliderEventPressExitHandler
 {
 
     //[SerializeField]
     //private ColliderButtonEventData.InputButton m_activeButton = ColliderButtonEventData.InputButton.Trigger;
-    
+
     /// <summary>
     /// This Vector shows how much the Button will be displaced while pressing
     /// </summary>
     //public Vector3 ButtonDownDisplacement = new Vector3(0f, 5f, 0f);
-    
+
     /// <summary>
     /// This Vector shows how much the 3D-Model will be displaced while pressing
     /// </summary>
     //public Vector3 ObjectDisplacement;
-    
+
     /// <summary>
     /// This is the Buttonobject
     /// </summary>
     //public Transform ButtonObject;
-    
+
+    /// <summary>
+    /// Shows how much the whole game object will be displaced while pressing
+    /// </summary>
+    public Vector3 FullObjectDisplacement;
+
     /// <summary>
     /// 
     /// </summary>
@@ -77,13 +83,13 @@ public class VRUpButton : AbstractButtonBehaviour
     void Start()
     {
         HoldButton = true;
-        FullObjectDisplacement = new Vector3(0f, 0.2f, 0f);
+        UseTriggerButton = false;
+        FullObjectDisplacement = new Vector3(0f, 0.002f, 0f);
 
         consoleBase = GameObject.Find("ConsoleBase");
         regulator1 = GameObject.Find("Regulator");
         regulator2 = GameObject.Find("Regulator (1)");
         regulator3 = GameObject.Find("Regulator (2)");
-
     }
 
 
@@ -172,8 +178,6 @@ public class VRUpButton : AbstractButtonBehaviour
                 if (true) //consoleBase.transform.localPosition.y <= -0.399f)
                 {
                     Vector3 increaseVector = FullObjectDisplacement; // * Time.deltaTime;
-                    
-
                     consoleBase.transform.localPosition += increaseVector;
                     regulator1.transform.localPosition += increaseVector;
                     regulator2.transform.localPosition += increaseVector;

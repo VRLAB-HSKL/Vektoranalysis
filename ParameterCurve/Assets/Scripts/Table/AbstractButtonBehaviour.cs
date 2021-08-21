@@ -14,12 +14,7 @@ public abstract class AbstractButtonBehaviour :
     /// <summary>
     /// Controls how much the actual object being pressed will be displaced while pressing
     /// </summary>
-    public Vector3 ButtonDownDisplacement = new Vector3(0f, 5f, 0f);
-
-    /// <summary>
-    /// Shows how much the whole game object will be displaced while pressing
-    /// </summary>
-    public Vector3 FullObjectDisplacement = new Vector3(0f, 0.2f, 0f);
+    public Vector3 ButtonDownDisplacement = new Vector3(0f, 5f, 0f);    
 
     /// <summary>
     /// Button object being pressed
