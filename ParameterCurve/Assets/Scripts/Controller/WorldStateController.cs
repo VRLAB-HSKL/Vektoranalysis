@@ -67,7 +67,7 @@ public class WorldStateController : MonoBehaviour
         GlobalData.InitializeData();
 
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
-        TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.05f);
+        TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
         //TableViewController.ScalingFactor = 0.5f;
 
         //simpleView = new SimpleCurveView(WorldDisplayLR);
@@ -123,6 +123,8 @@ public class WorldStateController : MonoBehaviour
             WorldViewController.CurrentView.UpdateView();
             TableViewController.CurrentView.UpdateView();
 
+            InfoWall.UpdatePlotLineRenderers();
+
             //if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
             //{
             //    GlobalData.IsDriving = false;
@@ -157,10 +159,11 @@ public class WorldStateController : MonoBehaviour
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
-
+        InfoWall.UpdatePlotLineRenderers();
 
         WorldViewController.CurrentView.UpdateView();
         TableViewController.CurrentView.UpdateView();
+        
         //UpdateWorldObjects();
     }
 
@@ -187,6 +190,7 @@ public class WorldStateController : MonoBehaviour
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
+        InfoWall.UpdatePlotLineRenderers();
 
         //UpdateWorldObjects();
         WorldViewController.CurrentView.UpdateView();
@@ -219,6 +223,7 @@ public class WorldStateController : MonoBehaviour
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
+        InfoWall.UpdatePlotLineRenderers();
 
         //UpdateWorldObjects();
         WorldViewController.CurrentView.UpdateView();

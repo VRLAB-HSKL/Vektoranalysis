@@ -1121,3 +1121,15 @@
 2021-08-22 20:38:36,551 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
 2021-08-22 20:38:36,604 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:17945f87-158b-417e-a6a6-470844d6060a,port:8930
 2021-08-22 20:40:03,377 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 22:04:02,721 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 22:04:02,770 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:b8286f4c-a52a-4e4e-a82a-0df1ed8d204c,port:8286
+2021-08-22 22:05:05,751 [11] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 23:01:11,511 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 23:01:11,567 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:58de8e3d-4857-4d30-9d90-464cfaca36ce,port:8939
+2021-08-22 23:01:39,569 [9] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 23:02:31,417 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 23:02:31,466 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:5ad3bc12-5780-43f4-8cb3-01a5098afbb1,port:8215
+2021-08-22 23:04:25,945 [11] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 23:05:53,852 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 23:05:53,898 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:4e666b1c-4360-4e32-944c-faf5bb3e706c,port:8951
+2021-08-22 23:09:57,268 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
