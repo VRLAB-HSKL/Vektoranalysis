@@ -17,31 +17,41 @@ using UnityEngine.Events;
 
 public class WorldStateController : MonoBehaviour
 {
-    public GameObject RootElement;
-    public LineRenderer DisplayLR;
-    public Transform TravelObject;
-    public Transform ArcLengthTravelObject;
+    [Header("WorldCurveElements")]
+    public Transform WorldRootElement;
+    public LineRenderer WorldDisplayLR;
+    public Transform WorldTravelObject;
+    public Transform WorldArcLengthTravelObject;
+
+    [Header("TableCurveElements")]
+    public Transform TableRootElement;
+    public LineRenderer TableDisplayLR;
+    public Transform TableTravelObject;
+    public Transform TableArcLengthTravelObject;
 
 
-    private AbstractCurveView currentView;
-    public AbstractCurveView CurrentView
-    {
-        get { return currentView; }
-        set
-        {
-            currentView = value;
-            currentView.UpdateView();
 
-            TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-            ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
-        }
-    }
+    //private AbstractCurveView currentWorldView;
+    //public AbstractCurveView CurrentWorldView
+    //{
+    //    get { return currentWorldView; }
+    //    set
+    //    {
+    //        currentWorldView = value;
+    //        currentWorldView.UpdateView();
 
-    public SimpleCurveView simpleView;
-    public SimpleRunCurveView simpleRunView;
-    public SimpleRunCurveWithArcLength simpleRunWithArcLengthView;
-    
+    //        WorldTravelObject.gameObject.SetActive(CurrentWorldView.HasTravelPoint);
+    //        WorldArcLengthTravelObject.gameObject.SetActive(CurrentWorldView.HasArcLengthPoint);
+    //    }
+    //}
 
+    public CurveViewController WorldViewController;
+    public CurveViewController TableViewController;
+
+
+
+
+    [Header("Walls")]
     public BrowserControl BrowserWall;
     public InformationControl InfoWall;
     public static CurveSelectionControl CurveSelectWall;
@@ -56,19 +66,23 @@ public class WorldStateController : MonoBehaviour
     {
         GlobalData.InitializeData();
 
-        simpleView = new SimpleCurveView(DisplayLR);
-        simpleView.UpdateView();
+        WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
+        TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.05f);
+        //TableViewController.ScalingFactor = 0.5f;
 
-        simpleRunView = new SimpleRunCurveView(DisplayLR, TravelObject);
-        simpleRunView.UpdateView();
+        //simpleView = new SimpleCurveView(WorldDisplayLR);
+        //simpleView.UpdateView();
 
-        simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(DisplayLR, TravelObject, ArcLengthTravelObject);
-        simpleRunWithArcLengthView.UpdateView();
+        //simpleRunView = new SimpleRunCurveView(WorldDisplayLR, WorldTravelObject);
+        //simpleRunView.UpdateView();
 
-        CurrentView = simpleRunWithArcLengthView;
-        
-        TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-        ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
+        //simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject);
+        //simpleRunWithArcLengthView.UpdateView();
+
+        //CurrentWorldView = simpleRunWithArcLengthView;
+
+        //WorldTravelObject.gameObject.SetActive(CurrentWorldView.HasTravelPoint);
+        //WorldArcLengthTravelObject.gameObject.SetActive(CurrentWorldView.HasArcLengthPoint);
 
 
 
@@ -106,7 +120,8 @@ public class WorldStateController : MonoBehaviour
             //    updateTimer = 0f;
             // SetTravelPointAndDisplay();                
             //}
-            CurrentView.UpdateView();
+            WorldViewController.CurrentView.UpdateView();
+            TableViewController.CurrentView.UpdateView();
 
             //if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
             //{
@@ -144,7 +159,8 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
 
-        CurrentView.UpdateView();
+        WorldViewController.CurrentView.UpdateView();
+        TableViewController.CurrentView.UpdateView();
         //UpdateWorldObjects();
     }
 
@@ -153,7 +169,7 @@ public class WorldStateController : MonoBehaviour
         // Stop driving
         if (GlobalData.IsDriving)
         {
-            if(CurrentView is null)
+            if(WorldViewController.CurrentView is null)
             {
                 Debug.Log("ViewEmpty");
             }
@@ -173,7 +189,8 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
         //UpdateWorldObjects();
-        CurrentView.UpdateView();
+        WorldViewController.CurrentView.UpdateView();
+        TableViewController.CurrentView.UpdateView();
     }
 
 
@@ -204,7 +221,8 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
 
         //UpdateWorldObjects();
-        CurrentView.UpdateView();
+        WorldViewController.CurrentView.UpdateView();
+        TableViewController.CurrentView.UpdateView();
     }
 
 }

@@ -16,19 +16,22 @@ public class ViewChangeHandler : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            switch(ViewIndex)
+            switch (ViewIndex)
             {
                 default:
                 case 0:
-                    world.CurrentView = world.simpleView;
+                    world.WorldViewController.CurrentView = world.WorldViewController.simpleView;
+                    world.TableViewController.CurrentView = world.TableViewController.simpleView;
                     break;
 
                 case 1:
-                    world.CurrentView = world.simpleRunView;
+                    world.WorldViewController.CurrentView = world.WorldViewController.simpleRunView;
+                    world.TableViewController.CurrentView = world.TableViewController.simpleRunView;
                     break;
 
                 case 2:
-                    world.CurrentView = world.simpleRunWithArcLengthView;
+                    world.WorldViewController.CurrentView = world.WorldViewController.simpleRunWithArcLengthView;
+                    world.TableViewController.CurrentView = world.TableViewController.simpleRunWithArcLengthView;
                     break;
             }
 

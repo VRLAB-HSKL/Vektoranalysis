@@ -14,8 +14,10 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
 
     public SimpleRunCurveWithArcLength(
         LineRenderer displayLR, 
+        Transform root, 
+        float scalingFactor,
         Transform travelObject, 
-        Transform arcLengthTravelObject) : base(displayLR, travelObject)
+        Transform arcLengthTravelObject) : base(displayLR, root, scalingFactor, travelObject)
     {
         ArcLengthTravelObject = arcLengthTravelObject;
 
@@ -63,34 +65,31 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
 
         int pointIndex = GlobalData.CurrentCurveIndex;
         ArcLengthTravelObject.position =
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex];
+            MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex]);
 
-        Vector3 nextPos = Vector3.zero;
+        Vector3 nextPos;
         if (pointIndex < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints.Count - 1)
         {
-            nextPos = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex + 1];
+            nextPos = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex + 1]);
         }
         else
         {
-            nextPos = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex];
+            nextPos = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex]);
         }
 
         Vector3[] arcTangentArr = new Vector3[2];
-        arcTangentArr[0] = ArcLengthTravelObject.position;
-        arcTangentArr[1] = ArcLengthTravelObject.position +
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[GlobalData.CurrentPointIndex].Tangent;
+        arcTangentArr[0] = MapPointPos(ArcLengthTravelObject.position);
+        arcTangentArr[1] = MapPointPos(ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[GlobalData.CurrentPointIndex].Tangent);
         ArcLengthTangentLR.SetPositions(arcTangentArr);
 
         Vector3[] arcNormalArr = new Vector3[2];
-        arcNormalArr[0] = ArcLengthTravelObject.position;
-        arcNormalArr[1] = ArcLengthTravelObject.position +
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[GlobalData.CurrentPointIndex].Normal;
+        arcNormalArr[0] = MapPointPos(ArcLengthTravelObject.position);
+        arcNormalArr[1] = MapPointPos(ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[GlobalData.CurrentPointIndex].Normal);
         ArcLengthNormalLR.SetPositions(arcNormalArr);
 
         Vector3[] arcBinormalArr = new Vector3[2];
-        arcBinormalArr[0] = ArcLengthTravelObject.position;
-        arcBinormalArr[1] = ArcLengthTravelObject.position +
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[GlobalData.CurrentPointIndex].Binormal;
+        arcBinormalArr[0] = MapPointPos(ArcLengthTravelObject.position);
+        arcBinormalArr[1] = MapPointPos(ArcLengthTravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthFresnetApparatuses[GlobalData.CurrentPointIndex].Binormal);
         ArcLengthBinormalLR.SetPositions(arcBinormalArr);
 
 

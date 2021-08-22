@@ -16,7 +16,8 @@ public class SimpleRunCurveView : SimpleCurveView
     private Vector3[] normalArr = new Vector3[2];
     private Vector3[] binormalArr = new Vector3[2];
 
-    public SimpleRunCurveView(LineRenderer displayLR, Transform travelObject) : base(displayLR)
+    public SimpleRunCurveView(LineRenderer displayLR, Transform root, float scalingFactor, Transform travelObject)
+        : base(displayLR, root, scalingFactor)
     {        
         TravelObject = travelObject;
 
@@ -57,8 +58,6 @@ public class SimpleRunCurveView : SimpleCurveView
         base.UpdateView();
         SetTravelPoint();
         SetMovingFrame();
-
-        //Debug.Log("RunCurveView - UpdateView");
     }
 
     private void SetTravelPoint()
@@ -77,23 +76,9 @@ public class SimpleRunCurveView : SimpleCurveView
             return;
         }
 
+        TravelObject.position = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex]);
+
         
-        TravelObject.position = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex];
-        //ArcLengthTravelObject.position = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex];
-
-        //Debug.Log("TravelObjectPos: " + TravelObject.position);
-
-        Vector3 nextPos = Vector3.zero;
-        if (pointIndex < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count - 1)
-        {
-            nextPos = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex + 1];
-        }
-        else
-        {
-            nextPos = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex];
-        }
-
-        TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
 
         ++GlobalData.CurrentPointIndex;
 
@@ -104,24 +89,35 @@ public class SimpleRunCurveView : SimpleCurveView
     {
         if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
         {
-            //Debug.Log("Stop");
             GlobalData.IsDriving = false;
             return;
         }
 
+        int pointIndex = GlobalData.CurrentPointIndex;
+
         tangentArr[0] = TravelObject.position;
-        tangentArr[1] = TravelObject.position + 
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Tangent;
+        tangentArr[1] = (TravelObject.position + 
+            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Tangent).normalized;
         TangentLR.SetPositions(tangentArr);
                 
         normalArr[0] = TravelObject.position;
-        normalArr[1] = TravelObject.position + 
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Normal;
+        normalArr[1] = (TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Normal).normalized;
         NormalLR.SetPositions(normalArr);
                 
         binormalArr[0] = TravelObject.position;
-        binormalArr[1] = TravelObject.position + 
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Binormal;
+        binormalArr[1] = (TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Binormal);
         BinormalLR.SetPositions(binormalArr);
+
+        Vector3 nextPos;
+        if (pointIndex < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count - 1)
+        {
+            nextPos = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex + 1]);
+        }
+        else
+        {
+            nextPos = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex]);
+        }
+
+        TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
     }
 }

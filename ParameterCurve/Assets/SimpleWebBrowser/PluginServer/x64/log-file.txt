@@ -1022,3 +1022,102 @@
 2021-08-21 18:34:12,234 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
 2021-08-21 18:34:12,285 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:745e943b-cd87-428e-b577-a722c97db570,port:8265
 2021-08-21 18:35:58,947 [7] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 18:48:56,312 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 18:48:56,366 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:d56dcd02-85f5-45b0-be2d-48a6929d79c5,port:8828
+2021-08-21 18:49:21,164 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 18:49:47,072 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 18:49:47,122 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:d57e6e19-005f-4979-8da2-66655e6f2542,port:8913
+2021-08-21 18:49:51,482 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 18:52:49,547 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 18:52:49,596 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:9f00779d-40d6-4288-8804-238a77428b87,port:8696
+2021-08-21 18:53:22,066 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 18:56:13,081 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 18:56:13,130 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:fe8127b1-3a61-4a84-812d-3c40dae855e1,port:8443
+2021-08-21 18:57:05,992 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 18:57:18,858 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 18:57:18,907 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:b2b2a90c-305a-4beb-8c20-73bd58344dc5,port:8103
+2021-08-21 18:57:39,434 [9] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 21:05:02,040 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 21:05:02,091 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:19704b74-689d-4f01-b0c4-8ad5c594b600,port:8644
+2021-08-21 21:07:54,432 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 21:08:16,819 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 21:08:16,869 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:cc0ad6cb-4ba6-490e-9d12-a695df2ca193,port:8026
+2021-08-21 21:09:00,590 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 21:09:31,955 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 21:09:32,006 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:a55fc7e0-8ddc-45e9-9f50-c4d8470fba6a,port:8228
+2021-08-21 21:13:33,970 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 21:58:08,299 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 21:58:08,355 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:f1026227-d87a-4a9b-bb6e-3266e526cf8e,port:8943
+2021-08-21 21:58:51,507 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 21:59:06,318 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 21:59:06,372 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:41bf8966-3784-4e91-b03a-e5022cf0c474,port:8078
+2021-08-21 21:59:28,696 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-21 22:01:44,670 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-21 22:01:44,723 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:10df9805-c8ae-464b-a6cd-eb80409d8fcf,port:8274
+2021-08-21 22:02:24,388 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 18:13:45,122 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 18:13:45,189 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:6769cc8c-3c34-4858-88ae-912944bb2c15,port:8650
+2021-08-22 18:14:19,285 [7] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 18:37:38,995 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 18:37:39,043 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:ce20eb95-83da-4910-91c3-f9ba3485f189,port:8658
+2021-08-22 18:37:42,420 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 18:46:08,800 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 18:46:08,854 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:28a5e976-c8d8-4d2b-a873-aaf8fdb06db0,port:8158
+2021-08-22 18:46:22,870 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 18:58:34,631 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 18:58:34,684 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:402ca53e-5302-4119-91d8-4420bafcb45d,port:8944
+2021-08-22 18:59:32,877 [9] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:00:40,675 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:00:40,724 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:7c479f79-3bd7-4f8c-9b66-63d247ff976a,port:8087
+2021-08-22 19:02:31,834 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:33:16,842 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:33:16,900 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:3d14b9f2-4689-42d1-b9de-09448f744979,port:8500
+2021-08-22 19:33:43,533 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:34:11,731 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:34:11,782 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:604da607-f27a-4439-8e19-2f4fc106041e,port:8307
+2021-08-22 19:34:27,738 [7] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:38:50,572 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:38:50,620 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:74aa3825-71ca-4050-b294-f9facaddf51a,port:8949
+2021-08-22 19:39:02,450 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:39:28,584 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:39:28,632 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:272ba734-a87d-4fba-8715-2604c65e3a3d,port:8469
+2021-08-22 19:39:31,532 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:39:59,716 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:39:59,768 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:f34aec3a-1fea-45f2-8201-f6e34a2b2767,port:8957
+2021-08-22 19:40:29,679 [7] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:40:52,595 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:40:52,640 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:fa2dedeb-54d3-4a1b-bdfb-d87d6eef14d0,port:8555
+2021-08-22 19:41:44,838 [9] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:55:30,207 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:55:30,256 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:7ea893c4-f5d2-462a-b01a-9cf1cc154439,port:8353
+2021-08-22 19:55:42,093 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:57:13,849 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:57:13,896 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:3ea53fee-2a56-4d4f-8a93-cc7143dd84a5,port:8035
+2021-08-22 19:57:46,830 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 19:59:11,719 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 19:59:11,767 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:b0bc9b9e-7e79-4807-beb7-1155c96f4b77,port:8919
+2021-08-22 19:59:23,234 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:00:09,117 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:00:09,165 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:84e9d970-d979-4b45-a78d-09a0807f9e7d,port:8267
+2021-08-22 20:00:23,769 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:05:20,057 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:05:20,107 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:d0f22cf7-388a-47b2-aa25-2ccb03d19caa,port:8790
+2021-08-22 20:06:02,414 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:08:17,185 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:08:17,233 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:a17bc556-138c-4776-b7d9-f71c68f49d2f,port:8733
+2021-08-22 20:09:02,270 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:13:09,534 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:13:09,582 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:6c9f7383-6eea-4683-acf2-042b900e4f1b,port:8117
+2021-08-22 20:13:27,942 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:14:25,633 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:14:25,679 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:d1f36443-b795-446a-894d-9008303c3223,port:8548
+2021-08-22 20:14:58,726 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:20:16,477 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:20:16,524 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:628827de-48d2-4976-acb7-77415776d214,port:8694
+2021-08-22 20:21:10,347 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:29:51,182 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:29:51,231 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:2efa5554-4eb4-4649-848a-701c4dc58255,port:8090
+2021-08-22 20:32:26,419 [7] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
+2021-08-22 20:38:36,551 [1] INFO  SharedPluginServer.Program [(null)] - ===============START================
+2021-08-22 20:38:36,604 [1] INFO  SharedPluginServer.Program [(null)] - Starting plugin, settings:width:1024,height:768,url:http://www.hs-kl.de,memfile:17945f87-158b-417e-a6a6-470844d6060a,port:8930
+2021-08-22 20:40:03,377 [3] INFO  SharedPluginServer.App [(null)] - ==============SHUTTING DOWN==========
