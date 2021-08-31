@@ -8,73 +8,65 @@ using UnityEngine.EventSystems;
 /// Class based on VIU developer pdf
 /// ToDo: Implement abstract base class and copy into VRKL
 /// </summary>
-public class PillarSelectionEventHandler : MonoBehaviour,
-    IPointerEnterHandler,
-    IPointerExitHandler,
-    IPointerClickHandler
+public class PillarSelectionEventHandler : AbstractCanvasRaycastEventHandler
 {
-    public GameObject Root;
+    public ThreeSelectionView threeSelView;
+    public GameObject BoundariesParent;
 
     public Material DefaultMat;
     public Material HoverMat;
     public Material SelectionMat;
 
-    private HashSet<PointerEventData> hovers = new HashSet<PointerEventData>();
+    private HashSet<PointerEventData> Hovers = new HashSet<PointerEventData>();
 
-    public void OnPointerClick(PointerEventData eventData)
+    protected override void HandlePointerClick(PointerEventData eventData)
     {
-        var viveEventData = eventData as VivePointerEventData;
-        if(viveEventData != null)
+        if (eventData is VivePointerEventData viveEventData)
         {
-            if(viveEventData.viveButton == ControllerButton.Trigger)
+            if (viveEventData.viveButton == ControllerButton.Trigger)
             {
-                MeshRenderer[] meshRenderers = Root.GetComponentsInChildren<MeshRenderer>();
+                MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
                 foreach (MeshRenderer m in meshRenderers)
                 {
-                    //if(m.material.color == DefaultMat.color)
-                    //{
                     m.material = SelectionMat;
-                    //}
                 }
             }
         }
-        else if(eventData != null)
+        else if (eventData != null)
         {
-            if(eventData.button == PointerEventData.InputButton.Left)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
                 // Standalone button triggered!
+                MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer m in meshRenderers)
+                {
+                    m.material = SelectionMat;
+                }
             }
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    protected override void HandlePointerEnter(PointerEventData eventData)
     {
-        if (hovers.Add(eventData) && hovers.Count == 1)
+        if (Hovers.Add(eventData) && Hovers.Count == 1)
         {
-            MeshRenderer[] meshRenderers = Root.GetComponentsInChildren<MeshRenderer>();
-            foreach(MeshRenderer m in meshRenderers)
-            {
-                //if(m.material.color == DefaultMat.color)
-                //{
-                    m.material = HoverMat;
-                //}
-            }
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (hovers.Remove(eventData) && hovers.Count == 0)
-        {
-            MeshRenderer[] meshRenderers = Root.GetComponentsInChildren<MeshRenderer>();
+            MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer m in meshRenderers)
             {
-                //if (m.material.color == HoverMat.color)
-                //{
-                    m.material = DefaultMat;
-                //}
+                m.material = HoverMat;
             }
         }
     }
 
+    protected override void HandlePointerExit(PointerEventData eventData)
+    {
+        if (Hovers.Remove(eventData) && Hovers.Count == 0)
+        {
+            MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer m in meshRenderers)
+            {                
+                m.material = DefaultMat;                
+            }
+        }
+    }
 }

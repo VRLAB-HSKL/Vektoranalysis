@@ -14,6 +14,7 @@ public class ThreeSelectionView : MonoBehaviour
     AbstractCurveView middleView;
     AbstractCurveView rightView;
 
+
     private void Start()
     {
         InitLineRenders();
