@@ -60,7 +60,7 @@ public static class DataImport
 
     public static PointDataset ImportFromJSONResource(TextAsset json)
     {
-        JsonRoot jsr = JsonConvert.DeserializeObject<JsonRoot>(json.text);
+        PointDataJsonRoot jsr = JsonConvert.DeserializeObject<PointDataJsonRoot>(json.text);
 
         PointDataset pds = new PointDataset();
         pds.Name = jsr.name + "_JSON";

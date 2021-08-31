@@ -16,8 +16,8 @@ public class SimpleRunCurveView : SimpleCurveView
     private Vector3[] normalArr = new Vector3[2];
     private Vector3[] binormalArr = new Vector3[2];
 
-    public SimpleRunCurveView(LineRenderer displayLR, Transform root, float scalingFactor, Transform travelObject)
-        : base(displayLR, root, scalingFactor)
+    public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject)
+        : base(displayLR, rootPos, scalingFactor)
     {        
         TravelObject = travelObject;
 

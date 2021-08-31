@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class AbstractCurveView
 {
     public LineRenderer DisplayLR;
-    public Transform Root;
+    public Vector3 RootPos;
     public float ScalingFactor;
     //public Transform TravelObject;
     //public Transform ArcLengthTravelObject;
@@ -14,10 +14,10 @@ public abstract class AbstractCurveView
     public bool HasArcLengthPoint;
     
     
-    public AbstractCurveView(LineRenderer displayLR, Transform root, float scalingFactor)
+    public AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
     {
         DisplayLR = displayLR;
-        Root = root;
+        RootPos = rootPos;
         ScalingFactor = scalingFactor;
         //UpdateView();
     }
@@ -30,6 +30,22 @@ public abstract class AbstractCurveView
         }
         
         PointDataset curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+
+        if(curve is null)
+        {
+            Debug.Log("Failed to get curve object at current curve index");
+        }
+
+        if(curve.worldPoints is null)
+        {
+            Debug.Log("World points collection not initialized in current curve object");
+        }
+
+        if (curve.worldPoints.Count == 0)
+        {
+            Debug.Log("World points collection empty in current curve object");
+        }
+
         DisplayLR.positionCount = curve.worldPoints.Count;
 
         Vector3[] pointArr = curve.worldPoints.ToArray();
@@ -44,27 +60,13 @@ public abstract class AbstractCurveView
 
     protected Vector3 MapPointPos(Vector3 point)
     {
-        return Root.position + point * ScalingFactor;
+        return RootPos + point * ScalingFactor;
     }
 
     private void UpdateWorldObjects()
     {
-        //UpdateLineRenderers();
         SetTravelPointAndDisplay();
-    }
-
-    //public void UpdateLineRenderers()
-    //{
-    //    //if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
-
-    //    if (DisplayLR is null)
-    //        Debug.Log("Failed to get line renderer component");
-
-    //    DisplayLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count;
-    //    DisplayLR.SetPositions(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.ToArray());
-
-    //    //InfoWall.UpdatePlotLineRenderers();
-    //}
+    }    
 
     private void SetTravelPointAndDisplay()
     {        

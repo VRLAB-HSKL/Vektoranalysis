@@ -55,7 +55,7 @@ public class VRClampDirection : MonoBehaviour
     /// <returns>void</returns>
     void Start()
     {
-        StartPosition = transform.position; //new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        StartPosition = transform.localPosition; //new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
         XDirUpperBound = StartPosition.x + OffsetX;
         XDirLowerBound = StartPosition.x - OffsetX;
         YDirUpperBound = StartPosition.y + OffsetY;

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,9 +72,13 @@ public static class GlobalData
 
     public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
     public static string ImageResourcePath = "img/";
+
+    public static InitFileJsonRoot initFile;
+
     public static void InitializeData()
     {
         ImportAllResources();
+        ParseIniFile();
     }
 
 
@@ -116,6 +121,14 @@ public static class GlobalData
             ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
 
+    }
+
+
+    private static void ParseIniFile()
+    {
+        // JSON Resources
+        TextAsset json = Resources.Load("json/init/initTemplate.json", typeof(TextAsset)) as TextAsset;
+        //initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text);
     }
 
 

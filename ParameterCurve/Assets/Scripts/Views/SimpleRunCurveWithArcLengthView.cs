@@ -14,10 +14,10 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
 
     public SimpleRunCurveWithArcLength(
         LineRenderer displayLR, 
-        Transform root, 
+        Vector3 rootPos, 
         float scalingFactor,
         Transform travelObject, 
-        Transform arcLengthTravelObject) : base(displayLR, root, scalingFactor, travelObject)
+        Transform arcLengthTravelObject) : base(displayLR, rootPos, scalingFactor, travelObject)
     {
         ArcLengthTravelObject = arcLengthTravelObject;
 

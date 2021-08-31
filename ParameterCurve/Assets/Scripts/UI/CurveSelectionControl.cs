@@ -75,6 +75,8 @@ public class CurveSelectionControl : MonoBehaviour
         GlobalData.CurrentCurveIndex = 0;
         GlobalData.CurrentPointIndex = 0;
 
+        
+
         switch(cdg)
         {
             default:
@@ -90,11 +92,39 @@ public class CurveSelectionControl : MonoBehaviour
                 CurveSelectionFSM.State = exerciseState;
                 break;
         }
+
+        
+
         CurveSelectionFSM.State.OnStateUpdate();
 
+        
+
+        if (world.BrowserWall is null)
+        {
+            Debug.Log("Browser Wall not initialized!");
+        }
+
+        List<PointDataset> cds = GlobalData.CurrentDataset;
+
+        if(cds is null)
+        {
+            Debug.Log("Datasets not initialized");
+        }
+
+        //Debug.Log("idx: " + GlobalData.CurrentCurveIndex);
+        //Debug.Log("cdsCount: " + cds.Count);
+
+        PointDataset ds = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+
+        if(ds is null)
+        {
+            Debug.Log("Current dataset is null");
+        }
 
         // Display html resource
-        world.BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
+        world.BrowserWall.OpenURL(ds.NotebookURL);
+
+        //Debug.Log("switchCurveGrpABC");
 
         //UpdateCurveMenuButtons();
 

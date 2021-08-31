@@ -36,13 +36,13 @@ public class CurveViewController// : MonoBehaviour
         TravelObject = travel;
         ArcLengthTravelObject = arcTravel;
 
-        simpleView = new SimpleCurveView(DisplayLR, RootElement, scalingFactor);
+        simpleView = new SimpleCurveView(DisplayLR, RootElement.position, scalingFactor);
         simpleView.UpdateView();
 
-        simpleRunView = new SimpleRunCurveView(DisplayLR, RootElement, scalingFactor, TravelObject);
+        simpleRunView = new SimpleRunCurveView(DisplayLR, RootElement.position, scalingFactor, TravelObject);
         simpleRunView.UpdateView();
 
-        simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(DisplayLR, RootElement, scalingFactor, TravelObject, ArcLengthTravelObject);
+        simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(DisplayLR, RootElement.position, scalingFactor, TravelObject, ArcLengthTravelObject);
         simpleRunWithArcLengthView.UpdateView();
         
         CurrentView = simpleRunWithArcLengthView;
