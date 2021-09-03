@@ -1,10 +1,13 @@
 
-public class NextDatasetButtonBehaviour : AbstractButtonBehaviour
+namespace Behaviours.Button
 {
-    public WorldStateController world;
-    
-    public override void HandleButtonEvent()
+    public class NextDatasetButtonBehaviour : AbstractButtonBehaviour
     {
-        world.SwitchToNextDataset();
+        public WorldStateController world;
+    
+        public override void HandleButtonEvent()
+        {
+            world.SwitchToNextDataset();
+        }
     }
 }

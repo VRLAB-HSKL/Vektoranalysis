@@ -1,71 +1,68 @@
-using HTC.UnityPlugin.Vive;
-using System.Collections;
 using System.Collections.Generic;
+using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// Class based on VIU developer pdf
-/// ToDo: Implement abstract base class and copy into VRKL
-/// </summary>
-public class PillarSelectionEventHandler : AbstractCanvasRaycastEventHandler
+namespace Behaviours
 {
-    public ThreeSelectionView threeSelView;
-    public GameObject BoundariesParent;
-
-    public Material DefaultMat;
-    public Material HoverMat;
-    public Material SelectionMat;
-
-    private HashSet<PointerEventData> Hovers = new HashSet<PointerEventData>();
-
-    protected override void HandlePointerClick(PointerEventData eventData)
+    /// <summary>
+    /// Class based on VIU developer pdf
+    /// </summary>
+    public class PillarSelectionEventHandler : AbstractCanvasRaycastEventHandler
     {
-        if (eventData is VivePointerEventData viveEventData)
+        public ThreeSelectionView threeSelView;
+        public GameObject boundariesParent;
+
+        public Material defaultMat;
+        public Material hoverMat;
+        public Material selectionMat;
+
+        private readonly HashSet<PointerEventData> _hovers = new HashSet<PointerEventData>();
+
+        protected override void HandlePointerClick(PointerEventData eventData)
         {
-            if (viveEventData.viveButton == ControllerButton.Trigger)
+            if (eventData is VivePointerEventData viveEventData)
             {
-                MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
-                foreach (MeshRenderer m in meshRenderers)
+                if (viveEventData.viveButton != ControllerButton.Trigger) return;
+            
+                var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
+                foreach (var m in meshRenderers)
                 {
-                    m.material = SelectionMat;
+                    m.material = selectionMat;
                 }
             }
-        }
-        else if (eventData != null)
-        {
-            if (eventData.button == PointerEventData.InputButton.Left)
+            else if (eventData != null)
             {
+                if (eventData.button != PointerEventData.InputButton.Left) return;
+            
                 // Standalone button triggered!
-                MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
-                foreach (MeshRenderer m in meshRenderers)
+                var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
+                foreach (var m in meshRenderers)
                 {
-                    m.material = SelectionMat;
+                    m.material = selectionMat;
                 }
             }
         }
-    }
 
-    protected override void HandlePointerEnter(PointerEventData eventData)
-    {
-        if (Hovers.Add(eventData) && Hovers.Count == 1)
+        protected override void HandlePointerEnter(PointerEventData eventData)
         {
-            MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer m in meshRenderers)
+            if (!_hovers.Add(eventData) || _hovers.Count != 1) return;
+        
+            var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
+            foreach (var m in meshRenderers)
             {
-                m.material = HoverMat;
+                m.material = hoverMat;
             }
         }
-    }
 
-    protected override void HandlePointerExit(PointerEventData eventData)
-    {
-        if (Hovers.Remove(eventData) && Hovers.Count == 0)
+        protected override void HandlePointerExit(PointerEventData eventData)
         {
-            MeshRenderer[] meshRenderers = BoundariesParent.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer m in meshRenderers)
+            if (!_hovers.Remove(eventData) || _hovers.Count != 0) return;
+        
+            var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
+            foreach (var m in meshRenderers)
             {                
-                m.material = DefaultMat;                
+                m.material = defaultMat;                
             }
         }
     }

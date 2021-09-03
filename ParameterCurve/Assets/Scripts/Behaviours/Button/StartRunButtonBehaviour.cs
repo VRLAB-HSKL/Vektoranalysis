@@ -1,9 +1,12 @@
 
-public class StartRunButtonBehaviour : AbstractButtonBehaviour
+namespace Behaviours.Button
 {
-    public WorldStateController world;
-    public override void HandleButtonEvent()
+    public class StartRunButtonBehaviour : AbstractButtonBehaviour
     {
-        world.StartRun();
+        public WorldStateController world;
+        public override void HandleButtonEvent()
+        {
+            world.StartRun();
+        }
     }
 }
