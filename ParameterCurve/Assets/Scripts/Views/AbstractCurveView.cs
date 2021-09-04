@@ -12,7 +12,9 @@ public abstract class AbstractCurveView
 
     public bool HasTravelPoint;
     public bool HasArcLengthPoint;
-    
+
+    protected bool HasCustomDataset;
+    protected PointDataset CustomDataset;
     
     public AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
     {
@@ -29,7 +31,7 @@ public abstract class AbstractCurveView
             Debug.Log("Failed to get line renderer component");
         }
         
-        PointDataset curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
         if(curve is null)
         {
@@ -71,5 +73,17 @@ public abstract class AbstractCurveView
     private void SetTravelPointAndDisplay()
     {        
         ++GlobalData.CurrentPointIndex;
-    }    
+    }
+
+    public void SetCustomDataset(PointDataset pds)
+    {
+        CustomDataset = pds;
+        HasCustomDataset = true;
+    }
+
+    public void ClearCustomDataset()
+    {
+        HasCustomDataset = false;
+        CustomDataset = null;
+    }
 }

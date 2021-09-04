@@ -14,14 +14,47 @@ public class ThreeSelectionView : MonoBehaviour
     AbstractCurveView middleView;
     AbstractCurveView rightView;
 
+    public List<SelectionExercise> Exercises;
 
     private void Start()
     {
+        InitExercises();
         InitLineRenders();
-
+        
         leftView.UpdateView();
         middleView.UpdateView();
         rightView.UpdateView();
+    }
+
+    private void InitExercises()
+    {
+        Exercises = new List<SelectionExercise>();
+
+        
+
+        var leftPds = GlobalData.ParamCurveDatasets[0];
+        var middlePds = GlobalData.ParamCurveDatasets[1];
+        var rightPds = GlobalData.ParamCurveDatasets[2];
+
+        ExercisePointDataset exercPds = new ExercisePointDataset(leftPds, middlePds, rightPds);
+
+        var exercPdsList = new List<ExercisePointDataset>();
+        exercPdsList.Add((exercPds));
+
+        SelectionChoice sel01 = SelectionChoice.MiddlePillar;
+        var selChoiceList = new List<SelectionChoice>();
+        
+        SelectionExercise slexerc = new SelectionExercise(
+            "TestExercise",
+                exercPdsList,
+                selChoiceList
+            );
+
+        List<SelectionExercise> lst = new List<SelectionExercise>();
+        lst.Add(slexerc);
+
+        Exercises = lst;
+
     }
 
     private void InitLineRenders()
@@ -45,9 +78,13 @@ public class ThreeSelectionView : MonoBehaviour
         rightPillar.transform.position += PillarOffset;        
 
         leftView = new SimpleCurveView(leftLR, leftPillar.transform.position + CurveOffset, ScalingFactor);
-        middleView = new SimpleCurveView(middleLR, middlePillar.transform.position + CurveOffset, ScalingFactor);
-        rightView = new SimpleCurveView(rightLR, rightPillar.transform.position + CurveOffset, ScalingFactor);
+        leftView.SetCustomDataset(Exercises[0].Datasets[0].LeftDataset);
 
+        middleView = new SimpleCurveView(middleLR, middlePillar.transform.position + CurveOffset, ScalingFactor);
+        middleView.SetCustomDataset(Exercises[0].Datasets[0].MiddleDataset);
+        
+        rightView = new SimpleCurveView(rightLR, rightPillar.transform.position + CurveOffset, ScalingFactor);
+        rightView.SetCustomDataset(Exercises[0].Datasets[0].RightDataset);
     }
 
 
