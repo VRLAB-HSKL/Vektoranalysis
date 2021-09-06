@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CurveViewController// : MonoBehaviour
 {
     [Header("DisplayElements")]
@@ -27,7 +28,7 @@ public class CurveViewController// : MonoBehaviour
     public SimpleCurveView simpleView;
     public SimpleRunCurveView simpleRunView;
     public SimpleRunCurveWithArcLength simpleRunWithArcLengthView;
-
+    public SelectionExerciseView selectionExerciseView;
 
     public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, Transform arcTravel, float scalingFactor)
     {
@@ -44,10 +45,16 @@ public class CurveViewController// : MonoBehaviour
 
         simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(DisplayLR, RootElement.position, scalingFactor, TravelObject, ArcLengthTravelObject);
         simpleRunWithArcLengthView.UpdateView();
+
         
         CurrentView = simpleRunWithArcLengthView;
 
         TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
         ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
+    }
+
+    public void SwitchView()
+    {
+        
     }
 }

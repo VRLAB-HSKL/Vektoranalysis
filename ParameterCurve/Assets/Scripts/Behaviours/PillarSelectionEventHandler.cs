@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,60 +11,39 @@ namespace Behaviours
     /// </summary>
     public class PillarSelectionEventHandler : AbstractVisualChangeSelectionEventHandler
     {
-        public ThreeSelectionView threeSelView;
-        //public GameObject boundariesParent;
+        private void Update()
+        {
+            // if (IsSelected) return;
+            //
+            // if (_hovers.Any()) return;
+            
 
-        // public Material defaultMat;
-        // public Material hoverMat;
-        // public Material selectionMat;
-
-        //private readonly HashSet<PointerEventData> _hovers = new HashSet<PointerEventData>();
+            if (!IsSelected)
+            {
+                var newMat = _hovers.Any() ? hoverMat : defaultMat;
+                
+                //Debug.Log(_hovers.Count);
+                foreach (var m in MeshRenderers)
+                {
+                    //m.material =  newMat;
+                }    
+            }
+            
+        }
 
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            // if (eventData is VivePointerEventData viveEventData)
-            // {
-            //     if (viveEventData.viveButton != ControllerButton.Trigger) return;
-            //
-            //     var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
-            //     foreach (var m in meshRenderers)
-            //     {
-            //         m.material = selectionMat;
-            //     }
-            // }
-            // else if (eventData != null)
-            // {
-            //     if (eventData.button != PointerEventData.InputButton.Left) return;
-            //
-            //     // Standalone button triggered!
-            //     var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
-            //     foreach (var m in meshRenderers)
-            //     {
-            //         m.material = selectionMat;
-            //     }
-            // }
+            threeSel.SetSelection(IsSelected ? SelectionChoice.None : selectionChoice);
         }
 
         protected override void HandlePointerEnter(PointerEventData eventData)
         {
-            // if (!_hovers.Add(eventData) || _hovers.Count != 1) return;
-            //
-            // var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
-            // foreach (var m in meshRenderers)
-            // {
-            //     m.material = hoverMat;
-            // }
+            
         }
 
         protected override void HandlePointerExit(PointerEventData eventData)
         {
-            // if (!_hovers.Remove(eventData) || _hovers.Count != 0) return;
-            //
-            // var meshRenderers = boundariesParent.GetComponentsInChildren<MeshRenderer>();
-            // foreach (var m in meshRenderers)
-            // {                
-            //     m.material = defaultMat;                
-            // }
+
         }
     }
 }

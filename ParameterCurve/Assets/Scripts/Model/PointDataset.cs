@@ -16,6 +16,8 @@ public class PointDataset
     public List<Vector3> worldPoints = new List<Vector3>();
     public List<float> paramValues = new List<float>();
 
+    public float ScalingFactor = 1f;
+
     public List<Vector2> timeDistancePoints { get; set; } = new List<Vector2>();
     public List<Vector2> timeVelocityPoints = new List<Vector2>();
 

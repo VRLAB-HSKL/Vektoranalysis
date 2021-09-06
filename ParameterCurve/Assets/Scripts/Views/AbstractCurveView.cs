@@ -1,68 +1,64 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AbstractCurveView
 {
-    public LineRenderer DisplayLR;
-    public Vector3 RootPos;
+    private readonly LineRenderer _displayLr;
+    private readonly Vector3 _rootPos;
+
     public float ScalingFactor;
-    //public Transform TravelObject;
-    //public Transform ArcLengthTravelObject;
 
     public bool HasTravelPoint;
     public bool HasArcLengthPoint;
 
     protected bool HasCustomDataset;
     protected PointDataset CustomDataset;
-    
-    public AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
+
+    protected AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
     {
-        DisplayLR = displayLR;
-        RootPos = rootPos;
+        _displayLr = displayLR;
+        _rootPos = rootPos;
         ScalingFactor = scalingFactor;
-        //UpdateView();
     }
 
     public virtual void UpdateView()
     {
-        if(DisplayLR is null)
-        {
-            Debug.Log("Failed to get line renderer component");
-        }
+        // if(_displayLr is null)
+        // {
+        //     Debug.Log("Failed to get line renderer component");
+        // }
         
         PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
-        if(curve is null)
-        {
-            Debug.Log("Failed to get curve object at current curve index");
-        }
+        // if(curve is null)
+        // {
+        //     Debug.Log("Failed to get curve object at current curve index");
+        // }
+        //
+        // if(curve.worldPoints is null)
+        // {
+        //     Debug.Log("World points collection not initialized in current curve object");
+        // }
+        //
+        // if (curve.worldPoints.Count == 0)
+        // {
+        //     Debug.Log("World points collection empty in current curve object");
+        // }
 
-        if(curve.worldPoints is null)
-        {
-            Debug.Log("World points collection not initialized in current curve object");
-        }
+        _displayLr.positionCount = curve.worldPoints.Count;
 
-        if (curve.worldPoints.Count == 0)
-        {
-            Debug.Log("World points collection empty in current curve object");
-        }
+        var pointArr = curve.worldPoints.ToArray();
 
-        DisplayLR.positionCount = curve.worldPoints.Count;
-
-        Vector3[] pointArr = curve.worldPoints.ToArray();
-
-        for (int i = 0; i < pointArr.Length; i++)
+        for (var i = 0; i < pointArr.Length; i++)
         {
             pointArr[i] = MapPointPos(pointArr[i]);
         }        
-        DisplayLR.SetPositions(pointArr);
+        _displayLr.SetPositions(pointArr);
         
     }
 
     protected Vector3 MapPointPos(Vector3 point)
     {
-        return RootPos + point * ScalingFactor;
+        return _rootPos + point * ScalingFactor;
     }
 
     private void UpdateWorldObjects()

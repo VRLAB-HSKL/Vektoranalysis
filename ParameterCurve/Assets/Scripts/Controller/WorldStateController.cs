@@ -31,19 +31,7 @@ public class WorldStateController : MonoBehaviour
 
 
 
-    //private AbstractCurveView currentWorldView;
-    //public AbstractCurveView CurrentWorldView
-    //{
-    //    get { return currentWorldView; }
-    //    set
-    //    {
-    //        currentWorldView = value;
-    //        currentWorldView.UpdateView();
 
-    //        WorldTravelObject.gameObject.SetActive(CurrentWorldView.HasTravelPoint);
-    //        WorldArcLengthTravelObject.gameObject.SetActive(CurrentWorldView.HasArcLengthPoint);
-    //    }
-    //}
 
     public CurveViewController WorldViewController;
     public CurveViewController TableViewController;
@@ -68,23 +56,7 @@ public class WorldStateController : MonoBehaviour
 
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
         TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
-        //TableViewController.ScalingFactor = 0.5f;
-
-        //simpleView = new SimpleCurveView(WorldDisplayLR);
-        //simpleView.UpdateView();
-
-        //simpleRunView = new SimpleRunCurveView(WorldDisplayLR, WorldTravelObject);
-        //simpleRunView.UpdateView();
-
-        //simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject);
-        //simpleRunWithArcLengthView.UpdateView();
-
-        //CurrentWorldView = simpleRunWithArcLengthView;
-
-        //WorldTravelObject.gameObject.SetActive(CurrentWorldView.HasTravelPoint);
-        //WorldArcLengthTravelObject.gameObject.SetActive(CurrentWorldView.HasArcLengthPoint);
-
-
+        
 
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
@@ -208,12 +180,7 @@ public class WorldStateController : MonoBehaviour
             GlobalData.IsDriving = false;
         }
 
-        //// Increment data set index, reset to 0 on overflow
-        //++currentDataSetIndex;
-        //if (currentDataSetIndex >= CurrentDataset.Count)
-        //    currentDataSetIndex = 0;
-
-        int index = GlobalData.CurrentDataset.FindIndex(x => x.Name.Equals(name));
+        var index = GlobalData.CurrentDataset.FindIndex(x => x.Name.Equals(name));
         if (index == -1) return;
 
         GlobalData.CurrentCurveIndex = index;

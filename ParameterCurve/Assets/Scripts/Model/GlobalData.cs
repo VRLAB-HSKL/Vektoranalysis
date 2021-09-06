@@ -59,9 +59,11 @@ public static class GlobalData
     };
 
     private static List<AbstractCurveCalc> LocalExerciseCalcList = new List<AbstractCurveCalc>(NamedDataset)
-    //{
-    //    new HelixCurveCalc(),
-    //}
+    {
+        new TestExercise01ACurveClass(),
+        new TestExercise01BCurveClass(),
+        new TestExercise01CCurveClass()
+    }
     ;
 
 

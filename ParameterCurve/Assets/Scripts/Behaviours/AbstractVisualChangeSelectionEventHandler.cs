@@ -12,16 +12,25 @@ namespace Behaviours
     {
         public GameObject visualTarget;
         public bool updateChildrenRenderers;
+        public bool isToggle;
+
+
+        public ThreeSelectionView threeSel;
+        public SelectionChoice selectionChoice = SelectionChoice.None;
+
+        protected bool IsSelected => selectionChoice == threeSel.selection;
 
         public Material defaultMat;
         public Material hoverMat;
         public Material selectionMat;
 
-        private bool _isSelected;
 
-        private readonly HashSet<PointerEventData> _hovers = new HashSet<PointerEventData>();
 
-        private List<MeshRenderer> MeshRenderers
+        
+
+        protected readonly HashSet<PointerEventData> _hovers = new HashSet<PointerEventData>();
+
+        protected List<MeshRenderer> MeshRenderers
         {
             get
             {
@@ -46,68 +55,83 @@ namespace Behaviours
             if (eventData is VivePointerEventData viveEventData)
             {
                 if (viveEventData.viveButton != ControllerButton.Trigger) return;
-                
-                var newMat = _isSelected ? hoverMat : selectionMat;
-                // MeshRenderer mr = visualTarget.GetComponent<MeshRenderer>();
-                // if(mr != null) mr.material = newMat;
-                //
-                // if(updateChildrenRenderers)
-                // {
-                //     var meshRenderers = visualTarget.GetComponentsInChildren<MeshRenderer>();
-                //     foreach (var m in meshRenderers)
-                //     {
-                //         m.material = newMat;
-                //     }
-                // }
 
-                foreach (var m in MeshRenderers)
+                if (isToggle)
                 {
-                    m.material = newMat;
-                }
+                    var newMat = IsSelected ? hoverMat : selectionMat;
 
-                _isSelected = !_isSelected;
-                HandlePointerClick(eventData);
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = newMat;
+                    }
+
+                    //_isSelected = !_isSelected;
+
+                    threeSel.SetSelection(IsSelected ? SelectionChoice.None : selectionChoice);
+
+                    HandlePointerClick(eventData);        
+                }
+                else
+                {
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = selectionMat;
+                    }
+                    
+                    HandlePointerClick(eventData);
+                    
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = hoverMat;
+                    }
+                }
             }
             else if (eventData is {button: PointerEventData.InputButton.Left})
             {
                 // Standalone button triggered!
-                var newMat = _isSelected ? hoverMat : selectionMat;
-                // visualTarget.material = newMat;
-                //
-                // if(updateChildrenRenderers)
-                // {
-                //     var meshRenderers = visualTarget.GetComponentsInChildren<MeshRenderer>();
-                //     foreach (var m in meshRenderers)
-                //     {
-                //         m.material = newMat;
-                //     }
-                // }
-                
-                foreach (var m in MeshRenderers)
-                {
-                    m.material = newMat;
-                }
 
-                _isSelected = !_isSelected;
-                HandlePointerClick(eventData);
+                if (isToggle)
+                {
+                    var newMat = IsSelected ? hoverMat : selectionMat;
+
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = newMat;
+                    }
+
+                    //_isSelected = !_isSelected;    
+                    
+                    threeSel.SetSelection(IsSelected ? SelectionChoice.None : selectionChoice);
+                    
+                    HandlePointerClick(eventData);        
+                }
+                else
+                {
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = selectionMat;
+                    }
+                    
+                    HandlePointerClick(eventData);
+                    
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = hoverMat;
+                    }
+                }
             }
         }
 
         public new void OnPointerEnter(PointerEventData eventData)
         {
-            if (_hovers.Add(eventData) && _hovers.Count == 1 && !_isSelected)
+            if (_hovers.Add(eventData) && _hovers.Count == 1)
             {
-                // visualTarget.material = hoverMat;
-                //
-                // if(updateChildrenRenderers)
-                // {
-                //     var meshRenderers = visualTarget.GetComponentsInChildren<MeshRenderer>();
-                //     foreach (MeshRenderer m in meshRenderers)
-                //     {
-                //         m.material = hoverMat;
-                //     }
-                // }
-
+                if (isToggle && IsSelected) return;
+                
+                // Debug.Log("IsToggle: " + isToggle);
+                // Debug.Log("IsSelected: " + IsSelected);
+                
+                
                 foreach (var m in MeshRenderers)
                 {
                     m.material = hoverMat;
@@ -119,19 +143,10 @@ namespace Behaviours
 
         public new void OnPointerExit(PointerEventData eventData)
         {
-            if (_hovers.Remove(eventData) && _hovers.Count == 0 && !_isSelected)
+            if (_hovers.Remove(eventData) && _hovers.Count == 0)
             {
-                // visualTarget.material = defaultMat;
-                //
-                // if(updateChildrenRenderers)
-                // {
-                //     var meshRenderers = visualTarget.GetComponentsInChildren<MeshRenderer>();
-                //     foreach (var m in meshRenderers)
-                //     {
-                //         m.material = defaultMat;
-                //     }
-                // }
-
+                if (isToggle && IsSelected) return;
+                
                 foreach (var m in MeshRenderers)
                 {
                     m.material = defaultMat;
