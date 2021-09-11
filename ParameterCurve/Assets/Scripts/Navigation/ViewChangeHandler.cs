@@ -16,25 +16,27 @@ public class ViewChangeHandler : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            switch (ViewIndex)
-            {
-                default:
-                case 0:
-                    world.WorldViewController.CurrentView = world.WorldViewController.simpleView;
-                    world.TableViewController.CurrentView = world.TableViewController.simpleView;
-                    break;
+            // switch (ViewIndex)
+            // {
+            //     default:
+            //     case 0:
+            //         world.WorldViewController.CurrentView = world.WorldViewController.simpleView;
+            //         world.TableViewController.CurrentView = world.TableViewController.simpleView;
+            //         break;
+            //
+            //     case 1:
+            //         world.WorldViewController.CurrentView = world.WorldViewController.simpleRunView;
+            //         world.TableViewController.CurrentView = world.TableViewController.simpleRunView;
+            //         break;
+            //
+            //     case 2:
+            //         world.WorldViewController.CurrentView = world.WorldViewController.simpleRunWithArcLengthView;
+            //         world.TableViewController.CurrentView = world.TableViewController.simpleRunWithArcLengthView;
+            //         break;
+            // }
 
-                case 1:
-                    world.WorldViewController.CurrentView = world.WorldViewController.simpleRunView;
-                    world.TableViewController.CurrentView = world.TableViewController.simpleRunView;
-                    break;
-
-                case 2:
-                    world.WorldViewController.CurrentView = world.WorldViewController.simpleRunWithArcLengthView;
-                    world.TableViewController.CurrentView = world.TableViewController.simpleRunWithArcLengthView;
-                    break;
-            }
-
+            world.WorldViewController.SwitchView(ViewIndex);
+            world.TableViewController.SwitchView(ViewIndex);
         }
 
         MeshRenderer msr = Target.GetComponent<MeshRenderer>();

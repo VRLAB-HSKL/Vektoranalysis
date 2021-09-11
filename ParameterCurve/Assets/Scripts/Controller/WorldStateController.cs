@@ -29,28 +29,21 @@ public class WorldStateController : MonoBehaviour
     public Transform TableTravelObject;
     public Transform TableArcLengthTravelObject;
 
-
-
-
-
-    public CurveViewController WorldViewController;
-    public CurveViewController TableViewController;
-
-
-
-
     [Header("Walls")]
     public BrowserControl BrowserWall;
     public InformationControl InfoWall;
     public static CurveSelectionControl CurveSelectWall;
 
+    public CurveViewController WorldViewController;
+    public CurveViewController TableViewController;
+    
     private Vector3 InitTravelObjPos;
     private Vector3 InitArcLengthTravelObjPos;
 
     private float pointStepDuration = 0f;    
 
     // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         GlobalData.InitializeData();
 
@@ -62,18 +55,8 @@ public class WorldStateController : MonoBehaviour
             0f //(1f / 30f) //60f) 
             * GlobalData.RunSpeedFactor;
 
-
-        
-
         // Display html resource
         BrowserWall.OpenURL(GlobalData.NamedCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
-
-        //CurveSelectWall.UpdateCurveMenuButtons();
-
-        //NamedCurvesState ns = new NamedCurvesState(CurveSelectWall.CurveMenuContent, CurveSelectWall.CurveMenuButtonPrefab);
-        //GlobalData.CurveSelectionFSM = new CurveSelectionStateContext(ns);
-
-        //UpdateWorldObjects();        
     }
 
 
@@ -82,7 +65,7 @@ public class WorldStateController : MonoBehaviour
 
     //private float updateTimer = 0f;
 
-    void Update()
+    private void Update()
     {
         if (GlobalData.IsDriving)
         {
@@ -92,7 +75,8 @@ public class WorldStateController : MonoBehaviour
             //    updateTimer = 0f;
             // SetTravelPointAndDisplay();                
             //}
-            WorldViewController.CurrentView.UpdateView();
+            //WorldViewController.CurrentView.UpdateView();
+            WorldViewController.UpdateViewsDelegate();
             TableViewController.CurrentView.UpdateView();
 
             InfoWall.UpdatePlotLineRenderers();
@@ -133,7 +117,8 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         InfoWall.UpdatePlotLineRenderers();
 
-        WorldViewController.CurrentView.UpdateView();
+        //WorldViewController.CurrentView.UpdateView();
+        WorldViewController.UpdateViewsDelegate();
         TableViewController.CurrentView.UpdateView();
         
         //UpdateWorldObjects();
@@ -165,7 +150,8 @@ public class WorldStateController : MonoBehaviour
         InfoWall.UpdatePlotLineRenderers();
 
         //UpdateWorldObjects();
-        WorldViewController.CurrentView.UpdateView();
+        //WorldViewController.CurrentView.UpdateView();
+        WorldViewController.UpdateViewsDelegate();
         TableViewController.CurrentView.UpdateView();
     }
 
@@ -193,7 +179,8 @@ public class WorldStateController : MonoBehaviour
         InfoWall.UpdatePlotLineRenderers();
 
         //UpdateWorldObjects();
-        WorldViewController.CurrentView.UpdateView();
+        //WorldViewController.CurrentView.UpdateView();
+        WorldViewController.UpdateViewsDelegate();
         TableViewController.CurrentView.UpdateView();
     }
 

@@ -3,58 +3,78 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class CurveViewController// : MonoBehaviour
+public class CurveViewController
 {
     [Header("DisplayElements")]
-    private Transform RootElement;
-    private LineRenderer DisplayLR;
-    private Transform TravelObject;
-    private Transform ArcLengthTravelObject;
+    private readonly Transform _rootElement;
+    private readonly LineRenderer _displayLr;
+    private readonly Transform _travelObject;
+    private readonly Transform _arcLengthTravelObject;
 
     private AbstractCurveView currentView;
     public AbstractCurveView CurrentView
     {
-        get { return currentView; }
+        get => currentView;
         set
         {
             currentView = value;
             currentView.UpdateView();
-
-            TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-            ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
         }
     }
 
-    public SimpleCurveView simpleView;
-    public SimpleRunCurveView simpleRunView;
-    public SimpleRunCurveWithArcLength simpleRunWithArcLengthView;
-    public SelectionExerciseView selectionExerciseView;
+    private readonly List<AbstractCurveView> _views;
+    
+    public delegate void d_updateViewsDelegate();
+    
+    private readonly d_updateViewsDelegate _updateViewsDelegate;
+
+    public d_updateViewsDelegate UpdateViewsDelegate
+    {
+        get
+        {
+            if (_updateViewsDelegate is null)
+            {
+                _updateViewsDelegate();
+            }
+
+            return _updateViewsDelegate;
+        }
+    }
 
     public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, Transform arcTravel, float scalingFactor)
     {
-        RootElement = root;
-        DisplayLR = displayLR;
-        TravelObject = travel;
-        ArcLengthTravelObject = arcTravel;
+        _rootElement = root;
+        _displayLr = displayLR;
+        _travelObject = travel;
+        _arcLengthTravelObject = arcTravel;
 
-        simpleView = new SimpleCurveView(DisplayLR, RootElement.position, scalingFactor);
-        simpleView.UpdateView();
-
-        simpleRunView = new SimpleRunCurveView(DisplayLR, RootElement.position, scalingFactor, TravelObject);
-        simpleRunView.UpdateView();
-
-        simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(DisplayLR, RootElement.position, scalingFactor, TravelObject, ArcLengthTravelObject);
-        simpleRunWithArcLengthView.UpdateView();
-
+        var simpleView = new SimpleCurveView(_displayLr, _rootElement.position, scalingFactor);
+        var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
+        var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
         
-        CurrentView = simpleRunWithArcLengthView;
+        _views = new List<AbstractCurveView>
+        {
+            simpleView,
+            simpleRunView,
+            simpleRunWithArcLengthView
+        };
 
-        TravelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-        ArcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
+        foreach (var view in _views)
+        {
+            _updateViewsDelegate += view.UpdateView;
+        }
+
+        UpdateViewsDelegate();
+        
+        SwitchView(0);
     }
 
-    public void SwitchView()
+    public void SwitchView(int index)
     {
+        if (index < 0 || index >= _views.Count) return;
         
+        currentView = _views[index];
+        _travelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
+        _arcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
     }
 }
