@@ -1,14 +1,14 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestExercise01CCurveClass : AbstractCurveCalc
+public class TestExercise01ECurveCalc : AbstractCurveCalc
 {
-    public TestExercise01CCurveClass()
+    public TestExercise01ECurveCalc()
     {
-        Name = "TestExercise01B";
+        Name = "TestExercise01E";
         NumOfSamples = 2000;
-        ParameterIntervall = new List<float>(linspace(-3f, 3f, NumOfSamples));
+        ParameterIntervall = new List<float>(linspace(-2f, 2f, NumOfSamples));
         ArcLengthParameterIntervall = new List<float>(new float[NumOfSamples]);
         Is3DCurve = false;
 
@@ -37,22 +37,24 @@ public class TestExercise01CCurveClass : AbstractCurveCalc
 
     protected override Vector3 CalculatePoint(float t)
     {
-        float x = Mathf.Sin(3f*t);
-        float y = Mathf.Sin(4f*t);
+        float x = Mathf.Sin(t + Mathf.Sin(t));
+        float y = Mathf.Cos(t + Mathf.Cos(t));
         return new Vector3(x, y, 0f);
     }
 
     protected override Vector3 CalculateVelocityPoint(float t)
     {
-        float x = 3f * Mathf.Cos(3f * t);
-        float y = 4f * Mathf.Cos(4f * t);
+        float x = (Mathf.Cos(t) + 1f) * Mathf.Cos(t + Mathf.Sin(t));
+        float y = (Mathf.Sin(t) - 1f) * Mathf.Sin(t + Mathf.Cos(t));
         return new Vector3(x, y, 0f).normalized;
     }
 
     protected override Vector3 CalculateAccelerationPoint(float t)
     {
-        float x = -9f * Mathf.Sin(3f * t);
-        float y = -16f * Mathf.Sin(4f * t);
+        float x = -Mathf.Sin(t + Mathf.Sin(t)) * Mathf.Pow((Mathf.Cos(t) + 1), 2f) -
+                  Mathf.Sin(t) * Mathf.Cos(t + Mathf.Sin(t));
+        float y = Mathf.Cos(t) * Mathf.Sin(t + Mathf.Cos(t)) - Mathf.Pow((Mathf.Sin(t) - 1f), 2f) *
+                    Mathf.Cos(t + Mathf.Cos(t));
         return new Vector3(x, y, 0f).normalized;
     }
 }

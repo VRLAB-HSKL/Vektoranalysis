@@ -15,7 +15,7 @@ namespace Behaviours
         public bool isToggle;
 
 
-        public ThreeSelectionView threeSel;
+        public ThreeSelectionExercise threeSel;
         public SelectionChoice selectionChoice = SelectionChoice.None;
 
         protected bool IsSelected => selectionChoice == threeSel.selection;

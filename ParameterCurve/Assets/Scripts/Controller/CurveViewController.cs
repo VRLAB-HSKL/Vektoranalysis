@@ -52,6 +52,8 @@ public class CurveViewController
         var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
         var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
         
+        //var selView = new SelectionExerciseView()
+        
         _views = new List<AbstractCurveView>
         {
             simpleView,

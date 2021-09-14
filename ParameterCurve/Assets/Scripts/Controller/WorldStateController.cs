@@ -49,7 +49,6 @@ public class WorldStateController : MonoBehaviour
 
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
         TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
-        
 
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
@@ -57,6 +56,9 @@ public class WorldStateController : MonoBehaviour
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.NamedCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
+
+        // Set plotline renderers
+        InfoWall.UpdatePlotLineRenderers();
     }
 
 

@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using Calculation.SelectionExercises;
 using UnityEngine;
 
 public static class GlobalData
@@ -62,9 +63,11 @@ public static class GlobalData
     {
         new TestExercise01ACurveClass(),
         new TestExercise01BCurveClass(),
-        new TestExercise01CCurveClass()
-    }
-    ;
+        new TestExercise01CCurveClass(),
+        new TestExercise01DCurveClass(),
+        new TestExercise01ECurveCalc(),
+        new TestExercise01FCurveCalc()
+    };
 
 
     //public static CurveSelectionStateContext CurveSelectionFSM;
