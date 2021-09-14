@@ -73,7 +73,9 @@
 	{
 		"id": 1,
 		"title": "exercise_02_assign",
-		"subexercise": b		
+		"subexercise": {
+			
+		}		
 	}
 	
 	

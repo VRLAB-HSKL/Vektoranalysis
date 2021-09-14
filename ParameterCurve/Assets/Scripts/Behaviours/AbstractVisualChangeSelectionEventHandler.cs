@@ -16,9 +16,9 @@ namespace Behaviours
 
 
         public ThreeSelectionExercise threeSel;
-        public SelectionChoice selectionChoice = SelectionChoice.None;
+        public int selectionChoice = -1;
 
-        protected bool IsSelected => selectionChoice == threeSel.selection;
+        protected bool IsSelected => selectionChoice == threeSel.selectionIndex;
 
         public Material defaultMat;
         public Material hoverMat;
@@ -67,7 +67,7 @@ namespace Behaviours
 
                     //_isSelected = !_isSelected;
 
-                    threeSel.SetSelection(IsSelected ? SelectionChoice.None : selectionChoice);
+                    threeSel.SetSelection(IsSelected ? -1 : selectionChoice);
 
                     HandlePointerClick(eventData);        
                 }
@@ -101,7 +101,7 @@ namespace Behaviours
 
                     //_isSelected = !_isSelected;    
                     
-                    threeSel.SetSelection(IsSelected ? SelectionChoice.None : selectionChoice);
+                    threeSel.SetSelection(IsSelected ? -1 : selectionChoice);
                     
                     HandlePointerClick(eventData);        
                 }

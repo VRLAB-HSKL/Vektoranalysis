@@ -33,7 +33,7 @@ namespace Behaviours
 
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            threeSel.SetSelection(IsSelected ? SelectionChoice.None : selectionChoice);
+            threeSel.SetSelection(IsSelected ? -1 : selectionChoice);
         }
 
         protected override void HandlePointerEnter(PointerEventData eventData)

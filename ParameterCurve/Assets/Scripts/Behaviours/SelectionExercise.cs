@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SelectionChoice { None = 0, LeftPillar = 1, MiddlePillar = 2, RightPillar = 3 }
+//public enum SelectionChoice { None = 0, LeftPillar = 1, MiddlePillar = 2, RightPillar = 3 }
 
 public class SelectionExercise
 {
@@ -11,20 +11,20 @@ public class SelectionExercise
 
     public List<ExercisePointDataset> Datasets;
     
-    public List<SelectionChoice> CorrectAnswers;
-    public List<SelectionChoice> ChosenAnswers;
+    public List<int> CorrectAnswers;
+    public List<int> ChosenAnswers;
 
-    public SelectionExercise(string title, List<ExercisePointDataset> exercisePointDatasets , List<SelectionChoice> correctAnswers)
+    public SelectionExercise(string title, List<ExercisePointDataset> exercisePointDatasets , List<int> correctAnswers)
     {
         Title = title;
         NumberOfSubExercises = correctAnswers.Count;
 
         Datasets = exercisePointDatasets;
         CorrectAnswers = correctAnswers;
-        ChosenAnswers = new List<SelectionChoice>();
+        ChosenAnswers = new List<int>();
         for(int i = 0; i < NumberOfSubExercises; i++)
         {
-            ChosenAnswers.Add(SelectionChoice.None);
+            ChosenAnswers.Add(-1);
         }        
     }
 

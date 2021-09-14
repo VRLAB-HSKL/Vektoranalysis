@@ -35,7 +35,7 @@ public class ThreeSelectionExercise : MonoBehaviour
 
     
     [NonSerialized] 
-    public SelectionChoice selection;
+    public int selectionIndex;
     
     private SelectionExercise _exercise;
     private int _exerciseIndex;
@@ -117,14 +117,14 @@ public class ThreeSelectionExercise : MonoBehaviour
             leftPds, middlePds, rightPds);
         exercPdsList.Add(exercPds06);
         
-        var selChoiceList = new List<SelectionChoice>
+        var selChoiceList = new List<int>
         {
-            SelectionChoice.MiddlePillar,
-            SelectionChoice.RightPillar,
-            SelectionChoice.LeftPillar,
-            SelectionChoice.LeftPillar,
-            SelectionChoice.MiddlePillar,
-            SelectionChoice.LeftPillar
+            2, //SelectionChoice.MiddlePillar,
+            3, //SelectionChoice.RightPillar,
+            1, //SelectionChoice.LeftPillar,
+            1, //SelectionChoice.LeftPillar,
+            2, //SelectionChoice.MiddlePillar,
+            1, //SelectionChoice.LeftPillar
         };
 
 
@@ -189,7 +189,23 @@ public class ThreeSelectionExercise : MonoBehaviour
 
     public void NextSubExercise()
     {
-        if (_exerciseIndex == _exercise.Datasets.Count - 1) return;
+        if (_exerciseIndex == _exercise.Datasets.Count - 1)
+        {
+            int correctCount = 0;
+            for (int i = 0; i < _exercise.CorrectAnswers.Count; i++)
+            {
+                int chosenAnswer = _exercise.ChosenAnswers[i];
+                int correctAnswer = _exercise.CorrectAnswers[i];
+                
+                Debug.Log("Chosen: " + chosenAnswer + ", Correct: " + correctAnswer);
+
+                if (chosenAnswer == correctAnswer) ++correctCount;
+            }
+            
+            Debug.Log("Result: [" + correctCount + "/" + _exercise.CorrectAnswers.Count + "] correct!");
+            
+            return;
+        }
         
         ++_exerciseIndex;
         UpdateView();
@@ -203,9 +219,10 @@ public class ThreeSelectionExercise : MonoBehaviour
          UpdateView();
     }
 
-    public void SetSelection(SelectionChoice choice)
+    public void SetSelection(int choice)
     {
-        selection = choice;
+        //selectionIndex = choice;
+        _exercise.ChosenAnswers[_exerciseIndex] = choice;
     }
     
 }
