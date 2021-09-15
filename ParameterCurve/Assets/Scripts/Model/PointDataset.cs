@@ -12,16 +12,16 @@ public class PointDataset
 
     public float Distance = 0f;
 
-    public List<Vector3> points = new List<Vector3>();
-    public List<Vector3> worldPoints = new List<Vector3>();
-    public List<float> paramValues = new List<float>();
+    public List<Vector3> points { get; set; } = new List<Vector3>();
+    public List<Vector3> worldPoints { get; set; } = new List<Vector3>();
+    public List<float> paramValues { get; set; } = new List<float>();
 
     public float ScalingFactor = 1f;
 
     public List<Vector2> timeDistancePoints { get; set; } = new List<Vector2>();
-    public List<Vector2> timeVelocityPoints = new List<Vector2>();
+    public List<Vector2> timeVelocityPoints { get; set; } = new List<Vector2>();
 
-    public List<FresnetSerretApparatus> fresnetApparatuses = new List<FresnetSerretApparatus>();
+    public List<FresnetSerretApparatus> fresnetApparatuses { get; set; } = new List<FresnetSerretApparatus>();
 
     public float arcLength { get; set; } = 0f;
     public List<Vector3> arcLenghtPoints { get; set; } = new List<Vector3>();

@@ -125,7 +125,10 @@ public static class GlobalData
             AbstractCurveCalc calc = LocalExerciseCalcList[i];
             ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
-
+        
+        // Load test exercise
+        Object res = Resources.Load("json/exercises/testExercise01", typeof(TextAsset));
+        SelectionExercise selExerc = DataImport.ImportExerciseFromJSONResource(res as TextAsset);
     }
 
 

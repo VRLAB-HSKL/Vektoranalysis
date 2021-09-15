@@ -2,6 +2,8 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 public static class DataImport
@@ -58,7 +60,7 @@ public static class DataImport
         return pd;
     }
 
-    public static PointDataset ImportFromJSONResource(TextAsset json)
+    public static PointDataset ImportPointsFromJSONResource(TextAsset json)
     {
         PointDataJsonRoot jsr = JsonConvert.DeserializeObject<PointDataJsonRoot>(json.text);
 
@@ -114,6 +116,64 @@ public static class DataImport
         }
 
         return pds;
+    }
+
+    public static SelectionExercise ImportExerciseFromJSONResource(TextAsset json)
+    {
+        List<string> errors = new List<string>();
+        ExerciseRoot jsr = JsonConvert.DeserializeObject<ExerciseRoot>(json.text,
+            new JsonSerializerSettings()
+            {
+                Error = delegate(object sender, ErrorEventArgs args)
+                {
+                    errors.Add(args.ErrorContext.Error.Message);
+                    Debug.Log("ErrorOccuredJSON");
+                    args.ErrorContext.Handled = true;
+                },
+                
+                //,
+                //Converters = { new IsoDateTimeConverter()}
+            }
+            
+            );
+
+        Debug.Log("ErrorCount: " + errors.Count);
+        
+        for (int i = 0; i < errors.Count; i++)
+        {
+            Debug.Log("JsonError [" + i + "]: " + errors[i]);
+        }
+
+        string id = jsr.exercise.id;
+        string title = jsr.exercise.title;
+        string description = jsr.exercise.description;
+        string type = jsr.exercise.type;
+        var subExercises = jsr.exercise.subExercises;
+
+        List<ExercisePointDataset> datasets = new List<ExercisePointDataset>();
+        List<int> correctAnswers = new List<int>();
+        
+        var lds = new PointDataset();
+        var mds = new PointDataset();
+        var rds = new PointDataset();
+        
+        for (int i = 0; i < subExercises.Count; i++)
+        {
+            var subExercise = subExercises[i];
+
+            lds = CreatePDSFromJsonCollection(subExercise.leftCurveData);
+            mds = CreatePDSFromJsonCollection(subExercise.middleCurveData);
+            rds = CreatePDSFromJsonCollection(subExercise.rightCurveData);
+
+            var exercisePds = new ExercisePointDataset(subExercise.description, lds, mds, rds);
+            datasets.Add(exercisePds);
+            
+            correctAnswers.Add(subExercise.correctAnswer);
+        }
+        
+        SelectionExercise selExerc = new SelectionExercise(title, datasets, correctAnswers);
+
+        return selExerc;
     }
 
     public static PointDataset CreateDatasetFormLocalCalculation(AbstractCurveCalc curveCalc)
@@ -190,5 +250,33 @@ public static class DataImport
         //curveCalc.ParameterIntervall = initParamIntervall;
 
         return pdsa;
+    }
+
+
+    private static PointDataset CreatePDSFromJsonCollection(List<PointCurveDataJSON> data)
+    {
+        PointDataset pds = new PointDataset();
+        for (int l = 0; l < data.Count; ++l)
+        {
+            var tData = data[l];
+            pds.paramValues.Add(tData.t);
+            pds.points.Add(new Vector3(tData.pVec[0], tData.pVec[1], tData.pVec.Count == 3 ? tData.pVec[2] : 0f));
+
+            FresnetSerretApparatus fsa = new FresnetSerretApparatus();
+            var leftVel = tData.velVec;
+            fsa.Tangent = new Vector3(leftVel[0], leftVel[1], leftVel.Count == 3 ? leftVel[2] : 0f);
+
+            var leftAcc = tData.accVec;
+            fsa.Normal = new Vector3(leftAcc[0], leftAcc[1], leftAcc.Count == 3 ? leftAcc[2] : 0f);
+
+            fsa.Binormal = Vector3.Cross(fsa.Tangent, fsa.Normal);
+                
+            pds.fresnetApparatuses.Add(fsa);
+                
+            // ToDo: Add arc length parametrization values to json and parse them here
+
+        }
+
+        return pds;
     }
 }

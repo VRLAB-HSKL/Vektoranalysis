@@ -37,7 +37,7 @@ public class FresnetSerretApparatus
     /// </summary> 
     public Vector3 Binormal = Vector3.zero;
 
-    // Krümmung
+    // KrÃ¼mmung
     public float Curvature;
 
     // Drehung um die Tangente

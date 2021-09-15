@@ -9,5 +9,5 @@ public class InitFileJsonRoot
     public CurveSelectionJSON curveSelection;
     public TableJSON table;
     public CommandCubeJSON commandCube;
-    public ExerciseJSON exercise;
+    //public ExerciseJSON exercise;
 }

@@ -1,6 +1,5 @@
 {
-	"curve": 
-	{
+	"curve": {
 		"id": 12,
 		"name": "helix",
 		"view": "simple",
@@ -9,76 +8,69 @@
 			"rgba": [255, 255, 255, 1],
 			"hex": "#FFFFFF"
 		},
-		
+
 		"travelObj": "airplane",
 		"travelObjColor": {
 			"name": "black",
 			"rgba": [255, 255, 255, 1],
 			"hex": "#FFFFFF"
 		},
-		
+
 		"arcTravelObj": "airplane",
 		"arcTravelObjColor": {
 			"name": "black",
 			"rgba": [255, 255, 255, 1],
 			"hex": "#FFFFFF"
 		},
-		
+
 		"data": {
-			"paramRange" : [-1, 1],
-			"numSamples" : 200,
-			"path" : "./Resources/json/helix.json",
-			"localCalc" : false
-		},
-		
+			"paramRange": [-1, 1],
+			"numSamples": 200,
+			"path": "./Resources/json/helix.json",
+			"localCalc": false
+		}
+
 	},
-	
-	"browser" : {
-		"activated" : true,
-		"url": "https://hs-kl.de/webhome/helix.html",
+
+	"browser": {
+		"activated": true,
+		"url": "https://hs-kl.de/webhome/helix.html"
 	},
-	
-	"information" : {
-		"activated" : true,
-		"basicInfo" : true,
-		"pointData" : true,
-		"arclengthData" : true,
-		"timeDistancePlot" : true,
-		"timeVelocityPlot" : true
+
+	"information": {
+		"activated": true,
+		"basicInfo": true,
+		"pointData": true,
+		"arclengthData": true,
+		"timeDistancePlot": true,
+		"timeVelocityPlot": true
 	},
-	
-	"curveSelection" : {
-		"activated" : true,
-		"namedCurves" : true,
-		"paramCurves" : true,
-		"exerciseCurves" : true
+
+	"curveSelection": {
+		"activated": true,
+		"namedCurves": true,
+		"paramCurves": true,
+		"exerciseCurves": true
 	},
+
+	"table": {
+		"activated": true,
+		"showNavButtons": true,
+		"showRunButton": true,
+		"showViewButtons": true,
+		"showSlider": true,
+		"allowRangeModify": true,
+		"allowBookmarks": true
+	},
+
+	"commandCube": {
+		"activated": true,
+		"allowScreenCapture": true
+	},
+
 	
-	"table" : {
-		"activated" : true,
-		"showNavButtons" : true,
-		"showRunButton" : true,
-		"showViewButtons" : true,
-		"showSlider" : true,
-		"allowRangeModify" : true,
-		"allowBookmarks" : true
-	}
-	
-	"commandCube" : {
-		"activated" : true,
-		"allowScreenCapture" : true		
-	}
-	
-	"exercise":
-	{
-		"id": 1,
-		"title": "exercise_02_assign",
-		"subexercise": {
-			
-		}		
-	}
-	
-	
-	
-	
+
+
+
+
 }

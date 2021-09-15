@@ -1,0 +1,65 @@
+{
+	"exercise": {
+		"id": 1,
+		"title": "exercise_test",
+		"type": "select3",
+		"description": "mainExerciseDescription",
+		"subExercises": [{
+				"leftCurveData": [{
+					"t": "-2.0",
+					"pVec": [
+						"15.0",
+						-7.0
+					],
+					"velVec": [
+						-32.0,
+						12.0
+					],
+					"accVec": [
+						0.970142500145332,
+						-0.242535625036333
+					]
+				}],
+
+				"middleCurveData": [{
+					"t": "-2.0",
+					"pVec": [
+						"15.0",
+						-7.0
+					],
+					"velVec": [
+						-32.0,
+						12.0
+					],
+					"accVec": [
+						0.970142500145332,
+						-0.242535625036333
+					]
+				}],
+
+				"rightCurveData": [{
+					"t": "-2.0",
+					"pVec": [
+						"15.0",
+						-7.0
+					],
+					"velVec": [
+						-32.0,
+						12.0
+					],
+					"accVec": [
+						0.970142500145332,
+						-0.242535625036333
+					]
+				}],
+
+				"correctAnswer": 1,
+				"description": "subExerciseDescription01"
+			}
+
+
+		]
+
+
+	}
+}
