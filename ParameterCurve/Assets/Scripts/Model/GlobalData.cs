@@ -120,11 +120,11 @@ public static class GlobalData
             ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
 
-        for (int i = 0; i < LocalExerciseCalcList.Count; i++)
-        {
-            AbstractCurveCalc calc = LocalExerciseCalcList[i];
-            ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        }
+        // for (int i = 0; i < LocalExerciseCalcList.Count; i++)
+        // {
+        //     AbstractCurveCalc calc = LocalExerciseCalcList[i];
+        //     ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+        // }
         
         // Load test exercise
         Object res = Resources.Load("json/exercises/testExercise01", typeof(TextAsset));

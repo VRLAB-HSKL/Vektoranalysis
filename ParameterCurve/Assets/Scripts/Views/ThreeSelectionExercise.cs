@@ -128,14 +128,14 @@ public class ThreeSelectionExercise : MonoBehaviour
         };
 
 
-        var slexerc = new SelectionExercise(
+        var selExercise = new SelectionExercise(
             "Parameter5",
                 exercPdsList,
                 selChoiceList
             );
 
 
-        _exercise = slexerc;
+        _exercise = selExercise;
 
     }
 
