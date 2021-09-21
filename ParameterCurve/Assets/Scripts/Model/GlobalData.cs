@@ -31,6 +31,8 @@ public static class GlobalData
     public static List<PointDataset> ParamCurveDatasets = new List<PointDataset>();
     public static List<PointDataset> ExerciseCurveDatasets = new List<PointDataset>();
 
+    public static List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+
     private static List<AbstractCurveCalc> NamedDataset = new List<AbstractCurveCalc>()
     {
         new HelixCurveCalc(),
@@ -120,15 +122,19 @@ public static class GlobalData
             ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
 
-        // for (int i = 0; i < LocalExerciseCalcList.Count; i++)
-        // {
-        //     AbstractCurveCalc calc = LocalExerciseCalcList[i];
-        //     ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        // }
+        for (int i = 0; i < LocalExerciseCalcList.Count; i++)
+        {
+            AbstractCurveCalc calc = LocalExerciseCalcList[i];
+            ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+        }
         
         // Load test exercise
         Object res = Resources.Load("json/exercises/testExercise01", typeof(TextAsset));
         SelectionExercise selExerc = DataImport.ImportExerciseFromJSONResource(res as TextAsset);
+        SelectionExercises.Add((selExerc));
+        
+        
+        //ExerciseCurveDatasets.Add(selExerc);
     }
 
 

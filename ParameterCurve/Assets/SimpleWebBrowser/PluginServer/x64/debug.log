@@ -18,3 +18,7 @@
 [0914/204920.195:WARNING:spdy_session.cc(2224)] Received HEADERS for invalid stream 3
 [0917/085605.527:WARNING:dns_config_service_win.cc(661)] Failed to read DnsConfig.
 [0917/085610.786:WARNING:dns_config_service_win.cc(661)] Failed to read DnsConfig.
+[0921/211026.475:WARNING:dns_config_service_win.cc(661)] Failed to read DnsConfig.
+[0921/211031.524:WARNING:dns_config_service_win.cc(661)] Failed to read DnsConfig.
+[0921/223739.755:WARNING:spdy_session.cc(2224)] Received HEADERS for invalid stream 1
+[0921/223739.755:WARNING:spdy_session.cc(2224)] Received HEADERS for invalid stream 3

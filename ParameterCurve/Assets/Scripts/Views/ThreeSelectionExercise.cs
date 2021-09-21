@@ -135,7 +135,10 @@ public class ThreeSelectionExercise : MonoBehaviour
             );
 
 
-        _exercise = selExercise;
+        //_exercise = selExercise;
+
+        _exercise = GlobalData.SelectionExercises[0];
+
 
     }
 
@@ -168,6 +171,14 @@ public class ThreeSelectionExercise : MonoBehaviour
 
     public void UpdateView()
     {
+        Debug.Log("datasetsCount: " + _exercise.Datasets.Count);
+        
+        if(leftView is null)
+            Debug.Log("leftView is null");
+        
+        if(_exercise.Datasets[_exerciseIndex].LeftDataset is null)
+            Debug.Log("LeftDataset is null");
+        
         leftView.SetCustomDataset(_exercise.Datasets[_exerciseIndex].LeftDataset);
         middleView.SetCustomDataset(_exercise.Datasets[_exerciseIndex].MiddleDataset);
         rightView.SetCustomDataset(_exercise.Datasets[_exerciseIndex].RightDataset);
@@ -176,13 +187,17 @@ public class ThreeSelectionExercise : MonoBehaviour
         middleView.ScalingFactor = ScalingFactorList[_exerciseIndex][1]; //_exercise.Datasets[_exerciseIndex].MiddleDataset.ScalingFactor;
         rightView.ScalingFactor = ScalingFactorList[_exerciseIndex][2]; //_exercise.Datasets[_exerciseIndex].RightDataset.ScalingFactor;
 
-
         ExerciseTitle.text = _exercise.Title;
         char subExerciseLetter = (char) (97 + _exerciseIndex);
         SubExerciseIdentifier.text = subExerciseLetter + ")";
         HeaderText.text = _exercise.Datasets[_exerciseIndex].HeaderText;
         
+        
+        
         leftView.UpdateView();
+        
+        Debug.Log("LeftDisplayLRPositions: " + leftView._displayLr.positionCount);
+        
         middleView.UpdateView();
         rightView.UpdateView();
     }

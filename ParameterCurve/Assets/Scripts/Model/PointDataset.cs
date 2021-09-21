@@ -12,7 +12,21 @@ public class PointDataset
 
     public float Distance = 0f;
 
-    public List<Vector3> points { get; set; } = new List<Vector3>();
+    public bool Is3DCurve;
+
+    private List<Vector3> ps = new List<Vector3>();
+
+    public List<Vector3> points
+    {
+        get => ps;
+        set
+        {
+            ps = value;
+            
+            CalculateWorldPoints();
+        }
+    }
+    
     public List<Vector3> worldPoints { get; set; } = new List<Vector3>();
     public List<float> paramValues { get; set; } = new List<float>();
 
@@ -31,4 +45,19 @@ public class PointDataset
     public List<FresnetSerretApparatus> arcLengthFresnetApparatuses { get; set; } = new List<FresnetSerretApparatus>();
 
 
+    public void CalculateWorldPoints()
+    {
+        // Calculate world points
+        worldPoints.Clear();
+        for (int i = 0; i < ps.Count; i++)
+        {
+            var point = ps[i];
+
+            bool swapYZCoordinates = !Is3DCurve;//point.z == 0f && (point.x == 0f || point.y == 0f);
+                
+            worldPoints.Add(swapYZCoordinates ?
+                new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :
+                new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor);
+        }
+    }
 }

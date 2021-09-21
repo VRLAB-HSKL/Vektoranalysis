@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 
 [Serializable]
@@ -18,16 +19,45 @@ public class Exercise
     public string description { get; set; } = string.Empty;
     
     public List<Subexercise> subExercises = new List<Subexercise>();
+
+    public string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("id: " + id);
+        sb.AppendLine("title: " + title);
+        sb.AppendLine("type: " + type);
+        sb.AppendLine("description: " + description);
+        sb.AppendLine("subExercises:");
+
+        for (int i = 0; i < subExercises.Count; i++)
+        {
+            sb.AppendLine(subExercises[i].ToString());
+        }
+
+        return sb.ToString();
+    }
 }
 
 [Serializable]
 public class Subexercise
 {
+    public string title { get; set; } = string.Empty;
+    public string description { get; set; } = string.Empty;
+    public int correctAnswer { get; set; } = -1;
+    
     public List<PointCurveDataJSON> leftCurveData = new List<PointCurveDataJSON>();
     public List<PointCurveDataJSON> middleCurveData = new List<PointCurveDataJSON>();
     public List<PointCurveDataJSON> rightCurveData = new List<PointCurveDataJSON>();
-    public int correctAnswer { get; set; } = -1;
-    public string description { get; set; } = string.Empty;
+
+    public string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("title: " + title);
+        sb.AppendLine("description: " + description);
+        sb.AppendLine("correctAnswer: " + correctAnswer);
+
+        return sb.ToString();
+    }
 }
 
 [Serializable]

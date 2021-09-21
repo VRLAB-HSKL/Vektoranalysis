@@ -26,7 +26,7 @@ public static class DataImport
         pd.DisplayString = txt.name;
         pd.NotebookURL = GlobalData.LocalHTMLResourcePath + txt.name + ".html";
 
-        string[] lineArr = txt.text.Split('\n'); //Regex.Split(textfile.text, "\n|\r|\r\n");
+        string[] lineArr = txt.text.Split('\n'); 
 
         //Skip header
         for (int i = 1; i < lineArr.Length; i++)
@@ -46,9 +46,9 @@ public static class DataImport
                 z = float.Parse(values[3], nfi);
             }
             pd.points.Add(new Vector3(x, y, z));
-            pd.worldPoints.Add(swapYZCoordinates ?
-                new Vector3(x, z, y) * GlobalData.PointScaleFactor :
-                new Vector3(x, y, z) * GlobalData.PointScaleFactor);
+            //pd.worldPoints.Add(swapYZCoordinates ?
+            //    new Vector3(x, z, y) * GlobalData.PointScaleFactor :
+            //    new Vector3(x, y, z) * GlobalData.PointScaleFactor);
             pd.paramValues.Add(t);
 
 
@@ -56,6 +56,8 @@ public static class DataImport
             fsa.Tangent = Vector3.zero;
             pd.fresnetApparatuses.Add(fsa);
         }
+        
+        pd.CalculateWorldPoints();
 
         return pd;
     }
@@ -69,6 +71,8 @@ public static class DataImport
         pds.DisplayString = jsr.name;
         pds.NotebookURL = GlobalData.LocalHTMLResourcePath + jsr.name + ".html";
 
+        pds.Is3DCurve = false;
+        
         bool swapYZCoordinates = false;
 
         for (int i = 0; i < jsr.pointData.Count; i++)
@@ -94,9 +98,9 @@ public static class DataImport
             //float t = float.Parse(pd.t, nfi);
 
             pds.points.Add(new Vector3(x, y, z));
-            pds.worldPoints.Add(swapYZCoordinates ?
-                new Vector3(x, z, y) * GlobalData.PointScaleFactor :
-                new Vector3(x, y, z) * GlobalData.PointScaleFactor);
+            // pds.worldPoints.Add(swapYZCoordinates ?
+            //     new Vector3(x, z, y) * GlobalData.PointScaleFactor :
+            //     new Vector3(x, y, z) * GlobalData.PointScaleFactor);
             pds.paramValues.Add(t);
 
             FresnetSerretApparatus fsp = new FresnetSerretApparatus();
@@ -114,6 +118,8 @@ public static class DataImport
 
             pds.fresnetApparatuses.Add(fsp);
         }
+        
+        pds.CalculateWorldPoints();
 
         return pds;
     }
@@ -121,7 +127,7 @@ public static class DataImport
     public static SelectionExercise ImportExerciseFromJSONResource(TextAsset json)
     {
         List<string> errors = new List<string>();
-        ExerciseRoot jsr = JsonConvert.DeserializeObject<ExerciseRoot>(json.text,
+        Exercise jsr = JsonConvert.DeserializeObject<Exercise>(json.text,
             new JsonSerializerSettings()
             {
                 Error = delegate(object sender, ErrorEventArgs args)
@@ -137,18 +143,23 @@ public static class DataImport
             
             );
 
-        Debug.Log("ErrorCount: " + errors.Count);
         
+        Debug.Log("ErrorCount: " + errors.Count);
+
         for (int i = 0; i < errors.Count; i++)
         {
             Debug.Log("JsonError [" + i + "]: " + errors[i]);
         }
 
-        string id = jsr.exercise.id;
-        string title = jsr.exercise.title;
-        string description = jsr.exercise.description;
-        string type = jsr.exercise.type;
-        var subExercises = jsr.exercise.subExercises;
+        //Debug.Log("jsonRoot: " + jsr.ToString());
+        
+        string id = jsr.id;
+        string title = jsr.title;
+        string description = jsr.description;
+        string type = jsr.type;
+        var subExercises = jsr.subExercises;
+        
+        //Debug.Log("subExercisesCount: " + subExercises.Count);
 
         List<ExercisePointDataset> datasets = new List<ExercisePointDataset>();
         List<int> correctAnswers = new List<int>();
@@ -160,6 +171,8 @@ public static class DataImport
         for (int i = 0; i < subExercises.Count; i++)
         {
             var subExercise = subExercises[i];
+            
+            //Debug.Log("subExercise[" + i + "]: " + subExercise.ToString());
 
             lds = CreatePDSFromJsonCollection(subExercise.leftCurveData);
             mds = CreatePDSFromJsonCollection(subExercise.middleCurveData);
@@ -256,6 +269,7 @@ public static class DataImport
     private static PointDataset CreatePDSFromJsonCollection(List<PointCurveDataJSON> data)
     {
         PointDataset pds = new PointDataset();
+        //Debug.Log("DataCount: " + data.Count);
         for (int l = 0; l < data.Count; ++l)
         {
             var tData = data[l];
@@ -272,10 +286,14 @@ public static class DataImport
             fsa.Binormal = Vector3.Cross(fsa.Tangent, fsa.Normal);
                 
             pds.fresnetApparatuses.Add(fsa);
-                
+        
+            //Debug.Log("pdsPoint["+ l + "]: " + pds.points[l]);
+            
             // ToDo: Add arc length parametrization values to json and parse them here
 
         }
+        
+        
 
         return pds;
     }
