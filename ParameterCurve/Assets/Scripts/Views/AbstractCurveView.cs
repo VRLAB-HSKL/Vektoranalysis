@@ -27,11 +27,11 @@ public abstract class AbstractCurveView
         //     Debug.Log("Failed to get line renderer component");
         // }
         
-        Debug.Log("HasCustomDataset: " + (HasCustomDataset ? "true" : "false"));
+        // Debug.Log("HasCustomDataset: " + (HasCustomDataset ? "true" : "false"));
         
         PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
-        Debug.Log("CustomDatasetPointCount: " + curve.points.Count);   
+        // Debug.Log("CustomDatasetPointCount: " + curve.points.Count);   
         
         // if(curve is null)
         // {
@@ -54,19 +54,19 @@ public abstract class AbstractCurveView
 
         var pointArr = curve.worldPoints.ToArray();
 
-        Debug.Log("pointArrLength01: " + pointArr.Length);
+        //Debug.Log("pointArrLength01: " + pointArr.Length);
         
         for (var i = 0; i < pointArr.Length; i++)
         {
             pointArr[i] = MapPointPos(pointArr[i]);
         }
         
-        Debug.Log("pointArrLength02: " + pointArr.Length);
+        //Debug.Log("pointArrLength02: " + pointArr.Length);
         
         _displayLr.positionCount = curve.worldPoints.Count;
         _displayLr.SetPositions(pointArr);
         
-        Debug.Log("displayLR_PointCount: " + _displayLr.positionCount);
+        //Debug.Log("displayLR_PointCount: " + _displayLr.positionCount);
         
     }
 

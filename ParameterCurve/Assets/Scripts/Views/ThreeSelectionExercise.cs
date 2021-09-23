@@ -14,16 +14,32 @@ public class ThreeSelectionExercise : MonoBehaviour
     public TextMeshProUGUI ExerciseTitle;
     public TextMeshProUGUI SubExerciseIdentifier;
     public TextMeshProUGUI HeaderText;
+    public TextMeshProUGUI MiddleDisplayText;
+
+    public GameObject SelectionParent;
+    public GameObject MainDisplayParent;
+
+
+    private bool showMainDisplay = true;
 
     public List<float[]> ScalingFactorList = new List<float[]>()
-    {
-        new[] {1f, 0.25f, 0.125f},
-        new[] {0.125f, 1f, 0.05f},
-        new[] {0.25f, 0.125f, 0.0625f},
-        new[] {0.125f, 0.25f, 1f},
-        new[] {1f, 0.5f, 0.125f},
-        new[] {1f, 0.5f, 0.125f}
-    };
+        // {
+        //     new[] {1f, 0.25f, 0.125f},
+        //     new[] {0.125f, 1f, 0.05f},
+        //     new[] {0.25f, 0.125f, 0.0625f},
+        //     new[] {0.125f, 0.25f, 1f},
+        //     new[] {1f, 0.5f, 0.125f},
+        //     new[] {1f, 0.5f, 0.125f}
+        // };
+        {
+            new[] {1f, 1f, 1f},
+            new[] {1f, 1f, 1f},
+            new[] {1f, 1f, 1f},
+            new[] {1f, 1f, 1f},
+            new[] {1f, 1f, 1f},
+            new[] {1f, 1f, 1f},
+        };
+    
     
     public Material CurveLineMat;
 
@@ -129,7 +145,7 @@ public class ThreeSelectionExercise : MonoBehaviour
 
 
         var selExercise = new SelectionExercise(
-            "Parameter5",
+            "Parameter5", "Parameter5Description",
                 exercPdsList,
                 selChoiceList
             );
@@ -171,7 +187,7 @@ public class ThreeSelectionExercise : MonoBehaviour
 
     public void UpdateView()
     {
-        Debug.Log("datasetsCount: " + _exercise.Datasets.Count);
+        //Debug.Log("datasetsCount: " + _exercise.Datasets.Count);
         
         if(leftView is null)
             Debug.Log("leftView is null");
@@ -187,23 +203,40 @@ public class ThreeSelectionExercise : MonoBehaviour
         middleView.ScalingFactor = ScalingFactorList[_exerciseIndex][1]; //_exercise.Datasets[_exerciseIndex].MiddleDataset.ScalingFactor;
         rightView.ScalingFactor = ScalingFactorList[_exerciseIndex][2]; //_exercise.Datasets[_exerciseIndex].RightDataset.ScalingFactor;
 
-        ExerciseTitle.text = _exercise.Title;
-        char subExerciseLetter = (char) (97 + _exerciseIndex);
-        SubExerciseIdentifier.text = subExerciseLetter + ")";
-        HeaderText.text = _exercise.Datasets[_exerciseIndex].HeaderText;
-        
-        
+        if (showMainDisplay)
+        {
+            MiddleDisplayText.text = _exercise.Description;
+
+            ExerciseTitle.text = string.Empty;
+            SubExerciseIdentifier.text = string.Empty;
+            HeaderText.text = string.Empty;
+            
+            ShowMainDisplayView();
+        }
+        else
+        {
+            ExerciseTitle.text = _exercise.Title;
+            
+            // Start incrementing on small 'a' character
+            var subExerciseLetter = (char) (97 + _exerciseIndex);
+            SubExerciseIdentifier.text = subExerciseLetter + ")";
+            HeaderText.text = _exercise.Datasets[_exerciseIndex].HeaderText;
+            
+            ShowSelectionView();
+        }
         
         leftView.UpdateView();
-        
-        Debug.Log("LeftDisplayLRPositions: " + leftView._displayLr.positionCount);
-        
         middleView.UpdateView();
         rightView.UpdateView();
     }
 
     public void NextSubExercise()
     {
+        if (_exerciseIndex == 0)
+        {
+            showMainDisplay = false;
+        }
+
         if (_exerciseIndex == _exercise.Datasets.Count - 1)
         {
             int correctCount = 0;
@@ -228,7 +261,12 @@ public class ThreeSelectionExercise : MonoBehaviour
 
     public void PreviousSubExercise()
     {
-        if (_exerciseIndex == 0) return;
+        if (_exerciseIndex == 0)
+        {
+            showMainDisplay = true;
+            UpdateView();
+            return;
+        }
         
         --_exerciseIndex;
          UpdateView();
@@ -238,6 +276,19 @@ public class ThreeSelectionExercise : MonoBehaviour
     {
         //selectionIndex = choice;
         _exercise.ChosenAnswers[_exerciseIndex] = choice;
+    }
+
+    private void ShowMainDisplayView()
+    {
+        SelectionParent.SetActive(false);
+        MainDisplayParent.SetActive(true);
+    }
+
+    private void ShowSelectionView()
+    {
+        MainDisplayParent.SetActive(false);
+        SelectionParent.SetActive(true);
+        
     }
     
 }

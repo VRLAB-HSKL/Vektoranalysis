@@ -45,9 +45,9 @@ public class Subexercise
     public string description { get; set; } = string.Empty;
     public int correctAnswer { get; set; } = -1;
     
-    public List<PointCurveDataJSON> leftCurveData = new List<PointCurveDataJSON>();
-    public List<PointCurveDataJSON> middleCurveData = new List<PointCurveDataJSON>();
-    public List<PointCurveDataJSON> rightCurveData = new List<PointCurveDataJSON>();
+    public CurveData leftCurveData = new CurveData();
+    public CurveData middleCurveData = new CurveData();
+    public CurveData rightCurveData = new CurveData();
 
     public string ToString()
     {
@@ -61,19 +61,17 @@ public class Subexercise
 }
 
 [Serializable]
-public class PointCurveDataJSON
+public class CurveData
+{
+    public int dim { get; set; } = 0;
+    public List<PointDataJSON> data { get; set; } = new List<PointDataJSON>();
+}
+
+[Serializable]
+public class PointDataJSON
 {
     public float t { get; set; } = 0f;
     public List<float> pVec { get; set; } = new List<float>();
     public List<float> velVec { get; set; } = new List<float>();
     public List<float> accVec { get; set; } = new List<float>();
 }
-
-// [Serializable]
-// public class LeftCurveData : AbstractCurveDataJSON {}
-//
-// [Serializable]
-// public class MiddleCurveData : AbstractCurveDataJSON {}
-//
-// [Serializable]
-// public class RightCurveData : AbstractCurveDataJSON {} 

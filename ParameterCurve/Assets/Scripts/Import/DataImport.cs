@@ -184,7 +184,7 @@ public static class DataImport
             correctAnswers.Add(subExercise.correctAnswer);
         }
         
-        SelectionExercise selExerc = new SelectionExercise(title, datasets, correctAnswers);
+        SelectionExercise selExerc = new SelectionExercise(title, description, datasets, correctAnswers);
 
         return selExerc;
     }
@@ -210,13 +210,13 @@ public static class DataImport
         pdsa.paramValues = new List<float>(curveCalc.ParameterIntervall);
         pdsa.points = curveCalc.CalculatePoints();
 
-        for (int i = 0; i < pdsa.points.Count; i++)
-        {
-            Vector3 pv = pdsa.points[i];
-            pdsa.worldPoints.Add(curveCalc.Is3DCurve ?
-                new Vector3(pv.x, pv.z, pv.y) * GlobalData.PointScaleFactor :
-                pv * GlobalData.PointScaleFactor);
-        }
+        // for (int i = 0; i < pdsa.points.Count; i++)
+        // {
+        //     Vector3 pv = pdsa.points[i];
+        //     pdsa.worldPoints.Add(curveCalc.Is3DCurve ?
+        //         new Vector3(pv.x, pv.z, pv.y) * GlobalData.PointScaleFactor :
+        //         pv * GlobalData.PointScaleFactor);
+        // }
 
         pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
         pdsa.timeDistancePoints = curveCalc.CalculateTimeDistancePoints();        
@@ -265,14 +265,16 @@ public static class DataImport
         return pdsa;
     }
 
-
-    private static PointDataset CreatePDSFromJsonCollection(List<PointCurveDataJSON> data)
+    
+    private static PointDataset CreatePDSFromJsonCollection(CurveData curve)
     {
         PointDataset pds = new PointDataset();
-        //Debug.Log("DataCount: " + data.Count);
-        for (int l = 0; l < data.Count; ++l)
+        
+        pds.Is3DCurve = curve.dim == 2;
+        
+        for (int l = 0; l < curve.data.Count; ++l)
         {
-            var tData = data[l];
+            var tData = curve.data[l];
             pds.paramValues.Add(tData.t);
             pds.points.Add(new Vector3(tData.pVec[0], tData.pVec[1], tData.pVec.Count == 3 ? tData.pVec[2] : 0f));
 
@@ -287,8 +289,6 @@ public static class DataImport
                 
             pds.fresnetApparatuses.Add(fsa);
         
-            //Debug.Log("pdsPoint["+ l + "]: " + pds.points[l]);
-            
             // ToDo: Add arc length parametrization values to json and parse them here
 
         }

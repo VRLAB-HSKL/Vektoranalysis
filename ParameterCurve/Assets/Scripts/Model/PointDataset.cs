@@ -53,7 +53,7 @@ public class PointDataset
         {
             var point = ps[i];
 
-            bool swapYZCoordinates = !Is3DCurve;//point.z == 0f && (point.x == 0f || point.y == 0f);
+            bool swapYZCoordinates = !Is3DCurve;
                 
             worldPoints.Add(swapYZCoordinates ?
                 new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :

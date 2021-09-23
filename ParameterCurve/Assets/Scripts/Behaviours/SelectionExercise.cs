@@ -7,6 +7,7 @@ using UnityEngine;
 public class SelectionExercise
 {
     public string Title = string.Empty;
+    public string Description = string.Empty;
     public int NumberOfSubExercises;
 
     public List<ExercisePointDataset> Datasets;
@@ -14,9 +15,10 @@ public class SelectionExercise
     public List<int> CorrectAnswers;
     public List<int> ChosenAnswers;
 
-    public SelectionExercise(string title, List<ExercisePointDataset> exercisePointDatasets , List<int> correctAnswers)
+    public SelectionExercise(string title, string description, List<ExercisePointDataset> exercisePointDatasets , List<int> correctAnswers)
     {
         Title = title;
+        Description = description;
         NumberOfSubExercises = correctAnswers.Count;
 
         Datasets = exercisePointDatasets;
