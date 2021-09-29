@@ -1,49 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
+using Views;
 
 
-public class CurveViewController
+public class CurveViewController : AbstractViewController
 {
-    [Header("DisplayElements")]
-    private readonly Transform _rootElement;
     private readonly LineRenderer _displayLr;
     private readonly Transform _travelObject;
     private readonly Transform _arcLengthTravelObject;
 
-    private AbstractCurveView currentView;
-    public AbstractCurveView CurrentView
+    // public delegate void d_updateViewsDelegate();
+    //
+    // private readonly d_updateViewsDelegate _updateViewsDelegate;
+    //
+    // public d_updateViewsDelegate UpdateViewsDelegate
+    // {
+    //     get
+    //     {
+    //         if (_updateViewsDelegate is null)
+    //         {
+    //             _updateViewsDelegate();
+    //         }
+    //
+    //         return _updateViewsDelegate;
+    //     }
+    // }
+
+    public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, 
+                               Transform arcTravel, float scalingFactor) : base(root)
     {
-        get => currentView;
-        set
-        {
-            currentView = value;
-            currentView.UpdateView();
-        }
-    }
-
-    private readonly List<AbstractCurveView> _views;
-    
-    public delegate void d_updateViewsDelegate();
-    
-    private readonly d_updateViewsDelegate _updateViewsDelegate;
-
-    public d_updateViewsDelegate UpdateViewsDelegate
-    {
-        get
-        {
-            if (_updateViewsDelegate is null)
-            {
-                _updateViewsDelegate();
-            }
-
-            return _updateViewsDelegate;
-        }
-    }
-
-    public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, Transform arcTravel, float scalingFactor)
-    {
-        _rootElement = root;
         _displayLr = displayLR;
         _travelObject = travel;
         _arcLengthTravelObject = arcTravel;
@@ -52,9 +39,7 @@ public class CurveViewController
         var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
         var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
         
-        //var selView = new SelectionExerciseView()
-        
-        _views = new List<AbstractCurveView>
+        _views = new List<IView>
         {
             simpleView,
             simpleRunView,
@@ -75,8 +60,8 @@ public class CurveViewController
     {
         if (index < 0 || index >= _views.Count) return;
         
-        currentView = _views[index];
-        _travelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-        _arcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
+        base.SwitchView(index);
+        _travelObject.gameObject.SetActive( (CurrentView as AbstractCurveView).HasTravelPoint);
+        _arcLengthTravelObject.gameObject.SetActive((CurrentView as AbstractCurveView).HasArcLengthPoint);
     }
 }

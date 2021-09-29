@@ -74,4 +74,8 @@ public class PointDataJSON
     public List<float> pVec { get; set; } = new List<float>();
     public List<float> velVec { get; set; } = new List<float>();
     public List<float> accVec { get; set; } = new List<float>();
+    
+    public List<float> arcPVec { get; set; } = new List<float>();
+    public List<float> arcVelVec { get; set; } = new List<float>();
+    public List<float> arcAccVec { get; set; } = new List<float>();
 }

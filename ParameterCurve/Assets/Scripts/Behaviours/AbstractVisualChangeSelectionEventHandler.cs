@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Views;
 
 namespace Behaviours
 {
@@ -15,10 +16,10 @@ namespace Behaviours
         public bool isToggle;
 
 
-        public ThreeSelectionExercise threeSel;
+        public SelectionExerciseCompoundView threeSel;
         public int selectionChoice = -1;
 
-        protected bool IsSelected => selectionChoice == threeSel.selectionIndex;
+        protected bool IsSelected => selectionChoice == threeSel.currentExerciseIndex;
 
         public Material defaultMat;
         public Material hoverMat;

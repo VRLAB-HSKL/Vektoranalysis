@@ -290,7 +290,18 @@ public static class DataImport
             pds.fresnetApparatuses.Add(fsa);
         
             // ToDo: Add arc length parametrization values to json and parse them here
+            pds.arcLenghtPoints.Add(new Vector3(tData.arcPVec[0], tData.arcPVec[1], tData.arcPVec.Count == 3 ? tData.arcPVec[2] : 0f));
 
+            FresnetSerretApparatus arcFsa = new FresnetSerretApparatus();
+            
+            arcFsa.Tangent = new Vector3(tData.arcVelVec[0], tData.arcVelVec[1],
+                tData.arcVelVec.Count == 3 ? tData.arcVelVec[2] : 0f);
+            arcFsa.Normal = new Vector3(tData.arcAccVec[0], tData.arcAccVec[1],
+                tData.arcAccVec.Count == 3 ? tData.arcAccVec[2] : 0f);
+
+            arcFsa.Binormal = Vector3.Cross(arcFsa.Tangent, arcFsa.Normal);
+            
+            pds.arcLengthFresnetApparatuses.Add(arcFsa);
         }
         
         

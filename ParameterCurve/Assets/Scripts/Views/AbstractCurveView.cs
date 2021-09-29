@@ -1,6 +1,7 @@
 using UnityEngine;
+using Views;
 
-public abstract class AbstractCurveView
+public abstract class AbstractCurveView : IView
 {
     public readonly LineRenderer _displayLr;
     private readonly Vector3 _rootPos;
@@ -87,21 +88,6 @@ public abstract class AbstractCurveView
 
     public void SetCustomDataset(PointDataset pds)
     {
-        // // ToDo: Move this world points calculation to points collection setter !
-        // if(pds.worldPoints.Count == 0)
-        // {
-        //     for (int i = 0; i < pds.points.Count; i++)
-        //     {
-        //         var point = pds.points[i];
-        //
-        //         bool swapYZCoordinates = point.z == 0f && (point.x == 0f || point.y == 0f);
-        //         
-        //         pds.worldPoints.Add(swapYZCoordinates ?
-        //             new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :
-        //             new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor);
-        //     }
-        // }
-
         CustomDataset = pds;
         CustomDataset.CalculateWorldPoints();
         HasCustomDataset = true;
