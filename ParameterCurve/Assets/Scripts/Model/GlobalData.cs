@@ -5,8 +5,13 @@ using Calculation.SelectionExercises;
 using Controller;
 using UnityEngine;
 
+using log4net;
+
 public static class GlobalData
 {
+    //public static readonly ILog Log = LogManager.GetLogger()
+    
+    
     public static float PointScaleFactor = 1f;
     public static float RunSpeedFactor = 1f;
 
