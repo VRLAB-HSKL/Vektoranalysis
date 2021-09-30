@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Controller;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +12,8 @@ namespace Behaviours
     /// </summary>
     public class PillarSelectionEventHandler : AbstractVisualChangeSelectionEventHandler
     {
+        //private ExerciseViewController threeSel;
+        
         private void Update()
         {
             // if (IsSelected) return;
@@ -33,7 +36,7 @@ namespace Behaviours
 
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            threeSel.SetSelection(IsSelected ? -1 : selectionChoice);
+            GlobalData.exerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
         }
 
         protected override void HandlePointerEnter(PointerEventData eventData)

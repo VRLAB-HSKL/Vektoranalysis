@@ -7,9 +7,6 @@ namespace Controller
     public abstract class AbstractViewController
     {
         protected readonly Transform _rootElement;
-        // private readonly LineRenderer _displayLr;
-        // private readonly Transform _travelObject;
-        // private readonly Transform _arcLengthTravelObject;
 
         private IView currentView;
         public IView CurrentView
@@ -45,28 +42,25 @@ namespace Controller
         protected AbstractViewController(Transform root)
         {
             _rootElement = root;
-            // _displayLr = displayLR;
-            // _travelObject = travel;
-            // _arcLengthTravelObject = arcTravel;
 
-            // var simpleView = new SimpleCurveView(_displayLr, _rootElement.position, scalingFactor);
-            // var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
-            // var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
+            _views = new List<IView>()
+            {
+                //selView
+            };
+            
+            
+            InitViews();
+        }
 
-            
-            
-            // var selView = new SelectionExerciseCompoundView(selEx, pillarPrefab, root);
-            
-            //var selView = new SelectionExerciseView()
-            
-            _views = new List<IView>();
-
+        public void InitViews()
+        {
             foreach (var view in _views)
             {
                 _updateViewsDelegate += view.UpdateView;
             }
 
-            UpdateViewsDelegate();
+            if(_views.Count > 0)
+                UpdateViewsDelegate();
             
             SwitchView(0);
         }
@@ -76,8 +70,18 @@ namespace Controller
             if (index < 0 || index >= _views.Count) return;
             
             currentView = _views[index];
+            
             // _travelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
             // _arcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
         }
+
+        public virtual void SetViewVisibility(bool value)
+        {
+            for (int i = 0; i < _rootElement.childCount; i++)
+            {
+                _rootElement.GetChild(i).gameObject.SetActive(value);
+            }
+        }
+        
     }
 }

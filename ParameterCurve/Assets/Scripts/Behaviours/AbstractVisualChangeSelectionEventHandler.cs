@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Controller;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,10 +17,25 @@ namespace Behaviours
         public bool isToggle;
 
 
-        public SelectionExerciseCompoundView threeSel;
+        //public ExerciseViewController threeSel;
+        
         public int selectionChoice = -1;
 
-        protected bool IsSelected => selectionChoice == threeSel.currentExerciseIndex;
+        protected bool IsSelected
+        {
+            get
+            {
+                //Debug.Log("globalExerciseController is null: " + (GlobalData.exerciseController is null));
+                
+                bool isSel = selectionChoice ==
+                    GlobalData.exerciseController?.selectionIndices[GlobalData.exerciseController.currentExerciseIndex]; //currentExerciseIndex;    
+
+                
+
+                return isSel;
+            }
+        }
+            
 
         public Material defaultMat;
         public Material hoverMat;
@@ -68,7 +84,7 @@ namespace Behaviours
 
                     //_isSelected = !_isSelected;
 
-                    threeSel.SetSelection(IsSelected ? -1 : selectionChoice);
+                    GlobalData.exerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
 
                     HandlePointerClick(eventData);        
                 }
@@ -102,7 +118,7 @@ namespace Behaviours
 
                     //_isSelected = !_isSelected;    
                     
-                    threeSel.SetSelection(IsSelected ? -1 : selectionChoice);
+                    GlobalData.exerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
                     
                     HandlePointerClick(eventData);        
                 }

@@ -7,9 +7,9 @@ using UnityEngine.PlayerLoop;
 
 public class SelectionExerciseGameObjects : MonoBehaviour
 {
-    public Vector3 PillarOffset = Vector3.right;
-    public Vector3 CurveOffset = Vector3.zero;
-    public float ScalingFactor = 0.25f;
+    public Vector3 PillarOffset { get; set; } = Vector3.right;
+    public Vector3 CurveOffset { get; set; } = Vector3.zero;
+    public float ScalingFactor { get; set; } = 1f;
 
     public TextMeshProUGUI ExerciseTitle;
     public TextMeshProUGUI SubExerciseIdentifier;
@@ -20,4 +20,8 @@ public class SelectionExerciseGameObjects : MonoBehaviour
     public GameObject MainDisplayParent;
         
     public Material CurveLineMat;
+
+    public GameObject leftPillar;
+    public GameObject middlePillar;
+    public GameObject rightPillar;
 }

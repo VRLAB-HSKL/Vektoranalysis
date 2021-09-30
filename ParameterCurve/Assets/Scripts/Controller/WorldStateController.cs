@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Controller;
 //using System.Text.Json;
 
 using UnityEngine;
@@ -29,6 +30,11 @@ public class WorldStateController : MonoBehaviour
     public Transform TableTravelObject;
     public Transform TableArcLengthTravelObject;
 
+    [Header("ExerciseElements")] 
+    public SelectionExerciseGameObjects SelObjects;
+
+    public GameObject PillarPrefab;
+    
     [Header("Walls")]
     public BrowserControl BrowserWall;
     public InformationControl InfoWall;
@@ -36,6 +42,8 @@ public class WorldStateController : MonoBehaviour
 
     public CurveViewController WorldViewController;
     public CurveViewController TableViewController;
+    //public ExerciseViewController ExerciseController;
+    
     
     private Vector3 InitTravelObjPos;
     private Vector3 InitArcLengthTravelObjPos;
@@ -45,11 +53,20 @@ public class WorldStateController : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        
+        
         GlobalData.InitializeData();
-
+        GlobalData.exerciseController = new ExerciseViewController(SelObjects.gameObject.transform, SelObjects, PillarPrefab);
+        
+        GlobalData.exerciseController.SetViewVisibility(true);
+        
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
+        WorldViewController.SetViewVisibility(false);
+        
         TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
-
+        
+        
+        
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
             * GlobalData.RunSpeedFactor;

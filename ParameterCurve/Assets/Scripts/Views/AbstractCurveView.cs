@@ -23,52 +23,16 @@ public abstract class AbstractCurveView : IView
 
     public virtual void UpdateView()
     {
-        // if(_displayLr is null)
-        // {
-        //     Debug.Log("Failed to get line renderer component");
-        // }
-        
-        // Debug.Log("HasCustomDataset: " + (HasCustomDataset ? "true" : "false"));
-        
         PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
-        // Debug.Log("CustomDatasetPointCount: " + curve.points.Count);   
-        
-        // if(curve is null)
-        // {
-        //     Debug.Log("Failed to get curve object at current curve index");
-        // }
-        //
-        // if(curve.worldPoints is null)
-        // {
-        //     Debug.Log("World points collection not initialized in current curve object");
-        // }
-        //
-        // if (curve.worldPoints.Count == 0)
-        // {
-        //     Debug.Log("World points collection empty in current curve object");
-        // }
-
-        
-        
-        
-
         var pointArr = curve.worldPoints.ToArray();
-
-        //Debug.Log("pointArrLength01: " + pointArr.Length);
-        
         for (var i = 0; i < pointArr.Length; i++)
         {
             pointArr[i] = MapPointPos(pointArr[i]);
         }
         
-        //Debug.Log("pointArrLength02: " + pointArr.Length);
-        
         _displayLr.positionCount = curve.worldPoints.Count;
         _displayLr.SetPositions(pointArr);
-        
-        //Debug.Log("displayLR_PointCount: " + _displayLr.positionCount);
-        
     }
 
     protected Vector3 MapPointPos(Vector3 point)

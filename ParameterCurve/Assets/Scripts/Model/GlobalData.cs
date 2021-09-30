@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using Calculation.SelectionExercises;
+using Controller;
 using UnityEngine;
 
 public static class GlobalData
@@ -9,6 +10,9 @@ public static class GlobalData
     public static float PointScaleFactor = 1f;
     public static float RunSpeedFactor = 1f;
 
+    public static ExerciseViewController exerciseController { get; set; }
+    
+    
     public static bool IsDriving = false;
 
     public enum CurveDisplayGroup { Named = 0, Parameter = 1, Exercises = 2 }

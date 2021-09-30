@@ -5,20 +5,19 @@ namespace Behaviours
 {
     public class SwitchExerciseEventHandler : AbstractVisualChangeSelectionEventHandler
     {
-        //public ThreeSelectionView threeSel;
         public bool IsIncrement;
-        
-        
-        
+
         protected override void HandlePointerClick(PointerEventData eventData)
         {
+            Debug.Log("SwitchExerciseEventHandler: HandlePointerClick()");
+            
             if (IsIncrement)
             {
-                threeSel.NextSubExercise();
+                GlobalData.exerciseController.NextSubExercise();
             }
             else
             {
-                threeSel.PreviousSubExercise();
+                GlobalData.exerciseController.PreviousSubExercise();
             }
         }
 

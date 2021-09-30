@@ -12,7 +12,7 @@ public abstract class AbstractCompoundView : IView
         
     }
 
-    public virtual void UpdateView()
+    public void UpdateView()
     {
         foreach (IView v in views)
         {
