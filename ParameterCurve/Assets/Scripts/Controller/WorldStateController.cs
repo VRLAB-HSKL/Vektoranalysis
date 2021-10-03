@@ -61,10 +61,16 @@ public class WorldStateController : MonoBehaviour
         GlobalData.InitializeData();
         GlobalData.exerciseController = new ExerciseViewController(SelObjects.gameObject.transform, SelObjects, PillarPrefab);
         
-        GlobalData.exerciseController.SetViewVisibility(true);
+        //GlobalData.exerciseController.SetViewVisibility(true);
+        //GlobalData.exerciseController.SetViewVisibility(GlobalData.initFile.curveSelection.activated);
         
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
         WorldViewController.SetViewVisibility(false);
+        
+        
+        
+        
+        
         
         TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
 
@@ -107,7 +113,7 @@ public class WorldStateController : MonoBehaviour
             //}
         }
         
-        StaticLogging();
+        //StaticLogging();
             
     }
 
@@ -154,7 +160,7 @@ public class WorldStateController : MonoBehaviour
         {
             if(WorldViewController.CurrentView is null)
             {
-                Debug.Log("ViewEmpty");
+                Log.Warn("ViewEmpty");
             }
 
             GlobalData.IsDriving = false;
@@ -172,7 +178,6 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         InfoWall.UpdatePlotLineRenderers();
 
-        //UpdateWorldObjects();
         //WorldViewController.CurrentView.UpdateView();
         WorldViewController.UpdateViewsDelegate();
         TableViewController.CurrentView.UpdateView();
@@ -201,14 +206,17 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         InfoWall.UpdatePlotLineRenderers();
 
-        //UpdateWorldObjects();
-        //WorldViewController.CurrentView.UpdateView();
         WorldViewController.UpdateViewsDelegate();
         TableViewController.CurrentView.UpdateView();
     }
 
+    
+    /// <summary>
+    /// Static logging operations that are performed every frame, regardless of user interaction
+    /// </summary>
     private void StaticLogging()
     {
+        // Head pose
         RigidPose headPose = VivePose.GetPoseEx(BodyRole.Head);
         Log.Info("Head position: " + headPose.pos);
         Log.Info("Head rotation: " + headPose.rot);
@@ -216,6 +224,7 @@ public class WorldStateController : MonoBehaviour
         Log.Info("Head forward: " + headPose.forward);
         Log.Info("Head right: " + headPose.right);
 
+        // Left hand pose
         var leftPose = VivePose.GetPoseEx(HandRole.LeftHand);
         Log.Info("Left hand position: " + leftPose.pos);
         Log.Info("Left hand rotation: " + leftPose.rot);
@@ -223,13 +232,13 @@ public class WorldStateController : MonoBehaviour
         Log.Info("Left hand forward: " + leftPose.forward);
         Log.Info("Left hand right: " + leftPose.right);
         
+        // Right hand pose
         var rightPose = VivePose.GetPoseEx(HandRole.RightHand);
         Log.Info("Right hand position: " + rightPose.pos);
         Log.Info("Right hand rotation: " + rightPose.rot);
         Log.Info("Right hand up: " + rightPose.up);
         Log.Info("Right hand forward: " + rightPose.forward);
         Log.Info("Right hand right: " + rightPose.right);
-        
     }
 
 }

@@ -38,10 +38,10 @@
 	},
 
 	"information": {
-		"activated": true,
+		"activated": false,
 		"basicInfo": true,
 		"pointData": true,
-		"arclengthData": true,
+		"arcLengthData": true,
 		"timeDistancePlot": true,
 		"timeVelocityPlot": true
 	},

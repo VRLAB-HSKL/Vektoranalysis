@@ -168,8 +168,12 @@ public static class GlobalData
     private static void ParseIniFile()
     {
         // JSON Resources
-        TextAsset json = Resources.Load("json/init/initTemplate.json", typeof(TextAsset)) as TextAsset;
-        //initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text);
+        TextAsset json = Resources.Load("json/init/initTemplate", typeof(TextAsset)) as TextAsset;
+        initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text);
+        
+        //Debug.Log("initFile null: " + (initFile is null));
+
+        
     }
 
 
