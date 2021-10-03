@@ -1,6 +1,8 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Calculation.SelectionExercises;
 using Controller;
 using UnityEngine;
@@ -9,7 +11,7 @@ using log4net;
 
 public static class GlobalData
 {
-    //public static readonly ILog Log = LogManager.GetLogger()
+    public static readonly ILog Log = LogManager.GetLogger(typeof(GlobalData));
     
     
     public static float PointScaleFactor = 1f;
@@ -93,8 +95,24 @@ public static class GlobalData
 
     public static void InitializeData()
     {
+        //Log.Debug("testOutputLogger");
+        
         ImportAllResources();
         ParseIniFile();
+        
+        Log.Debug("Global Data initialized");
+    }
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void ConfigureLogging()
+    {
+        string path = $"{Application.dataPath}/Resources/log/log4netConfig.xml";
+        Debug.Log("configPath: " + path);
+        var configFile = new FileInfo(path);
+        
+        log4net.Config.XmlConfigurator.Configure(configFile);
+        
+        //Debug.Log("log config loaded: " + LogManager.GetRepository().Configured);
     }
 
 

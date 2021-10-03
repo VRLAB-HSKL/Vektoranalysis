@@ -6,6 +6,9 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Controller;
+using HTC.UnityPlugin.Utility;
+using HTC.UnityPlugin.Vive;
+using log4net;
 //using System.Text.Json;
 
 using UnityEngine;
@@ -18,6 +21,8 @@ using UnityEngine.Events;
 
 public class WorldStateController : MonoBehaviour
 {
+    public static readonly ILog Log = LogManager.GetLogger(typeof(WorldStateController));
+    
     [Header("WorldCurveElements")]
     public Transform WorldRootElement;
     public LineRenderer WorldDisplayLR;
@@ -53,8 +58,6 @@ public class WorldStateController : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        
-        
         GlobalData.InitializeData();
         GlobalData.exerciseController = new ExerciseViewController(SelObjects.gameObject.transform, SelObjects, PillarPrefab);
         
@@ -64,9 +67,7 @@ public class WorldStateController : MonoBehaviour
         WorldViewController.SetViewVisibility(false);
         
         TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
-        
-        
-        
+
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
             * GlobalData.RunSpeedFactor;
@@ -105,6 +106,8 @@ public class WorldStateController : MonoBehaviour
             //    GlobalData.IsDriving = false;
             //}
         }
+        
+        StaticLogging();
             
     }
 
@@ -112,6 +115,7 @@ public class WorldStateController : MonoBehaviour
 
     public void StartRun()
     {
+        Log.Info("Starting curve run...");
         GlobalData.CurrentPointIndex = 0;
         GlobalData.IsDriving = true;        
     }
@@ -201,6 +205,31 @@ public class WorldStateController : MonoBehaviour
         //WorldViewController.CurrentView.UpdateView();
         WorldViewController.UpdateViewsDelegate();
         TableViewController.CurrentView.UpdateView();
+    }
+
+    private void StaticLogging()
+    {
+        RigidPose headPose = VivePose.GetPoseEx(BodyRole.Head);
+        Log.Info("Head position: " + headPose.pos);
+        Log.Info("Head rotation: " + headPose.rot);
+        Log.Info("Head up: " + headPose.up);
+        Log.Info("Head forward: " + headPose.forward);
+        Log.Info("Head right: " + headPose.right);
+
+        var leftPose = VivePose.GetPoseEx(HandRole.LeftHand);
+        Log.Info("Left hand position: " + leftPose.pos);
+        Log.Info("Left hand rotation: " + leftPose.rot);
+        Log.Info("Left hand up: " + leftPose.up);
+        Log.Info("Left hand forward: " + leftPose.forward);
+        Log.Info("Left hand right: " + leftPose.right);
+        
+        var rightPose = VivePose.GetPoseEx(HandRole.RightHand);
+        Log.Info("Right hand position: " + rightPose.pos);
+        Log.Info("Right hand rotation: " + rightPose.rot);
+        Log.Info("Right hand up: " + rightPose.up);
+        Log.Info("Right hand forward: " + rightPose.forward);
+        Log.Info("Right hand right: " + rightPose.right);
+        
     }
 
 }

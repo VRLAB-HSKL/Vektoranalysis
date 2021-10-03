@@ -77,7 +77,7 @@ namespace Views
 
         public void UpdateView()
         {
-            Debug.Log("SelectionExerciseView.UpdateView()");
+            //Debug.Log("SelectionExerciseView.UpdateView()");
             curveViews[0].SetCustomDataset(CurrentExerciseData.LeftDataset);
             curveViews[1].SetCustomDataset(CurrentExerciseData.MiddleDataset);
             curveViews[2].SetCustomDataset(CurrentExerciseData.RightDataset);
@@ -117,14 +117,14 @@ namespace Views
 
         private void ShowMainDisplayView()
         {
-            Debug.Log("ShowMainDisplayView()");
+            //Debug.Log("ShowMainDisplayView()");
             selObjects.SelectionParent.SetActive(false);
             selObjects.MainDisplayParent.SetActive(true);
         }
 
         private void ShowSelectionView()
         {
-            Debug.Log("ShowSelectionView()");
+            //Debug.Log("ShowSelectionView()");
             selObjects.MainDisplayParent.SetActive(false);
             selObjects.SelectionParent.SetActive(true);
         }

@@ -144,7 +144,7 @@ public static class DataImport
             );
 
         
-        Debug.Log("ErrorCount: " + errors.Count);
+        //Debug.Log("ErrorCount: " + errors.Count);
 
         for (int i = 0; i < errors.Count; i++)
         {
