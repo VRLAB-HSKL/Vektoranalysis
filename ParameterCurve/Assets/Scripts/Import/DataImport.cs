@@ -73,7 +73,7 @@ public static class DataImport
 
         pds.Is3DCurve = false;
         
-        bool swapYZCoordinates = false;
+        bool swapYZCoordinates = !pds.Is3DCurve;
 
         for (int i = 0; i < jsr.pointData.Count; i++)
         {
@@ -81,7 +81,7 @@ public static class DataImport
             float t = float.Parse(pd.t, nfi);
             float x = float.Parse(pd.x, nfi);
             float y = float.Parse(pd.y, nfi);
-            float z = 0f;
+            float z =  0f;
 
             float tx = float.Parse(pd.tan[0], nfi);
             float ty = float.Parse(pd.tan[1], nfi);
@@ -196,7 +196,8 @@ public static class DataImport
         {
             Name = curveCalc.Name,
             DisplayString = curveCalc.DisplayString,
-            NotebookURL = GlobalData.LocalHTMLResourcePath + curveCalc.Name + ".html"
+            NotebookURL = GlobalData.LocalHTMLResourcePath + curveCalc.Name + ".html",
+            Is3DCurve = curveCalc.Is3DCurve
         };
 
         string imgResPath = GlobalData.ImageResourcePath + curveCalc.Name;
@@ -217,6 +218,9 @@ public static class DataImport
         //         new Vector3(pv.x, pv.z, pv.y) * GlobalData.PointScaleFactor :
         //         pv * GlobalData.PointScaleFactor);
         // }
+
+        pdsa.CalculateWorldPoints();
+        
 
         pdsa.fresnetApparatuses = curveCalc.CalculateFresnetApparatuses();
         pdsa.timeDistancePoints = curveCalc.CalculateTimeDistancePoints();        
@@ -304,6 +308,7 @@ public static class DataImport
             pds.arcLengthFresnetApparatuses.Add(arcFsa);
         }
         
+        pds.CalculateWorldPoints();
         
 
         return pds;

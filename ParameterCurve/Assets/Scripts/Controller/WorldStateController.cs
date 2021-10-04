@@ -59,13 +59,14 @@ public class WorldStateController : MonoBehaviour
     private void Awake()
     {
         GlobalData.InitializeData();
+        Debug.Log("ExerciseControllerRoot: " + SelObjects.gameObject.name);
         GlobalData.exerciseController = new ExerciseViewController(SelObjects.gameObject.transform, SelObjects, PillarPrefab);
         
-        //GlobalData.exerciseController.SetViewVisibility(true);
+        GlobalData.exerciseController.SetViewVisibility(false);
         //GlobalData.exerciseController.SetViewVisibility(GlobalData.initFile.curveSelection.activated);
         
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
-        WorldViewController.SetViewVisibility(false);
+        WorldViewController.SetViewVisibility(true);
         
         
         

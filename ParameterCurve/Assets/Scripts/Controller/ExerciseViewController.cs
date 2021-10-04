@@ -122,7 +122,8 @@ namespace Controller
         public override void SetViewVisibility(bool value)
         {
             base.SetViewVisibility(value);
-            CurrentView.UpdateView();
+            
+            if(value) CurrentView.UpdateView();
         }
 
     }

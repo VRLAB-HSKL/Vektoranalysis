@@ -12,7 +12,7 @@ public class PointDataset
 
     public float Distance = 0f;
 
-    public bool Is3DCurve;
+    public bool Is3DCurve { get; set; }
 
     private List<Vector3> ps = new List<Vector3>();
 
@@ -53,7 +53,7 @@ public class PointDataset
         {
             var point = ps[i];
 
-            bool swapYZCoordinates = !Is3DCurve;
+            bool swapYZCoordinates = Is3DCurve;
                 
             worldPoints.Add(swapYZCoordinates ?
                 new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :

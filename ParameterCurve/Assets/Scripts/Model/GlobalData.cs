@@ -44,7 +44,7 @@ public static class GlobalData
 
     public static List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
 
-    private static List<AbstractCurveCalc> NamedDataset = new List<AbstractCurveCalc>()
+    private static List<AbstractCurveCalc> NamedDataset { get; set; } = new List<AbstractCurveCalc>()
     {
         new HelixCurveCalc(),
         new LogHelixCurveCalc(),

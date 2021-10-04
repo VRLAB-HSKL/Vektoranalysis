@@ -32,7 +32,7 @@ public abstract class AbstractCurveCalc
     /// <summary>
     /// Signals wether this curve is 3D oder 2D, i.e. has a non-null z value
     /// </summary>
-    public bool Is3DCurve;
+    public bool Is3DCurve { get; set; }
 
     /// <summary>
     /// Function object to calculate a single curve point based on a float parameter

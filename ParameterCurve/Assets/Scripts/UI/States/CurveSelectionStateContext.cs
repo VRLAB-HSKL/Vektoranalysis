@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRKL.MBU;
 
+public abstract class StateContext
+{
+    protected StateContext(State s)
+    {
+        
+    }
+}
+
+
 public class CurveSelectionStateContext : StateContext
 {
     private AbstractCurveSelectionState _state;
