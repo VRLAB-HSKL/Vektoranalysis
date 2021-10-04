@@ -114,7 +114,7 @@ public class WorldStateController : MonoBehaviour
             //}
         }
         
-        //StaticLogging();
+        StaticLogging();
             
     }
 
