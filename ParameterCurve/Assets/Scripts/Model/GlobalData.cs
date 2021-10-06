@@ -91,14 +91,16 @@ public static class GlobalData
     public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
     public static string ImageResourcePath = "img/";
 
-    public static InitFileJsonRoot initFile;
+    public static InitFileJsonRoot initFile { get; set; }
 
     public static void InitializeData()
     {
         //Log.Debug("testOutputLogger");
         
-        ImportAllResources();
         ParseIniFile();
+        
+        ImportAllResources();
+        
         
         Log.Debug("Global Data initialized");
     }
@@ -135,24 +137,37 @@ public static class GlobalData
         {
             //NamedCurveDatasets.Add(DataImport.ImportFromJSONResource(json_resources[i] as TextAsset));
         }
+        
+        Object[] json_named_curves = Resources.LoadAll("json/curves/named/", typeof(TextAsset));
+        for (int i = 0; i < json_named_curves.Length; i++)
+        {
+            NamedCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(json_resources[i] as TextAsset));
+        }
+        
+        Object[] json_param_curves = Resources.LoadAll("json/curves/param/", typeof(TextAsset));
+        for (int i = 0; i < json_param_curves.Length; i++)
+        {
+            ParamCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(json_resources[i] as TextAsset));
+        }
+        
 
         // Local calculation
         for (int i = 0; i < NamedDataset.Count; i++)
         {
             AbstractCurveCalc calc = NamedDataset[i];
-            NamedCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+            //NamedCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
 
         for (int i = 0; i < LocalParamCalcList.Count; i++)
         {
             AbstractCurveCalc calc = LocalParamCalcList[i];
-            ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+            //ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
 
         for (int i = 0; i < LocalExerciseCalcList.Count; i++)
         {
             AbstractCurveCalc calc = LocalExerciseCalcList[i];
-            ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+            //ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
         }
         
         // Load test exercise

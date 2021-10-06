@@ -5,6 +5,7 @@ using System.Globalization;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public static class DataImport
 {
@@ -64,10 +65,34 @@ public static class DataImport
 
     public static PointDataset ImportPointsFromJSONResource(TextAsset json)
     {
-        PointDataJsonRoot jsr = JsonConvert.DeserializeObject<PointDataJsonRoot>(json.text);
-
+        List<string> errors = new List<string>();
+        PointDataJsonRoot jsr = JsonConvert.DeserializeObject<PointDataJsonRoot>(json.text,
+            new JsonSerializerSettings()
+            {
+                Error = delegate(object sender, ErrorEventArgs args)
+                {
+                    errors.Add(args.ErrorContext.Error.Message);
+                    Debug.Log("ErrorOccuredJSON");
+                    args.ErrorContext.Handled = true;
+                },
+                
+                //,
+                //Converters = { new IsoDateTimeConverter()}
+            }
+            
+        );
+        
+        for (int i = 0; i < errors.Count; i++)
+        {
+            Debug.Log("JsonError [" + i + "]: " + errors[i]);
+        }
+        
+        
         PointDataset pds = new PointDataset();
         pds.Name = jsr.name + "_JSON";
+        
+        Debug.Log("curveName: " + jsr.name);
+        
         pds.DisplayString = jsr.name;
         pds.NotebookURL = GlobalData.LocalHTMLResourcePath + jsr.name + ".html";
 
@@ -75,47 +100,63 @@ public static class DataImport
         
         bool swapYZCoordinates = !pds.Is3DCurve;
 
+
         for (int i = 0; i < jsr.pointData.Count; i++)
         {
+            //Debug.Log("pointDataCount: " + jsr.pointData.Count);
+            
             PointData pd = jsr.pointData[i];
-            float t = float.Parse(pd.t, nfi);
-            float x = float.Parse(pd.x, nfi);
-            float y = float.Parse(pd.y, nfi);
-            float z =  0f;
+            pds.paramValues.Add(pd.T);
+            
+            
+            Debug.Log("pVec is null: "+ (pd.pVec is null));
+            Debug.Log("velVec is null: "+ (pd.velVec is null));
+            Debug.Log("accVec is null: "+ (pd.accVec is null));
+            
+            
+            pds.points.Add(new Vector3(pd.pVec[0], pd.pVec[1], pd.pVec.Count == 3 ? pd.pVec[2] : 0f));
 
-            float tx = float.Parse(pd.tan[0], nfi);
-            float ty = float.Parse(pd.tan[1], nfi);
-            float tz = float.Parse(pd.tan[2], nfi);
-
-            float nx = float.Parse(pd.norm[0], nfi);
-            float ny = float.Parse(pd.norm[1], nfi);
-            float nz = float.Parse(pd.norm[2], nfi);
-
-            float bnx = float.Parse(pd.binorm[0], nfi);
-            float bny = float.Parse(pd.binorm[1], nfi);
-            float bnz = float.Parse(pd.binorm[2], nfi);
+            // float tx = float.Parse(pd.tan[0], nfi);
+            // float ty = float.Parse(pd.tan[1], nfi);
+            // float tz = float.Parse(pd.tan[2], nfi);
+            //
+            // float nx = float.Parse(pd.norm[0], nfi);
+            // float ny = float.Parse(pd.norm[1], nfi);
+            // float nz = float.Parse(pd.norm[2], nfi);
+            //
+            // float bnx = float.Parse(pd.binorm[0], nfi);
+            // float bny = float.Parse(pd.binorm[1], nfi);
+            // float bnz = float.Parse(pd.binorm[2], nfi);
 
             //float t = float.Parse(pd.t, nfi);
 
-            pds.points.Add(new Vector3(x, y, z));
+            
             // pds.worldPoints.Add(swapYZCoordinates ?
             //     new Vector3(x, z, y) * GlobalData.PointScaleFactor :
             //     new Vector3(x, y, z) * GlobalData.PointScaleFactor);
-            pds.paramValues.Add(t);
+            
 
             FresnetSerretApparatus fsp = new FresnetSerretApparatus();
-            fsp.Tangent = swapYZCoordinates ?
-                new Vector3(tx, tz, ty) * GlobalData.PointScaleFactor :
-                new Vector3(tx, ty, tz) * GlobalData.PointScaleFactor;
+            // fsp.Tangent = swapYZCoordinates ?
+            //     new Vector3(tx, tz, ty) * GlobalData.PointScaleFactor :
+            //     new Vector3(tx, ty, tz) * GlobalData.PointScaleFactor;
 
-            fsp.Normal = swapYZCoordinates ?
-                new Vector3(nx, nz, ny) * GlobalData.PointScaleFactor :
-                new Vector3(nx, ny, nz) * GlobalData.PointScaleFactor;
+            fsp.Tangent = new Vector3(pd.velVec[0], pd.velVec[1], pd.velVec.Length == 3 ? pd.velVec[2] : 0f);
+            
+            
+            // fsp.Normal = swapYZCoordinates ?
+            //     new Vector3(nx, nz, ny) * GlobalData.PointScaleFactor :
+            //     new Vector3(nx, ny, nz) * GlobalData.PointScaleFactor;
 
-            fsp.Binormal = swapYZCoordinates ?
-                new Vector3(bnx, bnz, bny) * GlobalData.PointScaleFactor :
-                new Vector3(bnx, bny, bnz) * GlobalData.PointScaleFactor;
+            fsp.Normal = new Vector3(pd.accVec[0], pd.accVec[1], pd.accVec.Length == 3 ? pd.accVec[2] : 0f);
+            
+            
+            // fsp.Binormal = swapYZCoordinates ?
+            //     new Vector3(bnx, bnz, bny) * GlobalData.PointScaleFactor :
+            //     new Vector3(bnx, bny, bnz) * GlobalData.PointScaleFactor;
 
+            fsp.Binormal = Vector3.Cross(fsp.Tangent, fsp.Normal); 
+            
             pds.fresnetApparatuses.Add(fsp);
         }
         
@@ -174,9 +215,9 @@ public static class DataImport
             
             //Debug.Log("subExercise[" + i + "]: " + subExercise.ToString());
 
-            lds = CreatePDSFromJsonCollection(subExercise.leftCurveData);
-            mds = CreatePDSFromJsonCollection(subExercise.middleCurveData);
-            rds = CreatePDSFromJsonCollection(subExercise.rightCurveData);
+            lds = CreatePointDatasetFromCurveData(subExercise.leftCurveData);
+            mds = CreatePointDatasetFromCurveData(subExercise.middleCurveData);
+            rds = CreatePointDatasetFromCurveData(subExercise.rightCurveData);
 
             var exercisePds = new ExercisePointDataset(subExercise.description, lds, mds, rds);
             datasets.Add(exercisePds);
@@ -270,12 +311,14 @@ public static class DataImport
     }
 
     
-    private static PointDataset CreatePDSFromJsonCollection(CurveData curve)
+    private static PointDataset CreatePointDatasetFromCurveData(CurveData curve)
     {
-        PointDataset pds = new PointDataset();
-        
-        pds.Is3DCurve = curve.dim == 2;
-        
+        var pds = new PointDataset
+        {
+            Is3DCurve = curve.dim == 3,
+            arcLength = curve.arcLength
+        };
+
         for (int l = 0; l < curve.data.Count; ++l)
         {
             var tData = curve.data[l];
@@ -296,12 +339,13 @@ public static class DataImport
             // ToDo: Add arc length parametrization values to json and parse them here
             pds.arcLenghtPoints.Add(new Vector3(tData.arcPVec[0], tData.arcPVec[1], tData.arcPVec.Count == 3 ? tData.arcPVec[2] : 0f));
 
-            FresnetSerretApparatus arcFsa = new FresnetSerretApparatus();
-            
-            arcFsa.Tangent = new Vector3(tData.arcVelVec[0], tData.arcVelVec[1],
-                tData.arcVelVec.Count == 3 ? tData.arcVelVec[2] : 0f);
-            arcFsa.Normal = new Vector3(tData.arcAccVec[0], tData.arcAccVec[1],
-                tData.arcAccVec.Count == 3 ? tData.arcAccVec[2] : 0f);
+            FresnetSerretApparatus arcFsa = new FresnetSerretApparatus
+            {
+                Tangent = new Vector3(tData.arcVelVec[0], tData.arcVelVec[1],
+                    tData.arcVelVec.Count == 3 ? tData.arcVelVec[2] : 0f),
+                Normal = new Vector3(tData.arcAccVec[0], tData.arcAccVec[1],
+                    tData.arcAccVec.Count == 3 ? tData.arcAccVec[2] : 0f)
+            };
 
             arcFsa.Binormal = Vector3.Cross(arcFsa.Tangent, arcFsa.Normal);
             

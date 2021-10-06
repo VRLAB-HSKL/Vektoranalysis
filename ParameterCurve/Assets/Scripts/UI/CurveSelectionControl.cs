@@ -120,15 +120,11 @@ public class CurveSelectionControl : MonoBehaviour
         {
             Debug.Log("Current dataset is null");
         }
-
-        // Display html resource
-        world.BrowserWall.OpenURL(ds.NotebookURL);
-
-        //Debug.Log("switchCurveGrpABC");
-
-        //UpdateCurveMenuButtons();
-
-        //world.UpdateWorldObjects();
+        else
+        {
+            // Display html resource
+            if (world.BrowserWall is { }) world.BrowserWall.OpenURL(ds.NotebookURL);
+        }
     }
 
 

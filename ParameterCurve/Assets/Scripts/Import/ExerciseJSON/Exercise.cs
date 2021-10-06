@@ -64,6 +64,9 @@ public class Subexercise
 public class CurveData
 {
     public int dim { get; set; } = 0;
+
+    public float arcLength { get; set; } = 0f;
+    
     public List<PointDataJSON> data { get; set; } = new List<PointDataJSON>();
 }
 

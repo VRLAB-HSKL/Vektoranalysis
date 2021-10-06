@@ -3,16 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Newtonsoft.Json;
+
 [Serializable]
 public class PointData
 {
-    public string t { get; set; }
-    public string x { get; set; }
-    public string y { get; set; }
+    [JsonProperty("t")]
+    public float T { get; set; }
     
-    public string z { get; set; }
+    [JsonProperty("pVec")]
+    public List<float> pVec { get; set; }
     
-    public List<string> tan { get; set; } = new List<string>();
-    public List<string> norm { get; set; } = new List<string>();
-    public List<string> binorm { get; set; } = new List<string>();
+    [JsonProperty("velVec")]
+    public float[] velVec { get; set; }
+    
+    [JsonProperty("accVec")]
+    public float[] accVec { get; set; }
+    
+    [JsonProperty("arcT")]
+    public float arcT { get; set; }
+    
+    [JsonProperty("arcPVec")]
+    public float[] arcPVec { get; set; }
+    
+    [JsonProperty("arcVelVec")]
+    public float[] arcVelVec { get; set; }
+    
+    [JsonProperty("arcAccVec")]
+    public float[] arcAccVec { get; set; }
 }

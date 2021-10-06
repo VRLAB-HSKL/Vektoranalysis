@@ -48,10 +48,10 @@ public class InformationControl : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        Debug.Log("initFile: " + (GlobalData.initFile is null));
-        Debug.Log("initFile.information: " + (GlobalData.initFile.information is null));
+        Debug.Log("initFile is null: " + (GlobalData.initFile is null));
+        //Debug.Log("initFile.information is null: " + (GlobalData.initFile.information is null));
         
         if (!GlobalData.initFile.information.timeVelocityPlot || !GlobalData.initFile.information.activated)
         {
