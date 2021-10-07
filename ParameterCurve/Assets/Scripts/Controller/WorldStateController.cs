@@ -48,6 +48,9 @@ public class WorldStateController : MonoBehaviour
     public CurveViewController WorldViewController;
     public CurveViewController TableViewController;
     //public ExerciseViewController ExerciseController;
+
+
+    public bool ActivatePoseTracking = false;
     
     
     private Vector3 InitTravelObjPos;
@@ -114,7 +117,7 @@ public class WorldStateController : MonoBehaviour
             //}
         }
         
-        StaticLogging();
+        if(ActivatePoseTracking) StaticLogging();
             
     }
 

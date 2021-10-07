@@ -2,8 +2,10 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Import;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Unity.Rendering.HybridV2;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -66,6 +68,7 @@ public static class DataImport
     public static PointDataset ImportPointsFromJSONResource(TextAsset json)
     {
         List<string> errors = new List<string>();
+        ITraceWriter tr = new MemoryTraceWriter();
         PointDataJsonRoot jsr = JsonConvert.DeserializeObject<PointDataJsonRoot>(json.text,
             new JsonSerializerSettings()
             {
@@ -75,46 +78,60 @@ public static class DataImport
                     Debug.Log("ErrorOccuredJSON");
                     args.ErrorContext.Handled = true;
                 },
-                
+                //FloatParseHandling = FloatParseHandling.Double
+                TraceWriter = tr
                 //,
                 //Converters = { new IsoDateTimeConverter()}
             }
             
         );
         
-        for (int i = 0; i < errors.Count; i++)
-        {
-            Debug.Log("JsonError [" + i + "]: " + errors[i]);
-        }
+        //Debug.Log(tr);
+        
+        
         
         
         PointDataset pds = new PointDataset();
         pds.Name = jsr.name + "_JSON";
         
-        Debug.Log("curveName: " + jsr.name);
+        //Debug.Log("curveName: " + jsr.name);
         
         pds.DisplayString = jsr.name;
         pds.NotebookURL = GlobalData.LocalHTMLResourcePath + jsr.name + ".html";
 
-        pds.Is3DCurve = false;
+        // Temp local host
+        pds.NotebookURL = "localhost";
+        
+        pds.Is3DCurve = jsr.dim == 3;
+
+        pds.WorldScalingFactor = jsr.worldScalingFactor;
+        pds.TableScalingFactor = jsr.tableScalingFactor;
+        pds.SelectExercisePillarScalingFactor = jsr.selectExercisePillarScalingFactor;
+        
+        // Attempt to load image resource based on curve name
+        string imgResPath = GlobalData.ImageResourcePath + jsr.name;
+        Texture2D imgRes = Resources.Load(imgResPath) as Texture2D;
+
+        if (imgRes != null)
+        {
+            pds.MenuButtonImage = imgRes;
+        }
+        
+        
+        
+        
         
         bool swapYZCoordinates = !pds.Is3DCurve;
 
 
-        for (int i = 0; i < jsr.pointData.Count; i++)
+        for (int i = 0; i < jsr.data.Count; i++)
         {
             //Debug.Log("pointDataCount: " + jsr.pointData.Count);
             
-            PointData pd = jsr.pointData[i];
-            pds.paramValues.Add(pd.T);
+            PointData pd = jsr.data[i];
+            pds.paramValues.Add((float)pd.t);
             
-            
-            Debug.Log("pVec is null: "+ (pd.pVec is null));
-            Debug.Log("velVec is null: "+ (pd.velVec is null));
-            Debug.Log("accVec is null: "+ (pd.accVec is null));
-            
-            
-            pds.points.Add(new Vector3(pd.pVec[0], pd.pVec[1], pd.pVec.Count == 3 ? pd.pVec[2] : 0f));
+            pds.points.Add(new Vector3(pd.pVec[0], pd.pVec[1],(pd.pVec.Count == 3 ? pd.pVec[2] : 0f)));
 
             // float tx = float.Parse(pd.tan[0], nfi);
             // float ty = float.Parse(pd.tan[1], nfi);
@@ -141,14 +158,14 @@ public static class DataImport
             //     new Vector3(tx, tz, ty) * GlobalData.PointScaleFactor :
             //     new Vector3(tx, ty, tz) * GlobalData.PointScaleFactor;
 
-            fsp.Tangent = new Vector3(pd.velVec[0], pd.velVec[1], pd.velVec.Length == 3 ? pd.velVec[2] : 0f);
+            fsp.Tangent = new Vector3((float) pd.velVec[0], (float) pd.velVec[1], (float) (pd.velVec.Count == 3 ? pd.velVec[2] : 0f));
             
             
             // fsp.Normal = swapYZCoordinates ?
             //     new Vector3(nx, nz, ny) * GlobalData.PointScaleFactor :
             //     new Vector3(nx, ny, nz) * GlobalData.PointScaleFactor;
 
-            fsp.Normal = new Vector3(pd.accVec[0], pd.accVec[1], pd.accVec.Length == 3 ? pd.accVec[2] : 0f);
+            fsp.Normal = new Vector3((float) pd.accVec[0], (float) pd.accVec[1], (float) (pd.accVec.Count == 3 ? pd.accVec[2] : 0f));
             
             
             // fsp.Binormal = swapYZCoordinates ?

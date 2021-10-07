@@ -7,6 +7,9 @@ using Views;
 
 public class CurveViewController : AbstractViewController
 {
+    // ToDo:
+    // Replace single static line renderer with dynamic creation of line renderer segments for each edge
+    // between two points. This should remove visual bugs on the curve when the curves are scaled very small.
     private readonly LineRenderer _displayLr;
     private readonly Transform _travelObject;
     private readonly Transform _arcLengthTravelObject;

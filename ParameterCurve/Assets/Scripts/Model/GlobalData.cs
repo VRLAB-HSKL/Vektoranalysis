@@ -8,6 +8,7 @@ using Controller;
 using UnityEngine;
 
 using log4net;
+using Newtonsoft.Json.Serialization;
 
 public static class GlobalData
 {
@@ -138,16 +139,19 @@ public static class GlobalData
             //NamedCurveDatasets.Add(DataImport.ImportFromJSONResource(json_resources[i] as TextAsset));
         }
         
-        Object[] json_named_curves = Resources.LoadAll("json/curves/named/", typeof(TextAsset));
-        for (int i = 0; i < json_named_curves.Length; i++)
+        var json_named_curves = Resources.LoadAll("json/curves/named/", typeof(TextAsset) ).Cast<TextAsset>();
+        
+        foreach (var named_curve in json_named_curves)
         {
-            NamedCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(json_resources[i] as TextAsset));
+            //Debug.Log("Attempting to import named curve: " + (named_curve).name);
+            NamedCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(named_curve));
         }
         
-        Object[] json_param_curves = Resources.LoadAll("json/curves/param/", typeof(TextAsset));
-        for (int i = 0; i < json_param_curves.Length; i++)
+        var jsonParamCurves = Resources.LoadAll("json/curves/param/", typeof(TextAsset) ).Cast<TextAsset>();
+        foreach (var paramCurve in jsonParamCurves)
         {
-            ParamCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(json_resources[i] as TextAsset));
+            //Debug.Log("Attempting to import param curve: " + paramCurve.name);
+            ParamCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(paramCurve));
         }
         
 
@@ -183,11 +187,27 @@ public static class GlobalData
     private static void ParseIniFile()
     {
         // JSON Resources
+        ITraceWriter tr = new MemoryTraceWriter();
         TextAsset json = Resources.Load("json/init/initTemplate", typeof(TextAsset)) as TextAsset;
-        initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text);
+        initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text,
+            new JsonSerializerSettings()
+            {
+                // Error = delegate(object sender, ErrorEventArgs args)
+                // {
+                //     errors.Add(args.ErrorContext.Error.Message);
+                //     Debug.Log("ErrorOccuredJSON");
+                //     args.ErrorContext.Handled = true;
+                // },
+                //FloatParseHandling = FloatParseHandling.Double
+                TraceWriter = tr
+                //,
+                //Converters = { new IsoDateTimeConverter()}
+            }
+            );
         
         //Debug.Log("initFile null: " + (initFile is null));
 
+        Debug.Log(tr);
         
     }
 

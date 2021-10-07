@@ -7,13 +7,23 @@ public class PointDataset
     public string Name = string.Empty;
     public string DisplayString = string.Empty;
     public string NotebookURL = string.Empty;
-    public Texture2D MenuButtonImage;
+    public Texture2D MenuButtonImage { get; set; }
 
+    
+    
+    
 
     public float Distance = 0f;
 
     public bool Is3DCurve { get; set; }
 
+    
+    public float WorldScalingFactor { get; set; }
+    public float TableScalingFactor { get; set; }
+    public float SelectExercisePillarScalingFactor { get; set; }
+    
+    
+    
     private List<Vector3> ps = new List<Vector3>();
 
     public List<Vector3> points

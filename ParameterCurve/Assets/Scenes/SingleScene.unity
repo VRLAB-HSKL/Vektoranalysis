@@ -4973,6 +4973,7 @@ MonoBehaviour:
   PillarPrefab: {fileID: 0}
   BrowserWall: {fileID: 0}
   InfoWall: {fileID: 0}
+  ActivatePoseTracking: 0
 --- !u!120 &377768450
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -5263,6 +5264,7 @@ MonoBehaviour:
   PillarPrefab: {fileID: 0}
   BrowserWall: {fileID: 0}
   InfoWall: {fileID: 0}
+  ActivatePoseTracking: 0
 --- !u!120 &389395132
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -19102,6 +19104,7 @@ MonoBehaviour:
   PillarPrefab: {fileID: 0}
   BrowserWall: {fileID: 0}
   InfoWall: {fileID: 0}
+  ActivatePoseTracking: 0
 --- !u!120 &1689212564
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -20967,6 +20970,7 @@ MonoBehaviour:
   PillarPrefab: {fileID: 5542299056218215986, guid: 7e6ae2444f1354540b084a732b0e8caa, type: 3}
   BrowserWall: {fileID: 2130566545}
   InfoWall: {fileID: 574559611}
+  ActivatePoseTracking: 0
 --- !u!4 &1842699573
 Transform:
   m_ObjectHideFlags: 0
@@ -23492,6 +23496,7 @@ MonoBehaviour:
   PillarPrefab: {fileID: 0}
   BrowserWall: {fileID: 0}
   InfoWall: {fileID: 0}
+  ActivatePoseTracking: 0
 --- !u!120 &2134659878
 LineRenderer:
   m_ObjectHideFlags: 0

@@ -5,6 +5,11 @@ public class CurveJSON
 {
     public int id;
     public string name = string.Empty;
+    
+    /// <summary>
+    /// current views: display, select3
+    /// </summary>
+    public string view = string.Empty;
     public RGBColorJSON color;
 
     public string travelObj = string.Empty;
