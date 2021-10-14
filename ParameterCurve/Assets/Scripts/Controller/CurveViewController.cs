@@ -13,6 +13,8 @@ public class CurveViewController : AbstractViewController
     private readonly LineRenderer _displayLr;
     private readonly Transform _travelObject;
     private readonly Transform _arcLengthTravelObject;
+    
+    
 
     // public delegate void d_updateViewsDelegate();
     //
@@ -42,7 +44,7 @@ public class CurveViewController : AbstractViewController
         var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
         var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
         
-        _views = new List<IView>
+        _views = new List<AbstractView>
         {
             simpleView,
             simpleRunView,
@@ -55,8 +57,19 @@ public class CurveViewController : AbstractViewController
         }
 
         UpdateViewsDelegate();
+
+        int initViewIndex = 0;
         
-        SwitchView(0);
+        if (GlobalData.initFile.DisplayCurves.Count > 0)
+        {
+            if (GlobalData.initFile.DisplayCurves[0].CurveSettings.DisplaySettings.View.Equals("simple")) initViewIndex = 0;
+            if (GlobalData.initFile.DisplayCurves[0].CurveSettings.DisplaySettings.View.Equals("run")) initViewIndex = 1;
+            if (GlobalData.initFile.DisplayCurves[0].CurveSettings.DisplaySettings.View.Equals("arc")) initViewIndex = 2;    
+        }
+        
+        
+        
+        SwitchView(initViewIndex);
     }
 
     public void SwitchView(int index)
@@ -66,5 +79,18 @@ public class CurveViewController : AbstractViewController
         base.SwitchView(index);
         _travelObject.gameObject.SetActive( (CurrentView as AbstractCurveView).HasTravelPoint);
         _arcLengthTravelObject.gameObject.SetActive((CurrentView as AbstractCurveView).HasArcLengthPoint);
+    }
+    
+    public void StartRun()
+    {
+        Log.Info("Starting curve run...");
+
+        foreach (var view in _views)
+        {
+            view.StartRun();
+        }
+
+        
+        GlobalData.IsDriving = true;        
     }
 }

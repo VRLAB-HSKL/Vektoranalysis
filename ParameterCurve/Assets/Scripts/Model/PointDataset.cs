@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PointDataset
 {
+    public int id = 0;
     public string Name = string.Empty;
     public string DisplayString = string.Empty;
     public string NotebookURL = string.Empty;

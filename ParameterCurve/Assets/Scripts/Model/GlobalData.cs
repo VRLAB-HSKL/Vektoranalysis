@@ -5,10 +5,13 @@ using System.IO;
 using System.Linq;
 using Calculation.SelectionExercises;
 using Controller;
+using Import.NewInitFile;
 using UnityEngine;
 
 using log4net;
 using Newtonsoft.Json.Serialization;
+using UnityEngine.PlayerLoop;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 public static class GlobalData
 {
@@ -23,7 +26,7 @@ public static class GlobalData
     
     public static bool IsDriving = false;
 
-    public enum CurveDisplayGroup { Named = 0, Parameter = 1, Exercises = 2 }
+    public enum CurveDisplayGroup { Named = 0, Exercises = 1 }
     public static CurveDisplayGroup CurrentDisplayGroup = CurveDisplayGroup.Named;
 
     public static List<PointDataset> CurrentDataset
@@ -32,7 +35,7 @@ public static class GlobalData
         {
             return CurrentDisplayGroup switch
             {
-                CurveDisplayGroup.Parameter => ParamCurveDatasets,
+                //CurveDisplayGroup.Parameter => ParamCurveDatasets,
                 CurveDisplayGroup.Exercises => ExerciseCurveDatasets,
                 _ => NamedCurveDatasets,
             };
@@ -73,15 +76,15 @@ public static class GlobalData
         new Param62CurveCalc(),
     };
 
-    private static List<AbstractCurveCalc> LocalExerciseCalcList = new List<AbstractCurveCalc>(NamedDataset)
-    {
-        new TestExercise01ACurveClass(),
-        new TestExercise01BCurveClass(),
-        new TestExercise01CCurveClass(),
-        new TestExercise01DCurveClass(),
-        new TestExercise01ECurveCalc(),
-        new TestExercise01FCurveCalc()
-    };
+    // private static List<AbstractCurveCalc> LocalExerciseCalcList = new List<AbstractCurveCalc>(NamedDataset)
+    // {
+    //     new TestExercise01ACurveClass(),
+    //     new TestExercise01BCurveClass(),
+    //     new TestExercise01CCurveClass(),
+    //     new TestExercise01DCurveClass(),
+    //     new TestExercise01ECurveCalc(),
+    //     new TestExercise01FCurveCalc()
+    // };
 
 
     //public static CurveSelectionStateContext CurveSelectionFSM;
@@ -92,7 +95,7 @@ public static class GlobalData
     public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
     public static string ImageResourcePath = "img/";
 
-    public static InitFileJsonRoot initFile { get; set; }
+    public static InitFileRoot initFile { get; set; }
 
     public static void InitializeData()
     {
@@ -122,62 +125,67 @@ public static class GlobalData
 
     private static void ImportAllResources()
     {
-        // CSV Resources
-        Object[] csv_resources = Resources.LoadAll("csv/exercises/", typeof(TextAsset));
-
-        for (int i = 0; i < csv_resources.Length; i++)
-        {
-            TextAsset csvRes = csv_resources[i] as TextAsset;
-            //NamedCurveDatasets.Add(DataImport.ImportPointsFromCSVResource(csvRes));
-        }
-
-        // JSON Resources
-        Object[] json_resources = Resources.LoadAll("json/exercises/", typeof(TextAsset));
-
-        for (int i = 0; i < json_resources.Length; i++)
-        {
-            //NamedCurveDatasets.Add(DataImport.ImportFromJSONResource(json_resources[i] as TextAsset));
-        }
+        // // CSV Resources
+        // Object[] csv_resources = Resources.LoadAll("csv/exercises/", typeof(TextAsset));
+        //
+        // for (int i = 0; i < csv_resources.Length; i++)
+        // {
+        //     TextAsset csvRes = csv_resources[i] as TextAsset;
+        //     //NamedCurveDatasets.Add(DataImport.ImportPointsFromCSVResource(csvRes));
+        // }
+        //
+        // // JSON Resources
+        // Object[] json_resources = Resources.LoadAll("json/exercises/", typeof(TextAsset));
+        //
+        // for (int i = 0; i < json_resources.Length; i++)
+        // {
+        //     //NamedCurveDatasets.Add(DataImport.ImportFromJSONResource(json_resources[i] as TextAsset));
+        // }
+        //
+        // var json_named_curves = Resources.LoadAll("json/curves/named/", typeof(TextAsset) ).Cast<TextAsset>();
+        //
+        // foreach (var named_curve in json_named_curves)
+        // {
+        //     //Debug.Log("Attempting to import named curve: " + (named_curve).name);
+        //     NamedCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(named_curve));
+        // }
+        //
+        // var jsonParamCurves = Resources.LoadAll("json/curves/param/", typeof(TextAsset) ).Cast<TextAsset>();
+        // foreach (var paramCurve in jsonParamCurves)
+        // {
+        //     //Debug.Log("Attempting to import param curve: " + paramCurve.name);
+        //     ParamCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(paramCurve));
+        // }
+        //
+        //
+        // // Local calculation
+        // for (int i = 0; i < NamedDataset.Count; i++)
+        // {
+        //     AbstractCurveCalc calc = NamedDataset[i];
+        //     //NamedCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+        // }
+        //
+        // for (int i = 0; i < LocalParamCalcList.Count; i++)
+        // {
+        //     AbstractCurveCalc calc = LocalParamCalcList[i];
+        //     //ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+        // }
+        //
+        // for (int i = 0; i < LocalExerciseCalcList.Count; i++)
+        // {
+        //     AbstractCurveCalc calc = LocalExerciseCalcList[i];
+        //     //ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
+        // }
+        //
+        // // Load test exercise
+        // Object res = Resources.Load("json/exercises/testExercise01", typeof(TextAsset));
+        // SelectionExercise selExerc = DataImport.ImportExerciseFromJSONResource(res as TextAsset);
+        // SelectionExercises.Add((selExerc));
         
-        var json_named_curves = Resources.LoadAll("json/curves/named/", typeof(TextAsset) ).Cast<TextAsset>();
         
-        foreach (var named_curve in json_named_curves)
-        {
-            //Debug.Log("Attempting to import named curve: " + (named_curve).name);
-            NamedCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(named_curve));
-        }
+        // Import everything from single json 
         
-        var jsonParamCurves = Resources.LoadAll("json/curves/param/", typeof(TextAsset) ).Cast<TextAsset>();
-        foreach (var paramCurve in jsonParamCurves)
-        {
-            //Debug.Log("Attempting to import param curve: " + paramCurve.name);
-            ParamCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(paramCurve));
-        }
         
-
-        // Local calculation
-        for (int i = 0; i < NamedDataset.Count; i++)
-        {
-            AbstractCurveCalc calc = NamedDataset[i];
-            //NamedCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        }
-
-        for (int i = 0; i < LocalParamCalcList.Count; i++)
-        {
-            AbstractCurveCalc calc = LocalParamCalcList[i];
-            //ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        }
-
-        for (int i = 0; i < LocalExerciseCalcList.Count; i++)
-        {
-            AbstractCurveCalc calc = LocalExerciseCalcList[i];
-            //ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        }
-        
-        // Load test exercise
-        Object res = Resources.Load("json/exercises/testExercise01", typeof(TextAsset));
-        SelectionExercise selExerc = DataImport.ImportExerciseFromJSONResource(res as TextAsset);
-        SelectionExercises.Add((selExerc));
         
         
         //ExerciseCurveDatasets.Add(selExerc);
@@ -187,27 +195,105 @@ public static class GlobalData
     private static void ParseIniFile()
     {
         // JSON Resources
+        // ITraceWriter tr = new MemoryTraceWriter();
+        // TextAsset json = Resources.Load("json/init/initTemplate", typeof(TextAsset)) as TextAsset;
+        // initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text,
+        //     new JsonSerializerSettings()
+        //     {
+        //         // Error = delegate(object sender, ErrorEventArgs args)
+        //         // {
+        //         //     errors.Add(args.ErrorContext.Error.Message);
+        //         //     Debug.Log("ErrorOccuredJSON");
+        //         //     args.ErrorContext.Handled = true;
+        //         // },
+        //         //FloatParseHandling = FloatParseHandling.Double
+        //         TraceWriter = tr
+        //         //,
+        //         //Converters = { new IsoDateTimeConverter()}
+        //     }
+        //     );
+        
+        //Debug.Log("initFile null: " + (initFile is null));
+
+        //Debug.Log(tr);
+     
+        TextAsset json = Resources.Load("json/init/initv2", typeof(TextAsset) ) as TextAsset;
+        
+        
+        List<string> errors = new List<string>();
         ITraceWriter tr = new MemoryTraceWriter();
-        TextAsset json = Resources.Load("json/init/initTemplate", typeof(TextAsset)) as TextAsset;
-        initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text,
+        InitFileRoot jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
             new JsonSerializerSettings()
             {
-                // Error = delegate(object sender, ErrorEventArgs args)
-                // {
-                //     errors.Add(args.ErrorContext.Error.Message);
-                //     Debug.Log("ErrorOccuredJSON");
-                //     args.ErrorContext.Handled = true;
-                // },
+                Error = delegate(object sender, ErrorEventArgs args)
+                {
+                    errors.Add(args.ErrorContext.Error.Message);
+                    Debug.Log("ErrorOccuredJSON");
+                    args.ErrorContext.Handled = true;
+                },
                 //FloatParseHandling = FloatParseHandling.Double
                 TraceWriter = tr
                 //,
                 //Converters = { new IsoDateTimeConverter()}
             }
-            );
+            
+        );
         
-        //Debug.Log("initFile null: " + (initFile is null));
+        initFile = jsr;
+        
+        //Debug.Log(tr);
 
-        Debug.Log(tr);
+        var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
+        File.WriteAllText(path, tr.ToString());
+
+        
+        
+        for (int i = 0; i < jsr.DisplayCurves.Count; i++)
+        {
+            var curve = jsr.DisplayCurves[i];
+            NamedCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
+            
+        }
+
+        for (int i = 0; i < jsr.Exercises.Count; i++)
+        {
+            var ex = jsr.Exercises[i];
+
+            // Select3 exercise
+            if (ex.Type.Equals("select3"))
+            {
+                List<ExercisePointDataset> subexercises = new List<ExercisePointDataset>();
+                List<int> correctAnswers = new List<int>();
+                for (int j = 0; j < ex.SubExercises.Count; j++)
+                {
+                    var subExercise = ex.SubExercises[j];
+                    subexercises.Add(DataImport.CreateExercisePointDatasetFromSubexercise(subExercise));
+                    correctAnswers.Add(subExercise.CorrectAnswer);
+                }
+                
+                
+                
+                
+                SelectionExercise selExerc = new SelectionExercise(
+                    ex.Title,
+                    ex.Description,
+                    subexercises,
+                    correctAnswers
+                    );
+                
+                SelectionExercises.Add(selExerc);
+            }
+
+            
+            ExerciseCurveDatasets.Add(new PointDataset()
+            {
+                Name = ex.Title,
+                DisplayString = ex.Title,
+            });
+                
+            // SelectionExercises.Add((selExerc));
+        }
+        
         
     }
 

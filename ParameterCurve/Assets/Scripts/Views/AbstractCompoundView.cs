@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using TMPro;
 using Views;
 
-public abstract class AbstractCompoundView : IView
+public abstract class AbstractCompoundView : AbstractView
 {
-    protected List<IView> views = new List<IView>();
+    protected List<AbstractView> views = new List<AbstractView>();
 
     protected AbstractCompoundView()
     {
         
     }
 
-    public void UpdateView()
+    public override void UpdateView()
     {
-        foreach (IView v in views)
+        foreach (var v in views)
         {
             v.UpdateView();
         }

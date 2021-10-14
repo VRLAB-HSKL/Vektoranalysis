@@ -10,4 +10,6 @@ public class SimpleCurveView : AbstractCurveView
         HasTravelPoint = false;
         HasArcLengthPoint = false;
     }
+
+    public override void StartRun() {}
 }

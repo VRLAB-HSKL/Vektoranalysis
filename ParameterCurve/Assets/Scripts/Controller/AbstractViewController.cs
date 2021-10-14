@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using log4net;
 using UnityEngine;
 using Views;
 
@@ -6,10 +7,12 @@ namespace Controller
 {
     public abstract class AbstractViewController
     {
+        public static readonly ILog Log = LogManager.GetLogger(typeof(AbstractViewController));
+        
         protected readonly Transform _rootElement;
 
-        private IView currentView;
-        public IView CurrentView
+        private AbstractView currentView;
+        public AbstractView CurrentView
         {
             get => currentView;
             set
@@ -19,7 +22,7 @@ namespace Controller
             }
         }
 
-        protected List<IView> _views;
+        protected List<AbstractView> _views;
         
         // ToDo: Replace this with MBU observer pattern ?
         public delegate void d_updateViewsDelegate();
@@ -43,7 +46,7 @@ namespace Controller
         {
             _rootElement = root;
 
-            _views = new List<IView>()
+            _views = new List<AbstractView>()
             {
                 //selView
             };
@@ -82,6 +85,9 @@ namespace Controller
                 _rootElement.GetChild(i).gameObject.SetActive(value);
             }
         }
+        
+        
+        
         
     }
 }

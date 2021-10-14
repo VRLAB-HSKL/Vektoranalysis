@@ -6,17 +6,20 @@ using UnityEngine;
 
 public class InformationControl : MonoBehaviour
 {
-    [Header("Header")]
+    [Header("Header")] 
+    public GameObject HeaderParent;
     public TextMeshProUGUI SourceLabel;
     public TextMeshProUGUI IndexLabel;
 
-    [Header("PointInfo")]
+    [Header("PointInfo")] 
+    public GameObject PointInfoParent;
     public TextMeshProUGUI TLabel;
     public TextMeshProUGUI XLabel;
     public TextMeshProUGUI YLabel;
     public TextMeshProUGUI ZLabel;
 
     [Header("ArcLengthPointInfo")]
+    public GameObject ArcLengthParent;
     public TextMeshProUGUI ArcLengthLabel;
     public TextMeshProUGUI ArcTLabel;
     public TextMeshProUGUI ArcXLabel;
@@ -26,6 +29,7 @@ public class InformationControl : MonoBehaviour
 
 
     [Header("TimeDistance")]
+    public GameObject TimeDistanceParent;
     public GameObject TimeDistanceStart;
     public GameObject TimeDistanceXAxis;
     public GameObject TimeDistanceYAxis;
@@ -36,6 +40,7 @@ public class InformationControl : MonoBehaviour
     private Vector3 initTimeDistTravelPos;
 
     [Header("TimeVelocity")]
+    public GameObject TimeVelocityParent;
     public GameObject TimeVelocityStart;
     public GameObject TimeVelocityXAxis;
     public GameObject TimeVelocityYAxis;
@@ -53,12 +58,15 @@ public class InformationControl : MonoBehaviour
         Debug.Log("initFile is null: " + (GlobalData.initFile is null));
         //Debug.Log("initFile.information is null: " + (GlobalData.initFile.information is null));
         
-        if (!GlobalData.initFile.information.timeVelocityPlot || !GlobalData.initFile.information.activated)
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot || 
+            !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
-            TimeVelocityStart.SetActive(false);
-            TimeVelocityXAxis.SetActive(false);
-            TimeVelocityYAxis.SetActive(false);
-            TimeVelocityTravelObject.SetActive(false);
+            // TimeVelocityStart.SetActive(false);
+            // TimeVelocityXAxis.SetActive(false);
+            // TimeVelocityYAxis.SetActive(false);
+            // TimeVelocityTravelObject.SetActive(false);
+            
+            TimeVelocityParent.SetActive(false);
         }
         else
         {
@@ -71,12 +79,15 @@ public class InformationControl : MonoBehaviour
             initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
         }
         
-        if (!GlobalData.initFile.information.timeDistancePlot || !GlobalData.initFile.information.activated)
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot || 
+            !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
-            TimeDistanceStart.SetActive(false);
-            TimeDistanceXAxis.SetActive(false);
-            TimeDistanceYAxis.SetActive(false);
-            TimeDistanceTravelObject.SetActive(false);
+            // TimeDistanceStart.SetActive(false);
+            // TimeDistanceXAxis.SetActive(false);
+            // TimeDistanceYAxis.SetActive(false);
+            // TimeDistanceTravelObject.SetActive(false);
+            
+            TimeDistanceParent.SetActive(false);
         }
         else
         {
@@ -89,39 +100,48 @@ public class InformationControl : MonoBehaviour
             initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
         }
 
-        if (!GlobalData.initFile.information.arcLengthData || !GlobalData.initFile.information.activated)
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowArcLengthData || 
+            !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
-            ArcLengthLabel.gameObject.SetActive(false);
-            ArcTLabel.gameObject.SetActive(false);
-            ArcXLabel.gameObject.SetActive(false);
-            ArcYLabel.gameObject.SetActive(false);
-            ArcZLabel.gameObject.SetActive(false);
+            // ArcLengthLabel.gameObject.SetActive(false);
+            // ArcTLabel.gameObject.SetActive(false);
+            // ArcXLabel.gameObject.SetActive(false);
+            // ArcYLabel.gameObject.SetActive(false);
+            // ArcZLabel.gameObject.SetActive(false);
+            
+            ArcLengthParent.SetActive(false);
         }
 
-        if (!GlobalData.initFile.information.pointData || !GlobalData.initFile.information.activated)
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowPointData || 
+            !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
             TLabel.gameObject.SetActive(false);
             XLabel.gameObject.SetActive(false);
             YLabel.gameObject.SetActive(false);
             ZLabel.gameObject.SetActive(false);
+            
+            PointInfoParent.SetActive(false);
         }
         
         
-        if (!GlobalData.initFile.information.basicInfo || !GlobalData.initFile.information.activated)
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo || 
+            !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
             SourceLabel.gameObject.SetActive(false);
             IndexLabel.gameObject.SetActive(false);
+            
+            HeaderParent.SetActive(false);
         }
     }
 
 
     public void UpdateInfoLabels()
     {
-        if (!GlobalData.initFile.information.activated) return;
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         int pointIndex = GlobalData.CurrentPointIndex;
         
-        if (GlobalData.initFile.information.basicInfo)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
         {
             IndexLabel.text = (pointIndex + 1) +
                               " / " +
@@ -131,7 +151,7 @@ public class InformationControl : MonoBehaviour
 
         string floatFormat = "0.#####";
 
-        if (GlobalData.initFile.information.pointData)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowPointData)
         {
             SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].Name;
             TLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].paramValues[pointIndex].ToString(floatFormat);
@@ -140,7 +160,7 @@ public class InformationControl : MonoBehaviour
             ZLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].z.ToString(floatFormat);    
         }
 
-        if (GlobalData.initFile.information.arcLengthData)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
         {
             ArcLengthLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLength.ToString("0.###");
             ArcTLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthParamValues[pointIndex].ToString(floatFormat);
@@ -152,11 +172,11 @@ public class InformationControl : MonoBehaviour
 
     public void UpdatePlotTravelObjects()
     {
-        if (!GlobalData.initFile.information.activated) return;
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
         
         int pointIndex = GlobalData.CurrentPointIndex;
 
-        if (GlobalData.initFile.information.timeDistancePlot)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
         {
             // Set info plot travel objects
             Vector2 tdPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints[pointIndex];
@@ -165,7 +185,7 @@ public class InformationControl : MonoBehaviour
                 initTimeDistTravelPos + tdVec;    
         }
 
-        if (GlobalData.initFile.information.timeVelocityPlot)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
         {
             Vector2 tvPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints[pointIndex];
             Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
@@ -177,9 +197,9 @@ public class InformationControl : MonoBehaviour
 
     public void UpdatePlotLineRenderers()
     {
-        if (!GlobalData.initFile.information.activated) return;
+        if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
-        if (GlobalData.initFile.information.timeDistancePlot)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
         {
             TimeDistLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints.Count;
             for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints.Count; i++)
@@ -192,7 +212,7 @@ public class InformationControl : MonoBehaviour
             }    
         }
 
-        if (GlobalData.initFile.information.timeVelocityPlot)
+        if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
         {
             TimeVelocityLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints.Count;
             for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints.Count; i++)

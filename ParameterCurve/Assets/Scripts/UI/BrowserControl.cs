@@ -1,33 +1,33 @@
 using SimpleWebBrowser;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BrowserControl : MonoBehaviour
+namespace UI
 {
-    public WebBrowser Browser;
-
-    void Start()
+    public class BrowserControl : MonoBehaviour
     {
-        if(Browser is null)
+        public WebBrowser Browser;
+
+        void Start()
         {
-            if(!TryGetComponent(out Browser))
+            if(Browser is null)
             {
-                Debug.LogError("BrowserControl - WebBrowser Component not found");
-            }                        
+                if(!TryGetComponent(out Browser))
+                {
+                    Debug.LogError("BrowserControl - WebBrowser Component not found");
+                }                        
+            }
+        
+            Browser.gameObject.SetActive(GlobalData.initFile.ApplicationSettings.BrowserSettings.Activated);
+            OpenURL(GlobalData.initFile.ApplicationSettings.BrowserSettings.Url);
+        }
+    
+        public void OpenURL(string url)
+        {
+            if (GlobalData.initFile.ApplicationSettings.BrowserSettings.Activated)
+            {
+                Browser.OpenCommentFile(url);    
+            }
         }
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void OpenURL(string url)
-    {
-        Browser.OpenCommentFile(url);
-    }
-
 }

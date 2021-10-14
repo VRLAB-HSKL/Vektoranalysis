@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Views
 {
-    public class SelectionExerciseCompoundView : AbstractCompoundView, IView
+    public class SelectionExerciseCompoundView : AbstractCompoundView
     {
         private GameObject PillarPrefab;
         private List<AbstractCurveView> curveViews = new List<AbstractCurveView>();
@@ -113,7 +113,11 @@ namespace Views
             }
         }
 
-        
+        public override void StartRun()
+        {
+            // ToDo: Refactor this in class hierarchy, is this even needed here ?
+        }
+
 
         private void ShowMainDisplayView()
         {

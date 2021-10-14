@@ -5,10 +5,17 @@ namespace Behaviours.Button
         public WorldStateController world;
         public int viewIndex;
 
+        
+        private void Start()
+        {
+            gameObject.SetActive(GlobalData.initFile.ApplicationSettings.TableSettings.ShowViewButtons);
+        }
+        
+        
         public override void HandleButtonEvent()
         {        
             world.WorldViewController.SwitchView(viewIndex);
-            world.TableViewController.SwitchView(viewIndex);
+            world.TableViewController?.SwitchView(viewIndex);
         }
     }
 }

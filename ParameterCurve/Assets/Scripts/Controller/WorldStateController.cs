@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 
 
 using TMPro;
+using UI;
 using UnityEngine.Events;
 
 public class WorldStateController : MonoBehaviour
@@ -29,7 +30,8 @@ public class WorldStateController : MonoBehaviour
     public Transform WorldTravelObject;
     public Transform WorldArcLengthTravelObject;
 
-    [Header("TableCurveElements")]
+    [Header("TableCurveElements")] 
+    public GameObject TableParent;
     public Transform TableRootElement;
     public LineRenderer TableDisplayLR;
     public Transform TableTravelObject;
@@ -46,7 +48,7 @@ public class WorldStateController : MonoBehaviour
     public static CurveSelectionControl CurveSelectWall;
 
     public CurveViewController WorldViewController;
-    public CurveViewController TableViewController;
+    public CurveViewController TableViewController { get; set; }
     //public ExerciseViewController ExerciseController;
 
 
@@ -67,17 +69,47 @@ public class WorldStateController : MonoBehaviour
         
         GlobalData.exerciseController.SetViewVisibility(false);
         //GlobalData.exerciseController.SetViewVisibility(GlobalData.initFile.curveSelection.activated);
+
         
+        
+        // var curveColorValues = GlobalData.initFile..color.rgba;
+        // if (curveColorValues.Length >= 3)
+        // {
+        //     float r = curveColorValues[0] / 255f;
+        //     float g = curveColorValues[1] / 255f;
+        //     float b = curveColorValues[2] / 255f;
+        //     float a = curveColorValues.Length == 4 ? curveColorValues[3] : 1f;
+        //     
+        //     Color newColor = new Color(r, g, b, a);
+        //     WorldDisplayLR.material.color = newColor;
+        //     WorldDisplayLR.material.SetColor("_EmissionColor", newColor);
+        //     
+        // }
+
+
         WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
         WorldViewController.SetViewVisibility(true);
-        
-        
-        
-        
-        
-        
-        TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
 
+
+
+
+
+
+        if (GlobalData.initFile.ApplicationSettings.TableSettings.Activated)
+        {
+            TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
+        }
+        else
+        {
+            TableParent.SetActive(false);
+        }
+        
+
+        //if(GlobalData.initFile.table.activated)
+        
+        
+        
+        
         pointStepDuration = 
             0f //(1f / 30f) //60f) 
             * GlobalData.RunSpeedFactor;
@@ -107,14 +139,14 @@ public class WorldStateController : MonoBehaviour
             //}
             //WorldViewController.CurrentView.UpdateView();
             WorldViewController.UpdateViewsDelegate();
-            TableViewController.CurrentView.UpdateView();
+            TableViewController?.CurrentView.UpdateView();
 
             InfoWall.UpdatePlotLineRenderers();
 
-            //if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
-            //{
-            //    GlobalData.IsDriving = false;
-            //}
+            // if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
+            // {
+            //     GlobalData.IsDriving = false;
+            // }
         }
         
         if(ActivatePoseTracking) StaticLogging();
@@ -126,8 +158,10 @@ public class WorldStateController : MonoBehaviour
     public void StartRun()
     {
         Log.Info("Starting curve run...");
-        GlobalData.CurrentPointIndex = 0;
+        //GlobalData.CurrentPointIndex = 0;
         GlobalData.IsDriving = true;        
+        WorldViewController.StartRun();
+        TableViewController.StartRun();
     }
 
     public void SwitchToNextDataset()
@@ -152,7 +186,7 @@ public class WorldStateController : MonoBehaviour
 
         //WorldViewController.CurrentView.UpdateView();
         WorldViewController.UpdateViewsDelegate();
-        TableViewController.CurrentView.UpdateView();
+        TableViewController?.CurrentView.UpdateView();
         
         //UpdateWorldObjects();
     }
@@ -184,7 +218,7 @@ public class WorldStateController : MonoBehaviour
 
         //WorldViewController.CurrentView.UpdateView();
         WorldViewController.UpdateViewsDelegate();
-        TableViewController.CurrentView.UpdateView();
+        TableViewController?.CurrentView.UpdateView();
     }
 
 
@@ -211,7 +245,7 @@ public class WorldStateController : MonoBehaviour
         InfoWall.UpdatePlotLineRenderers();
 
         WorldViewController.UpdateViewsDelegate();
-        TableViewController.CurrentView.UpdateView();
+        TableViewController?.CurrentView.UpdateView();
     }
 
     

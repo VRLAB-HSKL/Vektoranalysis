@@ -1,7 +1,7 @@
 using UnityEngine;
 using Views;
 
-public abstract class AbstractCurveView : IView
+public abstract class AbstractCurveView : AbstractView
 {
     public readonly LineRenderer _displayLr;
     private readonly Vector3 _rootPos;
@@ -13,6 +13,8 @@ public abstract class AbstractCurveView : IView
 
     protected bool HasCustomDataset;
     protected PointDataset CustomDataset;
+    
+    
 
     protected AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
     {
@@ -21,7 +23,7 @@ public abstract class AbstractCurveView : IView
         ScalingFactor = scalingFactor;
     }
 
-    public virtual void UpdateView()
+    public override void UpdateView()
     {
         PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
@@ -40,15 +42,15 @@ public abstract class AbstractCurveView : IView
         return _rootPos + point * ScalingFactor;
     }
 
-    private void UpdateWorldObjects()
-    {
-        SetTravelPointAndDisplay();
-    }    
-
-    private void SetTravelPointAndDisplay()
-    {        
-        ++GlobalData.CurrentPointIndex;
-    }
+    // private void UpdateWorldObjects()
+    // {
+    //     SetTravelPointAndDisplay();
+    // }    
+    //
+    // private void SetTravelPointAndDisplay()
+    // {        
+    //     ++currentPointIndex;
+    // }
 
     public void SetCustomDataset(PointDataset pds)
     {
@@ -62,4 +64,7 @@ public abstract class AbstractCurveView : IView
         HasCustomDataset = false;
         CustomDataset = null;
     }
+
+
+    //public abstract void StartRun();
 }

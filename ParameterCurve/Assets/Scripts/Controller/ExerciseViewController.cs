@@ -39,7 +39,7 @@ namespace Controller
             var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, exercise.Datasets[0]);
             selView.CurrentTitle = exercise.Title;
             selView.CurrentDescription = exercise.Description;
-            _views = new List<IView>()
+            _views = new List<AbstractView>()
             {
                 selView
             };

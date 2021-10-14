@@ -16,6 +16,10 @@ public class SimpleRunCurveView : SimpleCurveView
     private Vector3[] normalArr = new Vector3[2];
     private Vector3[] binormalArr = new Vector3[2];
 
+    public int currentPointIndex = 0;
+    private bool isRunning = false;
+    
+
     public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject)
         : base(displayLR, rootPos, scalingFactor)
     {        
@@ -56,68 +60,86 @@ public class SimpleRunCurveView : SimpleCurveView
     public override void UpdateView()
     {
         base.UpdateView();
-        SetTravelPoint();
-        SetMovingFrame();
+
+        if (isRunning)
+        {
+            SetTravelPoint();
+            SetMovingFrame();    
+        }
+        
     }
 
+    public override void StartRun()
+    {
+        isRunning = true;
+    }
+    
     private void SetTravelPoint()
     {
+        PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+
+        
+        
         // Null checks
         if (TravelObject is null) return;
-        if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
-        if (GlobalData.CurrentPointIndex < 0) return;
+        //if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
+        if (currentPointIndex < 0) return;
 
-        int pointIndex = GlobalData.CurrentPointIndex;
+        //int pointIndex = GlobalData.CurrentPointIndex;
         // On arrival at the last point, stop driving
-        if (pointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
+        if (currentPointIndex >= curve.worldPoints.Count)
         {
             //Debug.Log("Stop");
             GlobalData.IsDriving = false;
             return;
         }
 
-        TravelObject.position = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex]);
+        TravelObject.position = MapPointPos(curve.worldPoints[currentPointIndex]);
 
         
 
-        ++GlobalData.CurrentPointIndex;
+        ++currentPointIndex;
 
         
     }
 
     private void SetMovingFrame()
     {
-        if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
+        PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        
+        if (currentPointIndex >= curve.worldPoints.Count)
         {
             GlobalData.IsDriving = false;
             return;
         }
 
-        int pointIndex = GlobalData.CurrentPointIndex;
+        //int pointIndex = GlobalData.CurrentPointIndex;
 
-        tangentArr[0] = TravelObject.position;
-        tangentArr[1] = (TravelObject.position + 
-            GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Tangent).normalized;
+        var travelObjPosition = TravelObject.position;
+        tangentArr[0] = travelObjPosition;
+        tangentArr[1] = (travelObjPosition + 
+            curve.fresnetApparatuses[currentPointIndex].Tangent).normalized;
         TangentLR.SetPositions(tangentArr);
                 
-        normalArr[0] = TravelObject.position;
-        normalArr[1] = (TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Normal).normalized;
+        normalArr[0] = travelObjPosition;
+        normalArr[1] = (travelObjPosition + curve.fresnetApparatuses[currentPointIndex].Normal).normalized;
         NormalLR.SetPositions(normalArr);
                 
-        binormalArr[0] = TravelObject.position;
-        binormalArr[1] = (TravelObject.position + GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].fresnetApparatuses[GlobalData.CurrentPointIndex].Binormal);
+        binormalArr[0] = travelObjPosition;
+        binormalArr[1] = (travelObjPosition + curve.fresnetApparatuses[currentPointIndex].Binormal);
         BinormalLR.SetPositions(binormalArr);
 
         Vector3 nextPos;
-        if (pointIndex < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count - 1)
+        if (currentPointIndex < curve.worldPoints.Count - 1)
         {
-            nextPos = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex + 1]);
+            nextPos = MapPointPos(curve.worldPoints[currentPointIndex + 1]);
         }
         else
         {
-            nextPos = MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints[pointIndex]);
+            nextPos = MapPointPos(curve.worldPoints[currentPointIndex]);
         }
 
+        // Make sure object is facing in the correct direction
         TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
     }
 }
