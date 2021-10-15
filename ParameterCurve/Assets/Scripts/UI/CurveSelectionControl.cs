@@ -54,7 +54,7 @@ public class CurveSelectionControl : MonoBehaviour
             // Make sure group is activated
             switch (dgrpName)
             {
-                case "Named":
+                case "Display":
                     if (!GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves) continue;
                     break;
                     
@@ -87,7 +87,7 @@ public class CurveSelectionControl : MonoBehaviour
             {
                 default:
                 case 0:
-                    b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Named));
+                    b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Display));
                     break;
 
                 // case 1:
@@ -100,7 +100,7 @@ public class CurveSelectionControl : MonoBehaviour
             }
         }
 
-        SwitchCurveGroup(GlobalData.CurveDisplayGroup.Named);
+        SwitchCurveGroup(GlobalData.CurveDisplayGroup.Display);
     }
 
 
@@ -111,14 +111,13 @@ public class CurveSelectionControl : MonoBehaviour
         // Update current display group
         GlobalData.CurrentDisplayGroup = cdg;
 
-       
-
+        
         
 
         switch(cdg)
         {
             default:
-            case GlobalData.CurveDisplayGroup.Named:
+            case GlobalData.CurveDisplayGroup.Display:
                 if (GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves)
                     CurveSelectionFSM.State = namedState;
                 break;

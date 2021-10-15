@@ -47,7 +47,7 @@ public class WorldStateController : MonoBehaviour
     public InformationControl InfoWall;
     public static CurveSelectionControl CurveSelectWall;
 
-    public CurveViewController WorldViewController;
+    
     public CurveViewController TableViewController { get; set; }
     //public ExerciseViewController ExerciseController;
 
@@ -65,9 +65,9 @@ public class WorldStateController : MonoBehaviour
     {
         GlobalData.InitializeData();
         Debug.Log("ExerciseControllerRoot: " + SelObjects.gameObject.name);
-        GlobalData.exerciseController = new ExerciseViewController(SelObjects.gameObject.transform, SelObjects, PillarPrefab);
+        GlobalData.ExerciseController = new ExerciseViewController(SelObjects.gameObject.transform, SelObjects, PillarPrefab);
         
-        GlobalData.exerciseController.SetViewVisibility(false);
+        GlobalData.ExerciseController.SetViewVisibility(false);
         //GlobalData.exerciseController.SetViewVisibility(GlobalData.initFile.curveSelection.activated);
 
         
@@ -86,9 +86,11 @@ public class WorldStateController : MonoBehaviour
         //     
         // }
 
+        var displayCurve = GlobalData.DisplayCurveDatasets[0];
 
-        WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, WorldTravelObject, WorldArcLengthTravelObject, 1f);
-        WorldViewController.SetViewVisibility(true);
+        GlobalData.WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, 
+            WorldTravelObject, WorldArcLengthTravelObject, displayCurve.WorldScalingFactor);
+        GlobalData.WorldViewController.SetViewVisibility(true);
 
 
 
@@ -97,7 +99,8 @@ public class WorldStateController : MonoBehaviour
 
         if (GlobalData.initFile.ApplicationSettings.TableSettings.Activated)
         {
-            TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, TableTravelObject, TableArcLengthTravelObject, 0.125f);
+            TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, 
+                TableTravelObject, TableArcLengthTravelObject, displayCurve.TableScalingFactor);
         }
         else
         {
@@ -115,7 +118,7 @@ public class WorldStateController : MonoBehaviour
             * GlobalData.RunSpeedFactor;
 
         // Display html resource
-        BrowserWall.OpenURL(GlobalData.NamedCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
+        BrowserWall.OpenURL(GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
 
         // Set plotline renderers
         InfoWall.UpdatePlotLineRenderers();
@@ -138,7 +141,7 @@ public class WorldStateController : MonoBehaviour
             // SetTravelPointAndDisplay();                
             //}
             //WorldViewController.CurrentView.UpdateView();
-            WorldViewController.UpdateViewsDelegate();
+            GlobalData.WorldViewController.UpdateViewsDelegate();
             TableViewController?.CurrentView.UpdateView();
 
             InfoWall.UpdatePlotLineRenderers();
@@ -160,7 +163,7 @@ public class WorldStateController : MonoBehaviour
         Log.Info("Starting curve run...");
         //GlobalData.CurrentPointIndex = 0;
         GlobalData.IsDriving = true;        
-        WorldViewController.StartRun();
+        GlobalData.WorldViewController.StartRun();
         TableViewController.StartRun();
     }
 
@@ -185,7 +188,7 @@ public class WorldStateController : MonoBehaviour
         InfoWall.UpdatePlotLineRenderers();
 
         //WorldViewController.CurrentView.UpdateView();
-        WorldViewController.UpdateViewsDelegate();
+        GlobalData.WorldViewController.UpdateViewsDelegate();
         TableViewController?.CurrentView.UpdateView();
         
         //UpdateWorldObjects();
@@ -196,7 +199,7 @@ public class WorldStateController : MonoBehaviour
         // Stop driving
         if (GlobalData.IsDriving)
         {
-            if(WorldViewController.CurrentView is null)
+            if(GlobalData.WorldViewController.CurrentView is null)
             {
                 Log.Warn("ViewEmpty");
             }
@@ -217,7 +220,7 @@ public class WorldStateController : MonoBehaviour
         InfoWall.UpdatePlotLineRenderers();
 
         //WorldViewController.CurrentView.UpdateView();
-        WorldViewController.UpdateViewsDelegate();
+        GlobalData.WorldViewController.UpdateViewsDelegate();
         TableViewController?.CurrentView.UpdateView();
     }
 
@@ -232,6 +235,9 @@ public class WorldStateController : MonoBehaviour
             GlobalData.IsDriving = false;
         }
 
+        if(GlobalData.CurrentDisplayGroup == GlobalData.CurveDisplayGroup.Exercises)
+            GlobalData.ExerciseController.SetViewVisibility(true);
+        
         var index = GlobalData.CurrentDataset.FindIndex(x => x.Name.Equals(name));
         if (index == -1) return;
 
@@ -244,7 +250,7 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         InfoWall.UpdatePlotLineRenderers();
 
-        WorldViewController.UpdateViewsDelegate();
+        GlobalData.WorldViewController.UpdateViewsDelegate();
         TableViewController?.CurrentView.UpdateView();
     }
 

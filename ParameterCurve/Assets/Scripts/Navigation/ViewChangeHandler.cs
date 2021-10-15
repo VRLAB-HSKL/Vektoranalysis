@@ -16,7 +16,7 @@ public class ViewChangeHandler : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            world.WorldViewController.SwitchView(ViewIndex);
+            GlobalData.WorldViewController.SwitchView(ViewIndex);
             world.TableViewController?.SwitchView(ViewIndex);
         }
 

@@ -2,10 +2,10 @@
 	"curve": {
 		"id": 12,
 		"name": "helix",
-		"view": "simple",
+		"view": "run",
 		"color": {
 			"name": "black",
-			"rgba": [255, 255, 255, 1],
+			"rgba": [255, 0, 0, 0],
 			"hex": "#FFFFFF"
 		},
 
@@ -33,31 +33,31 @@
 	},
 
 	"browser": {
-		"activated": true,
-		"url": "https://hs-kl.de/webhome/helix.html"
+		"activated": false,
+		"url": "https://campusboard.hs-kl.de"
 	},
 
 	"information": {
 		"activated": true,
-		"basicInfo": true,
-		"pointData": true,
-		"arcLengthData": true,
+		"basicInfo": false,
+		"pointData": false,
+		"arcLengthData": false,
 		"timeDistancePlot": true,
 		"timeVelocityPlot": true
 	},
 
 	"curveSelection": {
-		"activated": true,
+		"activated": false,
 		"namedCurves": true,
-		"paramCurves": true,
-		"exerciseCurves": true
+		"paramCurves": false,
+		"exerciseCurves": false
 	},
 
 	"table": {
-		"activated": true,
+		"activated": false,
 		"showNavButtons": true,
 		"showRunButton": true,
-		"showViewButtons": true,
+		"showViewButtons": false,
 		"showSlider": true,
 		"allowRangeModify": true,
 		"allowBookmarks": true

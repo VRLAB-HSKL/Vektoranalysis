@@ -14,7 +14,7 @@ namespace Behaviours.Button
         
         public override void HandleButtonEvent()
         {        
-            world.WorldViewController.SwitchView(viewIndex);
+            GlobalData.WorldViewController.SwitchView(viewIndex);
             world.TableViewController?.SwitchView(viewIndex);
         }
     }

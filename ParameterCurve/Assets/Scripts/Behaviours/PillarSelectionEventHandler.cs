@@ -36,7 +36,7 @@ namespace Behaviours
 
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            GlobalData.exerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
+            GlobalData.ExerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
         }
 
         protected override void HandlePointerEnter(PointerEventData eventData)

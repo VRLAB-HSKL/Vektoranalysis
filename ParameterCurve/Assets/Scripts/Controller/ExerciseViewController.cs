@@ -31,6 +31,9 @@ namespace Controller
             exercise = GlobalData.SelectionExercises[0];
             //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseData = exercise.Datasets[0];
             
+            
+            
+            // Initialize all answers as 'none given'
             for (int i = 0; i < exercise.CorrectAnswers.Count; i++)
             {
                 selectionIndices.Add(-1);

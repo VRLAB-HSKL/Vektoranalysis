@@ -27,6 +27,8 @@ public abstract class AbstractCurveView : AbstractView
     {
         PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
+        //ScalingFactor =
+        
         var pointArr = curve.worldPoints.ToArray();
         for (var i = 0; i < pointArr.Length; i++)
         {

@@ -21,13 +21,14 @@ public static class GlobalData
     public static float PointScaleFactor = 1f;
     public static float RunSpeedFactor = 1f;
 
-    public static ExerciseViewController exerciseController { get; set; }
+    public static CurveViewController WorldViewController;
+    public static ExerciseViewController ExerciseController { get; set; }
     
     
     public static bool IsDriving = false;
 
-    public enum CurveDisplayGroup { Named = 0, Exercises = 1 }
-    public static CurveDisplayGroup CurrentDisplayGroup = CurveDisplayGroup.Named;
+    public enum CurveDisplayGroup { Display = 0, Exercises = 1 }
+    public static CurveDisplayGroup CurrentDisplayGroup { get; set; } = CurveDisplayGroup.Display;
 
     public static List<PointDataset> CurrentDataset
     {
@@ -37,12 +38,12 @@ public static class GlobalData
             {
                 //CurveDisplayGroup.Parameter => ParamCurveDatasets,
                 CurveDisplayGroup.Exercises => ExerciseCurveDatasets,
-                _ => NamedCurveDatasets,
+                _ => DisplayCurveDatasets,
             };
         }
     }
 
-    public static List<PointDataset> NamedCurveDatasets = new List<PointDataset>();
+    public static List<PointDataset> DisplayCurveDatasets = new List<PointDataset>();
     public static List<PointDataset> ParamCurveDatasets = new List<PointDataset>();
     public static List<PointDataset> ExerciseCurveDatasets = new List<PointDataset>();
 
@@ -251,7 +252,7 @@ public static class GlobalData
         for (int i = 0; i < jsr.DisplayCurves.Count; i++)
         {
             var curve = jsr.DisplayCurves[i];
-            NamedCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
+            DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
             
         }
 
@@ -259,6 +260,8 @@ public static class GlobalData
         {
             var ex = jsr.Exercises[i];
 
+            
+            
             // Select3 exercise
             if (ex.Type.Equals("select3"))
             {

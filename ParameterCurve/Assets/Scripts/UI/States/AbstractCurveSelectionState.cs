@@ -37,6 +37,20 @@ public abstract class AbstractCurveSelectionState : State
     {
         GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
 
+
+        switch (GlobalData.CurrentDisplayGroup)
+        {
+            case GlobalData.CurveDisplayGroup.Display:
+                GlobalData.WorldViewController.SetViewVisibility(true);
+                break;
+            
+            case GlobalData.CurveDisplayGroup.Exercises:
+                //GlobalData.ExerciseController.SetViewVisibility(true);
+                break;
+        }
+        
+        
+        
         // Create buttons        
         for (int i = 0; i < GlobalData.CurrentDataset.Count; i++)
         {
@@ -62,6 +76,10 @@ public abstract class AbstractCurveSelectionState : State
 
     public override void OnStateQuit()
     {
+        // Hide all views
+        GlobalData.WorldViewController.SetViewVisibility(false);
+        GlobalData.ExerciseController.SetViewVisibility(false);
+        
         // Clear old buttons
         GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
         for (int i = 0; i < CurveMenuContent.transform.childCount; i++)
@@ -75,6 +93,9 @@ public abstract class AbstractCurveSelectionState : State
             GameObject child = children[i];
             Object.DestroyImmediate(child);
         }
+
+        //GlobalData.ExerciseController.SetViewVisibility(false);
+
     }
 
     //protected void SwitchToSpecificDataset(string name)

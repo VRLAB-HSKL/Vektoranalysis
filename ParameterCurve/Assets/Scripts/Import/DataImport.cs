@@ -22,15 +22,26 @@ public static class DataImport
     private static NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
 
-    public static PointDataset CreatePointDatasetFromCurve(Import.NewInitFile.Curve curve)
+    public static PointDataset CreatePointDatasetFromCurve(Curve curve)
     {
-        PointDataset pd = new PointDataset();
+        PointDataset pd = new PointDataset
+        {
+            id = curve.Info.Id,
+            Name = curve.Info.Name,
+            DisplayString = curve.Info.Name,
+            NotebookURL = string.Empty
+        };
 
-        pd.id = curve.Info.Id;
-        pd.Name = curve.Info.Name;
-        pd.DisplayString = curve.Info.Name;
-        pd.NotebookURL = string.Empty;
-
+        // Attempt to load image resource based on curve name        
+        string imgResPath = GlobalData.ImageResourcePath + curve.Info.Name; 
+        Texture2D imgRes = Resources.Load(imgResPath) as Texture2D;  
+                                                             
+        if (imgRes != null)                                          
+        {                                                            
+            pd.MenuButtonImage = imgRes;                            
+        }                                          
+        
+        
         pd.Is3DCurve = curve.Data.Dimension == 3;
         pd.arcLength = curve.Data.ArcLength;
         pd.WorldScalingFactor = curve.Data.WorldScalingFactor;
@@ -108,7 +119,6 @@ public static class DataImport
             );
 
         return epd;
-
     }
     
     
