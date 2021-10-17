@@ -49,7 +49,7 @@ public class CurveSelectionControl : MonoBehaviour
             // Get current group name
             string dgrpName = displayGrps[i];
 
-            Debug.Log(GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowExercises);
+            //Debug.Log(GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowExercises);
             
             // Make sure group is activated
             switch (dgrpName)

@@ -114,7 +114,9 @@ public class WorldStateController : MonoBehaviour
         
         
         pointStepDuration = 
-            0f //(1f / 30f) //60f) 
+            0.025f 
+            //(1f / 30f) 
+            //60f) 
             * GlobalData.RunSpeedFactor;
 
         // Display html resource
@@ -128,23 +130,28 @@ public class WorldStateController : MonoBehaviour
     
 
 
-    //private float updateTimer = 0f;
+    private float updateTimer = 0f;
 
     private void Update()
     {
         if (GlobalData.IsDriving)
         {
-            //updateTimer += Time.deltaTime;
-            //if(updateTimer >= pointStepDuration)
-            //{
-            //    updateTimer = 0f;
-            // SetTravelPointAndDisplay();                
-            //}
-            //WorldViewController.CurrentView.UpdateView();
-            GlobalData.WorldViewController.UpdateViewsDelegate();
-            TableViewController?.CurrentView.UpdateView();
+            updateTimer += Time.deltaTime;
+            if(updateTimer >= pointStepDuration)
+            {
+                updateTimer = 0f;
+                
+                //GlobalData.WorldViewController.UpdateViewsDelegate();
+                GlobalData.WorldViewController.CurrentView.UpdateView();
+                TableViewController?.CurrentView.UpdateView();
 
-            InfoWall.UpdatePlotLineRenderers();
+                InfoWall.UpdatePlotLineRenderers();
+            }
+            //WorldViewController.CurrentView.UpdateView();
+            
+            
+            
+            
 
             // if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints.Count)
             // {
@@ -154,6 +161,7 @@ public class WorldStateController : MonoBehaviour
         
         if(ActivatePoseTracking) StaticLogging();
             
+        //Debug.Log("GlobalData_IsDriving: " + GlobalData.IsDriving);
     }
 
     
@@ -183,6 +191,12 @@ public class WorldStateController : MonoBehaviour
         // Reset point index
         GlobalData.CurrentPointIndex = 0;
 
+        var worldView = GlobalData.WorldViewController.CurrentView as AbstractCurveView;
+        worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+        
+        var tableView = TableViewController.CurrentView as AbstractCurveView;
+        tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+        
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         InfoWall.UpdatePlotLineRenderers();
@@ -214,6 +228,12 @@ public class WorldStateController : MonoBehaviour
 
         // Reset point index
         GlobalData.CurrentPointIndex = 0;
+        
+        var worldView = GlobalData.WorldViewController.CurrentView as AbstractCurveView;
+        worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+        
+        var tableView = TableViewController.CurrentView as AbstractCurveView;
+        tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
@@ -245,6 +265,12 @@ public class WorldStateController : MonoBehaviour
 
         // Reset point index
         GlobalData.CurrentPointIndex = 0;
+        
+        var worldView = GlobalData.WorldViewController.CurrentView as AbstractCurveView;
+        worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+        
+        var tableView = TableViewController.CurrentView as AbstractCurveView;
+        tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);

@@ -81,8 +81,12 @@ namespace Views
             curveViews[0].SetCustomDataset(CurrentExerciseData.LeftDataset);
             curveViews[1].SetCustomDataset(CurrentExerciseData.MiddleDataset);
             curveViews[2].SetCustomDataset(CurrentExerciseData.RightDataset);
+
+            curveViews[0].ScalingFactor = CurrentExerciseData.LeftDataset.SelectExercisePillarScalingFactor;
+            curveViews[1].ScalingFactor = CurrentExerciseData.MiddleDataset.SelectExercisePillarScalingFactor;
+            curveViews[2].ScalingFactor = CurrentExerciseData.RightDataset.SelectExercisePillarScalingFactor;
             
-            // ToDo: Import scaling factor from json and set them here
+            
             
             if (showMainDisplay)
             {

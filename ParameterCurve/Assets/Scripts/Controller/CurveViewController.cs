@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Controller;
+using HTC.UnityPlugin.Vive.WaveVRExtension;
 using UnityEngine;
 using Views;
 
@@ -33,6 +35,10 @@ public class CurveViewController : AbstractViewController
     //     }
     // }
 
+
+    
+    
+
     public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, 
                                Transform arcTravel, float scalingFactor) : base(root)
     {
@@ -50,7 +56,9 @@ public class CurveViewController : AbstractViewController
             simpleRunView,
             simpleRunWithArcLengthView
         };
-
+ 
+        Debug.Log("ViewCount: " + _views.Count);
+        
         foreach (var view in _views)
         {
             _updateViewsDelegate += view.UpdateView;
@@ -85,6 +93,8 @@ public class CurveViewController : AbstractViewController
     {
         Log.Info("Starting curve run...");
 
+            
+        
         foreach (var view in _views)
         {
             view.StartRun();

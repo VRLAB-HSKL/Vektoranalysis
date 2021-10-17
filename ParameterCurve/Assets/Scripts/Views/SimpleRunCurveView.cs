@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class SimpleRunCurveView : SimpleCurveView
@@ -63,44 +64,46 @@ public class SimpleRunCurveView : SimpleCurveView
 
         if (isRunning)
         {
+            //Debug.Log("UpdateViewSimpleRun_isRunning");
             SetTravelPoint();
-            SetMovingFrame();    
+            SetMovingFrame();
         }
         
     }
 
     public override void StartRun()
     {
+        currentPointIndex = 0;
         isRunning = true;
     }
     
     private void SetTravelPoint()
     {
         PointDataset curve = HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
-        
         
         // Null checks
         if (TravelObject is null) return;
         //if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
         if (currentPointIndex < 0) return;
 
-        //int pointIndex = GlobalData.CurrentPointIndex;
+        // Debug.Log("currentPointIndex: " + currentPointIndex);
+        // Debug.Log("worldPointsCount: " + curve.worldPoints.Count);
+        
         // On arrival at the last point, stop driving
+        
+        
+        
         if (currentPointIndex >= curve.worldPoints.Count)
         {
             //Debug.Log("Stop");
             GlobalData.IsDriving = false;
+            isRunning = false;   
             return;
         }
 
         TravelObject.position = MapPointPos(curve.worldPoints[currentPointIndex]);
-
-        
-
         ++currentPointIndex;
 
-        
     }
 
     private void SetMovingFrame()

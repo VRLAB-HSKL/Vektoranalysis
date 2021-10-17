@@ -44,22 +44,13 @@ public abstract class AbstractCurveView : AbstractView
         return _rootPos + point * ScalingFactor;
     }
 
-    // private void UpdateWorldObjects()
-    // {
-    //     SetTravelPointAndDisplay();
-    // }    
-    //
-    // private void SetTravelPointAndDisplay()
-    // {        
-    //     ++currentPointIndex;
-    // }
-
     public void SetCustomDataset(PointDataset pds)
     {
         CustomDataset = pds;
         CustomDataset.CalculateWorldPoints();
         HasCustomDataset = true;
     }
+
 
     public void ClearCustomDataset()
     {

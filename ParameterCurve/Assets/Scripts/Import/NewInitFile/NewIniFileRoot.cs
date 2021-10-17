@@ -47,20 +47,6 @@ namespace Import.NewInitFile
         public List<List<float>> ArcAccVec { get; set; }
     }
 
-    // public class CurveData
-    // {
-    //     [JsonProperty("name")]
-    //     public string Name { get; set; }
-    //     
-    //     [JsonProperty("di")]
-    //     public int dim { get; set; }
-    //     public double arcLength { get; set; }
-    //     public double worldScalingFactor { get; set; }
-    //     public double tableScalingFactor { get; set; }
-    //     public double selectExercisePillarScalingFactor { get; set; }
-    //     public PointDataNew PointDataNew { get; set; }
-    // }
-    
     [Serializable]
     public class RGBColor
     {

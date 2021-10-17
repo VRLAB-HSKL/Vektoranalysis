@@ -26,8 +26,6 @@ public class InformationControl : MonoBehaviour
     public TextMeshProUGUI ArcYLabel;
     public TextMeshProUGUI ArcZLabel;
 
-
-
     [Header("TimeDistance")]
     public GameObject TimeDistanceParent;
     public GameObject TimeDistanceStart;
@@ -36,9 +34,6 @@ public class InformationControl : MonoBehaviour
     public GameObject TimeDistanceTravelObject;
     private LineRenderer TimeDistLR;
     
-
-    private Vector3 initTimeDistTravelPos;
-
     [Header("TimeVelocity")]
     public GameObject TimeVelocityParent;
     public GameObject TimeVelocityStart;
@@ -47,25 +42,20 @@ public class InformationControl : MonoBehaviour
     public GameObject TimeVelocityTravelObject;
     private LineRenderer TimeVelocityLR;
     
-
-    private Vector3 initTimeVelocityTravelPos;
+    private Vector3 _initTimeDistTravelPos;
+    private Vector3 _initTimeVelocityTravelPos;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("initFile is null: " + (GlobalData.initFile is null));
+        //Debug.Log("initFile is null: " + (GlobalData.initFile is null));
         //Debug.Log("initFile.information is null: " + (GlobalData.initFile.information is null));
         
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot || 
             !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
-            // TimeVelocityStart.SetActive(false);
-            // TimeVelocityXAxis.SetActive(false);
-            // TimeVelocityYAxis.SetActive(false);
-            // TimeVelocityTravelObject.SetActive(false);
-            
             TimeVelocityParent.SetActive(false);
         }
         else
@@ -76,7 +66,7 @@ public class InformationControl : MonoBehaviour
             DataImport.TimeVelocityXAxisLength = xrenderer.bounds.size.x;
             DataImport.TimeVelocityYAxisLength = yrenderer.bounds.size.y;
             TimeVelocityLR = TimeVelocityStart.GetComponent<LineRenderer>();
-            initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
+            _initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
         }
         
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot || 
@@ -97,7 +87,7 @@ public class InformationControl : MonoBehaviour
             DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
             DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
             TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
-            initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
+            _initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
         }
 
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowArcLengthData || 
@@ -182,7 +172,7 @@ public class InformationControl : MonoBehaviour
             Vector2 tdPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints[pointIndex];
             Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
             TimeDistanceTravelObject.transform.position =
-                initTimeDistTravelPos + tdVec;    
+                _initTimeDistTravelPos + tdVec;    
         }
 
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
@@ -190,7 +180,7 @@ public class InformationControl : MonoBehaviour
             Vector2 tvPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints[pointIndex];
             Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
             TimeVelocityTravelObject.transform.position =
-                initTimeVelocityTravelPos + tvVec;    
+                _initTimeVelocityTravelPos + tvVec;    
         }
 
     }

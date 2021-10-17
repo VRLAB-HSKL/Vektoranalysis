@@ -244,8 +244,8 @@ public static class GlobalData
         
         //Debug.Log(tr);
 
-        var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
-        File.WriteAllText(path, tr.ToString());
+        //var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
+        //File.WriteAllText(path, tr.ToString());
 
         
         
