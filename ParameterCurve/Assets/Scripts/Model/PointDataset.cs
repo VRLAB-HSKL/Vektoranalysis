@@ -70,5 +70,19 @@ public class PointDataset
                 new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :
                 new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor);
         }
+        
+        // Calcualte arc world points
+        arcLengthWorldPoints.Clear();
+        for (int i = 0; i < arcLenghtPoints.Count; i++)
+        {
+            var arcPoint = arcLenghtPoints[i];
+
+            bool swapYZCoordinates = Is3DCurve;
+            
+            arcLengthWorldPoints.Add(swapYZCoordinates ?
+                new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalData.PointScaleFactor :
+                new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalData.PointScaleFactor);
+
+        }
     }
 }

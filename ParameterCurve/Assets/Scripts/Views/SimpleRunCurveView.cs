@@ -1,24 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using log4net;
 using UnityEngine;
 
 public class SimpleRunCurveView : SimpleCurveView
 {
-    private Transform TravelObject { get; set; }
+    public static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
+    
+    
+    protected Transform TravelObject { get; set; }
 
     public LineRenderer TangentLR;
     public LineRenderer NormalLR;
     public LineRenderer BinormalLR;
 
     private Vector3 initTravelObjPos;
-
+    private float initTangentLRWidth;
+    private float initNormalLRWidth;
+    private float initBinormalLRWidth;
+    
+    
     private Vector3[] tangentArr = new Vector3[2];
     private Vector3[] normalArr = new Vector3[2];
     private Vector3[] binormalArr = new Vector3[2];
 
     public int currentPointIndex = 0;
-    private bool isRunning = false;
+    protected bool isRunning = false;
     
 
     public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject)
@@ -41,6 +49,7 @@ public class SimpleRunCurveView : SimpleCurveView
             GameObject firstChild = TravelObject.GetChild(0).gameObject;
             TangentLR = firstChild.GetComponent<LineRenderer>();
             TangentLR.positionCount = 2;
+            initTangentLRWidth = TangentLR.widthMultiplier;
         }
 
         if (TravelObject.childCount > 1)
@@ -48,6 +57,7 @@ public class SimpleRunCurveView : SimpleCurveView
             GameObject secondChild = TravelObject.GetChild(1).gameObject;
             NormalLR = secondChild.GetComponent<LineRenderer>();
             NormalLR.positionCount = 2;
+            initNormalLRWidth = NormalLR.widthMultiplier;
         }
 
         if (TravelObject.childCount > 2)
@@ -55,6 +65,7 @@ public class SimpleRunCurveView : SimpleCurveView
             GameObject thirdChild = TravelObject.GetChild(2).gameObject;
             BinormalLR = thirdChild.GetComponent<LineRenderer>();
             BinormalLR.positionCount = 2;
+            initBinormalLRWidth = BinormalLR.widthMultiplier;
         }
     }
 
@@ -90,9 +101,6 @@ public class SimpleRunCurveView : SimpleCurveView
         // Debug.Log("worldPointsCount: " + curve.worldPoints.Count);
         
         // On arrival at the last point, stop driving
-        
-        
-        
         if (currentPointIndex >= curve.worldPoints.Count)
         {
             //Debug.Log("Stop");
@@ -113,6 +121,7 @@ public class SimpleRunCurveView : SimpleCurveView
         if (currentPointIndex >= curve.worldPoints.Count)
         {
             GlobalData.IsDriving = false;
+            isRunning = false;
             return;
         }
 
@@ -120,18 +129,41 @@ public class SimpleRunCurveView : SimpleCurveView
 
         var travelObjPosition = TravelObject.position;
         tangentArr[0] = travelObjPosition;
-        tangentArr[1] = (travelObjPosition + 
-            curve.fresnetApparatuses[currentPointIndex].Tangent).normalized;
+        tangentArr[1] = (travelObjPosition +
+                         (curve.fresnetApparatuses[currentPointIndex].Tangent).normalized * ScalingFactor); //.normalized;
+        
+        
+        //tangentArr[1] = MapPointPos(tangentArr[1]);
+        
+        
         TangentLR.SetPositions(tangentArr);
+        TangentLR.widthMultiplier = initTangentLRWidth * ScalingFactor;
                 
         normalArr[0] = travelObjPosition;
-        normalArr[1] = (travelObjPosition + curve.fresnetApparatuses[currentPointIndex].Normal).normalized;
+        normalArr[1] = (travelObjPosition + (curve.fresnetApparatuses[currentPointIndex].Normal).normalized * ScalingFactor); //.normalized;
+        //normalArr[1] = MapPointPos(normalArr[1]);
         NormalLR.SetPositions(normalArr);
+        NormalLR.widthMultiplier = initNormalLRWidth * ScalingFactor;
                 
         binormalArr[0] = travelObjPosition;
-        binormalArr[1] = (travelObjPosition + curve.fresnetApparatuses[currentPointIndex].Binormal);
+        binormalArr[1] = (travelObjPosition + (curve.fresnetApparatuses[currentPointIndex].Binormal).normalized * ScalingFactor);
         BinormalLR.SetPositions(binormalArr);
-
+        BinormalLR.widthMultiplier = initBinormalLRWidth * ScalingFactor;
+        
+        
+        
+        Debug.Log("objPos: " + travelObjPosition +
+                  " jsonTangentPoint: [" + curve.fresnetApparatuses[currentPointIndex].Tangent + "] " +
+                  " tangentArr: [" + tangentArr[0] + ", " + tangentArr[1] + "]" +
+                  " length: " + (tangentArr[1] - tangentArr[0]).magnitude + "\n" + 
+                  " normalArr: [" + normalArr[0] + ", " + normalArr[1] + "]" +
+                  " length: " + (normalArr[1] - normalArr[0]).magnitude + "\n" + 
+                  " jsonBinormalPoint: [" + curve.fresnetApparatuses[currentPointIndex].Binormal + "] " +
+                  " binormalArr: [" + binormalArr[0] + ", " + binormalArr[1] + "]" +
+                  " length: " + (binormalArr[1] - binormalArr[0]).magnitude);
+        
+        
+        
         Vector3 nextPos;
         if (currentPointIndex < curve.worldPoints.Count - 1)
         {

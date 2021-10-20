@@ -114,8 +114,8 @@ public class WorldStateController : MonoBehaviour
         
         
         pointStepDuration = 
-            0.025f 
-            //(1f / 30f) 
+            //0.25f 
+            (1f / 30f) 
             //60f) 
             * GlobalData.RunSpeedFactor;
 

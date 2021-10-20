@@ -63,13 +63,13 @@ public static class DataImport
                 curve.Data.Data.VelVec[j][0],
                 curve.Data.Data.VelVec[j][1],
                 pd.Is3DCurve ? curve.Data.Data.VelVec[j][2] : 0f
-            );
+            ).normalized;
             
             fsr.Normal = new Vector3(
                 curve.Data.Data.AccVec[j][0],
                 curve.Data.Data.AccVec[j][1],
                 pd.Is3DCurve ? curve.Data.Data.AccVec[j][2] : 0f
-            );
+            ).normalized;
 
             fsr.Binormal = Vector3.Cross(fsr.Tangent, fsr.Normal);
             
