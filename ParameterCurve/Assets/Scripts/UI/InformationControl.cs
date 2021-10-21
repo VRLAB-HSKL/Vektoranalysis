@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using HTC.UnityPlugin.Vive;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class InformationControl : MonoBehaviour
 {
     [Header("Header")] 
-    public GameObject HeaderParent;
+    public GameObject headerParent;
     public TextMeshProUGUI SourceLabel;
     public TextMeshProUGUI IndexLabel;
 
@@ -120,22 +121,34 @@ public class InformationControl : MonoBehaviour
             SourceLabel.gameObject.SetActive(false);
             IndexLabel.gameObject.SetActive(false);
             
-            HeaderParent.SetActive(false);
+            headerParent.SetActive(false);
         }
     }
 
 
-    public void UpdateInfoLabels()
+    public void Update()
+    {
+        UpdateInfoLabels();
+        UpdatePlotTravelObjects();
+        UpdatePlotLineRenderers();
+    }
+    
+    private void UpdateInfoLabels()
     {
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
+        var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         int pointIndex = GlobalData.CurrentPointIndex;
+
+        if (pointIndex > curve.points.Count) return;
+        
+        Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
         
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
         {
             IndexLabel.text = (pointIndex + 1) +
                               " / " +
-                              GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points.Count;    
+                             curve.points.Count;    
         }
         
 
@@ -144,32 +157,35 @@ public class InformationControl : MonoBehaviour
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowPointData)
         {
             SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].Name;
-            TLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].paramValues[pointIndex].ToString(floatFormat);
-            XLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].x.ToString(floatFormat);
-            YLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].y.ToString(floatFormat);
-            ZLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].points[pointIndex].z.ToString(floatFormat);    
+            TLabel.text = curve.paramValues[pointIndex].ToString(floatFormat);
+            XLabel.text = curve.points[pointIndex].x.ToString(floatFormat);
+            YLabel.text = curve.points[pointIndex].y.ToString(floatFormat);
+            ZLabel.text = curve.points[pointIndex].z.ToString(floatFormat);    
         }
 
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
         {
-            ArcLengthLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLength.ToString("0.###");
-            ArcTLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthParamValues[pointIndex].ToString(floatFormat);
-            ArcXLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLenghtPoints[pointIndex].x.ToString(floatFormat);
-            ArcYLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLenghtPoints[pointIndex].y.ToString(floatFormat);
-            ArcZLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLenghtPoints[pointIndex].z.ToString(floatFormat);    
+            ArcLengthLabel.text = curve.arcLength.ToString("0.###");
+            ArcTLabel.text = curve.arcLengthParamValues[pointIndex].ToString(floatFormat);
+            ArcXLabel.text = curve.arcLenghtPoints[pointIndex].x.ToString(floatFormat);
+            ArcYLabel.text = curve.arcLenghtPoints[pointIndex].y.ToString(floatFormat);
+            ArcZLabel.text = curve.arcLenghtPoints[pointIndex].z.ToString(floatFormat);    
         }
     }
 
-    public void UpdatePlotTravelObjects()
+    private void UpdatePlotTravelObjects()
     {
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
-        
-        int pointIndex = GlobalData.CurrentPointIndex;
 
+        var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        var pointIndex = GlobalData.CurrentPointIndex;
+
+        if (pointIndex > curve.points.Count) return;
+        
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
         {
             // Set info plot travel objects
-            Vector2 tdPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints[pointIndex];
+            Vector2 tdPosVec = curve.timeDistancePoints[pointIndex];
             Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
             TimeDistanceTravelObject.transform.position =
                 _initTimeDistTravelPos + tdVec;    
@@ -177,7 +193,7 @@ public class InformationControl : MonoBehaviour
 
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
         {
-            Vector2 tvPosVec = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints[pointIndex];
+            Vector2 tvPosVec = curve.timeVelocityPoints[pointIndex];
             Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
             TimeVelocityTravelObject.transform.position =
                 _initTimeVelocityTravelPos + tvVec;    
@@ -185,16 +201,18 @@ public class InformationControl : MonoBehaviour
 
     }
 
-    public void UpdatePlotLineRenderers()
+    private void UpdatePlotLineRenderers()
     {
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
+        var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
         {
-            TimeDistLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints.Count;
-            for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints.Count; i++)
+            TimeDistLR.positionCount = curve.timeDistancePoints.Count;
+            for (int i = 0; i < curve.timeDistancePoints.Count; i++)
             {
-                Vector2 p = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeDistancePoints[i];
+                Vector2 p = curve.timeDistancePoints[i];
                 Vector3 newPos = TimeDistanceStart.transform.position;            
                 newPos.x += p.x;
                 newPos.y += p.y;
@@ -204,10 +222,10 @@ public class InformationControl : MonoBehaviour
 
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
         {
-            TimeVelocityLR.positionCount = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints.Count;
-            for (int i = 0; i < GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints.Count; i++)
+            TimeVelocityLR.positionCount = curve.timeVelocityPoints.Count;
+            for (int i = 0; i < curve.timeVelocityPoints.Count; i++)
             {
-                Vector2 p = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].timeVelocityPoints[i];
+                Vector2 p = curve.timeVelocityPoints[i];
                 Vector3 newPos = TimeVelocityStart.transform.position;
                 newPos.x += p.x;
                 newPos.y += p.y;

@@ -25,12 +25,12 @@ public static class GlobalData
     public static ExerciseViewController ExerciseController { get; set; }
     
     
-    public static bool IsDriving = false;
+    public static bool IsRunning { get; set; } = false;
 
     public enum CurveDisplayGroup { Display = 0, Exercises = 1 }
     public static CurveDisplayGroup CurrentDisplayGroup { get; set; } = CurveDisplayGroup.Display;
 
-    public static List<PointDataset> CurrentDataset
+    public static List<CurveInformationDataset> CurrentDataset
     {
         get
         {
@@ -42,12 +42,13 @@ public static class GlobalData
             };
         }
     }
+    
 
-    public static List<PointDataset> DisplayCurveDatasets = new List<PointDataset>();
-    public static List<PointDataset> ParamCurveDatasets = new List<PointDataset>();
-    public static List<PointDataset> ExerciseCurveDatasets = new List<PointDataset>();
+    public static List<CurveInformationDataset> DisplayCurveDatasets = new List<CurveInformationDataset>();
+    public static List<CurveInformationDataset> ParamCurveDatasets = new List<CurveInformationDataset>();
+    public static List<CurveInformationDataset> ExerciseCurveDatasets = new List<CurveInformationDataset>();
 
-    public static List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+    
 
     private static List<AbstractCurveCalc> NamedDataset { get; set; } = new List<AbstractCurveCalc>()
     {
@@ -91,8 +92,14 @@ public static class GlobalData
     //public static CurveSelectionStateContext CurveSelectionFSM;
 
     public static int CurrentCurveIndex = 0;
-    public static int CurrentPointIndex = 0;
+    public static int CurrentPointIndex { get; set; } = 0;
 
+    public static List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+
+    public static int CurrentExerciseIndex = 0;
+    public static int CurrentSubExerciseIndex = 0;
+    
+    
     public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
     public static string ImageResourcePath = "img/";
 
@@ -246,6 +253,8 @@ public static class GlobalData
 
         //var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
         //File.WriteAllText(path, tr.ToString());
+        
+        
 
         
         
@@ -288,7 +297,7 @@ public static class GlobalData
             }
 
             
-            ExerciseCurveDatasets.Add(new PointDataset()
+            ExerciseCurveDatasets.Add(new CurveInformationDataset()
             {
                 Name = ex.Title,
                 DisplayString = ex.Title,

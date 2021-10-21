@@ -19,7 +19,7 @@ public class RunStart : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            if (!GlobalData.IsDriving)
+            if (!GlobalData.IsRunning)
             {
                 world.StartRun();
             }

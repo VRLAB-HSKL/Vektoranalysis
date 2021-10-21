@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Views.Exercise;
 
 namespace Views
 {
@@ -13,7 +14,16 @@ namespace Views
         
         private SelectionExerciseGameObjects selObjects;
 
-        public ExercisePointDataset CurrentExerciseData { get; set; }
+        private SelectionExercise CurrentSelectionExercise
+        {
+            get
+            {
+                return GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];
+            }
+        }
+        
+        
+        //public ExercisePointDataset CurrentExerciseData { get; set; }
         public int CurrentExerciseIndex { get; set; }
         public string CurrentTitle { get; set; }
         public string CurrentDescription { get; set; }
@@ -36,7 +46,7 @@ namespace Views
         public SelectionExerciseCompoundView(SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, ExercisePointDataset initData)
         {
             PillarPrefab = pillarPrefab;
-            CurrentExerciseData = initData;
+            //CurrentExerciseData = initData;
             this.selObjects = selObjects;
             this.origin = origin;
 
@@ -68,9 +78,23 @@ namespace Views
             rightLR.widthMultiplier = 0.05f;
             rightLR.material = selObjects.CurveLineMat;
             
-            curveViews.Add(new SimpleCurveView(leftLR, leftPillar.transform.position + selObjects.CurveOffset, selObjects.ScalingFactor));
-            curveViews.Add(new SimpleCurveView(middleLR, middlePillar.transform.position + selObjects.CurveOffset, selObjects.ScalingFactor));
-            curveViews.Add(new SimpleCurveView(rightLR, rightPillar.transform.position + selObjects.CurveOffset, selObjects.ScalingFactor));
+            curveViews.Add(new SelectionExerciseView(
+                            leftLR, 
+                            leftPillar.transform.position + selObjects.CurveOffset, 
+                            selObjects.ScalingFactor,
+                            SelectionExerciseView.PillarIdentifier.Left));
+            
+            curveViews.Add(new SelectionExerciseView(
+                            middleLR, 
+                            middlePillar.transform.position + selObjects.CurveOffset, 
+                            selObjects.ScalingFactor,
+                            SelectionExerciseView.PillarIdentifier.Middle));
+            
+            curveViews.Add(new SelectionExerciseView(
+                            rightLR, 
+                            rightPillar.transform.position + selObjects.CurveOffset, 
+                            selObjects.ScalingFactor, 
+                            SelectionExerciseView.PillarIdentifier.Right));
 
             UpdateView();
         }
@@ -78,13 +102,13 @@ namespace Views
         public void UpdateView()
         {
             //Debug.Log("SelectionExerciseView.UpdateView()");
-            curveViews[0].SetCustomDataset(CurrentExerciseData.LeftDataset);
-            curveViews[1].SetCustomDataset(CurrentExerciseData.MiddleDataset);
-            curveViews[2].SetCustomDataset(CurrentExerciseData.RightDataset);
+            // curveViews[0].SetCustomDataset(CurrentExerciseData.LeftDataset);
+            // curveViews[1].SetCustomDataset(CurrentExerciseData.MiddleDataset);
+            // curveViews[2].SetCustomDataset(CurrentExerciseData.RightDataset);
 
-            curveViews[0].ScalingFactor = CurrentExerciseData.LeftDataset.SelectExercisePillarScalingFactor;
-            curveViews[1].ScalingFactor = CurrentExerciseData.MiddleDataset.SelectExercisePillarScalingFactor;
-            curveViews[2].ScalingFactor = CurrentExerciseData.RightDataset.SelectExercisePillarScalingFactor;
+            // curveViews[0].ScalingFactor = CurrentExerciseData.LeftDataset.SelectExercisePillarScalingFactor;
+            // curveViews[1].ScalingFactor = CurrentExerciseData.MiddleDataset.SelectExercisePillarScalingFactor;
+            // curveViews[2].ScalingFactor = CurrentExerciseData.RightDataset.SelectExercisePillarScalingFactor;
             
             
             
@@ -106,7 +130,8 @@ namespace Views
                 // Start incrementing on small 'a' character
                 var subExerciseLetter = (char) (97 + CurrentExerciseIndex);
                 selObjects.SubExerciseIdentifier.text = subExerciseLetter + ")";
-                selObjects.HeaderText.text = CurrentExerciseData.HeaderText;
+                selObjects.HeaderText.text = GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex]
+                    .Datasets[GlobalData.CurrentSubExerciseIndex].HeaderText;
                 
                 ShowSelectionView();
             }

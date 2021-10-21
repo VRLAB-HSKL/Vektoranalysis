@@ -54,7 +54,7 @@ namespace Import.NewInitFile
         public string Name { get; set; }
         
         [JsonProperty("rgba")]
-        public List<byte> Rgba { get; set; }
+        public List<float> Rgba { get; set; }
         
         [JsonProperty("hex")]
         public string Hex { get; set; }
@@ -62,8 +62,6 @@ namespace Import.NewInitFile
 
     
     #endregion General
-
-    
     
     #region DisplayCurves
     
@@ -149,7 +147,6 @@ namespace Import.NewInitFile
     
     
     #endregion DisplayCurves
-    
     
     #region Exercises
     

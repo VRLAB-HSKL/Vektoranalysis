@@ -50,6 +50,9 @@ public class CurveViewController : AbstractViewController
         var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
         var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
         
+        // Temporarily deactivate run object on arc view
+        //simpleRunWithArcLengthView.HasTravelPoint = false;
+        
         _views = new List<AbstractView>
         {
             simpleView,
@@ -86,7 +89,7 @@ public class CurveViewController : AbstractViewController
         
         base.SwitchView(index);
         _travelObject.gameObject.SetActive( (CurrentView as AbstractCurveView).HasTravelPoint);
-        _arcLengthTravelObject.gameObject.SetActive((CurrentView as AbstractCurveView).HasArcLengthPoint);
+        _arcLengthTravelObject.gameObject.SetActive((CurrentView as AbstractCurveView).HasArcLengthTravelPoint);
     }
     
     public void StartRun()
@@ -101,6 +104,6 @@ public class CurveViewController : AbstractViewController
         }
 
         
-        GlobalData.IsDriving = true;        
+        GlobalData.IsRunning = true;        
     }
 }

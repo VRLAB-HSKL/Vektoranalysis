@@ -13,12 +13,21 @@ namespace Controller
         /// <summary>
         /// Model of the controller, representing a selection exercise
         /// </summary>
-        public SelectionExercise exercise { get; set; }
+        public SelectionExercise CurrentExercise
+        {
+            get
+            {
+                return GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];
+            }
+        }
+        
+        
+        
         
         /// <summary>
         /// Current exercise index for multiple exercises
         /// </summary>
-        public int currentExerciseIndex;
+        //public int currentExerciseIndex;
         
         /// <summary>
         /// Chosen selections in selection exercise, all -1 per default for non-choice
@@ -28,20 +37,21 @@ namespace Controller
         public ExerciseViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab) : base(root)
         {
             //Debug.Log("globalDataSelectionExercises[0] is null: " + (GlobalData.SelectionExercises[0] is null));
-            exercise = GlobalData.SelectionExercises[0];
+            //exercise = ;
             //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseData = exercise.Datasets[0];
+
             
             
             
             // Initialize all answers as 'none given'
-            for (int i = 0; i < exercise.CorrectAnswers.Count; i++)
+            for (int i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
             {
                 selectionIndices.Add(-1);
             }
 
-            var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, exercise.Datasets[0]);
-            selView.CurrentTitle = exercise.Title;
-            selView.CurrentDescription = exercise.Description;
+            var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, CurrentExercise.Datasets[0]);
+            selView.CurrentTitle = CurrentExercise.Title;
+            selView.CurrentDescription = CurrentExercise.Description;
             _views = new List<AbstractView>()
             {
                 selView
@@ -63,7 +73,9 @@ namespace Controller
             // Debug.Log("showMainDisplay: " + (CurrentView as SelectionExerciseCompoundView).showMainDisplay);
             // Debug.Log("currentExerciseIndex: " + currentExerciseIndex);
             
-            if ((CurrentView as SelectionExerciseCompoundView).showMainDisplay && currentExerciseIndex == 0)
+            
+            
+            if ((CurrentView as SelectionExerciseCompoundView).showMainDisplay && GlobalData.CurrentSubExerciseIndex == 0)
             {
                 // showMainDisplay = false;
                 (CurrentView as SelectionExerciseCompoundView).showMainDisplay = false;
@@ -71,36 +83,36 @@ namespace Controller
                 return;
             }
 
-            if (currentExerciseIndex == exercise.Datasets.Count - 1)
+            if (GlobalData.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
             {
                 int correctCount = 0;
-                for (int i = 0; i < exercise.CorrectAnswers.Count; i++)
+                for (int i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
                 {
-                    int chosenAnswer = exercise.ChosenAnswers[i];
-                    int correctAnswer = exercise.CorrectAnswers[i];
+                    int chosenAnswer = CurrentExercise.ChosenAnswers[i];
+                    int correctAnswer = CurrentExercise.CorrectAnswers[i];
                     
                     Debug.Log("Chosen: " + chosenAnswer + ", Correct: " + correctAnswer);
 
                     if (chosenAnswer == correctAnswer) ++correctCount;
                 }
                 
-                Debug.Log("Result: [" + correctCount + "/" + exercise.CorrectAnswers.Count + "] correct!");
+                Debug.Log("Result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
             
                 return;
             }
             
-            ++currentExerciseIndex;
+            ++GlobalData.CurrentSubExerciseIndex;
             
-            (CurrentView as SelectionExerciseCompoundView).CurrentExerciseData =
-                exercise.Datasets[currentExerciseIndex];
-            (CurrentView as SelectionExerciseCompoundView).CurrentExerciseIndex = currentExerciseIndex;
+            //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseData =
+            //    exercise.Datasets[currentExerciseIndex];
+            //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseIndex = currentExerciseIndex;
             
             CurrentView.UpdateView();
         }
 
         public void PreviousSubExercise()
         {
-            if (currentExerciseIndex == 0)
+            if (GlobalData.CurrentSubExerciseIndex == 0)
             {
                 //showMainDisplay = true;
                 (CurrentView as SelectionExerciseCompoundView).showMainDisplay = true;
@@ -108,18 +120,18 @@ namespace Controller
                 return;
             }
             
-            --currentExerciseIndex;
-            (CurrentView as SelectionExerciseCompoundView).CurrentExerciseData =
-                exercise.Datasets[currentExerciseIndex];
-            (CurrentView as SelectionExerciseCompoundView).CurrentExerciseIndex = currentExerciseIndex;
+            --GlobalData.CurrentSubExerciseIndex;
+            // (CurrentView as SelectionExerciseCompoundView).CurrentExerciseData =
+            //     exercise.Datasets[currentExerciseIndex];
+            // (CurrentView as SelectionExerciseCompoundView).CurrentExerciseIndex = currentExerciseIndex;
             CurrentView.UpdateView();
         }
 
         public void SetSelection(int choice)
         {
             //selectionIndex = choice;
-            selectionIndices[currentExerciseIndex] = choice;
-            exercise.ChosenAnswers[currentExerciseIndex] = choice;
+            selectionIndices[GlobalData.CurrentSubExerciseIndex] = choice;
+            CurrentExercise.ChosenAnswers[GlobalData.CurrentSubExerciseIndex] = choice;
         }
 
         public override void SetViewVisibility(bool value)

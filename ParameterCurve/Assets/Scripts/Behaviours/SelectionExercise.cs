@@ -35,11 +35,11 @@ public class SelectionExercise
 public class ExercisePointDataset
 {
     public string HeaderText { get; set; }
-    public PointDataset LeftDataset { get; set; }
-    public PointDataset MiddleDataset { get; set; }
-    public PointDataset RightDataset { get; set; }
+    public CurveInformationDataset LeftDataset { get; set; }
+    public CurveInformationDataset MiddleDataset { get; set; }
+    public CurveInformationDataset RightDataset { get; set; }
 
-    public ExercisePointDataset(string headerText, PointDataset leftDataset, PointDataset middleDataset, PointDataset rightDataset)
+    public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
     {
         HeaderText = headerText;
         LeftDataset = leftDataset;

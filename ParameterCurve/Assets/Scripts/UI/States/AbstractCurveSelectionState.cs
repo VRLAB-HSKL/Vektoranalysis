@@ -54,7 +54,7 @@ public abstract class AbstractCurveSelectionState : State
         // Create buttons        
         for (int i = 0; i < GlobalData.CurrentDataset.Count; i++)
         {
-            PointDataset pds = GlobalData.CurrentDataset[i];
+            CurveInformationDataset pds = GlobalData.CurrentDataset[i];
             GameObject tmpButton = MonoBehaviour.Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
 
             tmpButton.name = pds.Name + "Button";

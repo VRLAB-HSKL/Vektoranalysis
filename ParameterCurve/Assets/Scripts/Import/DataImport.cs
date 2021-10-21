@@ -22,15 +22,35 @@ public static class DataImport
     private static NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
 
-    public static PointDataset CreatePointDatasetFromCurve(Curve curve)
+    public static CurveInformationDataset CreatePointDatasetFromCurve(Curve curve)
     {
-        PointDataset pd = new PointDataset
+        CurveInformationDataset pd = new CurveInformationDataset
         {
             id = curve.Info.Id,
             Name = curve.Info.Name,
             DisplayString = curve.Info.Name,
             NotebookURL = string.Empty
         };
+
+
+
+        var lineColorValues = curve.CurveSettings.DisplaySettings.LineColor;
+        
+        Color lineColor = new Color(lineColorValues.Rgba[0], lineColorValues.Rgba[1], 
+                                    lineColorValues.Rgba[2], lineColorValues.Rgba[3]);
+        
+        pd.CurveLineColor = lineColor;
+
+        var travelObjValArr= curve.CurveSettings.DisplaySettings.TravelObjColor.Rgba;
+        Color travelObjColor = new Color(travelObjValArr[0], travelObjValArr[1], 
+                                         travelObjValArr[2], travelObjValArr[3]);
+        pd.TravelObjColor = travelObjColor;
+        
+        var arcTravelObjValArr= curve.CurveSettings.DisplaySettings.ArcTravelObjColor.Rgba;
+        Color arcTravelObjColor = new Color(arcTravelObjValArr[0], arcTravelObjValArr[1], 
+                                            arcTravelObjValArr[2], arcTravelObjValArr[3]);
+        pd.ArcTravelObjColor = arcTravelObjColor;
+        
 
         // Attempt to load image resource based on curve name        
         string imgResPath = GlobalData.ImageResourcePath + curve.Info.Name; 

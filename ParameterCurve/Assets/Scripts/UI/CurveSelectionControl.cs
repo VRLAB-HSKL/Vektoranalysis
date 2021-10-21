@@ -149,7 +149,7 @@ public class CurveSelectionControl : MonoBehaviour
             Debug.Log("Browser Wall not initialized!");
         }
 
-        List<PointDataset> cds = GlobalData.CurrentDataset;
+        List<CurveInformationDataset> cds = GlobalData.CurrentDataset;
 
         if(cds is null)
         {
@@ -159,7 +159,7 @@ public class CurveSelectionControl : MonoBehaviour
         //Debug.Log("idx: " + GlobalData.CurrentCurveIndex);
         //Debug.Log("cdsCount: " + cds.Count);
 
-        PointDataset ds = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        CurveInformationDataset ds = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
         if(ds is null)
         {

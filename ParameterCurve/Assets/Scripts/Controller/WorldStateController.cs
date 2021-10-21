@@ -72,7 +72,7 @@ public class WorldStateController : MonoBehaviour
 
         
         
-        // var curveColorValues = GlobalData.initFile..color.rgba;
+        // var curveColorValues = GlobalData.initFile
         // if (curveColorValues.Length >= 3)
         // {
         //     float r = curveColorValues[0] / 255f;
@@ -123,7 +123,7 @@ public class WorldStateController : MonoBehaviour
         BrowserWall.OpenURL(GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
 
         // Set plotline renderers
-        InfoWall.UpdatePlotLineRenderers();
+        InfoWall.Update();
     }
 
 
@@ -134,7 +134,7 @@ public class WorldStateController : MonoBehaviour
 
     private void Update()
     {
-        if (GlobalData.IsDriving)
+        if (GlobalData.IsRunning)
         {
             updateTimer += Time.deltaTime;
             if(updateTimer >= pointStepDuration)
@@ -145,7 +145,7 @@ public class WorldStateController : MonoBehaviour
                 GlobalData.WorldViewController.CurrentView.UpdateView();
                 TableViewController?.CurrentView.UpdateView();
 
-                InfoWall.UpdatePlotLineRenderers();
+                InfoWall.Update();
             }
             //WorldViewController.CurrentView.UpdateView();
             
@@ -170,7 +170,7 @@ public class WorldStateController : MonoBehaviour
     {
         Log.Info("Starting curve run...");
         //GlobalData.CurrentPointIndex = 0;
-        GlobalData.IsDriving = true;        
+        GlobalData.IsRunning = true;        
         GlobalData.WorldViewController.StartRun();
         TableViewController.StartRun();
     }
@@ -178,9 +178,9 @@ public class WorldStateController : MonoBehaviour
     public void SwitchToNextDataset()
     {
         // Stop driving
-        if(GlobalData.IsDriving)
+        if(GlobalData.IsRunning)
         {
-            GlobalData.IsDriving = false;            
+            GlobalData.IsRunning = false;            
         }
 
         // Increment data set index, reset to 0 on overflow
@@ -199,7 +199,9 @@ public class WorldStateController : MonoBehaviour
         
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
-        InfoWall.UpdatePlotLineRenderers();
+        
+        // Udpate info wall
+        InfoWall.Update();
 
         //WorldViewController.CurrentView.UpdateView();
         GlobalData.WorldViewController.UpdateViewsDelegate();
@@ -211,14 +213,14 @@ public class WorldStateController : MonoBehaviour
     public void SwitchToPreviousDataset()
     {
         // Stop driving
-        if (GlobalData.IsDriving)
+        if (GlobalData.IsRunning)
         {
             if(GlobalData.WorldViewController.CurrentView is null)
             {
                 Log.Warn("ViewEmpty");
             }
 
-            GlobalData.IsDriving = false;
+            GlobalData.IsRunning = false;
         }
 
         // Decrement data set index, reset to last element on negative index
@@ -237,7 +239,7 @@ public class WorldStateController : MonoBehaviour
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
-        InfoWall.UpdatePlotLineRenderers();
+        InfoWall.Update();
 
         //WorldViewController.CurrentView.UpdateView();
         GlobalData.WorldViewController.UpdateViewsDelegate();
@@ -250,9 +252,9 @@ public class WorldStateController : MonoBehaviour
     public void SwitchToSpecificDataset(string name)
     {
         // Stop driving
-        if (GlobalData.IsDriving)
+        if (GlobalData.IsRunning)
         {
-            GlobalData.IsDriving = false;
+            GlobalData.IsRunning = false;
         }
 
         if(GlobalData.CurrentDisplayGroup == GlobalData.CurveDisplayGroup.Exercises)
@@ -274,7 +276,7 @@ public class WorldStateController : MonoBehaviour
 
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
-        InfoWall.UpdatePlotLineRenderers();
+        InfoWall.Update();
 
         GlobalData.WorldViewController.UpdateViewsDelegate();
         TableViewController?.CurrentView.UpdateView();

@@ -28,9 +28,7 @@ namespace Behaviours
                 //Debug.Log("globalExerciseController is null: " + (GlobalData.exerciseController is null));
                 
                 bool isSel = selectionChoice ==
-                    GlobalData.ExerciseController?.selectionIndices[GlobalData.ExerciseController.currentExerciseIndex]; //currentExerciseIndex;    
-
-                
+                    GlobalData.ExerciseController?.selectionIndices[GlobalData.CurrentSubExerciseIndex]; //currentExerciseIndex;    
 
                 return isSel;
             }
