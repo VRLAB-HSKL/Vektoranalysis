@@ -77,6 +77,9 @@ public static class DataImport
                 pd.Is3DCurve ? curve.Data.Data.PVec[j][2] : 0f
                 ));
 
+            pd.timeDistancePoints = CalculateTimeDistancePoints(pd.points);
+            pd.timeVelocityPoints = CalculateTimeVelocityPoints(pd.points);
+            
             FresnetSerretApparatus fsr = new FresnetSerretApparatus();
 
             fsr.Tangent = new Vector3(
@@ -141,6 +144,105 @@ public static class DataImport
         return epd;
     }
     
+    
+    private static List<Vector2> CalculateTimeDistancePoints(List<Vector3> points)
+    {
+        List<Vector2> tdPoints = new List<Vector2>();
+        var curvePoints = points;
+        int numSteps = points.Count;
+
+        float maxDistance = CalculateRawDistance(curvePoints);
+        float currentDistance = 0f;
+
+        for(int i = 0; i < numSteps; i++)
+        {
+            // Move one step to the right on the horizontal x-axis each iteration
+            float x = i / (float) numSteps;
+
+            
+            float y;
+            
+            // Start at the vertical origin on first iteration
+            if (i == 0)
+            {
+                y = 0f;
+            }
+            
+            // Otherwise calculate vertical distance on y-axis
+            else
+            {
+                // Calculate new vertical offset based on previous point location
+                currentDistance += Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
+                y = currentDistance;
+                y /= maxDistance;
+            }
+
+            tdPoints.Add(new Vector2(x, y));
+        }
+
+        return tdPoints;
+    }
+
+    private static List<Vector2> CalculateTimeVelocityPoints(List<Vector3> points)
+    {
+        List<Vector2> tvPoints = new List<Vector2>();
+        var curvePoints = points;
+        int numSteps = points.Count;
+
+        //float maxDistance =  CalculateRawDistance(curvePoints);
+        //float currentDistance = 0f;
+        float maxVelocity = 0f;
+
+        for (int i = 0; i < numSteps; i++)
+        {
+            float x = i / (float)numSteps;
+
+            float y;
+            if(i == 0)
+            {
+                y = 0f;
+            }
+            else
+            {
+                float distance = Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
+                //Debug.Log("VecDist: " + y);
+                //currentDistance += d;
+                y = distance;
+
+                if(y > maxVelocity)
+                {
+                    maxVelocity = y;
+                }
+                //y /= maxDistance;
+                //Debug.Log("ScaledVecDist: " + y);
+            }
+
+            tvPoints.Add(new Vector2(x, y));
+        }
+
+        foreach(Vector2 v in tvPoints)
+        {
+            v.Set(v.x, v.y / maxVelocity);
+        }
+        
+
+        return tvPoints;
+    }
+    
+    public static float CalculateRawDistance(List<Vector3> pointList)
+    {
+        // Only start calculating distance between |n| > 1 points
+        if (pointList.Count < 2) return 0f;
+
+        float distance = 0f;
+        for(int i = 1; i < pointList.Count; i++)
+        {
+            // Calculate distance between two points using Unity helper function
+            distance += Mathf.Abs(Vector3.Distance(pointList[i - 1], pointList[i]));
+        }
+
+        return distance;
+    }
     
     
     

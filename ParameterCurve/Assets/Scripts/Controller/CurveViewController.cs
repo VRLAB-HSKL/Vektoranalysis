@@ -17,7 +17,18 @@ public class CurveViewController : AbstractViewController
     private readonly Transform _arcLengthTravelObject;
     
     
-
+    // private new AbstractCurveView currentView;
+    // public new AbstractCurveView CurrentView
+    // {
+    //     get => currentView;
+    //     set
+    //     {
+    //         currentView = value;
+    //         currentView.UpdateView();
+    //     }
+    // }
+    
+    
     // public delegate void d_updateViewsDelegate();
     //
     // private readonly d_updateViewsDelegate _updateViewsDelegate;
@@ -34,7 +45,6 @@ public class CurveViewController : AbstractViewController
     //         return _updateViewsDelegate;
     //     }
     // }
-
 
     
     

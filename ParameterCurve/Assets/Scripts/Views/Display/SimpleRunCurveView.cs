@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Import.NewInitFile;
 using log4net;
 using UnityEngine;
 
@@ -28,15 +29,16 @@ public class SimpleRunCurveView : SimpleCurveView
     //public int currentPointIndex = 0;
     //protected bool isRunning = false;
 
+
+    private int _curPointIdx = 0;
+    
     public int CurrentPointIndex
     {
-        get
-        {
-            return GlobalData.CurrentPointIndex;
-        }
+        get => _curPointIdx;
         set
         {
-            GlobalData.CurrentPointIndex = value;
+            if (value >= CurrentCurve.points.Count) return;
+            _curPointIdx = value;
         }
     }
     
@@ -128,7 +130,7 @@ public class SimpleRunCurveView : SimpleCurveView
             return;
         }
 
-        TravelObject.position = MapPointPos(curve.worldPoints[GlobalData.CurrentPointIndex]);
+        TravelObject.position = MapPointPos(curve.worldPoints[CurrentPointIndex]);
         ++CurrentPointIndex;
 
     }

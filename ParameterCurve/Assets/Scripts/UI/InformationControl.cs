@@ -46,7 +46,7 @@ public class InformationControl : MonoBehaviour
     private Vector3 _initTimeDistTravelPos;
     private Vector3 _initTimeVelocityTravelPos;
 
-
+    public CurveViewController ObserevdViewController;
 
     // Start is called before the first frame update
     void Start()
@@ -138,11 +138,13 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        int pointIndex = GlobalData.CurrentPointIndex;
+
+        var view = ObserevdViewController.CurrentView;
+        int pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
 
         if (pointIndex > curve.points.Count) return;
         
-        Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
+        //Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
         
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
         {
@@ -156,20 +158,23 @@ public class InformationControl : MonoBehaviour
 
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowPointData)
         {
+            if(pointIndex > curve.points.Count)
+                Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
+            
             SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].Name;
-            TLabel.text = curve.paramValues[pointIndex].ToString(floatFormat);
-            XLabel.text = curve.points[pointIndex].x.ToString(floatFormat);
-            YLabel.text = curve.points[pointIndex].y.ToString(floatFormat);
-            ZLabel.text = curve.points[pointIndex].z.ToString(floatFormat);    
+            TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
+            XLabel.text = curve?.points[pointIndex].x.ToString(floatFormat);
+            YLabel.text = curve?.points[pointIndex].y.ToString(floatFormat);
+            ZLabel.text = curve?.points[pointIndex].z.ToString(floatFormat);    
         }
 
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
         {
-            ArcLengthLabel.text = curve.arcLength.ToString("0.###");
-            ArcTLabel.text = curve.arcLengthParamValues[pointIndex].ToString(floatFormat);
-            ArcXLabel.text = curve.arcLenghtPoints[pointIndex].x.ToString(floatFormat);
-            ArcYLabel.text = curve.arcLenghtPoints[pointIndex].y.ToString(floatFormat);
-            ArcZLabel.text = curve.arcLenghtPoints[pointIndex].z.ToString(floatFormat);    
+            ArcLengthLabel.text = curve?.arcLength.ToString("0.###");
+            ArcTLabel.text = curve?.arcLengthParamValues[pointIndex].ToString(floatFormat);
+            ArcXLabel.text = curve?.arcLenghtPoints[pointIndex].x.ToString(floatFormat);
+            ArcYLabel.text = curve?.arcLenghtPoints[pointIndex].y.ToString(floatFormat);
+            ArcZLabel.text = curve?.arcLenghtPoints[pointIndex].z.ToString(floatFormat);    
         }
     }
 

@@ -29,6 +29,8 @@ public abstract class AbstractCurveView : AbstractView
             return ret;
         }
     }
+
+    
     
     
     protected AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)

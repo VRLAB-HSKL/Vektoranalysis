@@ -92,7 +92,7 @@ public class WorldStateController : MonoBehaviour
             WorldTravelObject, WorldArcLengthTravelObject, displayCurve.WorldScalingFactor);
         GlobalData.WorldViewController.SetViewVisibility(true);
 
-
+        
 
 
 
@@ -106,6 +106,9 @@ public class WorldStateController : MonoBehaviour
         {
             TableParent.SetActive(false);
         }
+
+
+        InfoWall.ObserevdViewController = GlobalData.WorldViewController;
         
 
         //if(GlobalData.initFile.table.activated)
@@ -119,15 +122,18 @@ public class WorldStateController : MonoBehaviour
             //60f) 
             * GlobalData.RunSpeedFactor;
 
+        
+    }
+
+
+    private void Start()
+    {
         // Display html resource
         BrowserWall.OpenURL(GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
 
         // Set plotline renderers
         InfoWall.Update();
     }
-
-
-    
 
 
     private float updateTimer = 0f;
