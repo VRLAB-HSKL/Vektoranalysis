@@ -69,6 +69,9 @@ public static class DataImport
         pd.SelectExercisePillarScalingFactor = curve.Data.SelectExercisePillarScalingFactor;
 
         pd.paramValues = curve.Data.Data.T;
+
+        pd.arcLength = curve.Data.ArcLength;
+        
         for (int j = 0; j < curve.Data.Data.T.Count; j++)
         {
             pd.points.Add(new Vector3(

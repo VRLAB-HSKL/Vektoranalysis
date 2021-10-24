@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 8967346656377501906}
   - component: {fileID: 8967346656377501869}
   - component: {fileID: 8967346656377501868}
-  - component: {fileID: 8967346656377501907}
-  - component: {fileID: 8967346656377501870}
   m_Layer: 0
   m_Name: airplane
   m_TagString: Untagged
@@ -83,34 +81,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8967346656377501907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8967346656377501905}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7808c512f41e22c45953aab2e0092612, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshMaterial: {fileID: 2100000, guid: e2416570217cbfa4796f0d0a9f4abae0, type: 2}
-  Factor: 0.1
---- !u!114 &8967346656377501870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8967346656377501905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3244b418f3a51469ee4373861094ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NumberOfPoints: 128
-  distance: 0.5
-  speed: 5
-  RadiusA: 6
-  RadiusB: 3

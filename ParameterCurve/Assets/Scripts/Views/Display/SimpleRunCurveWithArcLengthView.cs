@@ -93,14 +93,14 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         // }
 
         // On arrival at the last point, stop driving
-        if (CurrentPointIndex >= curve.worldPoints.Count)
+        if (CurrentPointIndex >= curve.arcLengthWorldPoints.Count)
         {
             //Debug.Log("Stop");
             GlobalData.IsRunning = false;
             return;
         }
         
-        ArcLengthTravelObject.position = MapPointPos(curve.worldPoints[CurrentPointIndex]);
+        ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
         ++CurrentPointIndex;
 
     }
