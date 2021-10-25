@@ -199,9 +199,26 @@ public class WorldStateController : MonoBehaviour
 
         var worldView = GlobalData.WorldViewController.CurrentView as AbstractCurveView;
         worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+        if(worldView.GetType() == typeof(SimpleRunCurveView) || worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
+        {
+            Debug.Log("adjust travel gameobject");
+            var runview = worldView as SimpleRunCurveView;
+            runview.CurrentPointIndex = 0;
+            runview.SetTravelPoint();
+            runview.SetMovingFrame();
+        }
         
         var tableView = TableViewController.CurrentView as AbstractCurveView;
         tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+        if(tableView.GetType() == typeof(SimpleRunCurveView) || tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+        {
+            Debug.Log("adjust travel gameobject");
+            var runview = tableView as SimpleRunCurveView;
+            runview.CurrentPointIndex = 0;
+            runview.SetTravelPoint();
+            runview.SetMovingFrame();
+        }
+        
         
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
@@ -239,10 +256,26 @@ public class WorldStateController : MonoBehaviour
         
         var worldView = GlobalData.WorldViewController.CurrentView as AbstractCurveView;
         worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+        if(worldView.GetType() == typeof(SimpleRunCurveView) || worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
+        {
+            Debug.Log("adjust travel gameobject");
+            var runview = worldView as SimpleRunCurveView;
+            runview.CurrentPointIndex = 0;
+            runview.SetTravelPoint();
+            runview.SetMovingFrame();
+        }
         
         var tableView = TableViewController.CurrentView as AbstractCurveView;
         tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
-
+        if(tableView.GetType() == typeof(SimpleRunCurveView) || tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+        {
+            Debug.Log("adjust travel gameobject");
+            var runview = tableView as SimpleRunCurveView;
+            runview.CurrentPointIndex = 0;
+            runview.SetTravelPoint();
+            runview.SetMovingFrame();
+        }
+        
         // Display html resource
         BrowserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         InfoWall.Update();

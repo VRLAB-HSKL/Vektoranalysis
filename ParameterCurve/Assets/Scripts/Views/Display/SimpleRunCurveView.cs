@@ -95,7 +95,7 @@ public class SimpleRunCurveView : SimpleCurveView
     {
         base.UpdateView();
 
-        if (GlobalData.IsRunning)
+        if (GlobalData.IsRunning && HasTravelPoint)
         {
             //Debug.Log("UpdateViewSimpleRun_isRunning");
             SetTravelPoint();
@@ -110,8 +110,10 @@ public class SimpleRunCurveView : SimpleCurveView
         GlobalData.IsRunning = true;
     }
     
-    private void SetTravelPoint()
+    public void SetTravelPoint()
     {
+        if (!HasTravelPoint) return;
+        
         CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         
         // Null checks
@@ -135,8 +137,10 @@ public class SimpleRunCurveView : SimpleCurveView
 
     }
 
-    private void SetMovingFrame()
+    public void SetMovingFrame()
     {
+        if (!HasTravelPoint) return;
+        
         CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         
         if (CurrentPointIndex >= curve.worldPoints.Count)
@@ -169,8 +173,8 @@ public class SimpleRunCurveView : SimpleCurveView
         binormalArr[1] = (travelObjPosition + (curve.fresnetApparatuses[CurrentPointIndex].Binormal).normalized * ScalingFactor);
         BinormalLR.SetPositions(binormalArr);
         BinormalLR.widthMultiplier = initBinormalLRWidth * ScalingFactor;
-        
-        
+       
+
         
         // Debug.Log("objPos: " + travelObjPosition +
         //           " jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +

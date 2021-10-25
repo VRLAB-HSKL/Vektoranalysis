@@ -183,7 +183,7 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        var pointIndex = GlobalData.CurrentPointIndex;
+        var pointIndex = (ObserevdViewController.CurrentView as SimpleRunCurveView).CurrentPointIndex; //GlobalData.CurrentPointIndex;
 
         if (pointIndex > curve.points.Count) return;
         
@@ -221,6 +221,7 @@ public class InformationControl : MonoBehaviour
                 Vector3 newPos = TimeDistanceStart.transform.position;            
                 newPos.x += p.x;
                 newPos.y += p.y;
+                newPos.z -= 0.0125f;
                 TimeDistLR.SetPosition(i, newPos);
             }    
         }
@@ -234,6 +235,7 @@ public class InformationControl : MonoBehaviour
                 Vector3 newPos = TimeVelocityStart.transform.position;
                 newPos.x += p.x;
                 newPos.y += p.y;
+                newPos.z -= 0.0125f;    
                 TimeVelocityLR.SetPosition(i, newPos);
             }    
         }

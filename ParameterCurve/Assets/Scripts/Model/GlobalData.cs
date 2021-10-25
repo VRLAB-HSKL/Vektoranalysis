@@ -44,7 +44,7 @@ public static class GlobalData
     }
     
 
-    public static List<CurveInformationDataset> DisplayCurveDatasets = new List<CurveInformationDataset>();
+    public static List<CurveInformationDataset> DisplayCurveDatasets { get; set; } = new List<CurveInformationDataset>();
     public static List<CurveInformationDataset> ParamCurveDatasets = new List<CurveInformationDataset>();
     public static List<CurveInformationDataset> ExerciseCurveDatasets = new List<CurveInformationDataset>();
 
