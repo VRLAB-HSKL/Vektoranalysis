@@ -112,8 +112,6 @@ public class CurveSelectionControl : MonoBehaviour
         GlobalData.CurrentDisplayGroup = cdg;
 
         
-        
-
         switch(cdg)
         {
             default:
