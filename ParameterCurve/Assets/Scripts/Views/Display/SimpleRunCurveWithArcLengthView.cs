@@ -20,7 +20,8 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         Vector3 rootPos, 
         float scalingFactor,
         Transform travelObject, 
-        Transform arcLengthTravelObject) : base(displayLR, rootPos, scalingFactor, travelObject)
+        Transform arcLengthTravelObject,
+        CurveControllerTye type) : base(displayLR, rootPos, scalingFactor, travelObject, type)
     {
         ArcLengthTravelObject = arcLengthTravelObject;
 
@@ -76,7 +77,7 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         
     }
 
-    private void SetArcTravelPoint()
+    public void SetArcTravelPoint()
     {
         CurveInformationDataset curve = CurrentCurve; //HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         
@@ -100,12 +101,12 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
             return;
         }
         
-        ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+        ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex], curve.Is3DCurve);
         ++CurrentPointIndex;
 
     }
 
-    private void SetArcMovingFrame()
+    public void SetArcMovingFrame()
     {
         CurveInformationDataset curve = CurrentCurve; //HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         
@@ -167,11 +168,11 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         Vector3 nextPos;
         if (CurrentPointIndex < curve.arcLengthWorldPoints.Count - 1)
         {
-            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex + 1]);
+            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex + 1], curve.Is3DCurve);
         }
         else
         {
-            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex], curve.Is3DCurve);
         }
 
         ArcLengthTravelObject.transform.LookAt(

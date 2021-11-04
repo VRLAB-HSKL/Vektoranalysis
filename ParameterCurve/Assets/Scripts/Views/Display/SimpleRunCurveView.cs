@@ -29,7 +29,6 @@ public class SimpleRunCurveView : SimpleCurveView
     //public int currentPointIndex = 0;
     //protected bool isRunning = false;
 
-
     private int _curPointIdx = 0;
     
     public int CurrentPointIndex
@@ -43,8 +42,9 @@ public class SimpleRunCurveView : SimpleCurveView
     }
     
 
-    public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject)
-        : base(displayLR, rootPos, scalingFactor)
+    public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject,
+        CurveControllerTye type)
+        : base(displayLR, rootPos, scalingFactor, type)
     {        
         TravelObject = travelObject;
 
@@ -132,7 +132,7 @@ public class SimpleRunCurveView : SimpleCurveView
             return;
         }
 
-        TravelObject.position = MapPointPos(curve.worldPoints[CurrentPointIndex]);
+        TravelObject.position = MapPointPos(curve.worldPoints[CurrentPointIndex], curve.Is3DCurve);
         ++CurrentPointIndex;
 
     }
@@ -191,11 +191,11 @@ public class SimpleRunCurveView : SimpleCurveView
         Vector3 nextPos;
         if (CurrentPointIndex < curve.worldPoints.Count - 1)
         {
-            nextPos = MapPointPos(curve.worldPoints[CurrentPointIndex + 1]);
+            nextPos = MapPointPos(curve.worldPoints[CurrentPointIndex + 1], curve.Is3DCurve);
         }
         else
         {
-            nextPos = MapPointPos(curve.worldPoints[CurrentPointIndex]);
+            nextPos = MapPointPos(curve.worldPoints[CurrentPointIndex], curve.Is3DCurve);
         }
 
         // Make sure object is facing in the correct direction

@@ -6,9 +6,12 @@ using HTC.UnityPlugin.Vive.WaveVRExtension;
 using UnityEngine;
 using Views;
 
+public enum CurveControllerTye { World = 0, Table = 1 };
 
 public class CurveViewController : AbstractViewController
 {
+    public CurveControllerTye Type;
+    
     // ToDo:
     // Replace single static line renderer with dynamic creation of line renderer segments for each edge
     // between two points. This should remove visual bugs on the curve when the curves are scaled very small.
@@ -50,15 +53,18 @@ public class CurveViewController : AbstractViewController
     
 
     public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, 
-                               Transform arcTravel, float scalingFactor) : base(root)
+                               Transform arcTravel, float scalingFactor, CurveControllerTye type) : base(root)
     {
+        Type = type;
+        
         _displayLr = displayLR;
         _travelObject = travel;
         _arcLengthTravelObject = arcTravel;
 
-        var simpleView = new SimpleCurveView(_displayLr, _rootElement.position, scalingFactor);
-        var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject);
-        var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, scalingFactor, _travelObject, _arcLengthTravelObject);
+        var simpleView = new SimpleCurveView(_displayLr, _rootElement.position, scalingFactor, Type);
+        var simpleRunView = new SimpleRunCurveView(_displayLr, _rootElement.position, scalingFactor, _travelObject, Type);
+        var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(_displayLr, _rootElement.position, 
+            scalingFactor, _travelObject, _arcLengthTravelObject, Type);
         
         // Temporarily deactivate run object on arc view
         //simpleRunWithArcLengthView.HasTravelPoint = false;
@@ -70,7 +76,7 @@ public class CurveViewController : AbstractViewController
             simpleRunWithArcLengthView
         };
  
-        Debug.Log("ViewCount: " + _views.Count);
+        // Debug.Log("ViewCount: " + _views.Count);
         
         foreach (var view in _views)
         {
@@ -97,6 +103,7 @@ public class CurveViewController : AbstractViewController
     {
         if (index < 0 || index >= _views.Count) return;
         
+        
         base.SwitchView(index);
         _travelObject.gameObject.SetActive( (CurrentView as AbstractCurveView).HasTravelPoint);
         _arcLengthTravelObject.gameObject.SetActive((CurrentView as AbstractCurveView).HasArcLengthTravelPoint);
@@ -105,8 +112,6 @@ public class CurveViewController : AbstractViewController
     public void StartRun()
     {
         Log.Info("Starting curve run...");
-
-            
         
         foreach (var view in _views)
         {

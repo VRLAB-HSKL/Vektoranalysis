@@ -17,11 +17,10 @@ public static class GlobalData
 {
     public static readonly ILog Log = LogManager.GetLogger(typeof(GlobalData));
     
-    
     public static float PointScaleFactor = 1f;
     public static float RunSpeedFactor = 1f;
 
-    public static CurveViewController WorldViewController;
+    public static CurveViewController WorldViewController { get; set; }
     public static ExerciseViewController ExerciseController { get; set; }
     
     
@@ -255,22 +254,16 @@ public static class GlobalData
         //File.WriteAllText(path, tr.ToString());
         
         
-
-        
-        
         for (int i = 0; i < jsr.DisplayCurves.Count; i++)
         {
             var curve = jsr.DisplayCurves[i];
             DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
-            
         }
 
         for (int i = 0; i < jsr.Exercises.Count; i++)
         {
             var ex = jsr.Exercises[i];
 
-            
-            
             // Select3 exercise
             if (ex.Type.Equals("select3"))
             {
@@ -282,9 +275,6 @@ public static class GlobalData
                     subexercises.Add(DataImport.CreateExercisePointDatasetFromSubexercise(subExercise));
                     correctAnswers.Add(subExercise.CorrectAnswer);
                 }
-                
-                
-                
                 
                 SelectionExercise selExerc = new SelectionExercise(
                     ex.Title,
@@ -306,11 +296,6 @@ public static class GlobalData
             // SelectionExercises.Add((selExerc));
         }
         
-        
     }
-
-
-
-
-
+    
 }

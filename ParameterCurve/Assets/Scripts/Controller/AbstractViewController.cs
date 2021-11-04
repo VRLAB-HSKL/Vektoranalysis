@@ -51,7 +51,6 @@ namespace Controller
                 //selView
             };
             
-            
             InitViews();
         }
 
@@ -71,6 +70,8 @@ namespace Controller
         public virtual void SwitchView(int index)
         {
             if (index < 0 || index >= _views.Count) return;
+            
+            // Log.Debug("Setting view: " + index);
             
             currentView = _views[index];
             

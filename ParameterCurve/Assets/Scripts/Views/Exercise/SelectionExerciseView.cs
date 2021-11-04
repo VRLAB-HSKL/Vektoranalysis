@@ -32,8 +32,8 @@ namespace Views.Exercise
         }
         
         
-        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, PillarIdentifier pid) : 
-            base(displayLR, rootPos, scalingFactor)
+        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, PillarIdentifier pid, CurveControllerTye type) : 
+            base(displayLR, rootPos, scalingFactor, type)
         {
             Pillar = pid;
         }
@@ -47,7 +47,7 @@ namespace Views.Exercise
             var pointArr = curve.worldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
-                pointArr[i] = MapPointPos(pointArr[i]);
+                pointArr[i] = MapPointPos(pointArr[i], curve.Is3DCurve);
             }
         
             _displayLr.positionCount = curve.worldPoints.Count;

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SimpleCurveView : AbstractCurveView
 {
-    public SimpleCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor) 
-        : base(displayLR, rootPos, scalingFactor) 
+    public SimpleCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, CurveControllerTye type) 
+        : base(displayLR, rootPos, scalingFactor, type) 
     {
         HasTravelPoint = false;
         HasArcLengthTravelPoint = false;

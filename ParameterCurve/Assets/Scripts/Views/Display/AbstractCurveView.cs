@@ -3,6 +3,7 @@ using Views;
 
 public abstract class AbstractCurveView : AbstractView
 {
+    public CurveControllerTye Type;
     public readonly LineRenderer _displayLr;
     private readonly Vector3 _rootPos;
 
@@ -14,7 +15,6 @@ public abstract class AbstractCurveView : AbstractView
     // protected bool HasCustomDataset;
     // protected CurveInformationDataset CustomDataset;
     protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
-
 
 
     public CurveInformationDataset CurrentCurve
@@ -30,11 +30,9 @@ public abstract class AbstractCurveView : AbstractView
         }
     }
 
-    
-    
-    
-    protected AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
+    protected AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, CurveControllerTye type)
     {
+        Type = type;
         _displayLr = displayLR;
         _rootPos = rootPos;
         ScalingFactor = scalingFactor;
@@ -42,45 +40,38 @@ public abstract class AbstractCurveView : AbstractView
 
     public override void UpdateView()
     {
-        CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
-        //ScalingFactor =
+        CurveInformationDataset curve = CurrentCurve; 
         
         var pointArr = curve.worldPoints.ToArray();
         for (var i = 0; i < pointArr.Length; i++)
         {
-            pointArr[i] = MapPointPos(pointArr[i]);
+            var point = pointArr[i];
+
+            pointArr[i] = MapPointPos(point, curve.Is3DCurve);
         }
-        
-        _displayLr.positionCount = curve.worldPoints.Count;
+
+        _displayLr.positionCount = pointArr.Length;
         _displayLr.SetPositions(pointArr);
         
         _displayLr.material.color = curve.CurveLineColor;
         _displayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
-
     }
 
-    protected Vector3 MapPointPos(Vector3 point)
+    protected Vector3 MapPointPos(Vector3 point, bool is3d)
     {
-        var newVector = _rootPos + point * ScalingFactor;
-        //if (!CurrentCurve.Is3DCurve) newVector.z = 0f;
-        return newVector;
+        if (Type == CurveControllerTye.Table && !is3d)
+        {
+            Vector3 newVector = new Vector3(point.x, point.z, point.y);
+            newVector = _rootPos + newVector * ScalingFactor;
+            return newVector;
+        }
+        else
+        {
+            Vector3 newVector = new Vector3(point.x, point.y, point.z);
+            newVector = _rootPos + newVector * ScalingFactor;
+            return newVector;
+        }
+        
     }
 
-    // public void SetCustomDataset(CurveInformationDataset pds)
-    // {
-    //     CustomDataset = pds;
-    //     CustomDataset.CalculateWorldPoints();
-    //     HasCustomDataset = true;
-    // }
-    //
-    //
-    // public void ClearCustomDataset()
-    // {
-    //     HasCustomDataset = false;
-    //     CustomDataset = null;
-    // }
-
-
-    //public abstract void StartRun();
 }

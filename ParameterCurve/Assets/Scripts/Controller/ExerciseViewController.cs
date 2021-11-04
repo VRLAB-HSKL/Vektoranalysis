@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Import.NewInitFile;
 using UnityEngine;
 using Views;
 
@@ -17,12 +19,14 @@ namespace Controller
         {
             get
             {
-                return GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];
+                if (GlobalData.SelectionExercises.Any())
+                {
+                    return GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];    
+                }
+
+                return null;
             }
         }
-        
-        
-        
         
         /// <summary>
         /// Current exercise index for multiple exercises
@@ -34,36 +38,56 @@ namespace Controller
         /// </summary>
         public List<int> selectionIndices = new List<int>();
 
-        public ExerciseViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab) : base(root)
+        public ExerciseViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab,
+            CurveControllerTye type) : base(root)
         {
             //Debug.Log("globalDataSelectionExercises[0] is null: " + (GlobalData.SelectionExercises[0] is null));
             //exercise = ;
             //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseData = exercise.Datasets[0];
 
+
+            // if (CurrentExercise is null)
+            // {
+            //     Debug.Log("CurrentExercise null");
+            // }
+            //
+            // if (CurrentExercise.CorrectAnswers is null)
+            // {
+            //     Debug.Log("CurrentExercise.CorrectAnswers null");
+            // }
+
+            Debug.Log("test123");
             
-            
-            
-            // Initialize all answers as 'none given'
-            for (int i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
+            if (CurrentExercise != null)
             {
-                selectionIndices.Add(-1);
+                
+                
+                // Initialize all answers as 'none given'
+                for (int i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
+                {
+                    selectionIndices.Add(-1);
+                }
+            
+                var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, 
+                    CurrentExercise.Datasets[0], type);
+            
+                selView.CurrentTitle = CurrentExercise.Title;
+                selView.CurrentDescription = CurrentExercise.Description;
+                _views = new List<AbstractView>()
+                {
+                    selView
+                };
+
+                CurrentView = selView;
+            
+            
+            
+                //CurrentView.UpdateView();
+                InitViews();
+            
+                CurrentView.UpdateView();
+                //Debug.Log("Finished exercise view controller constructor");    
             }
-
-            var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, CurrentExercise.Datasets[0]);
-            selView.CurrentTitle = CurrentExercise.Title;
-            selView.CurrentDescription = CurrentExercise.Description;
-            _views = new List<AbstractView>()
-            {
-                selView
-            };
-
-            CurrentView = selView;
-            //CurrentView.UpdateView();
-            InitViews();
-            
-            CurrentView.UpdateView();
-            //Debug.Log("Finished exercise view controller constructor");
-            
             
         }
        
@@ -72,7 +96,9 @@ namespace Controller
         {
             // Debug.Log("showMainDisplay: " + (CurrentView as SelectionExerciseCompoundView).showMainDisplay);
             // Debug.Log("currentExerciseIndex: " + currentExerciseIndex);
-            
+
+            if (CurrentExercise is null)
+                return;
             
             
             if ((CurrentView as SelectionExerciseCompoundView).showMainDisplay && GlobalData.CurrentSubExerciseIndex == 0)
@@ -112,6 +138,9 @@ namespace Controller
 
         public void PreviousSubExercise()
         {
+            if (CurrentExercise is null)
+                return;
+            
             if (GlobalData.CurrentSubExerciseIndex == 0)
             {
                 //showMainDisplay = true;

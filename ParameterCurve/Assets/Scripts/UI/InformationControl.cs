@@ -46,7 +46,13 @@ public class InformationControl : MonoBehaviour
     private Vector3 _initTimeDistTravelPos;
     private Vector3 _initTimeVelocityTravelPos;
 
-    public CurveViewController ObserevdViewController;
+    public CurveViewController ObserevdViewController
+    {
+        get
+        {
+            return GlobalData.WorldViewController;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -140,9 +146,11 @@ public class InformationControl : MonoBehaviour
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
         var view = ObserevdViewController.CurrentView;
+
+        
         int pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
 
-        if (pointIndex > curve.points.Count) return;
+        if (pointIndex >= curve.points.Count) return;
         
         //Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
         
@@ -221,7 +229,7 @@ public class InformationControl : MonoBehaviour
                 Vector3 newPos = TimeDistanceStart.transform.position;            
                 newPos.x += p.x;
                 newPos.y += p.y;
-                newPos.z -= 0.0125f;
+                newPos.z -= Random.Range(0f, 0.005f); // 0.0125f;
                 TimeDistLR.SetPosition(i, newPos);
             }    
         }
@@ -235,7 +243,7 @@ public class InformationControl : MonoBehaviour
                 Vector3 newPos = TimeVelocityStart.transform.position;
                 newPos.x += p.x;
                 newPos.y += p.y;
-                newPos.z -= 0.0125f;    
+                newPos.z -= Random.Range(0f, 0.005f);
                 TimeVelocityLR.SetPosition(i, newPos);
             }    
         }

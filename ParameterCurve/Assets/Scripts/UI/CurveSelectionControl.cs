@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,7 +56,11 @@ public class CurveSelectionControl : MonoBehaviour
             switch (dgrpName)
             {
                 case "Display":
-                    if (!GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves) continue;
+                    if (!GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves ||
+                        !GlobalData.DisplayCurveDatasets.Any())
+                    {
+                        continue;
+                    }
                     break;
                     
                 // case "Parameter":
@@ -63,7 +68,12 @@ public class CurveSelectionControl : MonoBehaviour
                 //     break;
                 
                 case "Exercises":
-                    if (!GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowExercises) continue;
+                    if (!GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowExercises ||
+                        !GlobalData.SelectionExercises.Any())
+                    {
+                        continue;
+                    }
+                        
                     break;
                 
                 default:

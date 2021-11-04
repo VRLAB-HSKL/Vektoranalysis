@@ -8,6 +8,8 @@ namespace Views
 {
     public class SelectionExerciseCompoundView : AbstractCompoundView
     {
+        public CurveControllerTye Type;
+        
         private GameObject PillarPrefab;
         private List<AbstractCurveView> curveViews = new List<AbstractCurveView>();
         private Transform origin;
@@ -43,8 +45,11 @@ namespace Views
 
         
         
-        public SelectionExerciseCompoundView(SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, ExercisePointDataset initData)
+        public SelectionExerciseCompoundView(
+            SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, 
+            ExercisePointDataset initData, CurveControllerTye type)
         {
+            Type = type;
             PillarPrefab = pillarPrefab;
             //CurrentExerciseData = initData;
             this.selObjects = selObjects;
@@ -82,19 +87,19 @@ namespace Views
                             leftLR, 
                             leftPillar.transform.position + selObjects.CurveOffset, 
                             selObjects.ScalingFactor,
-                            SelectionExerciseView.PillarIdentifier.Left));
+                            SelectionExerciseView.PillarIdentifier.Left, Type));
             
             curveViews.Add(new SelectionExerciseView(
                             middleLR, 
                             middlePillar.transform.position + selObjects.CurveOffset, 
                             selObjects.ScalingFactor,
-                            SelectionExerciseView.PillarIdentifier.Middle));
+                            SelectionExerciseView.PillarIdentifier.Middle, Type));
             
             curveViews.Add(new SelectionExerciseView(
                             rightLR, 
                             rightPillar.transform.position + selObjects.CurveOffset, 
                             selObjects.ScalingFactor, 
-                            SelectionExerciseView.PillarIdentifier.Right));
+                            SelectionExerciseView.PillarIdentifier.Right, Type));
 
             UpdateView();
         }

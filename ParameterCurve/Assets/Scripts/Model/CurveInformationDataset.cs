@@ -68,10 +68,17 @@ public class CurveInformationDataset
             var point = ps[i];
 
             bool swapYZCoordinates = Is3DCurve;
-                
-            worldPoints.Add(swapYZCoordinates ?
+            
+            var newPoint = swapYZCoordinates ?
                 new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :
-                new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor);
+                new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor;
+
+            if (!Is3DCurve)
+            {
+                newPoint.z += Random.Range(0f, 0.00125f);
+            }
+
+            worldPoints.Add(newPoint);
         }
         
         // Calcualte arc world points
