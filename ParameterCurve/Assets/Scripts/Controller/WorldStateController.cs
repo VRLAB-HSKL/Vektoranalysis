@@ -60,9 +60,11 @@ public class WorldStateController : MonoBehaviour
 
     private float pointStepDuration = 0f;    
 
-    // Start is called before the first frame update
+    
     private void Awake()
     {
+        InfoWall.InitPlotLengths();
+        
         GlobalData.InitializeData();
         Debug.Log("ExerciseControllerRoot: " + SelObjects.gameObject.name);
         
@@ -104,6 +106,7 @@ public class WorldStateController : MonoBehaviour
         
     }
 
+    // Start is called before the first frame update
     private void Start()
     {
         // Display html resource

@@ -46,12 +46,32 @@ public class InformationControl : MonoBehaviour
     private Vector3 _initTimeDistTravelPos;
     private Vector3 _initTimeVelocityTravelPos;
 
-    public CurveViewController ObserevdViewController
+    public CurveViewController ObserevedViewController
     {
         get
         {
             return GlobalData.WorldViewController;
         }
+    }
+
+    public void InitPlotLengths()
+    {
+        var xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
+        var yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();    
+            
+        //Debug.Log("xRenderer_x: " + xrenderer.bounds.size.x);
+        // Debug.Log("xRenderer_y: " + xrenderer.bounds.size.y);
+        // Debug.Log("xRenderer_z: " + xrenderer.bounds.size.z);
+        // Debug.Log("yRenderer: " + yrenderer.bounds.size);
+            
+        DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
+        DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
+        
+        xrenderer = TimeVelocityXAxis.GetComponent<MeshRenderer>();
+        yrenderer = TimeVelocityYAxis.GetComponent<MeshRenderer>();
+
+        DataImport.TimeVelocityXAxisLength = xrenderer.bounds.size.x;
+        DataImport.TimeVelocityYAxisLength = yrenderer.bounds.size.y;
     }
 
     // Start is called before the first frame update
@@ -67,11 +87,7 @@ public class InformationControl : MonoBehaviour
         }
         else
         {
-            var xrenderer = TimeVelocityXAxis.GetComponent<MeshRenderer>();
-            var yrenderer = TimeVelocityYAxis.GetComponent<MeshRenderer>();
-
-            DataImport.TimeVelocityXAxisLength = xrenderer.bounds.size.x;
-            DataImport.TimeVelocityYAxisLength = yrenderer.bounds.size.y;
+            
             TimeVelocityLR = TimeVelocityStart.GetComponent<LineRenderer>();
             _initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
         }
@@ -88,11 +104,7 @@ public class InformationControl : MonoBehaviour
         }
         else
         {
-            var xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
-            var yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();    
             
-            DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
-            DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
             TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
             _initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
         }
@@ -145,7 +157,7 @@ public class InformationControl : MonoBehaviour
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
 
-        var view = ObserevdViewController.CurrentView;
+        var view = ObserevedViewController.CurrentView;
 
         
         int pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
@@ -191,7 +203,7 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        var pointIndex = (ObserevdViewController.CurrentView as SimpleRunCurveView).CurrentPointIndex; //GlobalData.CurrentPointIndex;
+        var pointIndex = (ObserevedViewController.CurrentView as SimpleRunCurveView).CurrentPointIndex; //GlobalData.CurrentPointIndex;
 
         if (pointIndex > curve.points.Count) return;
         

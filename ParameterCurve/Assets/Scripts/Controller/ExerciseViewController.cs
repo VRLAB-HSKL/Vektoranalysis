@@ -56,7 +56,7 @@ namespace Controller
             //     Debug.Log("CurrentExercise.CorrectAnswers null");
             // }
 
-            Debug.Log("test123");
+            
             
             if (CurrentExercise != null)
             {

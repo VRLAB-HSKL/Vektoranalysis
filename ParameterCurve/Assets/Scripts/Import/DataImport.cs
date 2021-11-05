@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using Unity.Rendering.HybridV2;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.Interactions;
 
 public static class DataImport
 {
@@ -157,11 +158,14 @@ public static class DataImport
         float maxDistance = CalculateRawDistance(curvePoints);
         float currentDistance = 0f;
 
+        //Debug.Log("timeDistanceXAxisLength: " + TimeDistanceXAxisLength);
+
         for(int i = 0; i < numSteps; i++)
         {
             // Move one step to the right on the horizontal x-axis each iteration
-            float x = i / (float) numSteps;
+            float x = (i / (float)numSteps) * TimeDistanceXAxisLength; //(i / TimeDistanceXAxisLength); //(float) numSteps);
 
+            Debug.Log("[" + i + "/" + numSteps + "]"+ "Calculated x: " + x);
             
             float y;
             
@@ -178,6 +182,7 @@ public static class DataImport
                 currentDistance += Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
                 y = currentDistance;
                 y /= maxDistance;
+                //y *= TimeDistanceYAxisLength;
             }
 
             tdPoints.Add(new Vector2(x, y));
@@ -198,7 +203,7 @@ public static class DataImport
 
         for (int i = 0; i < numSteps; i++)
         {
-            float x = i / (float)numSteps;
+            float x = (i / (float)numSteps) * TimeVelocityXAxisLength;
 
             float y;
             if(i == 0)
