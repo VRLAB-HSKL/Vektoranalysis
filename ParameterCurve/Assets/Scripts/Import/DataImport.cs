@@ -158,6 +158,8 @@ public static class DataImport
         float maxDistance = CalculateRawDistance(curvePoints);
         float currentDistance = 0f;
 
+        float maxY = 0f;
+        
         //Debug.Log("timeDistanceXAxisLength: " + TimeDistanceXAxisLength);
 
         for(int i = 0; i < numSteps; i++)
@@ -182,10 +184,23 @@ public static class DataImport
                 currentDistance += Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
                 y = currentDistance;
                 y /= maxDistance;
-                //y *= TimeDistanceYAxisLength;
-            }
 
+                if (y > maxY)
+                {
+                    maxY = y;
+                }
+            }
+            
+            
             tdPoints.Add(new Vector2(x, y));
+        }
+
+        for (int i = 0; i < tdPoints.Count; i++)
+        {
+            var p = tdPoints[i];
+            float factor = p.y / maxY;
+            float newY = factor * TimeDistanceYAxisLength;
+            tdPoints[i] = new Vector2(p.x, newY);
         }
 
         return tdPoints;
@@ -228,11 +243,26 @@ public static class DataImport
             tvPoints.Add(new Vector2(x, y));
         }
 
-        foreach(Vector2 v in tvPoints)
-        {
-            v.Set(v.x, v.y / maxVelocity);
-        }
+        // foreach(Vector2 v in tvPoints)
+        // {
+        //     v.Set(v.x, v.y / maxVelocity);
+        // }
         
+        // for (int i = 0; i < tdPoints.Count; i++)
+        // {
+        //     var p = tdPoints[i];
+        //     float factor = p.y / maxY;
+        //     float newY = factor * TimeDistanceYAxisLength;
+        //     tdPoints[i] = new Vector2(p.x, newY);
+        // }
+
+        for(int i = 0; i < tvPoints.Count; i++)
+        {
+            var v = tvPoints[i];
+            float factor = v.y / maxVelocity;
+            
+            tvPoints[i] = new Vector2(v.x, factor * TimeVelocityYAxisLength);
+        }
 
         return tvPoints;
     }
