@@ -75,7 +75,7 @@ public class CurveInformationDataset
 
             if (!Is3DCurve)
             {
-                newPoint.z += Random.Range(0f, 0.00125f);
+                //newPoint.z += Random.Range(0f, 0.00125f);
             }
 
             worldPoints.Add(newPoint);
