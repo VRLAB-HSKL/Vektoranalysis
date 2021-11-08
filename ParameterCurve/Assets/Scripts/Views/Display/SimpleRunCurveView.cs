@@ -199,6 +199,6 @@ public class SimpleRunCurveView : SimpleCurveView
         }
 
         // Make sure object is facing in the correct direction
-        TravelObject.transform.LookAt(nextPos, (binormalArr[0] + binormalArr[1]).normalized);
+        TravelObject.transform.LookAt(nextPos, new Vector3(0f, 0f, 1f));//(binormalArr[0] + binormalArr[1]).normalized);
     }
 }

@@ -116,13 +116,13 @@ public static class DataImport
                 curve.Data.Data.ArcVelVec[j][0],
                 curve.Data.Data.ArcVelVec[j][1],
                 pd.Is3DCurve ? curve.Data.Data.ArcVelVec[j][2] : 0f
-            );
+            ).normalized;
             
             arcFsr.Normal = new Vector3(
                 curve.Data.Data.ArcAccVec[j][0],
                 curve.Data.Data.ArcAccVec[j][1],
                 pd.Is3DCurve ? curve.Data.Data.ArcAccVec[j][2] : 0f
-            );
+            ).normalized;
 
             arcFsr.Binormal = Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
             
