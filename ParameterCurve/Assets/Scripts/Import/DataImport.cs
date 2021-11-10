@@ -98,7 +98,9 @@ public static class DataImport
                 pd.Is3DCurve ? curve.Data.Data.AccVec[j][2] : 0f
             ).normalized;
 
-            fsr.Binormal = Vector3.Cross(fsr.Tangent, fsr.Normal);
+            var bin = Vector3.Cross(fsr.Tangent, fsr.Normal);
+            fsr.Binormal = new Vector3(bin.x, bin.y, -Mathf.Abs(bin.z));
+            
             
             pd.fresnetApparatuses.Add(fsr);
 
@@ -124,7 +126,10 @@ public static class DataImport
                 pd.Is3DCurve ? curve.Data.Data.ArcAccVec[j][2] : 0f
             ).normalized;
 
-            arcFsr.Binormal = Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
+            
+            var arc_bin = Vector3.Cross(fsr.Tangent, fsr.Normal);
+            arcFsr.Binormal = new Vector3(arc_bin.x, arc_bin.y, -Mathf.Abs(arc_bin.z));
+                // Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
             
             pd.arcLengthFresnetApparatuses.Add(arcFsr);
 
