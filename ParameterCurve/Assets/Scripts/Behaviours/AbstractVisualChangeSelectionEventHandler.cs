@@ -101,40 +101,40 @@ namespace Behaviours
                     }
                 }
             }
-            else if (eventData is {button: PointerEventData.InputButton.Left})
-            {
-                // Standalone button triggered!
-
-                if (isToggle)
-                {
-                    var newMat = IsSelected ? hoverMat : selectionMat;
-
-                    foreach (var m in MeshRenderers)
-                    {
-                        m.material = newMat;
-                    }
-
-                    //_isSelected = !_isSelected;    
-                    
-                    GlobalData.ExerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
-                    
-                    HandlePointerClick(eventData);        
-                }
-                else
-                {
-                    foreach (var m in MeshRenderers)
-                    {
-                        m.material = selectionMat;
-                    }
-                    
-                    HandlePointerClick(eventData);
-                    
-                    foreach (var m in MeshRenderers)
-                    {
-                        m.material = hoverMat;
-                    }
-                }
-            }
+            // else if (eventData  is {button: PointerEventData.InputButton.Left})
+            // {
+            //     // Standalone button triggered!
+            //
+            //     if (isToggle)
+            //     {
+            //         var newMat = IsSelected ? hoverMat : selectionMat;
+            //
+            //         foreach (var m in MeshRenderers)
+            //         {
+            //             m.material = newMat;
+            //         }
+            //
+            //         //_isSelected = !_isSelected;    
+            //         
+            //         GlobalData.ExerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
+            //         
+            //         HandlePointerClick(eventData);        
+            //     }
+            //     else
+            //     {
+            //         foreach (var m in MeshRenderers)
+            //         {
+            //             m.material = selectionMat;
+            //         }
+            //         
+            //         HandlePointerClick(eventData);
+            //         
+            //         foreach (var m in MeshRenderers)
+            //         {
+            //             m.material = hoverMat;
+            //         }
+            //     }
+            // }
         }
 
         public new void OnPointerEnter(PointerEventData eventData)

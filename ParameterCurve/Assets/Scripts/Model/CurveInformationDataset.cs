@@ -5,8 +5,8 @@ using UnityEngine;
 public class CurveInformationDataset
 {
     public int id = 0;
-    public string Name = string.Empty;
-    public string DisplayString = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string DisplayString { get; set; } = string.Empty;
     public string NotebookURL = string.Empty;
     public Texture2D MenuButtonImage { get; set; }
 

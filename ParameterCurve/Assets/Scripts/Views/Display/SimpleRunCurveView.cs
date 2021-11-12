@@ -151,11 +151,35 @@ public class SimpleRunCurveView : SimpleCurveView
 
         //int pointIndex = GlobalData.CurrentPointIndex;
 
-        var travelObjPosition = TravelObject.position;
-        tangentArr[0] = travelObjPosition;
-        tangentArr[1] = (travelObjPosition +
-                         (curve.fresnetApparatuses[CurrentPointIndex].Tangent).normalized * ScalingFactor); //.normalized;
         
+        
+        var travelObjPosition = TravelObject.position;
+        var tangent = (curve.fresnetApparatuses[CurrentPointIndex].Tangent).normalized;
+        var normal = (curve.fresnetApparatuses[CurrentPointIndex].Normal).normalized;
+        var binormal = curve.fresnetApparatuses[CurrentPointIndex].Binormal.normalized;
+        
+        // Prevent z-buffer fighting
+        tangent.z += 0.001f;
+        normal.z += 0.001f;
+        binormal.z += 0.001f;
+        
+        if (Type == CurveControllerTye.Table && !curve.Is3DCurve)
+        {
+            //travelObjPosition = new Vector3(travelObjPosition.x, travelObjPosition.z, travelObjPosition.y);
+            tangent = new Vector3(tangent.x, tangent.z, tangent.y);
+            normal = new Vector3(normal.x, normal.z, normal.y);
+            binormal = new Vector3(binormal.x, binormal.z, binormal.y);
+        }
+        
+        tangent *= ScalingFactor;
+        normal *= ScalingFactor;
+        binormal *= ScalingFactor;
+        
+        
+        tangentArr[0] = travelObjPosition;
+        tangentArr[1] = travelObjPosition + tangent; //.normalized;
+        
+        //Debug.Log("tan0: " + tangentArr[0] + ", tan1: " + tangentArr[1]);
         
         //tangentArr[1] = MapPointPos(tangentArr[1]);
         
@@ -163,14 +187,16 @@ public class SimpleRunCurveView : SimpleCurveView
         TangentLR.SetPositions(tangentArr);
         TangentLR.widthMultiplier = initTangentLRWidth * ScalingFactor;
                 
+        
+        
         normalArr[0] = travelObjPosition;
-        normalArr[1] = (travelObjPosition + (curve.fresnetApparatuses[CurrentPointIndex].Normal).normalized * ScalingFactor); //.normalized;
+        normalArr[1] = (travelObjPosition + normal); //.normalized;
         //normalArr[1] = MapPointPos(normalArr[1]);
         NormalLR.SetPositions(normalArr);
         NormalLR.widthMultiplier = initNormalLRWidth * ScalingFactor;
                 
         binormalArr[0] = travelObjPosition;
-        binormalArr[1] = (travelObjPosition + (curve.fresnetApparatuses[CurrentPointIndex].Binormal).normalized * ScalingFactor);
+        binormalArr[1] = travelObjPosition + binormal;
         BinormalLR.SetPositions(binormalArr);
         BinormalLR.widthMultiplier = initBinormalLRWidth * ScalingFactor;
        
@@ -199,7 +225,11 @@ public class SimpleRunCurveView : SimpleCurveView
         }
 
         // Make sure object is facing in the correct direction
-        var worldUp = new Vector3(0f, 0f, -1f);//(binormalArr[0] + binormalArr[1]).normalized);
+        var worldUp = Type == CurveControllerTye.World ? new Vector3(0f, 0f, -1f) : Vector3.up;
+        
+        //Debug.Log("worldUp: " + worldUp);
+        
+        //(binormalArr[0] + binormalArr[1]).normalized);
         TravelObject.transform.LookAt(nextPos, worldUp);
     }
 }

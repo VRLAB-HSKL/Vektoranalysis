@@ -20,7 +20,7 @@ public static class GlobalData
     public static float PointScaleFactor = 1f;
     public static float RunSpeedFactor = 1f;
 
-    public static CurveViewController WorldViewController { get; set; }
+    public static OwnCurveViewController WorldViewController { get; set; }
     public static ExerciseViewController ExerciseController { get; set; }
     
     
@@ -33,11 +33,14 @@ public static class GlobalData
     {
         get
         {
-            return CurrentDisplayGroup switch
+            switch(CurrentDisplayGroup)
             {
                 //CurveDisplayGroup.Parameter => ParamCurveDatasets,
-                CurveDisplayGroup.Exercises => ExerciseCurveDatasets,
-                _ => DisplayCurveDatasets,
+                case CurveDisplayGroup.Exercises:
+                    return ExerciseCurveDatasets;
+                
+                default:
+                    return DisplayCurveDatasets;
             };
         }
     }

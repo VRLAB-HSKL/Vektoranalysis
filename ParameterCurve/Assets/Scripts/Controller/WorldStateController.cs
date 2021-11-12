@@ -48,7 +48,7 @@ public class WorldStateController : MonoBehaviour
     public static CurveSelectionControl CurveSelectWall;
 
     
-    public CurveViewController TableViewController { get; set; }
+    public OwnCurveViewController TableViewController { get; set; }
     //public ExerciseViewController ExerciseController;
 
 
@@ -77,7 +77,7 @@ public class WorldStateController : MonoBehaviour
 
         var displayCurve = GlobalData.DisplayCurveDatasets[0];
 
-        GlobalData.WorldViewController = new CurveViewController(WorldRootElement, WorldDisplayLR, 
+        GlobalData.WorldViewController = new OwnCurveViewController(WorldRootElement, WorldDisplayLR, 
             WorldTravelObject, WorldArcLengthTravelObject, displayCurve.WorldScalingFactor, CurveControllerTye.World);
 
         // if (!(GlobalData.WorldViewController is null))
@@ -89,7 +89,7 @@ public class WorldStateController : MonoBehaviour
 
         if (GlobalData.initFile.ApplicationSettings.TableSettings.Activated)
         {
-            TableViewController = new CurveViewController(TableRootElement, TableDisplayLR, 
+            TableViewController = new OwnCurveViewController(TableRootElement, TableDisplayLR, 
                 TableTravelObject, TableArcLengthTravelObject, displayCurve.TableScalingFactor, 
                 CurveControllerTye.Table);
         }

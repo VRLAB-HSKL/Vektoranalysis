@@ -46,7 +46,7 @@ public class InformationControl : MonoBehaviour
     private Vector3 _initTimeDistTravelPos;
     private Vector3 _initTimeVelocityTravelPos;
 
-    public CurveViewController ObserevedViewController
+    public OwnCurveViewController ObserevedViewController
     {
         get
         {
@@ -87,24 +87,17 @@ public class InformationControl : MonoBehaviour
         }
         else
         {
-            
             TimeVelocityLR = TimeVelocityStart.GetComponent<LineRenderer>();
             _initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
         }
         
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot || 
             !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
-        {
-            // TimeDistanceStart.SetActive(false);
-            // TimeDistanceXAxis.SetActive(false);
-            // TimeDistanceYAxis.SetActive(false);
-            // TimeDistanceTravelObject.SetActive(false);
-            
+        {   
             TimeDistanceParent.SetActive(false);
         }
         else
-        {
-            
+        {   
             TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
             _initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
         }
@@ -112,12 +105,6 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowArcLengthData || 
             !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
         {
-            // ArcLengthLabel.gameObject.SetActive(false);
-            // ArcTLabel.gameObject.SetActive(false);
-            // ArcXLabel.gameObject.SetActive(false);
-            // ArcYLabel.gameObject.SetActive(false);
-            // ArcZLabel.gameObject.SetActive(false);
-            
             ArcLengthParent.SetActive(false);
         }
 
@@ -131,7 +118,6 @@ public class InformationControl : MonoBehaviour
             
             PointInfoParent.SetActive(false);
         }
-        
         
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo || 
             !GlobalData.initFile.ApplicationSettings.InfoSettings.Activated)
@@ -156,7 +142,6 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
         var view = ObserevedViewController.CurrentView;
 
         
@@ -164,15 +149,12 @@ public class InformationControl : MonoBehaviour
 
         if (pointIndex >= curve.points.Count) return;
         
-        //Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
-        
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
         {
             IndexLabel.text = (pointIndex + 1) +
                               " / " +
                              curve.points.Count;    
         }
-        
 
         string floatFormat = "0.#####";
 
@@ -182,6 +164,13 @@ public class InformationControl : MonoBehaviour
                 Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
             
             SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].Name;
+
+            if (SourceLabel.text.Equals("param9b"))
+            {
+                SourceLabel.text = "Lemniskate";
+            }
+            
+            
             TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
             XLabel.text = curve?.points[pointIndex].x.ToString(floatFormat);
             YLabel.text = curve?.points[pointIndex].y.ToString(floatFormat);

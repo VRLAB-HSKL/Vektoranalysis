@@ -6,7 +6,7 @@ using Import;
 using Import.NewInitFile;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Unity.Rendering.HybridV2;
+//using Unity.Rendering.HybridV2;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Interactions;
@@ -32,8 +32,6 @@ public static class DataImport
             DisplayString = curve.Info.Name,
             NotebookURL = string.Empty
         };
-
-
 
         var lineColorValues = curve.CurveSettings.DisplaySettings.LineColor;
         
@@ -172,7 +170,7 @@ public static class DataImport
             // Move one step to the right on the horizontal x-axis each iteration
             float x = (i / (float)numSteps) * TimeDistanceXAxisLength; //(i / TimeDistanceXAxisLength); //(float) numSteps);
 
-            Debug.Log("[" + i + "/" + numSteps + "]"+ "Calculated x: " + x);
+            //Debug.Log("[" + i + "/" + numSteps + "]"+ "Calculated x: " + x);
             
             float y;
             

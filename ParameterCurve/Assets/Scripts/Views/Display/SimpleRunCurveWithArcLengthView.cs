@@ -175,8 +175,7 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
             nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex], curve.Is3DCurve);
         }
 
-        ArcLengthTravelObject.transform.LookAt(
-            nextPos, 
-            (arcBinormalArr[0] + arcBinormalArr[1]).normalized);
+        var worldUp = new Vector3(0f, 0f, 1f); //(arcBinormalArr[0] + arcBinormalArr[1]).normalized; 
+        ArcLengthTravelObject.transform.LookAt(nextPos, worldUp);
     }
 }

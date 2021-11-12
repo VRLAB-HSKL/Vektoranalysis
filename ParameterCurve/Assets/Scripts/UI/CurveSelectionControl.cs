@@ -176,7 +176,7 @@ public class CurveSelectionControl : MonoBehaviour
         else
         {
             // Display html resource
-            if (world.BrowserWall is { }) world.BrowserWall.OpenURL(ds.NotebookURL);
+            //if (world.BrowserWall is { }) world.BrowserWall.OpenURL(ds.NotebookURL);
         }
     }
 
