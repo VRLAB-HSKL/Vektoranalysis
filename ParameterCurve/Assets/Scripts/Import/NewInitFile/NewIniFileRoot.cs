@@ -88,6 +88,9 @@ namespace Import.NewInitFile
         
         [JsonProperty("name")]
         public string Name { get; set; }
+        
+        [JsonProperty("display_text")]
+        public string DisplayText { get; set; }
     }
     
     [Serializable]

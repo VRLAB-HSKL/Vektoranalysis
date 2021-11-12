@@ -29,7 +29,7 @@ public static class DataImport
         {
             id = curve.Info.Id,
             Name = curve.Info.Name,
-            DisplayString = curve.Info.Name,
+            DisplayString = curve.Info.DisplayText,
             NotebookURL = string.Empty
         };
 

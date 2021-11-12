@@ -151,6 +151,8 @@ public class InformationControl : MonoBehaviour
         
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
         {
+            SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].DisplayString;
+            
             IndexLabel.text = (pointIndex + 1) +
                               " / " +
                              curve.points.Count;    
@@ -163,12 +165,12 @@ public class InformationControl : MonoBehaviour
             if(pointIndex > curve.points.Count)
                 Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
             
-            SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].Name;
+            
 
-            if (SourceLabel.text.Equals("param9b"))
-            {
-                SourceLabel.text = "Lemniskate";
-            }
+            // if (SourceLabel.text.Equals("param9b"))
+            // {
+            //     SourceLabel.text = "Lemniskate";
+            // }
             
             
             TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
