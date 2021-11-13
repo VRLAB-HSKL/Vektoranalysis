@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using TMPro;
 using UI;
 using UnityEngine.Events;
+using Views.Display;
 
 public class WorldStateController : MonoBehaviour
 {
@@ -133,7 +134,11 @@ public class WorldStateController : MonoBehaviour
 
                 InfoWall.Update();
             }
-            
+        }
+
+        if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Trigger))
+        {
+            StartRun();
         }
         
         if(ActivatePoseTracking) StaticLogging();

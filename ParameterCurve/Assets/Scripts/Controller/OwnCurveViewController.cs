@@ -5,6 +5,7 @@ using Controller;
 //using HTC.UnityPlugin.Vive.WaveVRExtension;
 using UnityEngine;
 using Views;
+using Views.Display;
 
 public enum CurveControllerTye { World = 0, Table = 1 };
 

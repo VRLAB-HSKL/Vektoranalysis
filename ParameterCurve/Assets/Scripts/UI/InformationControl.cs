@@ -4,6 +4,7 @@ using HTC.UnityPlugin.Vive;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Views.Display;
 
 public class InformationControl : MonoBehaviour
 {

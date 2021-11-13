@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Views.Display;
 
 public class SimpleRunCurveWithArcLength : SimpleRunCurveView
 {
@@ -21,7 +22,7 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         float scalingFactor,
         Transform travelObject, 
         Transform arcLengthTravelObject,
-        CurveControllerTye type) : base(displayLR, rootPos, scalingFactor, travelObject, type)
+        CurveControllerTye controllerType) : base(displayLR, rootPos, scalingFactor, travelObject, controllerType)
     {
         ArcLengthTravelObject = arcLengthTravelObject;
 
@@ -101,7 +102,7 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
             return;
         }
         
-        ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex], curve.Is3DCurve);
+        ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]); //, curve.Is3DCurve);
         ++CurrentPointIndex;
 
     }
@@ -168,11 +169,11 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         Vector3 nextPos;
         if (CurrentPointIndex < curve.arcLengthWorldPoints.Count - 1)
         {
-            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex + 1], curve.Is3DCurve);
+            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex + 1]); //, curve.Is3DCurve);
         }
         else
         {
-            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex], curve.Is3DCurve);
+            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]); //, curve.Is3DCurve);
         }
 
         var worldUp = new Vector3(0f, 0f, 1f); //(arcBinormalArr[0] + arcBinormalArr[1]).normalized; 

@@ -32,8 +32,8 @@ namespace Views.Exercise
         }
         
         
-        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, PillarIdentifier pid, CurveControllerTye type) : 
-            base(displayLR, rootPos, scalingFactor, type)
+        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, PillarIdentifier pid, CurveControllerTye controllerType) : 
+            base(displayLR, rootPos, scalingFactor, controllerType)
         {
             Pillar = pid;
         }
@@ -47,14 +47,14 @@ namespace Views.Exercise
             var pointArr = curve.worldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
-                pointArr[i] = MapPointPos(pointArr[i], curve.Is3DCurve);
+                pointArr[i] = MapPointPos(pointArr[i]); //, curve.Is3DCurve);
             }
         
-            _displayLr.positionCount = curve.worldPoints.Count;
-            _displayLr.SetPositions(pointArr);
+            DisplayLr.positionCount = curve.worldPoints.Count;
+            DisplayLr.SetPositions(pointArr);
         
-            _displayLr.material.color = curve.CurveLineColor;
-            _displayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
+            DisplayLr.material.color = curve.CurveLineColor;
+            DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
         }
         
