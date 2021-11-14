@@ -18,13 +18,18 @@ public static class GlobalData
     public static readonly ILog Log = LogManager.GetLogger(typeof(GlobalData));
     
     public static float PointScaleFactor = 1f;
-    public static float RunSpeedFactor = 1f;
 
-    public static OwnCurveViewController WorldViewController { get; set; }
-    public static ExerciseViewController ExerciseController { get; set; }
+    /// <summary>
+    /// Factor to control speed of curve runs. The value specifies the time in seconds that has to pass before a
+    /// new point is traveled to. A value of 1.0 means a new point is reached every second. 
+    /// </summary>
+    public static float RunSpeedFactor = 0.0005f;
+
+    public static CurveViewController WorldCurveViewController { get; set; }
+    public static ExerciseCurveViewController ExerciseCurveController { get; set; }
     
     
-    public static bool IsRunning { get; set; } = false;
+    public static bool IsRunning { get; set; }
 
     public enum CurveDisplayGroup { Display = 0, Exercises = 1 }
     public static CurveDisplayGroup CurrentDisplayGroup { get; set; } = CurveDisplayGroup.Display;
@@ -94,7 +99,7 @@ public static class GlobalData
     //public static CurveSelectionStateContext CurveSelectionFSM;
 
     public static int CurrentCurveIndex = 0;
-    public static int CurrentPointIndex { get; set; } = 0;
+    //public static int CurrentPointIndex { get; set; };
 
     public static List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
 

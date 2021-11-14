@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Controller;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -144,7 +145,7 @@ public class CurveSelectionControl : MonoBehaviour
         
         // Reset curve and point indices
         GlobalData.CurrentCurveIndex = 0;
-        GlobalData.CurrentPointIndex = 0;
+        //GlobalData.CurrentPointIndex = 0;
 
         
 
@@ -152,7 +153,7 @@ public class CurveSelectionControl : MonoBehaviour
 
         
 
-        if (world.BrowserWall is null)
+        if (world.browserWall is null)
         {
             Debug.Log("Browser Wall not initialized!");
         }

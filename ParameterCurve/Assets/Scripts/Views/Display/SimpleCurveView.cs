@@ -1,4 +1,5 @@
 using UnityEngine;
+using Views.Display;
 
 /// <summary>
 /// Basic view on a display curve
@@ -21,6 +22,6 @@ public class SimpleCurveView : AbstractCurveView
         HasArcLengthTravelPoint = false;
     }
 
-    // ToDo: Remove this ?
-    public override void StartRun() {}
+    // // ToDo: Remove this ?
+    // public void StartRun() {}
 }

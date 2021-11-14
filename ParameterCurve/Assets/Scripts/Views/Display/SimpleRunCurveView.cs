@@ -24,6 +24,9 @@ namespace Views.Display
 
         private int _curPointIdx;
     
+        /// <summary>
+        /// Current point index (view local)
+        /// </summary>
         public int CurrentPointIndex
         {
             get => _curPointIdx;
@@ -88,15 +91,22 @@ namespace Views.Display
         {
             base.UpdateView();
 
-            if (GlobalData.IsRunning && HasTravelPoint)
+            if (!GlobalData.IsRunning) return;
+            
+            if (HasTravelPoint)
             {
                 SetTravelPoint();
                 SetMovingFrame();
             }
+
+            if (CurrentPointIndex > CurrentCurve.points.Count)
+            {
+                GlobalData.IsRunning = false;
+            }
         
         }
 
-        public override void StartRun()
+        public void StartRun()
         {
             CurrentPointIndex = 0;
             GlobalData.IsRunning = true;
@@ -117,7 +127,6 @@ namespace Views.Display
             // On arrival at the last point, stop driving
             if (CurrentPointIndex >= CurrentCurve.worldPoints.Count)
             {
-                //Debug.Log("Stop");
                 GlobalData.IsRunning = false; 
                 return;
             }
@@ -130,17 +139,12 @@ namespace Views.Display
         {
             if (!HasTravelPoint) return;
         
-            CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        
+            CurveInformationDataset curve = CurrentCurve;
             if (CurrentPointIndex >= curve.worldPoints.Count)
             {
                 GlobalData.IsRunning = false;
                 return;
             }
-
-            //int pointIndex = GlobalData.CurrentPointIndex;
-
-        
         
             var travelObjPosition = TravelObject.position;
             var tangent = (curve.fresnetApparatuses[CurrentPointIndex].Tangent).normalized;
@@ -163,24 +167,14 @@ namespace Views.Display
             tangent *= ScalingFactor;
             normal *= ScalingFactor;
             binormal *= ScalingFactor;
-        
-        
+
             _tangentArr[0] = travelObjPosition;
-            _tangentArr[1] = travelObjPosition + tangent; //.normalized;
-        
-            //Debug.Log("tan0: " + tangentArr[0] + ", tan1: " + tangentArr[1]);
-        
-            //tangentArr[1] = MapPointPos(tangentArr[1]);
-        
-        
+            _tangentArr[1] = travelObjPosition + tangent;
             _tangentLr.SetPositions(_tangentArr);
             _tangentLr.widthMultiplier = _initTangentLrWidth * ScalingFactor;
                 
-        
-        
             _normalArr[0] = travelObjPosition;
-            _normalArr[1] = (travelObjPosition + normal); //.normalized;
-            //normalArr[1] = MapPointPos(normalArr[1]);
+            _normalArr[1] = (travelObjPosition + normal); 
             _normalLr.SetPositions(_normalArr);
             _normalLr.widthMultiplier = _initNormalLrWidth * ScalingFactor;
                 

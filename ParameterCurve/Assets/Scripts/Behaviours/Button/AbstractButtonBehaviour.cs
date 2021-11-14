@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using HTC.UnityPlugin.ColliderEvent;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -38,8 +39,22 @@ namespace Behaviours.Button
         private bool ButtonTriggered = false;
 
 
+        private Vector3 initButtonPosition = Vector3.negativeInfinity;
 
+        public Vector3 ButtonPos
+        {
+            get
+            {
+                if (initButtonPosition == Vector3.negativeInfinity)
+                {
+                    initButtonPosition = ButtonObject.localPosition;
+                    Debug.Log("initButtonPos: " + initButtonPosition);
+                }
 
+                return initButtonPosition;
+            }
+        }
+        
 
 
         /// <summary>
@@ -52,13 +67,15 @@ namespace Behaviours.Button
             {
                 if (eventData.button == mActiveButton)
                 {
-                    ButtonObject.localPosition += ButtonDownDisplacement;
+                    ButtonObject.localPosition = ButtonPos + ButtonDownDisplacement;
+                    Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition);
                     ButtonTriggered = true;
                 }
             }
             else
             {
-                ButtonObject.localPosition += ButtonDownDisplacement;
+                ButtonObject.localPosition = ButtonPos + ButtonDownDisplacement;
+                Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition);
                 ButtonTriggered = true;
             }
 
@@ -78,15 +95,23 @@ namespace Behaviours.Button
         /// </remarks>
         /// <param name="eventData"></param>
         /// <returns>void</returns>
-
         public void OnColliderEventPressExit(ColliderButtonEventData eventData)
         {
-            ButtonObject.localPosition -= ButtonDownDisplacement;
+            ButtonObject.localPosition = ButtonPos - ButtonDownDisplacement;
+            
+            Debug.Log("exitNewButtonPos: " + ButtonObject.localPosition);
+            
             ButtonTriggered = false;
         }
 
 
-
+        void Start()
+        {
+            // initButtonPosition = ButtonObject.localPosition;
+            // Debug.Log("initButtonPos: " + initButtonPosition);
+        }
+        
+        
         // Update is called once per frame
 
 

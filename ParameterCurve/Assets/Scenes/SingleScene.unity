@@ -15568,7 +15568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5035029b84813a24e80e96e82f618541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mActiveButton: 0
+  mActiveButton: 1
   ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
   ButtonObject: {fileID: 408382570}
   UseTriggerButton: 1
@@ -16538,20 +16538,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b4d799febb21f498b6c5d91b444d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WorldRootElement: {fileID: 1375236216}
-  WorldDisplayLR: {fileID: 26821157}
-  WorldTravelObject: {fileID: 1306529851}
-  WorldArcLengthTravelObject: {fileID: 1647424384}
-  TableParent: {fileID: 1194414362}
-  TableRootElement: {fileID: 1559421796}
-  TableDisplayLR: {fileID: 1383344264}
-  TableTravelObject: {fileID: 600575872}
-  TableArcLengthTravelObject: {fileID: 1767141613}
-  SelObjects: {fileID: 134945217}
-  PillarPrefab: {fileID: 5542299056218215986, guid: 7e6ae2444f1354540b084a732b0e8caa, type: 3}
-  BrowserWall: {fileID: 2130566545}
-  InfoWall: {fileID: 574559611}
-  ActivatePoseTracking: 0
+  activatePoseLogging: 0
+  worldRootElement: {fileID: 1375236216}
+  worldDisplayLr: {fileID: 26821157}
+  worldTravelObject: {fileID: 1306529851}
+  worldArcLengthTravelObject: {fileID: 1647424384}
+  tableParent: {fileID: 1194414362}
+  tableRootElement: {fileID: 1559421796}
+  tableDisplayLr: {fileID: 1383344264}
+  tableTravelObject: {fileID: 600575872}
+  tableArcLengthTravelObject: {fileID: 1767141613}
+  selObjects: {fileID: 134945217}
+  pillarPrefab: {fileID: 5542299056218215986, guid: 7e6ae2444f1354540b084a732b0e8caa, type: 3}
+  browserWall: {fileID: 2130566545}
+  infoWall: {fileID: 574559611}
 --- !u!4 &1842699573
 Transform:
   m_ObjectHideFlags: 0

@@ -13,11 +13,11 @@ namespace Behaviours
             
             if (IsIncrement)
             {
-                GlobalData.ExerciseController.NextSubExercise();
+                GlobalData.ExerciseCurveController.NextSubExercise();
             }
             else
             {
-                GlobalData.ExerciseController.PreviousSubExercise();
+                GlobalData.ExerciseCurveController.PreviousSubExercise();
             }
         }
 

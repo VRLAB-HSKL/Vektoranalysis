@@ -10,7 +10,7 @@ namespace Controller
     /// <summary>
     /// Controller for in-game views of exercise related data structures
     /// </summary>
-    public class ExerciseViewController : AbstractViewController
+    public class ExerciseCurveViewController : AbstractExerciseViewController
     {
         /// <summary>
         /// Model of the controller, representing a selection exercise
@@ -38,7 +38,7 @@ namespace Controller
         /// </summary>
         public List<int> selectionIndices = new List<int>();
 
-        public ExerciseViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab,
+        public ExerciseCurveViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab,
             CurveControllerTye type) : base(root)
         {
             //Debug.Log("globalDataSelectionExercises[0] is null: " + (GlobalData.SelectionExercises[0] is null));
@@ -73,12 +73,12 @@ namespace Controller
             
                 selView.CurrentTitle = CurrentExercise.Title;
                 selView.CurrentDescription = CurrentExercise.Description;
-                _views = new List<AbstractView>()
-                {
-                    selView
-                };
-
-                CurrentView = selView;
+                // _views = new List<AbstractView>()
+                // {
+                //     selView
+                // };
+                //
+                // CurrentView = selView;
             
             
             
@@ -101,13 +101,13 @@ namespace Controller
                 return;
             
             
-            if ((CurrentView as SelectionExerciseCompoundView).showMainDisplay && GlobalData.CurrentSubExerciseIndex == 0)
-            {
-                // showMainDisplay = false;
-                (CurrentView as SelectionExerciseCompoundView).showMainDisplay = false;
-                CurrentView.UpdateView();
-                return;
-            }
+            // if ((CurrentView as SelectionExerciseCompoundView).showMainDisplay && GlobalData.CurrentSubExerciseIndex == 0)
+            // {
+            //     // showMainDisplay = false;
+            //     (CurrentView as SelectionExerciseCompoundView).showMainDisplay = false;
+            //     CurrentView.UpdateView();
+            //     return;
+            // }
 
             if (GlobalData.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
             {
@@ -143,8 +143,7 @@ namespace Controller
             
             if (GlobalData.CurrentSubExerciseIndex == 0)
             {
-                //showMainDisplay = true;
-                (CurrentView as SelectionExerciseCompoundView).showMainDisplay = true;
+                //(CurrentView as SelectionExerciseCompoundView).showMainDisplay = true;
                 CurrentView.UpdateView();
                 return;
             }

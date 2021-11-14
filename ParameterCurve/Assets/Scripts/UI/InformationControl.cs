@@ -47,11 +47,11 @@ public class InformationControl : MonoBehaviour
     private Vector3 _initTimeDistTravelPos;
     private Vector3 _initTimeVelocityTravelPos;
 
-    public OwnCurveViewController ObserevedViewController
+    public CurveViewController ObserevedCurveViewController
     {
         get
         {
-            return GlobalData.WorldViewController;
+            return GlobalData.WorldCurveViewController;
         }
     }
 
@@ -143,7 +143,7 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        var view = ObserevedViewController.CurrentView;
+        var view = ObserevedCurveViewController.CurrentView;
 
         
         int pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
@@ -195,7 +195,7 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        var pointIndex = (ObserevedViewController.CurrentView as SimpleRunCurveView).CurrentPointIndex; //GlobalData.CurrentPointIndex;
+        var pointIndex = (ObserevedCurveViewController.CurrentView as SimpleRunCurveView).CurrentPointIndex; //GlobalData.CurrentPointIndex;
 
         if (pointIndex > curve.points.Count) return;
         

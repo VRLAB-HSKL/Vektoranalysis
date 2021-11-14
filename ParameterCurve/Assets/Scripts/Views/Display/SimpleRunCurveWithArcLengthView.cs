@@ -97,7 +97,7 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         // On arrival at the last point, stop driving
         if (CurrentPointIndex >= curve.arcLengthWorldPoints.Count)
         {
-            //Debug.Log("Stop");
+            Debug.Log("Stop run");
             GlobalData.IsRunning = false;
             return;
         }

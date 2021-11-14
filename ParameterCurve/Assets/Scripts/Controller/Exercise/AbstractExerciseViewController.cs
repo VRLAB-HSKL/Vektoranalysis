@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using log4net;
 using UnityEngine;
-using Views;
+using Views.Display;
 
 namespace Controller
 {
-    public abstract class AbstractViewController
+    public abstract class AbstractExerciseViewController
     {
-        public static readonly ILog Log = LogManager.GetLogger(typeof(AbstractViewController));
+        public static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
         
         protected readonly Transform _rootElement;
 
-        private AbstractView currentView;
-        public AbstractView CurrentView
+        private AbstractCurveView currentView;
+        public AbstractCurveView CurrentView
         {
             get => currentView;
             set
@@ -22,7 +22,7 @@ namespace Controller
             }
         }
 
-        protected List<AbstractView> _views;
+        protected List<AbstractCurveView> _views;
         
         // ToDo: Replace this with MBU observer pattern ?
         public delegate void d_updateViewsDelegate();
@@ -42,11 +42,11 @@ namespace Controller
             }
         }
 
-        protected AbstractViewController(Transform root)
+        protected AbstractExerciseViewController(Transform root)
         {
             _rootElement = root;
 
-            _views = new List<AbstractView>()
+            _views = new List<AbstractCurveView>()
             {
                 //selView
             };
@@ -86,9 +86,5 @@ namespace Controller
                 _rootElement.GetChild(i).gameObject.SetActive(value);
             }
         }
-        
-        
-        
-        
     }
 }

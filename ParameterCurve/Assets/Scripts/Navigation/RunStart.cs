@@ -1,6 +1,7 @@
 using HTC.UnityPlugin.ColliderEvent;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 
 
@@ -21,7 +22,7 @@ public class RunStart : AbstractButtonCollisionHandler
         {
             if (!GlobalData.IsRunning)
             {
-                world.StartRun();
+                //world.StartRun();
             }
 
         }

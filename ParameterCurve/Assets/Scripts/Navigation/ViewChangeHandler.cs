@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 
 public class ViewChangeHandler : AbstractButtonCollisionHandler
@@ -16,8 +17,8 @@ public class ViewChangeHandler : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            GlobalData.WorldViewController.SwitchView(ViewIndex);
-            world.TableViewController?.SwitchView(ViewIndex);
+            GlobalData.WorldCurveViewController.SwitchView(ViewIndex);
+            world.TableCurveViewController?.SwitchView(ViewIndex);
         }
 
         MeshRenderer msr = Target.GetComponent<MeshRenderer>();

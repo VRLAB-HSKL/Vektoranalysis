@@ -1,3 +1,5 @@
+using Controller;
+
 namespace Behaviours.Button
 {
     public class SwitchViewButtonBehaviour : AbstractButtonBehaviour
@@ -14,8 +16,8 @@ namespace Behaviours.Button
         
         public override void HandleButtonEvent()
         {        
-            GlobalData.WorldViewController.SwitchView(viewIndex);
-            world.TableViewController?.SwitchView(viewIndex);
+            GlobalData.WorldCurveViewController.SwitchView(viewIndex);
+            world.TableCurveViewController?.SwitchView(viewIndex);
         }
     }
 }

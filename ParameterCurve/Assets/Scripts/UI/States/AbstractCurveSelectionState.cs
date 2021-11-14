@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +42,7 @@ public abstract class AbstractCurveSelectionState : State
         switch (GlobalData.CurrentDisplayGroup)
         {
             case GlobalData.CurveDisplayGroup.Display:
-                GlobalData.WorldViewController.SetViewVisibility(true);
+                GlobalData.WorldCurveViewController.SetViewVisibility(true);
                 break;
             
             case GlobalData.CurveDisplayGroup.Exercises:
@@ -77,8 +78,8 @@ public abstract class AbstractCurveSelectionState : State
     public override void OnStateQuit()
     {
         // Hide all views
-        GlobalData.WorldViewController.SetViewVisibility(false);
-        GlobalData.ExerciseController.SetViewVisibility(false);
+        GlobalData.WorldCurveViewController.SetViewVisibility(false);
+        GlobalData.ExerciseCurveController.SetViewVisibility(false);
         
         // Clear old buttons
         GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];

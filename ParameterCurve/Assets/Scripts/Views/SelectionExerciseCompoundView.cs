@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Views.Display;
 using Views.Exercise;
 
 namespace Views
 {
-    public class SelectionExerciseCompoundView : AbstractCompoundView
+    public class SelectionExerciseCompoundView // : AbstractCompoundView
     {
         public CurveControllerTye Type;
         
@@ -147,7 +148,7 @@ namespace Views
             }
         }
 
-        public override void StartRun()
+        public void StartRun()
         {
             // ToDo: Refactor this in class hierarchy, is this even needed here ?
         }

@@ -9,7 +9,7 @@ using Views.Display;
 
 public enum CurveControllerTye { World = 0, Table = 1 };
 
-public class OwnCurveViewController : AbstractViewController
+public class CurveViewController : AbstractCurveViewController
 {
     public CurveControllerTye Type;
     
@@ -53,7 +53,7 @@ public class OwnCurveViewController : AbstractViewController
     
     
 
-    public OwnCurveViewController(Transform root, LineRenderer displayLR, Transform travel, 
+    public CurveViewController(Transform root, LineRenderer displayLR, Transform travel, 
                                Transform arcTravel, float scalingFactor, CurveControllerTye type) : base(root)
     {
         Type = type;
@@ -70,7 +70,7 @@ public class OwnCurveViewController : AbstractViewController
         // Temporarily deactivate run object on arc view
         //simpleRunWithArcLengthView.HasTravelPoint = false;
         
-        _views = new List<AbstractView>
+        _views = new List<AbstractCurveView>
         {
             simpleView,
             simpleRunView,
