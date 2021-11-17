@@ -72,7 +72,7 @@ public static class DataImport
         pd.arcLength = curve.Data.ArcLength;
         
         for (int j = 0; j < curve.Data.Data.T.Count; j++)
-        {
+        {   
             pd.points.Add(new Vector3(
                 curve.Data.Data.PVec[j][0],
                 curve.Data.Data.PVec[j][1],

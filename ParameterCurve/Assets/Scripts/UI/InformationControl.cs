@@ -144,7 +144,7 @@ public class InformationControl : MonoBehaviour
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         var view = ObserevedCurveViewController.CurrentView;
-
+    
         
         int pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
 
@@ -165,14 +165,6 @@ public class InformationControl : MonoBehaviour
         {
             if(pointIndex > curve.points.Count)
                 Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
-            
-            
-
-            // if (SourceLabel.text.Equals("param9b"))
-            // {
-            //     SourceLabel.text = "Lemniskate";
-            // }
-            
             
             TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
             XLabel.text = curve?.points[pointIndex].x.ToString(floatFormat);
@@ -195,8 +187,17 @@ public class InformationControl : MonoBehaviour
         if (!GlobalData.initFile.ApplicationSettings.InfoSettings.Activated) return;
 
         var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        var pointIndex = (ObserevedCurveViewController.CurrentView as SimpleRunCurveView).CurrentPointIndex; //GlobalData.CurrentPointIndex;
+        var view = (ObserevedCurveViewController.CurrentView as SimpleRunCurveView);
 
+        if (view is null)
+        {
+            Debug.Log("Test123");
+        }
+        
+        var pointIndex = view.CurrentPointIndex;
+
+        
+        
         if (pointIndex > curve.points.Count) return;
         
         if (GlobalData.initFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)

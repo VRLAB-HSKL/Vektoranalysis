@@ -34,26 +34,11 @@ namespace Behaviours.Button
         /// or as long as the button is being pressed (true)
         /// </summary>
         public bool HoldButton = false;
-
-
+        
         private bool ButtonTriggered = false;
 
+        protected Vector3 initButtonPosition;
 
-        private Vector3 initButtonPosition = Vector3.negativeInfinity;
-
-        public Vector3 ButtonPos
-        {
-            get
-            {
-                if (initButtonPosition == Vector3.negativeInfinity)
-                {
-                    initButtonPosition = ButtonObject.localPosition;
-                    Debug.Log("initButtonPos: " + initButtonPosition);
-                }
-
-                return initButtonPosition;
-            }
-        }
         
 
 
@@ -67,15 +52,15 @@ namespace Behaviours.Button
             {
                 if (eventData.button == mActiveButton)
                 {
-                    ButtonObject.localPosition = ButtonPos + ButtonDownDisplacement;
-                    Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition);
+                    ButtonObject.position = initButtonPosition + ButtonDownDisplacement;
+                    Debug.Log("enterNewButtonPos: " + ButtonObject.position + ", initPos: " + initButtonPosition);
                     ButtonTriggered = true;
                 }
             }
             else
             {
-                ButtonObject.localPosition = ButtonPos + ButtonDownDisplacement;
-                Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition);
+                ButtonObject.position = initButtonPosition + ButtonDownDisplacement;
+                Debug.Log("enterNewButtonPos: " + ButtonObject.position + ", initPos: " + initButtonPosition);
                 ButtonTriggered = true;
             }
 
@@ -83,7 +68,7 @@ namespace Behaviours.Button
         }
 
         /// <summary>
-        /// Handles the buttonpress when the object is exited
+        /// Handles the button press when the object is exited
         /// </summary>
         /// <remarks>
         /// Behaviour when the Button is pressed:
@@ -97,28 +82,25 @@ namespace Behaviours.Button
         /// <returns>void</returns>
         public void OnColliderEventPressExit(ColliderButtonEventData eventData)
         {
-            ButtonObject.localPosition = ButtonPos - ButtonDownDisplacement;
+            ButtonObject.localPosition = initButtonPosition - ButtonDownDisplacement;
             
-            Debug.Log("exitNewButtonPos: " + ButtonObject.localPosition);
+            Debug.Log("exitNewButtonPos: " + ButtonObject.position + ", initPos: " + initButtonPosition);
+            // Debug.Log("exitNewButtonPos: " + ButtonObject.localPosition);
             
             ButtonTriggered = false;
         }
 
 
-        void Start()
+        public void Start()
         {
-            // initButtonPosition = ButtonObject.localPosition;
-            // Debug.Log("initButtonPos: " + initButtonPosition);
+            initButtonPosition = ButtonObject.position;
+            Debug.Log("initButtonPos: " + initButtonPosition);
         }
-        
-        
-        // Update is called once per frame
-
-
+            
         /// <summary>
-        /// 
+        /// Update is called once per frame 
         /// </summary>
-        void Update()
+        public void Update()
         {
             if (ButtonTriggered)
             {

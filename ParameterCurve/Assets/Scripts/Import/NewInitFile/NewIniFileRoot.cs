@@ -25,25 +25,25 @@ namespace Import.NewInitFile
         [JsonProperty("t")]
         public List<float> T { get; set; }
         
-        [JsonProperty("pVec")]
+        [JsonProperty("point_vec")]
         public List<List<float>> PVec { get; set; }
         
-        [JsonProperty("velVec")]
+        [JsonProperty("vel_vec")]
         public List<List<float>> VelVec { get; set; }
         
-        [JsonProperty("accVec")]
+        [JsonProperty("acc_vec")]
         public List<List<float>> AccVec { get; set; }
         
-        [JsonProperty("arcT")]
+        [JsonProperty("arc_t")]
         public List<float> ArcT { get; set; }
         
-        [JsonProperty("arcPVec")]
+        [JsonProperty("arc_point_vec")]
         public List<List<float>> ArcPVec { get; set; }
         
-        [JsonProperty("arcVelVec")]
+        [JsonProperty("arc_vel_vec")]
         public List<List<float>> ArcVelVec { get; set; }
         
-        [JsonProperty("arcAccVec")]
+        [JsonProperty("arc_acc_vec")]
         public List<List<float>> ArcAccVec { get; set; }
     }
 

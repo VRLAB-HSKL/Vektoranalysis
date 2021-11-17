@@ -221,8 +221,6 @@ namespace Controller
             
             }
         
-            // tableView.UpdateView();
-        
             // Display html resource
             browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         
@@ -232,7 +230,6 @@ namespace Controller
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
             TableCurveViewController?.CurrentView.UpdateView();
         
-            //UpdateWorldObjects();
         }
 
         public void SwitchToPreviousDataset()
