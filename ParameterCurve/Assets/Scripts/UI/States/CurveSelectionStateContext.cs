@@ -1,32 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VRKL.MBU;
 
-public abstract class StateContext
+namespace UI.States
 {
-    protected StateContext(State s)
+    public abstract class StateContext
     {
-        
-    }
-}
-
-
-public class CurveSelectionStateContext : StateContext
-{
-    private AbstractCurveSelectionState _state;
-    public new AbstractCurveSelectionState State
-    {
-        get { return _state; }
-        set
+        protected StateContext(State s)
         {
-            if(_state != null)
-                _state.OnStateQuit();
-            
-            value.OnStateEntered();
-            _state = value;
+            Debug.Log(s.ToString());
         }
     }
 
-    public CurveSelectionStateContext(State s) : base(s) {}
+
+    public class CurveSelectionStateContext : StateContext
+    {
+        private AbstractCurveSelectionState _state;
+        public AbstractCurveSelectionState State
+        {
+            get => _state;
+            set
+            {
+                _state?.OnStateQuit();
+
+                value.OnStateEntered();
+                _state = value;
+            }
+        }
+
+        public CurveSelectionStateContext(State s) : base(s) {}
+    }
 }

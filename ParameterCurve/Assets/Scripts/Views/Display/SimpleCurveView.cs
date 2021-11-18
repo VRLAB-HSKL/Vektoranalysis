@@ -1,3 +1,4 @@
+using Controller.Curve;
 using UnityEngine;
 using Views.Display;
 

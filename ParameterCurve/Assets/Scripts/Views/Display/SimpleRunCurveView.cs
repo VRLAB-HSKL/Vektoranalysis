@@ -1,3 +1,4 @@
+using Controller.Curve;
 using log4net;
 using UnityEngine;
 
@@ -99,14 +100,16 @@ namespace Views.Display
                 SetMovingFrame();
             }
 
-            if (CurrentPointIndex > CurrentCurve.points.Count)
+            if (CurrentPointIndex == CurrentCurve.points.Count - 1)
             {
                 GlobalData.IsRunning = false;
+                Debug.Log("Stopping run...!");
             }
+            
         
         }
 
-        public void StartRun()
+        public override void StartRun()
         {
             CurrentPointIndex = 0;
             GlobalData.IsRunning = true;
@@ -119,13 +122,8 @@ namespace Views.Display
             if (TravelObject is null) return;
             if (CurrentPointIndex < 0) return;
 
-            
-            //CurveInformationDataset curve = CurrentCurve;
-        
-            
-        
             // On arrival at the last point, stop driving
-            if (CurrentPointIndex >= CurrentCurve.worldPoints.Count)
+            if (CurrentPointIndex == CurrentCurve.worldPoints.Count - 1)
             {
                 GlobalData.IsRunning = false; 
                 return;
@@ -140,7 +138,7 @@ namespace Views.Display
             if (!HasTravelPoint) return;
         
             CurveInformationDataset curve = CurrentCurve;
-            if (CurrentPointIndex >= curve.worldPoints.Count)
+            if (CurrentPointIndex == curve.worldPoints.Count - 1)
             {
                 GlobalData.IsRunning = false;
                 return;

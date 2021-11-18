@@ -1,3 +1,4 @@
+using Controller.Curve;
 using HTC.UnityPlugin.Utility;
 using HTC.UnityPlugin.Vive;
 using log4net;
@@ -113,7 +114,8 @@ namespace Controller
             if (GlobalData.IsRunning)
             {
                 _updateTimer += Time.deltaTime;
-                Log.Debug("deltaTime: " + Time.deltaTime + ", updateTimer: " + _updateTimer + 
+                Log.Debug("deltaTime: " + Time.deltaTime + 
+                          ", updateTimer: " + _updateTimer + 
                           ", pointStepDuration: " + _pointStepDuration +
                           " - " + (_updateTimer >= _pointStepDuration));
                 
@@ -140,6 +142,7 @@ namespace Controller
             // Start run on trigger press
             if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Trigger))
             {
+                Debug.Log("Run started with controller button!");
                 StartRun();
             }
         
@@ -150,8 +153,7 @@ namespace Controller
 
         public void StartRun()
         {
-            Log.Info("Starting curve run...");
-            //GlobalData.CurrentPointIndex = 0;
+            //Log.Info("Starting curve run...");
             GlobalData.IsRunning = true;        
             GlobalData.WorldCurveViewController.StartRun();
             TableCurveViewController.StartRun();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Controller.Curve;
 using Import.NewInitFile;
 using UnityEngine;
 using Views;

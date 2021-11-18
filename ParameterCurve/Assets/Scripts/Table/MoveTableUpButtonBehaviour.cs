@@ -1,212 +1,119 @@
-using HTC.UnityPlugin.ColliderEvent;
-using System.Collections;
-using System.Collections.Generic;
 using Behaviours.Button;
 using UnityEngine;
 
-/// <summary>
-/// This class handles Logic of the Upbutton 
-/// Source: ImmersiveVolume Project
-/// </summary>
-/// 
-
-public class MoveTableUpButtonBehaviour : AbstractButtonBehaviour
-    //MonoBehaviour, IColliderEventPressEnterHandler
-    //, IColliderEventPressExitHandler
+namespace Table
 {
-
-    //[SerializeField]
-    //private ColliderButtonEventData.InputButton m_activeButton = ColliderButtonEventData.InputButton.Trigger;
-
     /// <summary>
-    /// This Vector shows how much the Button will be displaced while pressing
+    /// This class handles Logic of the Up button 
+    /// Source: ImmersiveVolume Project
     /// </summary>
-    //public Vector3 ButtonDownDisplacement = new Vector3(0f, 5f, 0f);
-
-    /// <summary>
-    /// This Vector shows how much the 3D-Model will be displaced while pressing
-    /// </summary>
-    //public Vector3 ObjectDisplacement;
-
-    /// <summary>
-    /// This is the Buttonobject
-    /// </summary>
-    //public Transform ButtonObject;
-
-    /// <summary>
-    /// Shows how much the whole game object will be displaced while pressing
-    /// </summary>
-    public Vector3 FullObjectDisplacement;
-
-    /// <summary>
     /// 
-    /// </summary>
-    bool getUpwards = false;
-    
-    /// <summary>
-    /// The current 3D-Model 
-    /// </summary>
-    private Transform volumeObject; //VolumeRenderedObject volumeObject;
-    /// <summary>
-    /// The Base of the Console
-    /// </summary>
-    private GameObject consoleBase;
-    /// <summary>
-    /// Sidepanels without the Sliders
-    /// </summary>
-    private GameObject regulator1;
-    /// <summary>
-    /// Sidepanels without the Sliders
-    /// </summary>
-    private GameObject regulator2;
-    /// <summary>
-    /// Sidepanels without the Sliders
-    /// </summary>
-    private GameObject regulator3;
 
-
-
-    /// <summary>
-    /// Finding the GameObjects in the Scene
-    /// </summary>
-    /// <remarks>
-    /// 
-    /// <ul>
-    /// <li>Finding the  consoleBase</li>
-    /// <li>Finding the left Regulator</li>
-    /// <li>Finding the right Regulator</li>
-    /// <li>Finding the front Regulator</li>
-    /// </ul> 
-    /// </remarks>
-    /// <param name="void"></param>
-    /// <returns>void</returns>
-    /// 
-    void Start()
+    public class MoveTableUpButtonBehaviour : AbstractButtonBehaviour
+        //MonoBehaviour, IColliderEventPressEnterHandler
+        //, IColliderEventPressExitHandler
     {
-        HoldButton = true;
-        UseTriggerButton = false;
-        FullObjectDisplacement = new Vector3(0f, 0.002f, 0f);
 
-        consoleBase = GameObject.Find("ConsoleBase");
-        regulator1 = GameObject.Find("Regulator");
-        regulator2 = GameObject.Find("Regulator (1)");
-        regulator3 = GameObject.Find("Regulator (2)");
-    }
+        //[SerializeField]
+        //private ColliderButtonEventData.InputButton m_activeButton = ColliderButtonEventData.InputButton.Trigger;
 
-
-
-
-    /// <summary>
-    /// Handles the buttonpress when the object is entered
-    /// </summary>
-    /// <remarks>
-    /// Behaviour when the Button is pressed:
-    /// <ul>
-    /// 
-    /// <li>The lower part of the Button will be displaced depending on the value of buttonDownDisplacement </li>
-    /// <li>Finding the current VolumeObject</li>
-    /// <li>Upward-Movement (getUpward) will be enabled</li>
-    /// </ul> 
-    /// </remarks>
-    /// <param name="eventData"></param>
-    /// <returns>void</returns>
-    //public void OnColliderEventPressEnter(ColliderButtonEventData eventData)
-    //{
-    //    if (eventData.button == m_activeButton)
-    //    {
-    //        //volumeObject = GameObject.FindObjectOfType<VolumeRenderedObject>();
-
-    //        //Debug.Log("ButtonHit");
-    //        ButtonObject.localPosition += ButtonDownDisplacement;
-    //        getUpwards = true;
+        /// <summary>
+        /// Shows how much the whole game object will be displaced while pressing
+        /// </summary>
+        public Vector3 fullObjectDisplacement;
+ 
+        /// <summary>
+        /// The Base of the Console
+        /// </summary>
+        private GameObject _consoleBase;
+        /// <summary>
+        /// Side panels without the Sliders
+        /// </summary>
+        private GameObject _regulator1;
+        /// <summary>
+        /// Side panels without the Sliders
+        /// </summary>
+        private GameObject _regulator2;
+        /// <summary>
+        /// Side panels without the Sliders
+        /// </summary>
+        private GameObject _regulator3;
 
 
 
-
-
-    //    }
-    //}
-
-    /// <summary>
-    /// Handles the buttonpress when the object is exited
-    /// </summary>
-    /// <remarks>
-    /// Behaviour when the Button is pressed:
-    /// <ul>
-    /// 
-    /// <li>Resets the Buttonposition </li>
-    /// <li>Disables the UpWard-Movement</li>
-    /// </ul> 
-    /// </remarks>
-    /// <param name="eventData"></param>
-    /// <returns>void</returns>
-
-    //public void OnColliderEventPressExit(ColliderButtonEventData eventData)
-    //{
-    //    ButtonObject.localPosition -= ButtonDownDisplacement;
-    //    getUpwards = false;
-    //}
-
-
-
-    // Update is called once per frame
-
-
-    /// <summary>
-    /// Handles the ObjectDisplacement
-    /// </summary>
-    /// <remarks>
-    /// Behaviour when Upward-Movement is enabled, the VolumeObject is not null and the localPosition of the consoleBase is less or equal than -0.399 (Topposition)
-    /// <ul>
-    /// <li>The ConsoleBase, the Regulators and the 3D-Model wll be displaced depending on objectDisplacement and Time.deltaTime every Frame</li>
-    /// </ul> 
-    /// </remarks>
-    /// <param name="void"></param>
-    /// <returns>void</returns>
-    /// 
-    //void Update()
-    //{
-        
-    //}
-
-    public override void HandleButtonEvent()
-    {
-        if (true) //getUpwards)
+        /// <summary>
+        /// Finding the GameObjects in the Scene
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <ul>
+        /// <li>Finding the  consoleBase</li>
+        /// <li>Finding the left Regulator</li>
+        /// <li>Finding the right Regulator</li>
+        /// <li>Finding the front Regulator</li>
+        /// </ul> 
+        /// </remarks>
+        /// <returns>void</returns>
+        /// 
+        private new void Start()
         {
-            if (true)//volumeObject != null)
+            base.Start();
+            
+            holdButton = true;
+            useTriggerButton = false;
+            fullObjectDisplacement = new Vector3(0f, 0.002f, 0f);
+
+            
+            
+            _consoleBase = GameObject.Find("ConsoleBase");
+            _regulator1 = GameObject.Find("Regulator");
+            _regulator2 = GameObject.Find("Regulator (1)");
+            _regulator3 = GameObject.Find("Regulator (2)");
+        }
+
+        protected override void HandleButtonEvent()
+        {
+            if (true) //getUpwards)
             {
-
-                if (true) //consoleBase.transform.localPosition.y <= -0.399f)
+                if (true)//volumeObject != null)
                 {
-                    Vector3 increaseVector = FullObjectDisplacement; // * Time.deltaTime;
-                    consoleBase.transform.localPosition += increaseVector;
-                    regulator1.transform.localPosition += increaseVector;
-                    regulator2.transform.localPosition += increaseVector;
-                    regulator3.transform.localPosition += increaseVector;
 
-                    //volumeObject.transform.localPosition += FullObjectDisplacement * Time.deltaTime;
+                    if (true) //consoleBase.transform.localPosition.y <= -0.399f)
+                    {
+                        Vector3 increaseVector = fullObjectDisplacement; // * Time.deltaTime;
+                        _consoleBase.transform.localPosition += increaseVector;
+                        _regulator1.transform.localPosition += increaseVector;
+                        _regulator2.transform.localPosition += increaseVector;
+                        _regulator3.transform.localPosition += increaseVector;
 
-                    Debug.Log("IncreaseVector: " + increaseVector);
-                    //Debug.Log("localPosInc: " + consoleBase.transform.localPosition);
+                        //volumeObject.transform.localPosition += FullObjectDisplacement * Time.deltaTime;
 
-                    //Debug.Log("hoch");
+                        Debug.Log("IncreaseVector: " + increaseVector);
+                        //Debug.Log("localPosInc: " + consoleBase.transform.localPosition);
 
-                }
+                        //Debug.Log("going up");
 
-
-
-                /*  if (ConsoleBase.transform.localPosition.y <= -1.3f) {
+                    }
 
 
-                      volobj.transform.localPosition = new Vector3(volobj.transform.localPosition.z, volobj.transform.localPosition.y, volobj.transform.localPosition.x);
-                      ConsoleBase.transform.localPosition = new Vector3(ConsoleBase.transform.localPosition.z, -1.3f, ConsoleBase.transform.localPosition.x);
+
+                    /*  if (ConsoleBase.transform.localPosition.y <= -1.3f) {
+
+
+                      vol_obj.transform.localPosition = new Vector3(vol_obj.transform.localPosition.z, 
+                      vol_obj.transform.localPosition.y, vol_obj.transform.localPosition.x);
+                      ConsoleBase.transform.localPosition = 
+                      new Vector3(ConsoleBase.transform.localPosition.z, -
+                      1.3f, 
+                      ConsoleBase.transform.localPosition.x);
 
 
                   }*/
 
+                }
+
+
             }
-
-
         }
     }
 }

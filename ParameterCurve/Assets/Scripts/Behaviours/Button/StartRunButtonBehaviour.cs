@@ -8,13 +8,14 @@ namespace Behaviours.Button
         public WorldStateController world;
         
         
-        private void Start()
+        private new void Start()
         {
+            base.Start();
             gameObject.SetActive(GlobalData.initFile.ApplicationSettings.TableSettings.ShowRunButton);
         }
-        
-        
-        public override void HandleButtonEvent()
+
+
+        protected override void HandleButtonEvent()
         {
             world.StartRun();
         }

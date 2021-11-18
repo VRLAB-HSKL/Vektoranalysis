@@ -1,7 +1,5 @@
-using System.Runtime.CompilerServices;
 using HTC.UnityPlugin.ColliderEvent;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Behaviours.Button
 {
@@ -16,52 +14,52 @@ namespace Behaviours.Button
         /// <summary>
         /// Controls how much the actual object being pressed will be displaced while pressing
         /// </summary>
-        public Vector3 ButtonDownDisplacement = new Vector3(0f, -0.02f, 0f);    
+        public Vector3 buttonDownDisplacement = new Vector3(0f, -0.02f, 0f);    
 
         /// <summary>
         /// Button object being pressed
         /// </summary>
-        public Transform ButtonObject;
+        public Transform buttonObject;
 
         /// <summary>
-        /// Controls wether button activation is dependent on pushing the trigger button
+        /// Controls whether button activation is dependent on pushing the trigger button
         /// or simple collision with the object
         /// </summary>
-        public bool UseTriggerButton = false;
+        public bool useTriggerButton;
 
         /// <summary>
-        /// Signals wether the associated handler function is triggered once (false)
+        /// Signals whether the associated handler function is triggered once (false)
         /// or as long as the button is being pressed (true)
         /// </summary>
-        public bool HoldButton = false;
+        public bool holdButton;
         
-        private bool ButtonTriggered = false;
+        private bool _buttonTriggered;
 
-        protected Vector3 initButtonPosition;
+        private Vector3 _initButtonPosition;
+
 
         
-
 
         /// <summary>
-        /// Handles the buttonpress when the object is entered
+        /// Handles the button press when the object is entered
         /// </summary>
         /// <param name="eventData"></param>
         public void OnColliderEventPressEnter(ColliderButtonEventData eventData)
         {
-            if (UseTriggerButton)
+            if (useTriggerButton)
             {
                 if (eventData.button == mActiveButton)
                 {
-                    ButtonObject.position = initButtonPosition + ButtonDownDisplacement;
-                    Debug.Log("enterNewButtonPos: " + ButtonObject.position + ", initPos: " + initButtonPosition);
-                    ButtonTriggered = true;
+                    buttonObject.localPosition = _initButtonPosition + buttonDownDisplacement;
+                    // Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition + ", initPos: " + initButtonPosition);
+                    _buttonTriggered = true;
                 }
             }
             else
             {
-                ButtonObject.position = initButtonPosition + ButtonDownDisplacement;
-                Debug.Log("enterNewButtonPos: " + ButtonObject.position + ", initPos: " + initButtonPosition);
-                ButtonTriggered = true;
+                buttonObject.localPosition = _initButtonPosition + buttonDownDisplacement;
+                // Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition + ", initPos: " + initButtonPosition);
+                _buttonTriggered = true;
             }
 
         
@@ -74,7 +72,7 @@ namespace Behaviours.Button
         /// Behaviour when the Button is pressed:
         /// <ul>
         /// 
-        /// <li>Resets the Buttonposition </li>
+        /// <li>Resets the button position </li>
         /// <li>Disables the UpWard-Movement</li>
         /// </ul> 
         /// </remarks>
@@ -82,19 +80,17 @@ namespace Behaviours.Button
         /// <returns>void</returns>
         public void OnColliderEventPressExit(ColliderButtonEventData eventData)
         {
-            ButtonObject.localPosition = initButtonPosition - ButtonDownDisplacement;
+            buttonObject.localPosition = _initButtonPosition - buttonDownDisplacement;
             
-            Debug.Log("exitNewButtonPos: " + ButtonObject.position + ", initPos: " + initButtonPosition);
-            // Debug.Log("exitNewButtonPos: " + ButtonObject.localPosition);
+            // Debug.Log("exitNewButtonPos: " + ButtonObject.localPosition + ", initPos: " + initButtonPosition);
             
-            ButtonTriggered = false;
+            _buttonTriggered = false;
         }
-
 
         public void Start()
         {
-            initButtonPosition = ButtonObject.position;
-            Debug.Log("initButtonPos: " + initButtonPosition);
+            _initButtonPosition = buttonObject.localPosition;
+            // Debug.Log("initButtonPos: " + initButtonPosition);
         }
             
         /// <summary>
@@ -102,18 +98,18 @@ namespace Behaviours.Button
         /// </summary>
         public void Update()
         {
-            if (ButtonTriggered)
+            if (_buttonTriggered)
             {
                 HandleButtonEvent();
-                if (!HoldButton) 
+                if (!holdButton) 
                 {
-                    ButtonTriggered = false;
+                    _buttonTriggered = false;
                 }
             }
         
         }
 
-        public abstract void HandleButtonEvent();
+        protected abstract void HandleButtonEvent();
 
     }
 }

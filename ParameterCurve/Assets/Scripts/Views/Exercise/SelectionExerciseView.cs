@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Controller.Curve;
+using UnityEngine;
 
 namespace Views.Exercise
 {

@@ -1105,10 +1105,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActiveButton: 0
-  ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  ButtonObject: {fileID: 18509533}
-  UseTriggerButton: 1
-  HoldButton: 0
+  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
+  buttonObject: {fileID: 18509533}
+  useTriggerButton: 1
+  holdButton: 0
   world: {fileID: 1842699572}
   viewIndex: 1
 --- !u!1 &89168742
@@ -5709,10 +5709,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActiveButton: 0
-  ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  ButtonObject: {fileID: 1187300}
-  UseTriggerButton: 1
-  HoldButton: 0
+  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
+  buttonObject: {fileID: 1187300}
+  useTriggerButton: 1
+  holdButton: 0
   world: {fileID: 1842699572}
   viewIndex: 0
 --- !u!1 &688697091 stripped
@@ -7301,10 +7301,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActiveButton: 0
-  ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  ButtonObject: {fileID: 191158020}
-  UseTriggerButton: 1
-  HoldButton: 0
+  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
+  buttonObject: {fileID: 191158020}
+  useTriggerButton: 1
+  holdButton: 0
   world: {fileID: 1842699572}
   viewIndex: 2
 --- !u!1 &864817757
@@ -12125,10 +12125,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActiveButton: 0
-  ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  ButtonObject: {fileID: 882178420}
-  UseTriggerButton: 1
-  HoldButton: 0
+  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
+  buttonObject: {fileID: 882178420}
+  useTriggerButton: 1
+  holdButton: 0
   world: {fileID: 1842699572}
 --- !u!1 &1356279672
 GameObject:
@@ -15488,10 +15488,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActiveButton: 0
-  ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  ButtonObject: {fileID: 408382570}
-  UseTriggerButton: 1
-  HoldButton: 0
+  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
+  buttonObject: {fileID: 408382570}
+  useTriggerButton: 1
+  holdButton: 0
   world: {fileID: 1842699572}
 --- !u!1001 &1728278281
 PrefabInstance:
@@ -18197,10 +18197,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mActiveButton: 0
-  ButtonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  ButtonObject: {fileID: 2091748782}
-  UseTriggerButton: 1
-  HoldButton: 0
+  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
+  buttonObject: {fileID: 2091748782}
+  useTriggerButton: 1
+  holdButton: 0
   world: {fileID: 1842699572}
 --- !u!1 &2130566544
 GameObject:

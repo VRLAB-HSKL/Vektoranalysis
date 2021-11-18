@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller.Curve;
 using UnityEngine;
 using Views.Display;
 
@@ -95,9 +96,8 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         // }
 
         // On arrival at the last point, stop driving
-        if (CurrentPointIndex >= curve.arcLengthWorldPoints.Count)
+        if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
         {
-            Debug.Log("Stop run");
             GlobalData.IsRunning = false;
             return;
         }
@@ -111,7 +111,7 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
     {
         CurveInformationDataset curve = CurrentCurve; //HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         
-        if (CurrentPointIndex >= curve.worldPoints.Count)
+        if (CurrentPointIndex == curve.worldPoints.Count - 1)
         {
             GlobalData.IsRunning = false;
             return;

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Calculation.SelectionExercises;
 using Controller;
+using Controller.Curve;
 using Import.NewInitFile;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public static class GlobalData
     /// Factor to control speed of curve runs. The value specifies the time in seconds that has to pass before a
     /// new point is traveled to. A value of 1.0 means a new point is reached every second. 
     /// </summary>
-    public static float RunSpeedFactor = 0.0005f;
+    public static float RunSpeedFactor = 0.005f;
 
     public static CurveViewController WorldCurveViewController { get; set; }
     public static ExerciseCurveViewController ExerciseCurveController { get; set; }

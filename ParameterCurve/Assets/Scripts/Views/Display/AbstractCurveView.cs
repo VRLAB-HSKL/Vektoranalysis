@@ -1,3 +1,4 @@
+using Controller.Curve;
 using log4net;
 using UnityEngine;
 
@@ -112,7 +113,7 @@ namespace Views.Display
 
         public virtual void StartRun()
         {
-            
+               
         }
     }
 }

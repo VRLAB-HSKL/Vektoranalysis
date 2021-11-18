@@ -8,13 +8,14 @@ namespace Behaviours.Button
         public int viewIndex;
 
         
-        private void Start()
+        private new void Start()
         {
+            base.Start();
             gameObject.SetActive(GlobalData.initFile.ApplicationSettings.TableSettings.ShowViewButtons);
         }
-        
-        
-        public override void HandleButtonEvent()
+
+
+        protected override void HandleButtonEvent()
         {        
             GlobalData.WorldCurveViewController.SwitchView(viewIndex);
             world.TableCurveViewController?.SwitchView(viewIndex);
