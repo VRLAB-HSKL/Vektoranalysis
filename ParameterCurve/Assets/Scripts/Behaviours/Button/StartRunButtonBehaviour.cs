@@ -17,7 +17,7 @@ namespace Behaviours.Button
 
         protected override void HandleButtonEvent()
         {
-            world.StartRun();
+            WorldStateController.StartRun();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Behaviours.Button
         protected override void HandleButtonEvent()
         {        
             GlobalData.WorldCurveViewController.SwitchView(viewIndex);
-            world.TableCurveViewController?.SwitchView(viewIndex);
+            GlobalData.TableCurveViewController?.SwitchView(viewIndex);
         }
     }
 }

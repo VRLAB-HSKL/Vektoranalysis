@@ -16,7 +16,7 @@ namespace Views
         private List<AbstractCurveView> curveViews = new List<AbstractCurveView>();
         private Transform origin;
         
-        private SelectionExerciseGameObjects selObjects;
+        private SelectionExerciseGameObjects selObjects { get; set; }
 
         private SelectionExercise CurrentSelectionExercise
         {

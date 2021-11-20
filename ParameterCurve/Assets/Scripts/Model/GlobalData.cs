@@ -27,6 +27,8 @@ public static class GlobalData
     public static float RunSpeedFactor = 0.005f;
 
     public static CurveViewController WorldCurveViewController { get; set; }
+    
+    public static CurveViewController TableCurveViewController { get; set; }
     public static ExerciseCurveViewController ExerciseCurveController { get; set; }
     
     
@@ -124,6 +126,14 @@ public static class GlobalData
         
         Log.Debug("Global Data initialized");
     }
+    
+    
+    
+    
+    
+    
+    
+    
     
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void ConfigureLogging()

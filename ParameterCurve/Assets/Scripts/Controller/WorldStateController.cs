@@ -1,5 +1,4 @@
 using Controller.Curve;
-using HTC.UnityPlugin.Utility;
 using HTC.UnityPlugin.Vive;
 using log4net;
 using UI;
@@ -8,157 +7,133 @@ using Views.Display;
 
 namespace Controller
 {
+    /// <summary>
+    /// Controls global game state of the scene. This class initializes important utilities like the global data
+    /// model <see cref="GlobalData"/>, and contains the main game loop. Additionally, game objects related to
+    /// the different curve displays in the scene are mapped from the scene into the code. 
+    /// </summary>
     public class WorldStateController : MonoBehaviour
     {
-    
+        #region Public members
+        
         /// <summary>
-        /// Controls pose logging for every frame
+        /// Controls pose logging for every frame. If true, the player pose is logged using the log4net logger object
         /// </summary>
         [Header("Options")]
         public bool activatePoseLogging;
-    
-         
         
+        /// <summary>
+        /// Root element position of the world curve display. This should be an empty parent game object containing
+        /// all related game objects as children
+        /// </summary>
         [Header("WorldCurveElements")]
         public Transform worldRootElement;
+        
+        /// <summary>
+        /// Line renderer displaying the world curve
+        /// </summary>
         public LineRenderer worldDisplayLr;
+        
+        /// <summary>
+        /// Game object transform used to visualize runs along the world curve display
+        /// </summary>
         public Transform worldTravelObject;
+        
+        /// <summary>
+        /// Game object transform used to visualize arc length parametrization based runs along the world curve display
+        /// </summary>
         public Transform worldArcLengthTravelObject;
-
-        [Header("TableCurveElements")] 
+        
+        /// <summary>
+        /// Root element containing the table prefab and all other related game objects. This differs from
+        /// <see cref="tableRootElement"/> by containing all elements, not just the ones related to simple curve
+        /// display
+        /// </summary>
+        [Header("TableCurveElements")]
         public GameObject tableParent;
+        
+        /// <summary>
+        /// Root element position of the table curve display. This should be an empty parent game object containing
+        /// all related game objects as children
+        /// </summary>
         public Transform tableRootElement;
+        
+        /// <summary>
+        /// Line renderer displaying the table curve
+        /// </summary>
         public LineRenderer tableDisplayLr;
+        
+        /// <summary>
+        /// Game object transform used to visualize runs along the table curve display
+        /// </summary>
         public Transform tableTravelObject;
+        
+        /// <summary>
+        /// Game object transform used to visualize arc length parametrization based runs along the table curve display
+        /// </summary>
         public Transform tableArcLengthTravelObject;
 
+        /// <summary>
+        /// Exercise script instance <see cref="SelectionExerciseGameObjects"/> bundling all relevant game object
+        /// related to selection exercise interaction
+        /// </summary>
         [Header("ExerciseElements")] 
         public SelectionExerciseGameObjects selObjects;
+        
+        /// <summary>
+        /// Prefab used to instance pillars containing curves to be selected by the user
+        /// </summary>
         public GameObject pillarPrefab;
     
+        /// <summary>
+        /// Control for room wall that uses an in-game browser asset to display websites or local html resources
+        /// </summary>
         [Header("Walls")]
         public BrowserControl browserWall;
+        
+        /// <summary>
+        /// Control for room wall that displays general curve information and current point information during runs
+        /// </summary>
         public InformationControl infoWall;
+        
+        /// <summary>
+        /// Control for room wall used to select curves to display from the imported datasets
+        /// </summary>
         public static CurveSelectionControl CurveSelectWall;
 
-    
-        public CurveViewController TableCurveViewController { get; private set; }
-        
+        #endregion Public members
 
-        
+        #region Private members
         
         /// <summary>
         /// Static log4net Logger 
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(WorldStateController));
 
-        private float _pointStepDuration;
+        /// <summary>
+        /// Time passed since last traversal to the current point. Once this value is greater than
+        /// <see cref="GlobalData.RunSpeedFactor"/>, the travel object moves to the next point on the curve
+        /// </summary>
         private float _updateTimer;
         
-    
-        private void Awake()
-        {
-            // Initialize global model
-            infoWall.InitPlotLengths();
-            GlobalData.InitializeData();
-            
-            // Set up view controllers
-            GlobalData.ExerciseCurveController = new ExerciseCurveViewController(
-                selObjects.gameObject.transform, selObjects, pillarPrefab, CurveControllerTye.World);
-            GlobalData.ExerciseCurveController.SetViewVisibility(false);
-
-            var displayCurve = GlobalData.DisplayCurveDatasets[0];
-
-            GlobalData.WorldCurveViewController = new CurveViewController(
-                worldRootElement, worldDisplayLr, 
-                worldTravelObject, worldArcLengthTravelObject, 
-                displayCurve.WorldScalingFactor, CurveControllerTye.World);
-            GlobalData.WorldCurveViewController.SetViewVisibility(true);
-
-            if (GlobalData.initFile.ApplicationSettings.TableSettings.Activated)
-            {
-                TableCurveViewController = new CurveViewController(
-                    tableRootElement, tableDisplayLr, 
-                    tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
-                    CurveControllerTye.Table);
-            }
-            else
-            {
-                tableParent.SetActive(false);
-            }
-
-            _pointStepDuration = GlobalData.RunSpeedFactor;
-
-        }
-
-        // Start is called before the first frame update
-        private void Start()
-        {
-            // Display html resource
-            browserWall.OpenURL(GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
-
-            // Set plot line renderers
-            infoWall.Update();
-        }
-
+        #endregion Private members
         
+        #region Public functions
 
-        public WorldStateController(Vector3 initTravelObjPos, Vector3 initArcLengthTravelObjPos)
+        /// <summary>
+        /// Start run on views on curves that have a travel object associated with them
+        /// </summary>
+        public static void StartRun()
         {
-            // _initTravelObjPos = initTravelObjPos;
-            // _initArcLengthTravelObjPos = initArcLengthTravelObjPos;
-        }
-
-        private void Update()
-        {
-            if (GlobalData.IsRunning)
-            {
-                _updateTimer += Time.deltaTime;
-                Log.Debug("deltaTime: " + Time.deltaTime + 
-                          ", updateTimer: " + _updateTimer + 
-                          ", pointStepDuration: " + _pointStepDuration +
-                          " - " + (_updateTimer >= _pointStepDuration));
-                
-                if(_updateTimer >= _pointStepDuration)
-                {
-                    _updateTimer = 0f;
-                
-                    //GlobalData.WorldViewController.UpdateViewsDelegate();
-                    GlobalData.WorldCurveViewController.CurrentView.UpdateView();
-                    TableCurveViewController?.CurrentView.UpdateView();
-
-                    infoWall.Update();
-                }
-
-                // Debug.Log("crP: " + GlobalData.CurrentPointIndex + 
-                //           ", max: " + GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].points.Count);
-                // if (GlobalData.CurrentPointIndex >= GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].points.Count)
-                // {
-                //     Debug.Log("Stopping run");
-                //     GlobalData.IsRunning = false;
-                // }
-            }
-
-            // Start run on trigger press
-            if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Trigger))
-            {
-                Debug.Log("Run started with controller button!");
-                StartRun();
-            }
-        
-            if(activatePoseLogging) StaticLogging();
-            
-
-        }
-
-        public void StartRun()
-        {
-            //Log.Info("Starting curve run...");
+            Log.Info("Starting curve run");
             GlobalData.IsRunning = true;        
             GlobalData.WorldCurveViewController.StartRun();
-            TableCurveViewController.StartRun();
+            GlobalData.TableCurveViewController?.StartRun();
         }
 
+        /// <summary>
+        /// Switch to the next curve in the current dataset <see cref="GlobalData.CurrentDataset"/>
+        /// </summary>
         public void SwitchToNextDataset()
         {
             // Stop driving
@@ -172,68 +147,76 @@ namespace Controller
             if (GlobalData.CurrentCurveIndex >= GlobalData.CurrentDataset.Count)
                 GlobalData.CurrentCurveIndex = 0;
 
-            // Reset point index
-            //GlobalData.CurrentPointIndex = 0;
-
-            var worldView = GlobalData.WorldCurveViewController.CurrentView as AbstractCurveView;
+            
+            var worldView = GlobalData.WorldCurveViewController.CurrentView;
             worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
             if(worldView.GetType() == typeof(SimpleRunCurveView) ||
                worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
             {
-                // Debug.Log("adjust travel gameobject");
-                var runview = worldView as SimpleRunCurveView;
-                runview.CurrentPointIndex = 0;
-                runview.SetTravelPoint();
-                runview.SetMovingFrame();
-                runview.CurrentPointIndex = 0;
+                if (worldView is SimpleRunCurveView runView)
+                {
+                    runView.CurrentPointIndex = 0;
+                    runView.SetTravelPoint();
+                    runView.SetMovingFrame();
+                    runView.CurrentPointIndex = 0;
+                }
 
                 if (worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
-                    var arcview = worldView as SimpleRunCurveWithArcLength;
-                    arcview.CurrentPointIndex = 0;
-                    arcview.SetArcTravelPoint();
-                    arcview.SetArcMovingFrame();
-                    arcview.CurrentPointIndex = 0;
+                    if (worldView is SimpleRunCurveWithArcLength arcView)
+                    {
+                        arcView.CurrentPointIndex = 0;
+                        arcView.SetArcTravelPoint();
+                        arcView.SetArcMovingFrame();
+                        arcView.CurrentPointIndex = 0;
+                    }
                 }
             
             }
         
-            // worldView.UpdateView();
-        
-            var tableView = TableCurveViewController.CurrentView as AbstractCurveView;
-            tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
-            if(tableView.GetType() == typeof(SimpleRunCurveView) ||
-               tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+            var tableView = GlobalData.TableCurveViewController?.CurrentView;
+            if (tableView != null)
             {
-                // Debug.Log("adjust travel gameobject");
-                var runview = tableView as SimpleRunCurveView;
-                runview.CurrentPointIndex = 0;
-                runview.SetTravelPoint();
-                runview.SetMovingFrame();
-                runview.CurrentPointIndex = 0;
-            
-                if (tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+                tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+                if (tableView.GetType() == typeof(SimpleRunCurveView) ||
+                    tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
-                    var arcview = tableView as SimpleRunCurveWithArcLength;
-                    arcview.CurrentPointIndex = 0;
-                    arcview.SetArcTravelPoint();
-                    arcview.SetArcMovingFrame();
-                    arcview.CurrentPointIndex = 0;
+                    // Debug.Log("adjust travel game object");
+                    if (tableView is SimpleRunCurveView runView)
+                    {
+                        runView.CurrentPointIndex = 0;
+                        runView.SetTravelPoint();
+                        runView.SetMovingFrame();
+                        runView.CurrentPointIndex = 0;
+                    }
+
+                    if (tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+                    {
+                        if (tableView is SimpleRunCurveWithArcLength arcView)
+                        {
+                            arcView.CurrentPointIndex = 0;
+                            arcView.SetArcTravelPoint();
+                            arcView.SetArcMovingFrame();
+                            arcView.CurrentPointIndex = 0;
+                        }
+                    }
                 }
-            
             }
-        
+
             // Display html resource
             browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
         
-            // Udpate info wall
+            // Update info wall
             infoWall.Update();
 
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
-            TableCurveViewController?.CurrentView.UpdateView();
+            GlobalData.TableCurveViewController?.CurrentView.UpdateView();
         
         }
 
+        /// <summary>
+        /// Switch to the previous curve in the current dataset <see cref="GlobalData.CurrentDataset"/>
+        /// </summary>
         public void SwitchToPreviousDataset()
         {
             // Stop driving
@@ -251,56 +234,63 @@ namespace Controller
             --GlobalData.CurrentCurveIndex;
             if (GlobalData.CurrentCurveIndex < 0)
                 GlobalData.CurrentCurveIndex = GlobalData.CurrentDataset.Count - 1;
+        
+            var worldView = GlobalData.WorldCurveViewController.CurrentView;
+            if (worldView != null)
+            {
+                worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+                if (worldView.GetType() == typeof(SimpleRunCurveView) ||
+                    worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
+                {
+                    if (worldView is SimpleRunCurveView runView)
+                    {
+                        runView.CurrentPointIndex = 0;
+                        runView.SetTravelPoint();
+                        runView.SetMovingFrame();
+                        runView.CurrentPointIndex = 0;
+                    }
 
-            // Reset point index
-            //GlobalData.CurrentPointIndex = 0;
-        
-            var worldView = GlobalData.WorldCurveViewController.CurrentView as AbstractCurveView;
-            worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
-            if(worldView.GetType() == typeof(SimpleRunCurveView) ||
-               worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
-            {
-                Debug.Log("adjust travel gameobject");
-                var runview = worldView as SimpleRunCurveView;
-                runview.CurrentPointIndex = 0;
-                runview.SetTravelPoint();
-                runview.SetMovingFrame();
-                runview.CurrentPointIndex = 0;
-            
-                if (worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
-                {
-                    var arcview = worldView as SimpleRunCurveWithArcLength;
-                    arcview.CurrentPointIndex = 0;
-                    arcview.SetArcTravelPoint();
-                    arcview.SetArcMovingFrame();
-                    arcview.CurrentPointIndex = 0;
+                    if (worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
+                    {
+                        if (worldView is SimpleRunCurveWithArcLength arcView)
+                        {
+                            arcView.CurrentPointIndex = 0;
+                            arcView.SetArcTravelPoint();
+                            arcView.SetArcMovingFrame();
+                            arcView.CurrentPointIndex = 0;
+                        }
+                    }
                 }
             }
-        
-            // worldView.UpdateView();
-        
-            var tableView = TableCurveViewController.CurrentView as AbstractCurveView;
-            tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
-            if(tableView.GetType() == typeof(SimpleRunCurveView) || 
-               tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+
+            var tableView = GlobalData.TableCurveViewController?.CurrentView;
+            if (tableView != null)
             {
-                Debug.Log("adjust travel gameobject");
-                var runview = tableView as SimpleRunCurveView;
-                runview.CurrentPointIndex = 0;
-                runview.SetTravelPoint();
-                runview.SetMovingFrame();
-                runview.CurrentPointIndex = 0;
-            
-                if (tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+                tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+                if (tableView.GetType() == typeof(SimpleRunCurveView) ||
+                    tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
-                    var arcview = tableView as SimpleRunCurveWithArcLength;
-                    arcview.CurrentPointIndex = 0;
-                    arcview.SetArcTravelPoint();
-                    arcview.SetArcMovingFrame();
-                    arcview.CurrentPointIndex = 0;
+                    if (tableView is SimpleRunCurveView runView)
+                    {
+                        runView.CurrentPointIndex = 0;
+                        runView.SetTravelPoint();
+                        runView.SetMovingFrame();
+                        runView.CurrentPointIndex = 0;
+                    }
+
+                    if (tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
+                    {
+                        if (tableView is SimpleRunCurveWithArcLength arcView)
+                        {
+                            arcView.CurrentPointIndex = 0;
+                            arcView.SetArcTravelPoint();
+                            arcView.SetArcMovingFrame();
+                            arcView.CurrentPointIndex = 0;
+                        }
+                    }
                 }
             }
-        
+
             // tableView.UpdateView();
         
             // Display html resource
@@ -309,10 +299,10 @@ namespace Controller
 
             //WorldViewController.CurrentView.UpdateView();
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
-            TableCurveViewController?.CurrentView.UpdateView();
+            GlobalData.TableCurveViewController?.CurrentView.UpdateView();
         }
 
-        public void SwitchToSpecificDataset(string name)
+        public void SwitchToSpecificDataset(string datasetIdentifier)
         {
             // Stop driving
             if (GlobalData.IsRunning)
@@ -323,32 +313,154 @@ namespace Controller
             if(GlobalData.CurrentDisplayGroup == GlobalData.CurveDisplayGroup.Exercises)
                 GlobalData.ExerciseCurveController.SetViewVisibility(true);
         
-            var index = GlobalData.CurrentDataset.FindIndex(x => x.Name.Equals(name));
+            var index = GlobalData.CurrentDataset.FindIndex(
+                x => x.Name.Equals(datasetIdentifier));
             if (index == -1) return;
 
             GlobalData.CurrentCurveIndex = index;
 
-            // Reset point index
-            //GlobalData.CurrentPointIndex = 0;
+            var worldView = GlobalData.WorldCurveViewController.CurrentView;
+            worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
 
-            if (GlobalData.WorldCurveViewController.CurrentView is AbstractCurveView worldView)
-            {
-                worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
-            }
 
-            if (TableCurveViewController?.CurrentView is AbstractCurveView tableView)
+            var tableView = GlobalData.TableCurveViewController?.CurrentView;
+            if (tableView != null)
             {
                 tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
             }
-        
+                
             // Display html resource
             browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
             infoWall.Update();
 
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
-            TableCurveViewController?.CurrentView.UpdateView();
+            GlobalData.TableCurveViewController?.CurrentView.UpdateView();
+        }
+        
+        #endregion Public functions
+        
+        #region Private functions
+
+        /// <summary>
+        /// Unity Awake function
+        /// ====================
+        /// 
+        /// This function is called when the script instance is loaded. This is used to prepare the global data model
+        /// <see cref="GlobalData"/> before any gameplay happens. All future instantiation procedures should therefore
+        /// be done in this function.
+        ///
+        /// </summary>
+        private void Awake()
+        {
+            InitializeModel();
+            InitializeViewControllers();
+        }
+        
+        /// <summary>
+        /// Unity Start function
+        /// ====================
+        /// 
+        /// This function is called before the first frame update, after <see cref="Awake"/>
+        /// </summary>
+        private void Start()
+        {
+            // Display html resource
+            browserWall.OpenURL(GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
+
+            // Set plot line renderers
+            infoWall.Update();
         }
 
+        /// <summary>
+        /// Unity Update function
+        /// =====================
+        ///
+        /// Core game loop, is called once per frame
+        /// 
+        /// </summary>
+        private void Update()
+        {
+            // During run
+            if (GlobalData.IsRunning)
+            {
+                // Update time since last point step
+                _updateTimer += Time.deltaTime;
+                Log.Debug("deltaTime: " + Time.deltaTime + 
+                          ", updateTimer: " + _updateTimer + 
+                          ", pointStepDuration: " + GlobalData.RunSpeedFactor +
+                          " - " + (_updateTimer >= GlobalData.RunSpeedFactor));
+                
+                // If the time threshold has been reached, traverse to next point
+                if(_updateTimer >= GlobalData.RunSpeedFactor)
+                {
+                    _updateTimer = 0f;
+                    GlobalData.WorldCurveViewController.CurrentView.UpdateView();
+                    GlobalData.TableCurveViewController?.CurrentView.UpdateView();
+
+                    infoWall.Update();
+                }
+            }
+
+            // Start run on trigger press
+            if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Trigger))
+            {
+                Log.Debug("Run started with controller button!");
+                StartRun();
+            }
+        
+            // Log pose if activated
+            if (activatePoseLogging)
+            {
+                StaticLogging();
+            }
+
+        }
+
+        /// <summary>
+        /// Initialize global data model <see cref="GlobalData"/>
+        /// </summary>
+        private void InitializeModel()
+        {
+            // Initialize info wall plot lengths first because the rendered size of some game objects
+            // is needed in the model calculation
+            infoWall.InitPlotLengths();
+            
+            // Initialize global model
+            GlobalData.InitializeData();
+        }
+
+        /// <summary>
+        /// Initialize all view controllers in the scene
+        /// </summary>
+        private void InitializeViewControllers()
+        {
+            // World display curve
+            var displayCurve = GlobalData.DisplayCurveDatasets[0];
+            GlobalData.WorldCurveViewController = new CurveViewController(
+                worldRootElement, worldDisplayLr, 
+                worldTravelObject, worldArcLengthTravelObject, 
+                displayCurve.WorldScalingFactor, CurveControllerTye.World);
+            GlobalData.WorldCurveViewController.SetViewVisibility(true);
+
+            // Table display curve (if activated)
+            if (GlobalData.initFile.ApplicationSettings.TableSettings.Activated)
+            {
+                GlobalData.TableCurveViewController = new CurveViewController(
+                    tableRootElement, tableDisplayLr, 
+                    tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
+                    CurveControllerTye.Table);
+            }
+            else
+            {
+                tableParent.SetActive(false);
+            }
+
+            // Exercise controller
+            GlobalData.ExerciseCurveController = new ExerciseCurveViewController(
+                selObjects.gameObject.transform, selObjects, pillarPrefab, CurveControllerTye.World);
+            GlobalData.ExerciseCurveController.SetViewVisibility(false);    
+        }
+        
     
         /// <summary>
         /// Static logging operations that are performed every frame, regardless of user interaction
@@ -356,7 +468,7 @@ namespace Controller
         private static void StaticLogging()
         {
             // Head pose
-            RigidPose headPose = VivePose.GetPoseEx(BodyRole.Head);
+            var headPose = VivePose.GetPoseEx(BodyRole.Head);
             Log.Info("Head position: " + headPose.pos);
             Log.Info("Head rotation: " + headPose.rot);
             Log.Info("Head up: " + headPose.up);
@@ -380,5 +492,6 @@ namespace Controller
             Log.Info("Right hand right: " + rightPose.right);
         }
 
+        #endregion Private functions
     }
 }

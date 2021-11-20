@@ -3,14 +3,18 @@ using UnityEngine;
 
 namespace Behaviours.Button
 {
+    /// <summary>
+    /// Abstract Button Behaviour class for all button behaviours
+    ///
+    /// Derived classes only have to implement their own version of <see cref="HandleButtonEvent"/>
+    /// </summary>
     public abstract class AbstractButtonBehaviour : 
         MonoBehaviour, 
         IColliderEventPressEnterHandler, 
         IColliderEventPressExitHandler
     {
-        [SerializeField]
-        protected ColliderButtonEventData.InputButton mActiveButton = ColliderButtonEventData.InputButton.Trigger;
-    
+        #region Public members
+        
         /// <summary>
         /// Controls how much the actual object being pressed will be displaced while pressing
         /// </summary>
@@ -33,13 +37,34 @@ namespace Behaviours.Button
         /// </summary>
         public bool holdButton;
         
+        #endregion Public members
+        
+        #region Protected members
+        
+        /// <summary>
+        /// Button used to activate the button <see cref="ColliderButtonEventData.InputButton"/>
+        /// </summary>
+        [SerializeField]
+        protected ColliderButtonEventData.InputButton mActiveButton = ColliderButtonEventData.InputButton.Trigger;
+        
+        #endregion Protected members
+        
+        #region Private members
+        
+        /// <summary>
+        /// Signals whether the button is being triggered
+        /// </summary>
         private bool _buttonTriggered;
 
+        /// <summary>
+        /// Initial position of the cylinder object being pressed down
+        /// </summary>
         private Vector3 _initButtonPosition;
 
-
+        #endregion Private members
         
-
+        #region Public functions
+        
         /// <summary>
         /// Handles the button press when the object is entered
         /// </summary>
@@ -48,21 +73,19 @@ namespace Behaviours.Button
         {
             if (useTriggerButton)
             {
-                if (eventData.button == mActiveButton)
-                {
-                    buttonObject.localPosition = _initButtonPosition + buttonDownDisplacement;
-                    // Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition + ", initPos: " + initButtonPosition);
-                    _buttonTriggered = true;
-                }
+                // Check if associated button was pressed
+                if (eventData.button != mActiveButton) return;
+                
+                // Move cylinder down
+                buttonObject.localPosition = _initButtonPosition + buttonDownDisplacement;
+                _buttonTriggered = true;
             }
             else
             {
+                // Move cylinder down
                 buttonObject.localPosition = _initButtonPosition + buttonDownDisplacement;
-                // Debug.Log("enterNewButtonPos: " + ButtonObject.localPosition + ", initPos: " + initButtonPosition);
                 _buttonTriggered = true;
             }
-
-        
         }
 
         /// <summary>
@@ -71,45 +94,61 @@ namespace Behaviours.Button
         /// <remarks>
         /// Behaviour when the Button is pressed:
         /// <ul>
-        /// 
-        /// <li>Resets the button position </li>
-        /// <li>Disables the UpWard-Movement</li>
+        ///     <li>Resets the button position </li>
+        ///     <li>Disables the UpWard-Movement</li>
         /// </ul> 
         /// </remarks>
         /// <param name="eventData"></param>
         /// <returns>void</returns>
         public void OnColliderEventPressExit(ColliderButtonEventData eventData)
         {
+            // Move cylinder up
             buttonObject.localPosition = _initButtonPosition - buttonDownDisplacement;
-            
-            // Debug.Log("exitNewButtonPos: " + ButtonObject.localPosition + ", initPos: " + initButtonPosition);
-            
             _buttonTriggered = false;
         }
 
-        public void Start()
+        /// <summary>
+        /// Unity Start function
+        /// ====================
+        /// 
+        /// This function is called before the first frame update
+        /// </summary>
+        protected void Start()
         {
             _initButtonPosition = buttonObject.localPosition;
-            // Debug.Log("initButtonPos: " + initButtonPosition);
         }
             
         /// <summary>
-        /// Update is called once per frame 
+        /// Unity Update function
+        /// =====================
+        ///
+        /// Core game loop, is called once per frame
         /// </summary>
         public void Update()
         {
-            if (_buttonTriggered)
+            // Abort if button wasn't triggered
+            if (!_buttonTriggered) return;
+            
+            HandleButtonEvent();
+            if (!holdButton) 
             {
-                HandleButtonEvent();
-                if (!holdButton) 
-                {
-                    _buttonTriggered = false;
-                }
+                _buttonTriggered = false;
             }
-        
+
         }
 
+        #endregion Public functions
+        
+        #region Protected functions
+        
+        /// <summary>
+        /// Procedure that is executed when the button gets activated. Has to be implemented by the derived class.
+        /// </summary>
         protected abstract void HandleButtonEvent();
 
+        
+        
+        
+        #endregion Protected functions
     }
 }

@@ -3,9 +3,9 @@ using Controller;
 namespace Behaviours.Button
 {
     /// <summary>
-    /// Button Behaviour used to switch to the previous curve in the current dataset
+    /// Button Behaviour used to switch to the next curve in the current dataset
     /// </summary>
-    public class PreviousDatasetButtonBehaviour : AbstractButtonBehaviour
+    public class NextCurveButtonBehaviour : AbstractButtonBehaviour
     {
         /// <summary>
         /// Single world state controller instance <see cref="WorldStateController"/>
@@ -25,11 +25,11 @@ namespace Behaviours.Button
         }
 
         /// <summary>
-        /// Switches to the previous curve when the button is activated
+        /// Switches to the next curve when the button is activated
         /// </summary>
         protected override void HandleButtonEvent()
         {
-            world.SwitchToPreviousDataset();
+            world.SwitchToNextDataset();
         }
     }
 }
