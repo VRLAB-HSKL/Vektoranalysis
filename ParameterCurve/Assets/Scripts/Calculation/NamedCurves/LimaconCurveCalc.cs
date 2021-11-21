@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Calculation;
 using UnityEngine;
 
 public class LimaconCurveCalc : AbstractCurveCalc
@@ -11,9 +12,7 @@ public class LimaconCurveCalc : AbstractCurveCalc
     {
         Name = "Limacon";
         NumOfSamples = 200;
-        ParameterIntervall = new List<float>(linspace(-Mathf.PI, Mathf.PI, NumOfSamples));
-        ArcLengthParameterIntervall = new List<float>(new float[NumOfSamples]);
-        Is3DCurve = false;
+        ParameterRange = new List<float>(Linspace(-Mathf.PI, Mathf.PI, NumOfSamples));
     }
 
     protected override Vector3 CalculatePoint(float t)
@@ -55,23 +54,4 @@ public class LimaconCurveCalc : AbstractCurveCalc
         return new Vector3(x, y, 0f).normalized;
     }
 
-    
-
-    public override List<float> CalculateArcLengthParamRange()
-    {
-        return new List<float>(
-            linspace(0f,
-            CalculateRawDistance(CalculatePoints()),
-            ParameterIntervall.Count));
-    }
-
-    public override List<Vector3> CalculateArcLengthParameterizedPoints()
-    {
-        List<Vector3> retList = new List<Vector3>();
-        for (int i = 0; i < NumOfSamples; i++)
-        {
-            retList.Add(Vector3.up);
-        }
-        return retList;
-    }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviours
+namespace Behaviours.Pointer
 {
     public abstract class AbstractCanvasRaycastEventHandler : MonoBehaviour,
         IPointerEnterHandler,

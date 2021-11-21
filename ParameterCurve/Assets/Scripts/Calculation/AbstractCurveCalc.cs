@@ -1,242 +1,169 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class AbstractCurveCalc
+namespace Calculation
 {
     /// <summary>
-    /// Name of the curve
+    /// Abstract base class for local calculation classes. Subclasses of this class calculate the points of specific
+    /// curves.
+    ///
     /// </summary>
-    public string Name;
-
-    public string DisplayString
+    public abstract class AbstractCurveCalc
     {
-        get
+        #region Public members
+        
+        /// <summary>
+        /// Display string used in GUI
+        /// </summary>
+        public string DisplayString => Name;
+        
+        #endregion Public members
+        
+        #region Protected members
+        
+        /// <summary>
+        /// Name of the curve
+        /// </summary>
+        protected string Name;
+
+        /// <summary>
+        /// Number of samples out of the parameter range
+        /// </summary>
+        protected int NumOfSamples;
+
+        /// <summary>
+        /// Collection of parameter values, usually as a range
+        /// </summary>
+        protected List<float> ParameterRange { get; set; } = new List<float>();
+
+        /// <summary>
+        /// Function object to calculate a single curve point based on a float parameter
+        /// </summary>
+        protected Func<float, Vector3> PointCalcFunc;
+
+        /// <summary>
+        /// Function object to calculate a single velocity point based on a float parameter
+        /// </summary>
+        protected Func<float, Vector3> VelocityCalcFunc;
+
+        /// <summary>
+        /// Function object to calculate a single acceleration point based on a float parameter
+        /// </summary>
+        protected Func<float, Vector3> AccelerationCalcFunc;
+
+        #endregion Protected members
+        
+        #region Constructors
+        
+        protected AbstractCurveCalc()
         {
-            return Name;
-        }
-    }
-
-    public int NumOfSamples;
-
-    /// <summary>
-    /// Collection of parameter values, usually as a range
-    /// </summary>
-    public List<float> ParameterIntervall;
-
-    public List<float> ArcLengthParameterIntervall { get; set; } = new List<float>();
-    
-
-    /// <summary>
-    /// Signals wether this curve is 3D oder 2D, i.e. has a non-null z value
-    /// </summary>
-    public bool Is3DCurve { get; set; }
-
-    /// <summary>
-    /// Function object to calculate a single curve point based on a float parameter
-    /// </summary>
-    protected Func<float, Vector3> PointCalcFunc;
-
-    /// <summary>
-    /// Function object to calculate a sinlge velocity point based on a float parameter
-    /// </summary>
-    protected Func<float, Vector3> VelocityCalcFunc;
-
-    /// <summary>
-    /// Function object to calculate a single acceleration point based on a float parameter
-    /// </summary>
-    protected Func<float, Vector3> AccelerationCalcFunc;
-
-
-    protected Func<float, Vector3> ArcLengthPointCalcFunc;
-
-
-    public AbstractCurveCalc()
-    {
-        PointCalcFunc = CalculatePoint;
-        VelocityCalcFunc = CalculateVelocityPoint;
-        AccelerationCalcFunc = CalculateAccelerationPoint;
-    }
-
-    /// <summary>
-    /// Calculate the curve as a collection of points, based on parameter intervall set in constructor
-    /// </summary>
-    /// <returns>Points collection</returns>
-    public List<Vector3> CalculatePoints()
-    {
-        return CalculateAllPointsIntoList(PointCalcFunc);
-    }
-
-    public List<Vector3> CalculateVelocity()
-    {
-        return CalculateAllPointsIntoList(VelocityCalcFunc);
-    }
-
-    public List<Vector3> CalculateAcceleration()
-    {
-        return CalculateAllPointsIntoList(AccelerationCalcFunc);
-    }
-
-    public List<FresnetSerretApparatus> CalculateFresnetApparatuses()
-    {
-        List<FresnetSerretApparatus> fresnetList = new List<FresnetSerretApparatus>();
-        List<Vector3> velocityList = CalculateVelocity();
-        List<Vector3> accelerationList = CalculateAcceleration();
-        for (int i = 0; i < ParameterIntervall.Count; i++)
-        {
-            FresnetSerretApparatus fsa = new FresnetSerretApparatus();
-            Vector3 velVec = velocityList[i];
-            Vector3 accVec = accelerationList[i];
-            fsa.Tangent = velVec;
-            fsa.Normal = accVec;
-            fsa.Binormal = Vector3.Cross(velVec, accVec);
-            fresnetList.Add(fsa);
+            PointCalcFunc = CalculatePoint;
+            VelocityCalcFunc = CalculateVelocityPoint;
+            AccelerationCalcFunc = CalculateAccelerationPoint;
         }
 
-        return fresnetList;
-    }
-
-    public List<Vector2> CalculateTimeDistancePoints()
-    {
-        List<Vector2> tdPoints = new List<Vector2>();
-        var curvePoints = CalculatePoints();
-        int numSteps = ParameterIntervall.Count;
-
-        float maxDistance = CalculateRawDistance(curvePoints);
-        float currentDistance = 0f;
-
-        for(int i = 0; i < numSteps; i++)
+        #endregion Constructors
+        
+        #region Protected functions
+        
+        /// <summary>
+        /// Calculate curve point vectors, based on parameter range set in constructor
+        /// </summary>
+        /// <returns>Point vectors</returns>
+        protected List<Vector3> CalculatePoints()
         {
-            float x = i / (float)numSteps;  //ParameterIntervall[i];
-
-
-            float y;
-            if (i == 0)
-            {
-                y = 0f;
-            }
-            else
-            {
-                currentDistance += Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
-                y = currentDistance;
-                y /= maxDistance;
-            }
-
-            tdPoints.Add(new Vector2(x, y));
+            return CalculateAllPointsIntoList(PointCalcFunc);
         }
 
-        return tdPoints;
-    }
-
-    public List<Vector2> CalculateTimeVelocityPoints()
-    {
-        List<Vector2> tvPoints = new List<Vector2>();
-        var curvePoints = CalculatePoints();
-        int numSteps = ParameterIntervall.Count;
-
-        //float maxDistance =  CalculateRawDistance(curvePoints);
-        //float currentDistance = 0f;
-        float maxVelocity = 0f;
-
-        for (int i = 0; i < numSteps; i++)
+        /// <summary>
+        /// Calculate curve velocity vectors, based on parameter range set in constructor
+        /// </summary>
+        /// <returns>Velocity vectors</returns>
+        protected List<Vector3> CalculateVelocity()
         {
-            float x = i / (float)numSteps;
-
-            float y;
-            if(i == 0)
-            {
-                y = 0f;
-            }
-            else
-            {
-                float distance = Vector3.Distance(curvePoints[i], curvePoints[i - 1]);
-                //Debug.Log("VecDist: " + y);
-                //currentDistance += d;
-                y = distance;
-
-                if(y > maxVelocity)
-                {
-                    maxVelocity = y;
-                }
-                //y /= maxDistance;
-                //Debug.Log("ScaledVecDist: " + y);
-            }
-
-            tvPoints.Add(new Vector2(x, y));
+            return CalculateAllPointsIntoList(VelocityCalcFunc);
         }
 
-        foreach(Vector2 v in tvPoints)
+        /// <summary>
+        /// Calculate curve acceleration vectors, based on parameter range set in constructor
+        /// </summary>
+        /// <returns>Acceleration vectors</returns>
+        protected List<Vector3> CalculateAcceleration()
         {
-            v.Set(v.x, v.y / maxVelocity);
+            return CalculateAllPointsIntoList(AccelerationCalcFunc);
+        }
+
+        /// <summary>
+        /// Calculates the length of a given polyline
+        /// </summary>
+        /// <param name="pointList">Polyline as a collection of point vectors</param>
+        /// <returns>Calculated distance</returns>
+        protected static float CalculateRawDistance(List<Vector3> pointList)
+        {
+            if (pointList.Count < 2) return 0f;
+
+            var distance = 0f;
+            for(var i = 1; i < pointList.Count; i++)
+            {
+                distance += Mathf.Abs(Vector3.Distance(pointList[i - 1], pointList[i]));
+            }
+
+            return distance;
+        }
+
+        /// <summary>
+        /// Source:
+        /// https://stackoverflow.com/questions/17046293/is-there-a-linspace-like-method-in-math-net/67131017#67131017 
+        /// </summary>
+        /// <param name="startVal">start of range</param>
+        /// <param name="endVal">end of range</param>
+        /// <param name="steps">step count</param>
+        /// <returns></returns>
+        protected static IEnumerable<float> Linspace(float startVal, float endVal, int steps)
+        {
+            var interval = (endVal / Mathf.Abs(endVal)) * Mathf.Abs(endVal - startVal) / (steps - 1);
+            return (from val in Enumerable.Range(0, steps)
+                select startVal + (val * interval)).ToArray();
+        }
+
+        /// <summary>
+        /// Point vector calculation function. Subclasses implement their own calculation by implementing
+        /// this function
+        /// </summary>
+        /// <param name="t">Parameter value</param>
+        /// <returns>Point vector</returns>
+        protected abstract Vector3 CalculatePoint(float t);
+        
+        /// <summary>
+        /// Velocity vector calculation function. Subclasses implement their own calculation by implementing
+        /// this function
+        /// </summary>
+        /// <param name="t">Parameter value</param>
+        /// <returns>Velocity vector</returns>
+        protected abstract Vector3 CalculateVelocityPoint(float t);
+        
+        /// <summary>
+        /// Acceleration vector calculation function. Subclasses implement their own calculation by implementing
+        /// this function
+        /// </summary>
+        /// <param name="t">Parameter value</param>
+        /// <returns>Acceleration vector</returns>
+        protected abstract Vector3 CalculateAccelerationPoint(float t);
+
+        #endregion Protected functions
+        
+        #region Private functions
+        
+        private List<Vector3> CalculateAllPointsIntoList(Func<float, Vector3> f)
+        {
+            return ParameterRange.Select(f).ToList();
         }
         
+        #endregion Private functions
 
-        return tvPoints;
     }
-
-    public static float CalculateRawDistance(List<Vector3> pointList)
-    {
-        if (pointList.Count < 2) return 0f;
-
-        float distance = 0f;
-        for(int i = 1; i < pointList.Count; i++)
-        {
-            distance += Mathf.Abs(Vector3.Distance(pointList[i - 1], pointList[i]));
-        }
-
-        return distance;
-    }
-
-    public abstract List<float> CalculateArcLengthParamRange();
-
-    public abstract List<Vector3> CalculateArcLengthParameterizedPoints();
-    //{
-    //    List<Vector3> retList = new List<Vector3>();
-    //    for(int i = 0; i < 10000; i++)
-    //    {
-    //        retList.Add(Vector3.up);
-    //    }
-    //    return retList;
-    //}
-
-
-    /// <summary>
-    /// Source: https://stackoverflow.com/questions/17046293/is-there-a-linspace-like-method-in-math-net/67131017#67131017 
-    /// </summary>
-    /// <param name="startval">start of range</param>
-    /// <param name="endval">end of range</param>
-    /// <param name="steps">step count</param>
-    /// <returns></returns>
-    public static float[] linspace(float startval, float endval, int steps)
-    {
-        float interval = (endval / Mathf.Abs(endval)) * Mathf.Abs(endval - startval) / (steps - 1);
-        return (from val in Enumerable.Range(0, steps)
-                select startval + (val * interval)).ToArray();
-    }
-
-
-
-
-    protected abstract Vector3 CalculatePoint(float t);
-    protected abstract Vector3 CalculateVelocityPoint(float t);
-    protected abstract Vector3 CalculateAccelerationPoint(float t);
-
-    //protected abstract float CalculateArcLength();
-
-    protected List<Vector3> CalculateAllPointsIntoList(Func<float, Vector3> f)
-    {
-        List<Vector3> pointList = new List<Vector3>();
-        for (int i = 0; i < ParameterIntervall.Count; i++)
-        {
-            float t = ParameterIntervall[i];
-            Vector3 vec = f(t);
-            pointList.Add(vec);
-        }
-        return pointList;
-    }
-
 }
 
 

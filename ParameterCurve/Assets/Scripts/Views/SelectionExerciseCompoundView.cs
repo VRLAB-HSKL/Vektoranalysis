@@ -10,7 +10,7 @@ namespace Views
 {
     public class SelectionExerciseCompoundView // : AbstractCompoundView
     {
-        public CurveControllerTye Type;
+        public AbstractCurveViewController.CurveControllerType Type;
         
         private GameObject PillarPrefab;
         private List<AbstractCurveView> curveViews = new List<AbstractCurveView>();
@@ -49,7 +49,7 @@ namespace Views
         
         public SelectionExerciseCompoundView(
             SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, 
-            ExercisePointDataset initData, CurveControllerTye type)
+            ExercisePointDataset initData, AbstractCurveViewController.CurveControllerType type)
         {
             Type = type;
             PillarPrefab = pillarPrefab;

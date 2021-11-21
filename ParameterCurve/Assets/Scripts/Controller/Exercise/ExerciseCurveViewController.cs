@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Controller.Curve;
-using Import.NewInitFile;
+using log4net;
 using UnityEngine;
 using Views;
 
-
-namespace Controller
+namespace Controller.Exercise
 {
     /// <summary>
     /// Controller for in-game views of exercise related data structures
@@ -16,124 +16,88 @@ namespace Controller
         /// <summary>
         /// Model of the controller, representing a selection exercise
         /// </summary>
-        public SelectionExercise CurrentExercise
-        {
-            get
-            {
-                if (GlobalData.SelectionExercises.Any())
-                {
-                    return GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];    
-                }
+        private static SelectionExercise CurrentExercise => 
+            GlobalData.SelectionExercises.Any() ? GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex] : null;
 
-                return null;
-            }
-        }
-        
-        /// <summary>
-        /// Current exercise index for multiple exercises
-        /// </summary>
-        //public int currentExerciseIndex;
-        
         /// <summary>
         /// Chosen selections in selection exercise, all -1 per default for non-choice
         /// </summary>
-        public List<int> selectionIndices = new List<int>();
+        public List<int> SelectionIndices = new List<int>();
 
+        
+        #region Private members
+
+        /// <summary>
+        /// Static log4net logger instance
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
+        
+        #endregion Private members
+        
+        
         public ExerciseCurveViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab,
-            CurveControllerTye type) : base(root)
+            AbstractCurveViewController.CurveControllerType type) : base(root)
         {
-            //Debug.Log("globalDataSelectionExercises[0] is null: " + (GlobalData.SelectionExercises[0] is null));
-            //exercise = ;
-            //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseData = exercise.Datasets[0];
-
-
-            // if (CurrentExercise is null)
-            // {
-            //     Debug.Log("CurrentExercise null");
-            // }
-            //
-            // if (CurrentExercise.CorrectAnswers is null)
-            // {
-            //     Debug.Log("CurrentExercise.CorrectAnswers null");
-            // }
-
+            // Return if no exercises were imported
+            if (CurrentExercise == null) return;
             
             
-            if (CurrentExercise != null)
+            // Initialize all answers as 'none given'
+            for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
             {
-                
-                
-                // Initialize all answers as 'none given'
-                for (int i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
-                {
-                    selectionIndices.Add(-1);
-                }
-            
-                var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, 
-                    CurrentExercise.Datasets[0], type);
-            
-                selView.CurrentTitle = CurrentExercise.Title;
-                selView.CurrentDescription = CurrentExercise.Description;
-                // _views = new List<AbstractView>()
-                // {
-                //     selView
-                // };
-                //
-                // CurrentView = selView;
-            
-            
-            
-                //CurrentView.UpdateView();
-                InitViews();
-            
-                CurrentView.UpdateView();
-                //Debug.Log("Finished exercise view controller constructor");    
+                SelectionIndices.Add(-1);
             }
             
+            var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, 
+                CurrentExercise.Datasets[0], type)
+            {
+                CurrentTitle = CurrentExercise.Title,
+                CurrentDescription = CurrentExercise.Description
+            };
+
+            // _views = new List<AbstractView>()
+            // {
+            //     selView
+            // };
+            //
+            // CurrentView = selView;
+            
+            
+            
+            //CurrentView.UpdateView();
+            InitViews();
+            
+            CurrentView.UpdateView();
         }
        
-        
         public void NextSubExercise()
         {
-            // Debug.Log("showMainDisplay: " + (CurrentView as SelectionExerciseCompoundView).showMainDisplay);
-            // Debug.Log("currentExerciseIndex: " + currentExerciseIndex);
-
             if (CurrentExercise is null)
                 return;
-            
-            
-            // if ((CurrentView as SelectionExerciseCompoundView).showMainDisplay && GlobalData.CurrentSubExerciseIndex == 0)
-            // {
-            //     // showMainDisplay = false;
-            //     (CurrentView as SelectionExerciseCompoundView).showMainDisplay = false;
-            //     CurrentView.UpdateView();
-            //     return;
-            // }
 
+            // Calculate results if navigating to next on last sub exercise
             if (GlobalData.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
             {
-                int correctCount = 0;
-                for (int i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
+                var sb = new StringBuilder("Exercise results:\n");
+                var correctCount = 0;
+                for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
                 {
-                    int chosenAnswer = CurrentExercise.ChosenAnswers[i];
-                    int correctAnswer = CurrentExercise.CorrectAnswers[i];
+                    var chosenAnswer = CurrentExercise.ChosenAnswers[i];
+                    var correctAnswer = CurrentExercise.CorrectAnswers[i];
                     
-                    Debug.Log("Chosen: " + chosenAnswer + ", Correct: " + correctAnswer);
+                    sb.Append("Chosen: " + chosenAnswer + ", Correct: " + correctAnswer + "\n");
 
                     if (chosenAnswer == correctAnswer) ++correctCount;
                 }
                 
-                Debug.Log("Result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
+                sb.Append("Result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
             
+                Log.Debug(sb.ToString());
+                
                 return;
             }
             
             ++GlobalData.CurrentSubExerciseIndex;
-            
-            //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseData =
-            //    exercise.Datasets[currentExerciseIndex];
-            //(CurrentView as SelectionExerciseCompoundView).CurrentExerciseIndex = currentExerciseIndex;
-            
             CurrentView.UpdateView();
         }
 
@@ -144,22 +108,17 @@ namespace Controller
             
             if (GlobalData.CurrentSubExerciseIndex == 0)
             {
-                //(CurrentView as SelectionExerciseCompoundView).showMainDisplay = true;
                 CurrentView.UpdateView();
                 return;
             }
             
             --GlobalData.CurrentSubExerciseIndex;
-            // (CurrentView as SelectionExerciseCompoundView).CurrentExerciseData =
-            //     exercise.Datasets[currentExerciseIndex];
-            // (CurrentView as SelectionExerciseCompoundView).CurrentExerciseIndex = currentExerciseIndex;
             CurrentView.UpdateView();
         }
 
         public void SetSelection(int choice)
         {
-            //selectionIndex = choice;
-            selectionIndices[GlobalData.CurrentSubExerciseIndex] = choice;
+            SelectionIndices[GlobalData.CurrentSubExerciseIndex] = choice;
             CurrentExercise.ChosenAnswers[GlobalData.CurrentSubExerciseIndex] = choice;
         }
 

@@ -1,4 +1,5 @@
 using Controller.Curve;
+using Controller.Exercise;
 using HTC.UnityPlugin.Vive;
 using log4net;
 using UI;
@@ -439,7 +440,7 @@ namespace Controller
             GlobalData.WorldCurveViewController = new CurveViewController(
                 worldRootElement, worldDisplayLr, 
                 worldTravelObject, worldArcLengthTravelObject, 
-                displayCurve.WorldScalingFactor, CurveControllerTye.World);
+                displayCurve.WorldScalingFactor, AbstractCurveViewController.CurveControllerType.World);
             GlobalData.WorldCurveViewController.SetViewVisibility(true);
 
             // Table display curve (if activated)
@@ -448,7 +449,7 @@ namespace Controller
                 GlobalData.TableCurveViewController = new CurveViewController(
                     tableRootElement, tableDisplayLr, 
                     tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
-                    CurveControllerTye.Table);
+                    AbstractCurveViewController.CurveControllerType.Table);
             }
             else
             {
@@ -457,7 +458,7 @@ namespace Controller
 
             // Exercise controller
             GlobalData.ExerciseCurveController = new ExerciseCurveViewController(
-                selObjects.gameObject.transform, selObjects, pillarPrefab, CurveControllerTye.World);
+                selObjects.gameObject.transform, selObjects, pillarPrefab, AbstractCurveViewController.CurveControllerType.World);
             GlobalData.ExerciseCurveController.SetViewVisibility(false);    
         }
         

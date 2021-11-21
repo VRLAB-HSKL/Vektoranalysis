@@ -15,7 +15,7 @@ public class SimpleCurveView : AbstractCurveView
     /// <param name="scalingFactor">Point vector scaling factor</param>
     /// <param name="controllerType">Type of parent controller</param>
     public SimpleCurveView(LineRenderer displayLr, Vector3 rootPos, 
-        float scalingFactor, CurveControllerTye controllerType) 
+        float scalingFactor, AbstractCurveViewController.CurveControllerType controllerType) 
         : base(displayLr, rootPos, scalingFactor, controllerType) 
     {
         // Disable all travel points

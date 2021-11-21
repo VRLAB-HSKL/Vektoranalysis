@@ -23,7 +23,8 @@ public class SimpleRunCurveWithArcLength : SimpleRunCurveView
         float scalingFactor,
         Transform travelObject, 
         Transform arcLengthTravelObject,
-        CurveControllerTye controllerType) : base(displayLR, rootPos, scalingFactor, travelObject, controllerType)
+        AbstractCurveViewController.CurveControllerType controllerType) 
+        : base(displayLR, rootPos, scalingFactor, travelObject, controllerType)
     {
         ArcLengthTravelObject = arcLengthTravelObject;
 

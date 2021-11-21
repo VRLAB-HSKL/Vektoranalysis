@@ -30,7 +30,7 @@ namespace Views.Display
         /// Type of parent controller
         /// ToDo: Does this make sense in the pattern ?
         /// </summary>
-        protected readonly CurveControllerTye ControllerType;
+        protected readonly AbstractCurveViewController.CurveControllerType ControllerType;
     
         /// <summary>
         /// Line renderer to display curve path
@@ -60,7 +60,7 @@ namespace Views.Display
         /// <param name="rootPos">Parent game object root position</param>
         /// <param name="scalingFactor">Point vector scaling factor</param>
         /// <param name="controllerType">Type of parent controller</param>
-        protected AbstractCurveView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor, CurveControllerTye controllerType)
+        protected AbstractCurveView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor, AbstractCurveViewController.CurveControllerType controllerType)
         {
             Log.Info("AbstractCurveView.ArgumentConstructor()");
             ControllerType = controllerType;
@@ -103,7 +103,8 @@ namespace Views.Display
         protected Vector3 MapPointPos(Vector3 point)//, bool is3d)
         {
             // Flip curve upright based on controller type and dimension
-            var flip = ControllerType == CurveControllerTye.Table && !CurrentCurve.Is3DCurve;
+            var flip = 
+                ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
         
             // Calculate new point
             var newVector = flip ? new Vector3(point.x, point.z, point.y) : new Vector3(point.x, point.y, point.z);

@@ -3,88 +3,125 @@ using log4net;
 using UnityEngine;
 using Views.Display;
 
-namespace Controller
+namespace Controller.Exercise
 {
+    /// <summary>
+    /// Abstract base class for all view controllers related to displaying curve data in global data model
+    /// <see cref="GlobalData"/>
+    /// </summary>
     public abstract class AbstractExerciseViewController
     {
-        public static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
         
-        protected readonly Transform _rootElement;
+        #region Public members
 
-        private AbstractCurveView currentView;
-        public AbstractCurveView CurrentView
-        {
-            get => currentView;
-            set
-            {
-                currentView = value;
-                currentView.UpdateView();
-            }
-        }
+        protected AbstractCurveView CurrentView { get; private set; }
 
-        protected List<AbstractCurveView> _views;
-        
+        #endregion Public members
+
+        #region Protected members
+
         // ToDo: Replace this with MBU observer pattern ?
-        public delegate void d_updateViewsDelegate();
-        
-        protected d_updateViewsDelegate _updateViewsDelegate;
+        /// <summary>
+        /// Delegate to update views, intended to replicate observer pattern behaviour using C# language construct
+        /// </summary>
+        protected delegate void DUpdateViewsDelegate();
 
-        public d_updateViewsDelegate UpdateViewsDelegate
+        /// <summary>
+        /// Private delegate instance for custom getter
+        /// </summary>
+        protected DUpdateViewsDelegate RawUpdateViewsDelegate;
+
+        /// <summary>
+        /// Public delegate instance, called to update views
+        /// </summary>
+        protected DUpdateViewsDelegate UpdateViewsDelegate
         {
             get
             {
-                if (_updateViewsDelegate is null)
+                // Initialize delegate on first call
+                if (RawUpdateViewsDelegate is null)
                 {
-                    _updateViewsDelegate();
+                    RawUpdateViewsDelegate?.Invoke();
                 }
 
-                return _updateViewsDelegate;
+                return RawUpdateViewsDelegate;
             }
         }
 
+        /// <summary>
+        /// Root element position in the world, used as the origin for all curve coordinates
+        /// </summary>
+        private readonly Transform _rootElement;
+        
+        /// <summary>
+        /// Collection of all views associated with this controller
+        /// </summary>
+        private readonly List<AbstractCurveView> Views;
+        
+        #endregion Protected members
+
+        
+        #region Private members
+
+        /// <summary>
+        /// Static log4net logger instance
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
+        
+        #endregion Private members
+        
+        
+        #region Constructors
+        
         protected AbstractExerciseViewController(Transform root)
         {
             _rootElement = root;
 
-            _views = new List<AbstractCurveView>()
-            {
-                //selView
-            };
+            Views = new List<AbstractCurveView>();
             
             InitViews();
         }
+        
+        #endregion Constructors
 
-        public void InitViews()
-        {
-            foreach (var view in _views)
-            {
-                _updateViewsDelegate += view.UpdateView;
-            }
-
-            if(_views.Count > 0)
-                UpdateViewsDelegate();
-            
-            SwitchView(0);
-        }
-
-        public virtual void SwitchView(int index)
-        {
-            if (index < 0 || index >= _views.Count) return;
-            
-            // Log.Debug("Setting view: " + index);
-            
-            currentView = _views[index];
-            
-            // _travelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-            // _arcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
-        }
+        #region Public functions
 
         public virtual void SetViewVisibility(bool value)
         {
-            for (int i = 0; i < _rootElement.childCount; i++)
+            for (var i = 0; i < _rootElement.childCount; i++)
             {
                 _rootElement.GetChild(i).gameObject.SetActive(value);
             }
         }
+        
+        #endregion Public functions
+        
+        
+        #region Protected functions
+        
+        protected void InitViews()
+        {
+            foreach (var view in Views)
+            {
+                RawUpdateViewsDelegate += view.UpdateView;
+            }
+
+            if(Views.Count > 0)
+                UpdateViewsDelegate();
+            
+            SwitchView(0);
+        }
+        
+        #endregion Protected functions
+        
+        #region Private functions
+
+        private void SwitchView(int index)
+        {
+            if (index < 0 || index >= Views.Count) return;
+            CurrentView = Views[index];
+        }
+        
+        #endregion Private functions
     }
 }

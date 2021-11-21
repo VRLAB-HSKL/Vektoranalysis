@@ -1,95 +1,150 @@
 ﻿using System.Collections.Generic;
 using log4net;
 using UnityEngine;
-using Views;
 using Views.Display;
 
-namespace Controller
+namespace Controller.Curve
 {
+    /// <summary>
+    /// Abstract base class for all view controllers related to displaying curve data in global data model
+    /// <see cref="GlobalData"/>
+    /// </summary>
     public abstract class AbstractCurveViewController
     {
-        public static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveViewController));
+        /// <summary>
+        /// Type enum
+        /// </summary>
+        public enum CurveControllerType { World = 0, Table = 1 };
         
-        protected readonly Transform _rootElement;
+        #region Public members
+        
+        /// <summary>
+        /// Current view displayed by the controller
+        /// </summary>
+        public AbstractCurveView CurrentView { get; private set; }
 
-        private AbstractCurveView currentView;
-        public AbstractCurveView CurrentView
-        {
-            get => currentView;
-            set
-            {
-                currentView = value;
-                currentView.UpdateView();
-            }
-        }
-
-        protected List<AbstractCurveView> _views;
+        #endregion Public members
+        
+        #region Protected members
         
         // ToDo: Replace this with MBU observer pattern ?
-        public delegate void d_updateViewsDelegate();
-        
-        protected d_updateViewsDelegate _updateViewsDelegate;
+        /// <summary>
+        /// Delegate to update views, intended to replicate observer pattern behaviour using C# language construct
+        /// </summary>
+        public delegate void DUpdateViewsDelegate();
 
-        public d_updateViewsDelegate UpdateViewsDelegate
+        /// <summary>
+        /// Private delegate instance for custom getter
+        /// </summary>
+        protected DUpdateViewsDelegate RawUpdateViewsDelegate;
+
+        /// <summary>
+        /// Public delegate instance, called to update views
+        /// </summary>
+        public DUpdateViewsDelegate UpdateViewsDelegate
         {
             get
             {
-                if (_updateViewsDelegate is null)
+                // Initialize delegate on first call
+                if (RawUpdateViewsDelegate is null)
                 {
-                    _updateViewsDelegate();
+                    RawUpdateViewsDelegate?.Invoke();
                 }
 
-                return _updateViewsDelegate;
+                return RawUpdateViewsDelegate;
             }
         }
+        
+        /// <summary>
+        /// Root element position in the world, used as the origin for all curve coordinates
+        /// </summary>
+        protected readonly Transform RootElement;
 
+        /// <summary>
+        /// Collection of all views associated with this controller
+        /// </summary>
+        protected List<AbstractCurveView> Views;
+
+        #endregion Protected members
+        
+        #region Private members
+
+        /// <summary>
+        /// Static log4net logger instance
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveViewController));
+        
+        #endregion Private members
+        
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="root">Root game object transform</param>
         protected AbstractCurveViewController(Transform root)
         {
-            _rootElement = root;
+            RootElement = root;
 
-            _views = new List<AbstractCurveView>()
-            {
-                //selView
-            };
+            Views = new List<AbstractCurveView>();
             
             InitViews();
         }
 
-        public void InitViews()
+        #endregion Constructors
+
+        #region Public functions
+                
+        /// <summary>
+        /// Hides or shows views based on argument value
+        /// </summary>
+        /// <param name="value">True: Show view, False: Hide view</param>
+        public void SetViewVisibility(bool value)
         {
-            foreach (var view in _views)
+            for (var i = 0; i < RootElement.childCount; i++)
             {
-                _updateViewsDelegate += view.UpdateView;
+                RootElement.GetChild(i).gameObject.SetActive(value);
+            }
+        }
+        
+        #endregion Public functions
+        
+        #region Protected functions
+        
+        /// <summary>
+        /// Switch to the view associated with the given index
+        /// </summary>
+        /// <param name="index">View index</param>
+        protected void SwitchView(int index)
+        {
+            if (index < 0 || index >= Views.Count) return;
+            
+            Log.Debug("Switching to view with index: " + index);
+            
+            CurrentView = Views[index];
+        }
+        
+        #endregion Protected functions
+        
+        #region Private functions
+        
+        /// <summary>
+        /// Initialize views delegate
+        /// </summary>
+        private void InitViews()
+        {
+            foreach (var view in Views)
+            {
+                RawUpdateViewsDelegate += view.UpdateView;
             }
 
-            if(_views.Count > 0)
+            if(Views.Count > 0)
                 UpdateViewsDelegate();
             
             SwitchView(0);
         }
-
-        public virtual void SwitchView(int index)
-        {
-            if (index < 0 || index >= _views.Count) return;
-            
-            // Log.Debug("Setting view: " + index);
-            
-            currentView = _views[index];
-            
-            // _travelObject.gameObject.SetActive(CurrentView.HasTravelPoint);
-            // _arcLengthTravelObject.gameObject.SetActive(CurrentView.HasArcLengthPoint);
-        }
-
-        public virtual void SetViewVisibility(bool value)
-        {
-            for (int i = 0; i < _rootElement.childCount; i++)
-            {
-                _rootElement.GetChild(i).gameObject.SetActive(value);
-            }
-        }
         
-        
-        
+        #endregion Private functions
         
     }
 }

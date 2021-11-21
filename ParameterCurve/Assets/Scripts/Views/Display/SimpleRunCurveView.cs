@@ -40,7 +40,7 @@ namespace Views.Display
     
 
         public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject,
-            CurveControllerTye controllerType)
+            AbstractCurveViewController.CurveControllerType controllerType)
             : base(displayLR, rootPos, scalingFactor, controllerType)
         {        
             TravelObject = travelObject;
@@ -154,7 +154,7 @@ namespace Views.Display
             normal.z += 0.001f;
             binormal.z += 0.001f;
         
-            if (ControllerType == CurveControllerTye.Table && !curve.Is3DCurve)
+            if (ControllerType == AbstractCurveViewController.CurveControllerType.Table && !curve.Is3DCurve)
             {
                 //travelObjPosition = new Vector3(travelObjPosition.x, travelObjPosition.z, travelObjPosition.y);
                 tangent = new Vector3(tangent.x, tangent.z, tangent.y);
@@ -206,7 +206,7 @@ namespace Views.Display
             }
 
             // Make sure object is facing in the correct direction
-            var worldUp = ControllerType == CurveControllerTye.World ? new Vector3(0f, 0f, -1f) : Vector3.up;
+            var worldUp = ControllerType == AbstractCurveViewController.CurveControllerType.World ? new Vector3(0f, 0f, -1f) : Vector3.up;
         
             //Debug.Log("worldUp: " + worldUp);
         

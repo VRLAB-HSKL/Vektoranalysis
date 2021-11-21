@@ -33,7 +33,8 @@ namespace Views.Exercise
         }
         
         
-        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, PillarIdentifier pid, CurveControllerTye controllerType) : 
+        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, 
+            PillarIdentifier pid, AbstractCurveViewController.CurveControllerType controllerType) : 
             base(displayLR, rootPos, scalingFactor, controllerType)
         {
             Pillar = pid;

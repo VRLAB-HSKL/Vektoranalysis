@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Behaviours.Pointer;
 using Controller;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Behaviours
                 //Debug.Log("globalExerciseController is null: " + (GlobalData.exerciseController is null));
                 
                 bool isSel = selectionChoice ==
-                    GlobalData.ExerciseCurveController?.selectionIndices[GlobalData.CurrentSubExerciseIndex]; //currentExerciseIndex;    
+                    GlobalData.ExerciseCurveController?.SelectionIndices[GlobalData.CurrentSubExerciseIndex]; //currentExerciseIndex;    
 
                 return isSel;
             }

@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Calculation;
+using Calculation.NamedCurves;
+using Calculation.ParameterExercises;
 using Calculation.SelectionExercises;
 using Controller;
 using Controller.Curve;
+using Controller.Exercise;
 using Import.NewInitFile;
 using UnityEngine;
 

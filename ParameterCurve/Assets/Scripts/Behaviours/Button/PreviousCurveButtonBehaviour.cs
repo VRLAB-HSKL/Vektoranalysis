@@ -5,7 +5,7 @@ namespace Behaviours.Button
     /// <summary>
     /// Button Behaviour used to switch to the previous curve in the current dataset
     /// </summary>
-    public class PreviousDatasetButtonBehaviour : AbstractButtonBehaviour
+    public class PreviousCurveButtonBehaviour : AbstractButtonBehaviour
     {
         /// <summary>
         /// Single world state controller instance <see cref="WorldStateController"/>
