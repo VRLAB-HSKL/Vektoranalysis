@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Controller.Curve;
 using HTC.UnityPlugin.Vive;
+using Import;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;

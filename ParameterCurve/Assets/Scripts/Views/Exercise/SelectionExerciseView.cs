@@ -1,5 +1,6 @@
 ﻿using Controller.Curve;
 using UnityEngine;
+using Views.Display;
 
 namespace Views.Exercise
 {

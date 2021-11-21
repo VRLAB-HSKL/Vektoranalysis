@@ -96,24 +96,6 @@ namespace Calculation
         }
 
         /// <summary>
-        /// Calculates the length of a given polyline
-        /// </summary>
-        /// <param name="pointList">Polyline as a collection of point vectors</param>
-        /// <returns>Calculated distance</returns>
-        protected static float CalculateRawDistance(List<Vector3> pointList)
-        {
-            if (pointList.Count < 2) return 0f;
-
-            var distance = 0f;
-            for(var i = 1; i < pointList.Count; i++)
-            {
-                distance += Mathf.Abs(Vector3.Distance(pointList[i - 1], pointList[i]));
-            }
-
-            return distance;
-        }
-
-        /// <summary>
         /// Source:
         /// https://stackoverflow.com/questions/17046293/is-there-a-linspace-like-method-in-math-net/67131017#67131017 
         /// </summary>

@@ -7,9 +7,9 @@ namespace Views.Display
     /// <summary>
     /// Abstract base class for all views on curve data
     /// </summary>
-    public abstract class AbstractCurveView // : AbstractView
+    public abstract class AbstractCurveView
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
+        #region Public members
     
         /// <summary>
         /// Scaling factor, applied to all points in the view
@@ -26,6 +26,10 @@ namespace Views.Display
         /// </summary>
         public bool HasArcLengthTravelPoint { get; protected set; }
     
+        #endregion Public members
+        
+        #region Protected members
+        
         /// <summary>
         /// Type of parent controller
         /// ToDo: Does this make sense in the pattern ?
@@ -33,26 +37,39 @@ namespace Views.Display
         protected readonly AbstractCurveViewController.CurveControllerType ControllerType;
     
         /// <summary>
+        /// Current curve being displayed in the view. This model data is accessed through the static
+        /// <see cref="GlobalData"/> class, based on global curve index <see cref="GlobalData.CurrentCurveIndex"/>
+        /// </summary>
+        protected static CurveInformationDataset CurrentCurve => GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        
+        /// <summary>
         /// Line renderer to display curve path
         /// </summary>
         protected readonly LineRenderer DisplayLr;
     
         /// <summary>
-        /// Position of root object, used to translate point vectors
-        /// </summary>
-        private readonly Vector3 _rootPos;
-
-        /// <summary>
         /// Cached material property key to change material color of line on startup
         /// </summary>
         protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
+        #endregion Protected members
+        
+        #region Private members
+        
         /// <summary>
-        /// Current curve being displayed in the view. This model data is accessed through the static
-        /// <see cref="GlobalData"/> class, based on global curve index <see cref="GlobalData.CurrentCurveIndex"/>
+        /// Position of root object, used to translate point vectors
         /// </summary>
-        protected static CurveInformationDataset CurrentCurve => GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
+        private readonly Vector3 _rootPos;
+        
+        /// <summary>
+        /// Static log4net logger
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
+        
+        #endregion Private members
+        
+        #region Constructors
+        
         /// <summary>
         /// Argument constructor
         /// </summary>
@@ -68,14 +85,16 @@ namespace Views.Display
             _rootPos = rootPos;
             ScalingFactor = scalingFactor;
         }
+        
+        #endregion Constructors
 
+        #region Public functions
+        
         /// <summary>
         /// Update view with current information
         /// </summary>
         public virtual void UpdateView()
         {
-            Log.Info("AbstractCurveView.UpdateView()");
-        
             var curve = CurrentCurve; 
         
             // Map points to world space location
@@ -96,6 +115,15 @@ namespace Views.Display
         }
 
         /// <summary>
+        /// Starts a run on the view, if a travel object is present
+        /// </summary>
+        public virtual void StartRun() {}
+        
+        #endregion Public functions
+        
+        #region Protected functions
+        
+        /// <summary>
         /// Maps a point to its correct world space location, based on parent game object position and scaling factor
         /// </summary>
         /// <param name="point">Source point vector</param>
@@ -112,9 +140,6 @@ namespace Views.Display
             return newVector;
         }
 
-        public virtual void StartRun()
-        {
-               
-        }
+        #endregion Protected functions
     }
 }

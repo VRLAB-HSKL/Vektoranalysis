@@ -10,6 +10,7 @@ using Calculation.SelectionExercises;
 using Controller;
 using Controller.Curve;
 using Controller.Exercise;
+using Import;
 using Import.NewInitFile;
 using UnityEngine;
 
@@ -295,7 +296,7 @@ public static class GlobalData
                 for (int j = 0; j < ex.SubExercises.Count; j++)
                 {
                     var subExercise = ex.SubExercises[j];
-                    subexercises.Add(DataImport.CreateExercisePointDatasetFromSubexercise(subExercise));
+                    subexercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
                     correctAnswers.Add(subExercise.CorrectAnswer);
                 }
                 

@@ -4,6 +4,10 @@ using Newtonsoft.Json;
 
 namespace Import.NewInitFile
 {
+    /// <summary>
+    /// Root of the tree like structure the information of the init file is parsed into
+    /// <see cref="DataImport.P"/>
+    /// </summary>
     [Serializable]
     public class InitFileRoot
     {

@@ -157,7 +157,7 @@ namespace Controller
                 if (worldView is SimpleRunCurveView runView)
                 {
                     runView.CurrentPointIndex = 0;
-                    runView.SetTravelPoint();
+                    runView.SetTravelObjectPoint();
                     runView.SetMovingFrame();
                     runView.CurrentPointIndex = 0;
                 }
@@ -186,7 +186,7 @@ namespace Controller
                     if (tableView is SimpleRunCurveView runView)
                     {
                         runView.CurrentPointIndex = 0;
-                        runView.SetTravelPoint();
+                        runView.SetTravelObjectPoint();
                         runView.SetMovingFrame();
                         runView.CurrentPointIndex = 0;
                     }
@@ -246,7 +246,7 @@ namespace Controller
                     if (worldView is SimpleRunCurveView runView)
                     {
                         runView.CurrentPointIndex = 0;
-                        runView.SetTravelPoint();
+                        runView.SetTravelObjectPoint();
                         runView.SetMovingFrame();
                         runView.CurrentPointIndex = 0;
                     }
@@ -274,7 +274,7 @@ namespace Controller
                     if (tableView is SimpleRunCurveView runView)
                     {
                         runView.CurrentPointIndex = 0;
-                        runView.SetTravelPoint();
+                        runView.SetTravelObjectPoint();
                         runView.SetMovingFrame();
                         runView.CurrentPointIndex = 0;
                     }

@@ -4,27 +4,14 @@ using UnityEngine;
 
 namespace Views.Display
 {
+    /// <summary>
+    /// View on curve data with an attached game object to display runs along the curve line.
+    /// The user can start runs on this view. The travel object will then move along the curve line.
+    /// </summary>
     public class SimpleRunCurveView : SimpleCurveView
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
-
-        private Transform TravelObject { get; }
-
-        private readonly LineRenderer _tangentLr;
-        private readonly LineRenderer _normalLr;
-        private readonly LineRenderer _binormalLr;
-
-        private Vector3 _initTravelObjPos;
-        private readonly float _initTangentLrWidth;
-        private readonly float _initNormalLrWidth;
-        private readonly float _initBinormalLrWidth;
-    
-        private readonly Vector3[] _tangentArr = new Vector3[2];
-        private readonly Vector3[] _normalArr = new Vector3[2];
-        private readonly Vector3[] _binormalArr = new Vector3[2];
-
-        private int _curPointIdx;
-    
+        #region Public members
+        
         /// <summary>
         /// Current point index (view local)
         /// </summary>
@@ -37,23 +24,100 @@ namespace Views.Display
                 _curPointIdx = value;
             }
         }
+        
+        #endregion
+        
+        #region Private members
+        
+        /// <summary>
+        /// Used to move the associated game object along the curve line
+        /// </summary>
+        private Transform TravelObject { get; }
+
+        /// <summary>
+        /// Displays the tangent of the current point
+        /// </summary>
+        private LineRenderer TangentLr { get; }
+        
+        /// <summary>
+        /// Displays the normal of the current point
+        /// </summary>
+        private LineRenderer NormalLr { get; }
+        
+        /// <summary>
+        /// Displays the binormal of the current point
+        /// </summary>
+        private LineRenderer BinormalLr { get; }
+
+        /// <summary>
+        /// Cached init line renderer width of the tangent vector. Used to scale width based on scaling factor
+        /// </summary>
+        private readonly float _initTangentLrWidth;
+        
+        /// <summary>
+        /// Cached init line renderer width of the normal vector. Used to scale width based on scaling factor
+        /// </summary> 
+        private readonly float _initNormalLrWidth;
+        
+        /// <summary>
+        /// Cached init line renderer width of the binormal vector. Used to scale width based on scaling factor
+        /// </summary>
+        private readonly float _initBinormalLrWidth;
     
+        /// <summary>
+        /// Local array to store the start and end point of the tangent vector
+        /// </summary>
+        private readonly Vector3[] _tangentArr = new Vector3[2];
+        
+        /// <summary>
+        /// Local array to store the start and end point of the normal vector
+        /// </summary>
+        private readonly Vector3[] _normalArr = new Vector3[2];
+        
+        /// <summary>
+        /// Local array to store the start and end point of the binormal vector
+        /// </summary>
+        private readonly Vector3[] _binormalArr = new Vector3[2];
 
-        public SimpleRunCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, Transform travelObject,
+        /// <summary>
+        /// Current point index. Stored locally to enable views running independent of each other
+        /// </summary>
+        private int _curPointIdx;
+    
+        /// <summary>
+        /// Static log4net logger
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
+        
+        #endregion Private members
+        
+        #region Constructors    
+
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="displayLr">Line renderer used to display curve line</param>
+        /// <param name="rootPos">Origin of curve points</param>
+        /// <param name="scalingFactor">Scaling factor used to scale curve line</param>
+        /// <param name="travelObject">Game object used to visualize runs along the curve line</param>
+        /// <param name="controllerType">Type of curve controller</param>
+        public SimpleRunCurveView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor, Transform travelObject,
             AbstractCurveViewController.CurveControllerType controllerType)
-            : base(displayLR, rootPos, scalingFactor, controllerType)
-        {        
+            : base(displayLr, rootPos, scalingFactor, controllerType)
+        {
+            // Set travel object
             TravelObject = travelObject;
-
             if (travelObject is null)
             {
                 Debug.Log("SimpleCVConstructor - TravelObjectEmpty");
             }
 
+            // Allow normal runs
             HasTravelPoint = true;
             HasArcLengthTravelPoint = false;
 
-            CurveInformationDataset curve = CurrentCurve;
+            // Set travel object color based on init file values
+            var curve = CurrentCurve;
             var renderers = TravelObject.GetComponentsInChildren<MeshRenderer>();
             foreach (var r in renderers)
             {
@@ -62,32 +126,37 @@ namespace Views.Display
             }
         
             // Setup travel object line renderers        
-            _initTravelObjPos = TravelObject.position;
             if (TravelObject.childCount > 0)
             {
-                GameObject firstChild = TravelObject.GetChild(0).gameObject;
-                _tangentLr = firstChild.GetComponent<LineRenderer>();
-                _tangentLr.positionCount = 2;
-                _initTangentLrWidth = _tangentLr.widthMultiplier;
+                var firstChild = TravelObject.GetChild(0).gameObject;
+                TangentLr = firstChild.GetComponent<LineRenderer>();
+                TangentLr.positionCount = 2;
+                _initTangentLrWidth = TangentLr.widthMultiplier;
             }
 
             if (TravelObject.childCount > 1)
             {
-                GameObject secondChild = TravelObject.GetChild(1).gameObject;
-                _normalLr = secondChild.GetComponent<LineRenderer>();
-                _normalLr.positionCount = 2;
-                _initNormalLrWidth = _normalLr.widthMultiplier;
+                var secondChild = TravelObject.GetChild(1).gameObject;
+                NormalLr = secondChild.GetComponent<LineRenderer>();
+                NormalLr.positionCount = 2;
+                _initNormalLrWidth = NormalLr.widthMultiplier;
             }
 
-            if (TravelObject.childCount > 2)
-            {
-                GameObject thirdChild = TravelObject.GetChild(2).gameObject;
-                _binormalLr = thirdChild.GetComponent<LineRenderer>();
-                _binormalLr.positionCount = 2;
-                _initBinormalLrWidth = _binormalLr.widthMultiplier;
-            }
+            if (TravelObject.childCount <= 2) return;
+            
+            var thirdChild = TravelObject.GetChild(2).gameObject;
+            BinormalLr = thirdChild.GetComponent<LineRenderer>();
+            BinormalLr.positionCount = 2;
+            _initBinormalLrWidth = BinormalLr.widthMultiplier;
         }
 
+        #endregion Constructors
+        
+        #region Public functions
+        
+        /// <summary>
+        /// Update view
+        /// </summary>
         public override void UpdateView()
         {
             base.UpdateView();
@@ -96,26 +165,29 @@ namespace Views.Display
             
             if (HasTravelPoint)
             {
-                SetTravelPoint();
+                SetTravelObjectPoint();
                 SetMovingFrame();
             }
 
-            if (CurrentPointIndex == CurrentCurve.points.Count - 1)
-            {
-                GlobalData.IsRunning = false;
-                Debug.Log("Stopping run...!");
-            }
+            if (CurrentPointIndex != CurrentCurve.points.Count - 1) return;
             
-        
+            GlobalData.IsRunning = false;
+            Log.Debug("Stopping run...!");
         }
 
+        /// <summary>
+        /// Start run
+        /// </summary>
         public override void StartRun()
         {
             CurrentPointIndex = 0;
             GlobalData.IsRunning = true;
         }
     
-        public void SetTravelPoint()
+        /// <summary>
+        /// Set the travel object to the next point along the curve line
+        /// </summary>
+        public void SetTravelObjectPoint()
         {
             // Null checks
             if (!HasTravelPoint) return;
@@ -133,20 +205,27 @@ namespace Views.Display
             ++CurrentPointIndex;
         }
 
+        /// <summary>
+        /// Set the fresnet equation based moving frame around the next point along the curve line
+        /// </summary>
         public void SetMovingFrame()
         {
+            // Only do this if travel object is even allowed
             if (!HasTravelPoint) return;
         
-            CurveInformationDataset curve = CurrentCurve;
+            var curve = CurrentCurve;
+            
+            // Stop run on last point
             if (CurrentPointIndex == curve.worldPoints.Count - 1)
             {
                 GlobalData.IsRunning = false;
                 return;
             }
         
+            // Get curve data
             var travelObjPosition = TravelObject.position;
-            var tangent = (curve.fresnetApparatuses[CurrentPointIndex].Tangent).normalized;
-            var normal = (curve.fresnetApparatuses[CurrentPointIndex].Normal).normalized;
+            var tangent = curve.fresnetApparatuses[CurrentPointIndex].Tangent.normalized;
+            var normal = curve.fresnetApparatuses[CurrentPointIndex].Normal.normalized;
             var binormal = curve.fresnetApparatuses[CurrentPointIndex].Binormal.normalized;
         
             // Prevent z-buffer fighting
@@ -154,34 +233,34 @@ namespace Views.Display
             normal.z += 0.001f;
             binormal.z += 0.001f;
         
+            // Custom axis flip on examination table
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table && !curve.Is3DCurve)
             {
-                //travelObjPosition = new Vector3(travelObjPosition.x, travelObjPosition.z, travelObjPosition.y);
                 tangent = new Vector3(tangent.x, tangent.z, tangent.y);
                 normal = new Vector3(normal.x, normal.z, normal.y);
                 binormal = new Vector3(binormal.x, binormal.z, binormal.y);
             }
         
+            // Scale moving frame points
             tangent *= ScalingFactor;
             normal *= ScalingFactor;
             binormal *= ScalingFactor;
-
+    
+            // Calculate moving frame points
             _tangentArr[0] = travelObjPosition;
             _tangentArr[1] = travelObjPosition + tangent;
-            _tangentLr.SetPositions(_tangentArr);
-            _tangentLr.widthMultiplier = _initTangentLrWidth * ScalingFactor;
+            TangentLr.SetPositions(_tangentArr);
+            TangentLr.widthMultiplier = _initTangentLrWidth * ScalingFactor;
                 
             _normalArr[0] = travelObjPosition;
             _normalArr[1] = (travelObjPosition + normal); 
-            _normalLr.SetPositions(_normalArr);
-            _normalLr.widthMultiplier = _initNormalLrWidth * ScalingFactor;
+            NormalLr.SetPositions(_normalArr);
+            NormalLr.widthMultiplier = _initNormalLrWidth * ScalingFactor;
                 
             _binormalArr[0] = travelObjPosition;
             _binormalArr[1] = travelObjPosition + binormal;
-            _binormalLr.SetPositions(_binormalArr);
-            _binormalLr.widthMultiplier = _initBinormalLrWidth * ScalingFactor;
-       
-
+            BinormalLr.SetPositions(_binormalArr);
+            BinormalLr.widthMultiplier = _initBinormalLrWidth * ScalingFactor;
         
             Log.Debug("objPos: " + travelObjPosition +
                       " jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +
@@ -192,26 +271,20 @@ namespace Views.Display
                       " jsonBinormalPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Binormal + "] " +
                       " binormalArr: [" + _binormalArr[0] + ", " + _binormalArr[1] + "]" +
                       " length: " + (_binormalArr[1] - _binormalArr[0]).magnitude);
-        
-        
-        
-            Vector3 nextPos;
-            if (CurrentPointIndex < curve.worldPoints.Count - 1)
-            {
-                nextPos = MapPointPos(curve.worldPoints[CurrentPointIndex + 1]); //, curve.Is3DCurve);
-            }
-            else
-            {
-                nextPos = MapPointPos(curve.worldPoints[CurrentPointIndex]);//, curve.Is3DCurve);
-            }
 
             // Make sure object is facing in the correct direction
-            var worldUp = ControllerType == AbstractCurveViewController.CurveControllerType.World ? new Vector3(0f, 0f, -1f) : Vector3.up;
-        
-            //Debug.Log("worldUp: " + worldUp);
+            var nextPos = MapPointPos(CurrentPointIndex < curve.worldPoints.Count - 1
+                ? curve.worldPoints[CurrentPointIndex + 1] 
+                : curve.worldPoints[CurrentPointIndex]);
+            
+            var worldUp = ControllerType == AbstractCurveViewController.CurveControllerType.World 
+                ? new Vector3(0f, 0f, -1f) 
+                : Vector3.up;
         
             //(binormalArr[0] + binormalArr[1]).normalized);
             TravelObject.transform.LookAt(nextPos, worldUp);
         }
+        
+        #endregion Public functions
     }
 }

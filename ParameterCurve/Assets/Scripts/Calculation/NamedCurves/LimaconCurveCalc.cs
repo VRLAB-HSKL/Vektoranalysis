@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Calculation;
 using UnityEngine;
+using Utility;
 
 public class LimaconCurveCalc : AbstractCurveCalc
 {
