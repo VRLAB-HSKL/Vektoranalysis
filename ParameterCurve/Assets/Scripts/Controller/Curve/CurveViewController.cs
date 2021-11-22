@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 using Views.Display;
 
@@ -66,9 +67,9 @@ namespace Controller.Curve
 
             var initViewIndex = 0;
         
-            if (GlobalData.initFile.DisplayCurves.Count > 0)
+            if (GlobalData.InitFile.DisplayCurves.Count > 0)
             {
-                initViewIndex = GlobalData.initFile.DisplayCurves[0].CurveSettings.DisplaySettings.View switch
+                initViewIndex = GlobalData.InitFile.DisplayCurves[0].CurveSettings.DisplaySettings.View switch
                 {
                     "simple" => 0,
                     "run" => 1,

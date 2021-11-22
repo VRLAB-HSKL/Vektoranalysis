@@ -1,5 +1,6 @@
 using Controller.Curve;
 using log4net;
+using Model;
 using UnityEngine;
 
 namespace Views.Display

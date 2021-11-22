@@ -1,7 +1,7 @@
 using HTC.UnityPlugin.ColliderEvent;
 using UnityEngine;
 
-namespace Behaviours.Button
+namespace Behaviour.Button
 {
     /// <summary>
     /// Abstract Button Behaviour class for all button behaviours

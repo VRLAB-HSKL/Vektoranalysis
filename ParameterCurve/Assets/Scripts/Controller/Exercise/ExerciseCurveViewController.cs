@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Controller.Curve;
 using log4net;
+using Model;
 using UnityEngine;
 using Views;
 

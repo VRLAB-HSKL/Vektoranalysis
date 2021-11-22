@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.ParameterExercises
 {
+    /// <summary>
+    /// Calculation class for the first curve associated with the parameter59.tex course material file
+    /// </summary>
     public class Param59CurveCalc : AbstractCurveCalc
     {
         public Param59CurveCalc()

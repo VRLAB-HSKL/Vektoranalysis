@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.NamedCurves
 {
+    /// <summary>
+    /// Calculation class for an involute - https://en.wikipedia.org/wiki/Involute
+    /// </summary>
     public class InvoluteCurveCalc : AbstractCurveCalc
     {
         public float Radius = 1f;

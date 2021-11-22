@@ -1,6 +1,7 @@
 using Controller;
+using Model;
 
-namespace Behaviours.Button
+namespace Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to switch to another view on curve displays.
@@ -26,7 +27,7 @@ namespace Behaviours.Button
         private new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalData.initFile.ApplicationSettings.TableSettings.ShowViewButtons);
+            gameObject.SetActive(GlobalData.InitFile.ApplicationSettings.TableSettings.ShowViewButtons);
         }
 
         /// <summary>

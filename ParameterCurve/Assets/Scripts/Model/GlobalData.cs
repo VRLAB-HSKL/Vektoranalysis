@@ -1,325 +1,238 @@
-using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Calculation;
 using Calculation.NamedCurves;
 using Calculation.ParameterExercises;
-using Calculation.SelectionExercises;
-using Controller;
 using Controller.Curve;
 using Controller.Exercise;
 using Import;
-using Import.NewInitFile;
-using UnityEngine;
-
+using Import.InitFile;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using UnityEngine.PlayerLoop;
+using UnityEngine;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
-public static class GlobalData
+namespace Model
 {
-    public static readonly ILog Log = LogManager.GetLogger(typeof(GlobalData));
-    
-    public static float PointScaleFactor = 1f;
-
     /// <summary>
-    /// Factor to control speed of curve runs. The value specifies the time in seconds that has to pass before a
-    /// new point is traveled to. A value of 1.0 means a new point is reached every second. 
+    /// Static global data model. This singular model is used as the single access point of imported data and static
+    /// application settings.
     /// </summary>
-    public static float RunSpeedFactor = 0.005f;
-
-    public static CurveViewController WorldCurveViewController { get; set; }
-    
-    public static CurveViewController TableCurveViewController { get; set; }
-    public static ExerciseCurveViewController ExerciseCurveController { get; set; }
-    
-    
-    public static bool IsRunning { get; set; }
-
-    public enum CurveDisplayGroup { Display = 0, Exercises = 1 }
-    public static CurveDisplayGroup CurrentDisplayGroup { get; set; } = CurveDisplayGroup.Display;
-
-    public static List<CurveInformationDataset> CurrentDataset
+    public static class GlobalData
     {
-        get
+        #region Public members
+
+        /// <summary>
+        /// Global point scale factor, impacting all in game curves in addition to view local scale factors
+        /// </summary>
+        public const float PointScaleFactor = 1f;
+
+        /// <summary>
+        /// Factor to control speed of curve runs. The value specifies the time in seconds that has to pass before a
+        /// new point is traveled to. A value of 1.0 means a new point is reached every 1 second. 
+        /// </summary>
+        public const float RunSpeedFactor = 0.0125f;
+
+        /// <summary>
+        /// View controller of the main world curve display in the middle of the room
+        /// </summary>
+        public static CurveViewController WorldCurveViewController { get; set; }
+    
+        /// <summary>
+        /// View controller of the curve display on the examination table
+        /// </summary>
+        public static CurveViewController TableCurveViewController { get; set; }
+        
+        /// <summary>
+        /// View controller of the selection exercise 
+        /// </summary>
+        public static ExerciseCurveViewController ExerciseCurveController { get; set; }
+
+        /// <summary>
+        /// Type enum used to differentiate between the currently selected curve dataset. This can be
+        /// changed by selection another group on the selection wall (if activated)
+        /// </summary>
+        public enum CurveDisplayGroup { Display = 0, Exercises = 1 }
+        
+        /// <summary>
+        /// Currently selected curve dataset group
+        /// </summary>
+        public static CurveDisplayGroup CurrentDisplayGroup { get; set; } = CurveDisplayGroup.Display;
+
+        /// <summary>
+        /// Static truth value signaling if runs are currently happening
+        /// </summary>
+        public static bool IsRunning { get; set; }
+
+        
+        /// <summary>
+        /// Current dataset based on selected display group <see cref="CurrentDisplayGroup"/>
+        /// </summary>
+        public static List<CurveInformationDataset> CurrentDataset
         {
-            switch(CurrentDisplayGroup)
+            get
             {
-                //CurveDisplayGroup.Parameter => ParamCurveDatasets,
-                case CurveDisplayGroup.Exercises:
-                    return ExerciseCurveDatasets;
-                
-                default:
-                    return DisplayCurveDatasets;
-            };
-        }
-    }
-    
-
-    public static List<CurveInformationDataset> DisplayCurveDatasets { get; set; } = new List<CurveInformationDataset>();
-    public static List<CurveInformationDataset> ParamCurveDatasets = new List<CurveInformationDataset>();
-    public static List<CurveInformationDataset> ExerciseCurveDatasets = new List<CurveInformationDataset>();
-
-    
-
-    private static List<AbstractCurveCalc> NamedDataset { get; set; } = new List<AbstractCurveCalc>()
-    {
-        new HelixCurveCalc(),
-        new LogHelixCurveCalc(),
-        new ArchimedeanSpiralCurveCalc(),
-        new InvoluteCurveCalc(),
-        new CardioidCurveCalc(),
-        new LemniskateBernoulliCurveCalc(),
-        new LemniskateGeronoCurveCalc(),
-        new LimaconCurveCalc(),
-        new CycloidCurveCalc(),
-    };
-
-    private static List<AbstractCurveCalc> LocalParamCalcList = new List<AbstractCurveCalc>()
-    {
-        new Param4aCurveCalc(),
-        new Param4bCurveCalc(),
-        new Param18CurveCalc(),
-        new Param41CurveCalc(),
-        new Param56CurveCalc(),
-        new Param57CurveCalc(),
-        new Param58CurveCalc(),
-        new Param59CurveCalc(),
-        new Param60CurveCalc(),
-        new Param61CurveCalc(),
-        new Param62CurveCalc(),
-    };
-
-    // private static List<AbstractCurveCalc> LocalExerciseCalcList = new List<AbstractCurveCalc>(NamedDataset)
-    // {
-    //     new TestExercise01ACurveClass(),
-    //     new TestExercise01BCurveClass(),
-    //     new TestExercise01CCurveClass(),
-    //     new TestExercise01DCurveClass(),
-    //     new TestExercise01ECurveCalc(),
-    //     new TestExercise01FCurveCalc()
-    // };
-
-
-    //public static CurveSelectionStateContext CurveSelectionFSM;
-
-    public static int CurrentCurveIndex = 0;
-    //public static int CurrentPointIndex { get; set; };
-
-    public static List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
-
-    public static int CurrentExerciseIndex = 0;
-    public static int CurrentSubExerciseIndex = 0;
-    
-    
-    public static string LocalHTMLResourcePath = Application.dataPath + "/Resources/html/";
-    public static string ImageResourcePath = "img/";
-
-    public static InitFileRoot initFile { get; set; }
-
-    public static void InitializeData()
-    {
-        //Log.Debug("testOutputLogger");
-        
-        ParseIniFile();
-        
-        ImportAllResources();
-        
-        
-        Log.Debug("Global Data initialized");
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void ConfigureLogging()
-    {
-        string path = $"{Application.dataPath}/Resources/log/log4netConfig.xml";
-        Debug.Log("configPath: " + path);
-        var configFile = new FileInfo(path);
-        
-        log4net.Config.XmlConfigurator.Configure(configFile);
-        
-        //Debug.Log("log config loaded: " + LogManager.GetRepository().Configured);
-    }
-
-
-
-    private static void ImportAllResources()
-    {
-        // // CSV Resources
-        // Object[] csv_resources = Resources.LoadAll("csv/exercises/", typeof(TextAsset));
-        //
-        // for (int i = 0; i < csv_resources.Length; i++)
-        // {
-        //     TextAsset csvRes = csv_resources[i] as TextAsset;
-        //     //NamedCurveDatasets.Add(DataImport.ImportPointsFromCSVResource(csvRes));
-        // }
-        //
-        // // JSON Resources
-        // Object[] json_resources = Resources.LoadAll("json/exercises/", typeof(TextAsset));
-        //
-        // for (int i = 0; i < json_resources.Length; i++)
-        // {
-        //     //NamedCurveDatasets.Add(DataImport.ImportFromJSONResource(json_resources[i] as TextAsset));
-        // }
-        //
-        // var json_named_curves = Resources.LoadAll("json/curves/named/", typeof(TextAsset) ).Cast<TextAsset>();
-        //
-        // foreach (var named_curve in json_named_curves)
-        // {
-        //     //Debug.Log("Attempting to import named curve: " + (named_curve).name);
-        //     NamedCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(named_curve));
-        // }
-        //
-        // var jsonParamCurves = Resources.LoadAll("json/curves/param/", typeof(TextAsset) ).Cast<TextAsset>();
-        // foreach (var paramCurve in jsonParamCurves)
-        // {
-        //     //Debug.Log("Attempting to import param curve: " + paramCurve.name);
-        //     ParamCurveDatasets.Add(DataImport.ImportPointsFromJSONResource(paramCurve));
-        // }
-        //
-        //
-        // // Local calculation
-        // for (int i = 0; i < NamedDataset.Count; i++)
-        // {
-        //     AbstractCurveCalc calc = NamedDataset[i];
-        //     //NamedCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        // }
-        //
-        // for (int i = 0; i < LocalParamCalcList.Count; i++)
-        // {
-        //     AbstractCurveCalc calc = LocalParamCalcList[i];
-        //     //ParamCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        // }
-        //
-        // for (int i = 0; i < LocalExerciseCalcList.Count; i++)
-        // {
-        //     AbstractCurveCalc calc = LocalExerciseCalcList[i];
-        //     //ExerciseCurveDatasets.Add(DataImport.CreateDatasetFormLocalCalculation(calc));
-        // }
-        //
-        // // Load test exercise
-        // Object res = Resources.Load("json/exercises/testExercise01", typeof(TextAsset));
-        // SelectionExercise selExerc = DataImport.ImportExerciseFromJSONResource(res as TextAsset);
-        // SelectionExercises.Add((selExerc));
-        
-        
-        // Import everything from single json 
-        
-        
-        
-        
-        //ExerciseCurveDatasets.Add(selExerc);
-    }
-
-
-    private static void ParseIniFile()
-    {
-        // JSON Resources
-        // ITraceWriter tr = new MemoryTraceWriter();
-        // TextAsset json = Resources.Load("json/init/initTemplate", typeof(TextAsset)) as TextAsset;
-        // initFile = JsonConvert.DeserializeObject<InitFileJsonRoot>(json.text,
-        //     new JsonSerializerSettings()
-        //     {
-        //         // Error = delegate(object sender, ErrorEventArgs args)
-        //         // {
-        //         //     errors.Add(args.ErrorContext.Error.Message);
-        //         //     Debug.Log("ErrorOccuredJSON");
-        //         //     args.ErrorContext.Handled = true;
-        //         // },
-        //         //FloatParseHandling = FloatParseHandling.Double
-        //         TraceWriter = tr
-        //         //,
-        //         //Converters = { new IsoDateTimeConverter()}
-        //     }
-        //     );
-        
-        //Debug.Log("initFile null: " + (initFile is null));
-
-        //Debug.Log(tr);
-     
-        TextAsset json = Resources.Load("json/init/initv2", typeof(TextAsset) ) as TextAsset;
-        
-        
-        List<string> errors = new List<string>();
-        ITraceWriter tr = new MemoryTraceWriter();
-        InitFileRoot jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
-            new JsonSerializerSettings()
-            {
-                Error = delegate(object sender, ErrorEventArgs args)
+                return CurrentDisplayGroup switch
                 {
-                    errors.Add(args.ErrorContext.Error.Message);
-                    Debug.Log("ErrorOccuredJSON");
-                    args.ErrorContext.Handled = true;
-                },
-                //FloatParseHandling = FloatParseHandling.Double
-                TraceWriter = tr
-                //,
-                //Converters = { new IsoDateTimeConverter()}
+                    //CurveDisplayGroup.Parameter => ParamCurveDatasets,
+                    CurveDisplayGroup.Exercises => ExerciseCurveDatasets,
+                    _ => DisplayCurveDatasets
+                };
             }
-            
-        );
-        
-        initFile = jsr;
-        
-        //Debug.Log(tr);
+        }
+    
 
-        //var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
-        //File.WriteAllText(path, tr.ToString());
+        /// <summary>
+        /// Imported display curves
+        /// </summary>
+        public static List<CurveInformationDataset> DisplayCurveDatasets { get; } = new List<CurveInformationDataset>();
+        
+        /// <summary>
+        /// Index used to access the current curve in the current curve dataset. This value is modified to switch
+        /// between curves in a dataset
+        /// </summary>
+        public static int CurrentCurveIndex = 0;
         
         
-        for (int i = 0; i < jsr.DisplayCurves.Count; i++)
+        /// <summary>
+        /// Imported exercise curves
+        /// </summary>
+        public static List<CurveInformationDataset> ExerciseCurveDatasets { get; } = new List<CurveInformationDataset>();
+
+        /// <summary>
+        /// Collection of imported selection exercises
+        /// </summary>
+        public static readonly List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+
+        /// <summary>
+        /// Index used to access the current selection exercise. This value is modified to switch between main
+        /// exercises, i.e. Exercise 1 -> Exercise 2
+        /// </summary>
+        public static int CurrentExerciseIndex = 0;
+        
+        /// <summary>
+        /// Index used to access the current sub-exercise in the current selection exercise. This 
+        /// </summary>
+        public static int CurrentSubExerciseIndex = 0;
+    
+    
+        /// <summary>
+        /// Path to HTML resources in unity project file strucutre. Used to display local html files in in-game
+        /// browser plugin
+        /// </summary>
+        public static string LocalHtmlResourcePath = Application.dataPath + "/Resources/html/";
+        
+        /// <summary>
+        /// Path to image resources in unity project file structure
+        /// </summary>
+        public static string ImageResourcePath = "img/";
+
+        /// <summary>
+        /// Initialization file parse tree root
+        /// </summary>
+        public static InitFileRoot InitFile { get; private set; }
+
+        #endregion Public members
+        
+        #region Private members
+        
+        /// <summary>
+        /// Static log4net logger
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(GlobalData));
+        
+        #endregion Private members
+        
+        public static void InitializeData()
         {
-            var curve = jsr.DisplayCurves[i];
-            DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
+            ParseIniFile();
+            Log.Debug("Global Data initialized");
+        }
+    
+        /// <summary>
+        /// Setup configuration of the log4net logging framework
+        /// </summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ConfigureLogging()
+        {
+            var path = $"{Application.dataPath}/Resources/log/log4netConfig.xml";
+            var configFile = new FileInfo(path);
+        
+            log4net.Config.XmlConfigurator.Configure(configFile);
         }
 
-        for (int i = 0; i < jsr.Exercises.Count; i++)
+        private static void ParseIniFile()
         {
-            var ex = jsr.Exercises[i];
-
-            // Select3 exercise
-            if (ex.Type.Equals("select3"))
-            {
-                List<ExercisePointDataset> subexercises = new List<ExercisePointDataset>();
-                List<int> correctAnswers = new List<int>();
-                for (int j = 0; j < ex.SubExercises.Count; j++)
+            var json = Resources.Load("json/init/initv2", typeof(TextAsset) ) as TextAsset;
+        
+            var errors = new List<string>();
+            ITraceWriter tr = new MemoryTraceWriter();
+            InitFileRoot jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
+                new JsonSerializerSettings()
                 {
-                    var subExercise = ex.SubExercises[j];
-                    subexercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
-                    correctAnswers.Add(subExercise.CorrectAnswer);
+                    Error = delegate(object sender, ErrorEventArgs args)
+                    {
+                        errors.Add(args.ErrorContext.Error.Message);
+                        Debug.Log("ErrorOccuredJSON");
+                        args.ErrorContext.Handled = true;
+                    },
+                    //FloatParseHandling = FloatParseHandling.Double
+                    TraceWriter = tr
+                    //,
+                    //Converters = { new IsoDateTimeConverter()}
                 }
+            
+            );
+        
+            InitFile = jsr;
+        
+            //Debug.Log(tr);
+
+            //var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
+            //File.WriteAllText(path, tr.ToString());
+        
+        
+            for (var i = 0; i < jsr.DisplayCurves.Count; i++)
+            {
+                var curve = jsr.DisplayCurves[i];
+                DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
+            }
+
+            for (int i = 0; i < jsr.Exercises.Count; i++)
+            {
+                var ex = jsr.Exercises[i];
+
+                // Select3 exercise
+                if (ex.Type.Equals("select3"))
+                {
+                    var subExercises = new List<ExercisePointDataset>();
+                    var correctAnswers = new List<int>();
+                    for (var j = 0; j < ex.SubExercises.Count; j++)
+                    {
+                        var subExercise = ex.SubExercises[j];
+                        subExercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
+                        correctAnswers.Add(subExercise.CorrectAnswer);
+                    }
                 
-                SelectionExercise selExerc = new SelectionExercise(
-                    ex.Title,
-                    ex.Description,
-                    subexercises,
-                    correctAnswers
+                    var selExercise = new SelectionExercise(
+                        ex.Title,
+                        ex.Description,
+                        subExercises,
+                        correctAnswers
                     );
                 
-                SelectionExercises.Add(selExerc);
-            }
+                    SelectionExercises.Add(selExercise);
+                }
 
-            
-            ExerciseCurveDatasets.Add(new CurveInformationDataset()
-            {
-                Name = ex.Title,
-                DisplayString = ex.Title,
-            });
-                
-            // SelectionExercises.Add((selExerc));
-        }
+                ExerciseCurveDatasets.Add(new CurveInformationDataset()
+                {
+                    Name = ex.Title,
+                    DisplayString = ex.Title,
+                });
+            }
         
-    }
+        }
     
+    }
 }

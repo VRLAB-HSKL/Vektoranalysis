@@ -4,10 +4,7 @@ using UnityEngine;
 namespace Calculation.NamedCurves
 {
     /// <summary>
-    /// Calculation class for a cardioid curve
-    ///
-    /// https://en.wikipedia.org/wiki/Cardioid
-    /// 
+    /// Calculation class for a cardioid curve - https://en.wikipedia.org/wiki/Cardioid 
     /// </summary>
     public class CardioidCurveCalc : AbstractCurveCalc
     {

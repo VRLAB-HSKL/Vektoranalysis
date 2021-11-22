@@ -1,4 +1,5 @@
 ﻿using Controller.Curve;
+using Model;
 using UnityEngine;
 using Views.Display;
 

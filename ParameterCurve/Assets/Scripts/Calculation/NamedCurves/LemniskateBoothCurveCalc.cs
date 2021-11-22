@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.NamedCurves
 {
+    /// <summary>
+    /// Calculation class for a lemniscate  of Booth curve - https://en.wikipedia.org/wiki/Lemniscate
+    /// </summary>
     public class LemniskateBoothCurveCalc : AbstractCurveCalc
     {
         // ToDo: Implement this class

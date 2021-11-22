@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.NamedCurves
 {
+    /// <summary>
+    /// Calculation class for a lemniscate  of Bernoulli curve - https://en.wikipedia.org/wiki/Lemniscate
+    /// </summary>
     public class LemniskateBernoulliCurveCalc : AbstractCurveCalc
     {
         public float Factor = 1f;

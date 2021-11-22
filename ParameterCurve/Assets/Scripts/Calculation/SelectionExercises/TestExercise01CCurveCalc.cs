@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.SelectionExercises
 {
+    /// <summary>
+    /// Calculation class for the third curve of the test selection exercise    
+    /// </summary>
     public class TestExercise01CCurveClass : AbstractCurveCalc
     {
         public TestExercise01CCurveClass()

@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace Calculation.NamedCurves
 {
+    
+    /// <summary>
+    /// Calculation class for a 3d logarithmic helix - https://en.wikipedia.org/wiki/Lima%C3%A7on  
+    /// </summary>
     public class LogHelixCurveCalc : AbstractCurveCalc
     {
         public float A = 2f;

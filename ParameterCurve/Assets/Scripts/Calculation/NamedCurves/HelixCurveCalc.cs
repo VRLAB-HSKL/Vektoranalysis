@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.NamedCurves
 {
+    /// <summary>
+    /// Calculation class for a 3D helix - https://en.wikipedia.org/wiki/Helix
+    /// </summary>
     public class HelixCurveCalc : AbstractCurveCalc
     {
         private float Radius = 2f;

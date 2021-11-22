@@ -1,135 +1,244 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net.Appender;
+using Model;
 using Newtonsoft.Json;
 
-namespace Import.NewInitFile
+namespace Import.InitFile
 {
     /// <summary>
     /// Root of the tree like structure the information of the init file is parsed into
-    /// <see cref="DataImport.P"/>
+    /// <see cref="GlobalData.InitFile"/>
     /// </summary>
     [Serializable]
     public class InitFileRoot
     {
+        /// <summary>
+        /// Collection of display curves
+        /// </summary>
         [JsonProperty("displayCurves")]
         public List<Curve> DisplayCurves { get; set; }
         
+        /// <summary>
+        /// Collection of exercises
+        /// </summary>
         [JsonProperty("exercises")]
         public List<Exercise> Exercises { get; set; }
         
+        /// <summary>
+        /// General application settings
+        /// </summary>
         [JsonProperty("applicationSettings")]
         public ApplicationSettings ApplicationSettings { get; set; }
     }
 
     #region General
     
+    /// <summary>
+    /// Node class for geometric curve data
+    /// </summary>
     [Serializable]
-    public class PointDataNew
+    public class PointData
     {
+        /// <summary>
+        /// Parameter values
+        /// </summary>
         [JsonProperty("t")]
         public List<float> T { get; set; }
         
+        /// <summary>
+        /// Point vectors
+        /// </summary>
         [JsonProperty("point_vec")]
         public List<List<float>> PVec { get; set; }
         
+        /// <summary>
+        /// Velocity vectors
+        /// </summary>
         [JsonProperty("vel_vec")]
         public List<List<float>> VelVec { get; set; }
         
+        /// <summary>
+        /// Acceleration vectors
+        /// </summary>
         [JsonProperty("acc_vec")]
         public List<List<float>> AccVec { get; set; }
         
+        /// <summary>
+        /// Arc length parametrization based parameter values
+        /// </summary>
         [JsonProperty("arc_t")]
         public List<float> ArcT { get; set; }
         
+        /// <summary>
+        /// Arc length parametrization based point vectors
+        /// </summary>
         [JsonProperty("arc_point_vec")]
         public List<List<float>> ArcPVec { get; set; }
         
+        /// <summary>
+        /// Arc length parametrization based velocity vectors
+        /// </summary>
         [JsonProperty("arc_vel_vec")]
         public List<List<float>> ArcVelVec { get; set; }
         
+        /// <summary>
+        /// Arc length parametrization based acceleration vectors
+        /// </summary>
         [JsonProperty("arc_acc_vec")]
         public List<List<float>> ArcAccVec { get; set; }
     }
 
+    /// <summary>
+    /// Node class for general color values
+    /// </summary>
     [Serializable]
     public class RGBColor
     {
+        /// <summary>
+        /// Name of the color, to be used for static color constants <see>
+        ///     <cref>System.Windows.Media.Colors</cref>
+        /// </see>
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
         
+        /// <summary>
+        /// Float array representing color values
+        /// [0]: red
+        /// [1]: green
+        /// [2]: blue
+        /// [3]: alpha
+        /// </summary>
         [JsonProperty("rgba")]
         public List<float> Rgba { get; set; }
         
+        /// <summary>
+        /// Hexadecimal color code
+        /// </summary>
         [JsonProperty("hex")]
         public string Hex { get; set; }
     }
 
-    
     #endregion General
     
     #region DisplayCurves
     
+    /// <summary>
+    /// Node class representing a single curve
+    /// </summary>
     [Serializable]
     public class Curve
     {
         //public InfoSettings InfoSettings { get; set; }
 
+        /// <summary>
+        /// Curve information
+        /// </summary>
         [JsonProperty("info")]
         public CurveInfo Info { get; set; }
         
+        /// <summary>
+        /// Curve data, i.e. geometric data
+        /// </summary>
         [JsonProperty("data")]
         public CurveData Data { get; set; }
         
+        /// <summary>
+        /// Custom curve local settings
+        /// </summary>
         [JsonProperty("settings")]
         public CurveSettings CurveSettings { get; set; }
     }
 
+    /// <summary>
+    /// Node class for general curve information
+    /// </summary>
     [Serializable]
     public class CurveInfo
     {
+        /// <summary>
+        /// Unique curve identifier
+        /// </summary>
         [JsonProperty("id")]
         public int Id { get; set; }
         
+        /// <summary>
+        /// Curve name
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
         
+        /// <summary>
+        /// Display string, used in GUI
+        /// </summary>
         [JsonProperty("display_text")]
         public string DisplayText { get; set; }
     }
     
+    /// <summary>
+    /// Node glass for curve data
+    /// </summary>
     [Serializable]
     public class CurveData
     {
         // [JsonProperty("name")]
         // public string Name { get; set; }
         
+        /// <summary>
+        /// Dimension of curve, only 2 or 3
+        /// </summary>
         [JsonProperty("dim")]
         public int Dimension { get; set; }
         
+        /// <summary>
+        /// Length of the curve
+        /// </summary>
         [JsonProperty("arcLength")]
         public float ArcLength { get; set; }
         
+        /// <summary>
+        /// Scaling factor, used to scale the curve on the world display
+        /// </summary>
         [JsonProperty("worldScalingFactor")]
         public float WorldScalingFactor { get; set; }
         
+        /// <summary>
+        /// Scaling factor, used to scale the curve on the examination table
+        /// </summary>
         [JsonProperty("tableScalingFactor")]
         public float TableScalingFactor { get; set; }
         
+        /// <summary>
+        /// Scaling factor, used to scale the curve inside pillars in selection exercises
+        /// </summary>
         [JsonProperty("selectExercisePillarScalingFactor")]
         public float SelectExercisePillarScalingFactor { get; set; }
         
+        /// <summary>
+        /// Geometric point data, i.e. point vectors, velocity vectors, ...
+        /// </summary>
         [JsonProperty("data")]
-        public PointDataNew Data { get; set; }
+        public PointData Data { get; set; }
     }
     
+    /// <summary>
+    /// Node class for curve local settings
+    /// </summary>
     [Serializable]
     public class CurveSettings
     {
+        /// <summary>
+        /// Settings related to the ingame display of the curve
+        /// </summary>
         [JsonProperty("display")]
         public DisplaySettings DisplaySettings { get; set; }
     }
     
     
+    /// <summary>
+    /// Node class for settings related to the ingame display of curves
+    /// </summary>
     [Serializable]
     public class DisplaySettings
     {
@@ -157,6 +266,9 @@ namespace Import.NewInitFile
     
     #region Exercises
     
+    /// <summary>
+    /// Node class representing an exercise
+    /// </summary>
     [Serializable]
     public class Exercise
     {
@@ -176,6 +288,9 @@ namespace Import.NewInitFile
         public List<SubExercise> SubExercises { get; set; }
     }
     
+    /// <summary>
+    /// Node class representing a sub-exercise of a given exercise
+    /// </summary>
     [Serializable]
     public class SubExercise
     {
@@ -203,6 +318,9 @@ namespace Import.NewInitFile
 
     #region ApplicationSettings
     
+    /// <summary>
+    /// Node class for general, curve-independent application settings
+    /// </summary>
     [Serializable]
     public class ApplicationSettings
     {
@@ -219,6 +337,9 @@ namespace Import.NewInitFile
         public TableSettings TableSettings { get; set; }
     }
     
+    /// <summary>
+    /// Node class for settings related to the ingame browser application
+    /// </summary>
     [Serializable]
     public class BrowserSettings
     {
@@ -229,6 +350,9 @@ namespace Import.NewInitFile
         public string Url { get; set; }
     }
     
+    /// <summary>
+    /// Node class for settings related to the ingame information wall
+    /// </summary>
     [Serializable]
     public class InfoSettings
     {
@@ -251,6 +375,9 @@ namespace Import.NewInitFile
         public bool ShowTimeVelocityPlot { get; set; }
     }
     
+    /// <summary>
+    /// Node class for settings related to the ingame selection menu
+    /// </summary>
     [Serializable]
     public class SelectMenuSettings
     {
@@ -265,6 +392,9 @@ namespace Import.NewInitFile
     }
     
     
+    /// <summary>
+    /// Node class for settings related to the examination table
+    /// </summary>
     [Serializable]
     public class TableSettings
     {

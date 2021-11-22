@@ -2,6 +2,7 @@ using Controller.Curve;
 using Controller.Exercise;
 using HTC.UnityPlugin.Vive;
 using log4net;
+using Model;
 using UI;
 using UnityEngine;
 using Views.Display;
@@ -444,7 +445,7 @@ namespace Controller
             GlobalData.WorldCurveViewController.SetViewVisibility(true);
 
             // Table display curve (if activated)
-            if (GlobalData.initFile.ApplicationSettings.TableSettings.Activated)
+            if (GlobalData.InitFile.ApplicationSettings.TableSettings.Activated)
             {
                 GlobalData.TableCurveViewController = new CurveViewController(
                     tableRootElement, tableDisplayLr, 

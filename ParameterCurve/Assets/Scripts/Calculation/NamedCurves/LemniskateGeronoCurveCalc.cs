@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Calculation.NamedCurves
 {
+    /// <summary>
+    /// Calculation class for a lemniscate  of Gerono curve - https://en.wikipedia.org/wiki/Lemniscate
+    /// </summary>
     public class LemniskateGeronoCurveCalc : AbstractCurveCalc
     {
         public LemniskateGeronoCurveCalc()

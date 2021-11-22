@@ -1,4 +1,4 @@
-using Behaviours.Button;
+using Behaviour.Button;
 using UnityEngine;
 
 namespace Table

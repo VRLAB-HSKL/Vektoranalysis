@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Calculation.NamedCurves
 {
     /// <summary>
-    /// Calculation class fora cycloid curve
+    /// Calculation class for a cycloid curve
     /// 
     /// https://en.wikipedia.org/wiki/Cycloid
     /// </summary>

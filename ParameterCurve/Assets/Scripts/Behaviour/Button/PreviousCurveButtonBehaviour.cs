@@ -1,6 +1,7 @@
 using Controller;
+using Model;
 
-namespace Behaviours.Button
+namespace Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to switch to the previous curve in the current dataset
@@ -21,7 +22,7 @@ namespace Behaviours.Button
         protected new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalData.initFile.ApplicationSettings.TableSettings.ShowNavButtons);
+            gameObject.SetActive(GlobalData.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Controller.Curve;
+using Model;
 using TMPro;
 using UnityEngine;
 using Views.Display;

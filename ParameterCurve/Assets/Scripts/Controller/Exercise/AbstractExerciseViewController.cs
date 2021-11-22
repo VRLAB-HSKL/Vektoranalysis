@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using log4net;
+using Model;
 using UnityEngine;
 using Views.Display;
 

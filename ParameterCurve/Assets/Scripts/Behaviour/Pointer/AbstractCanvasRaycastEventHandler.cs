@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviours.Pointer
+namespace Behaviour.Pointer
 {
+    /// <summary>
+    /// Abstract raycast handler to map event handling of collision and click events between canvas elements
+    /// and a raycast line that is generated from VR controllers
+    /// </summary>
     public abstract class AbstractCanvasRaycastEventHandler : MonoBehaviour,
         IPointerEnterHandler,
         IPointerExitHandler,

@@ -4,10 +4,7 @@ using UnityEngine;
 namespace Calculation.NamedCurves
 {
     /// <summary>
-    /// Calculation class for an archimedean spiral
-    ///
-    /// https://en.wikipedia.org/wiki/Archimedean_spiral
-    /// 
+    /// Calculation class for an archimedean spiral - https://en.wikipedia.org/wiki/Archimedean_spiral
     /// </summary>
     public class ArchimedeanSpiralCurveCalc : AbstractCurveCalc
     {

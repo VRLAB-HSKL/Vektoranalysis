@@ -1,8 +1,12 @@
+using Model;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviours
+namespace Behaviour
 {
+    /// <summary>
+    /// Handles the Behaviour of the ingame navigation objects used to switch between exercises     
+    /// </summary>
     public class SwitchExerciseEventHandler : AbstractVisualChangeSelectionEventHandler
     {
         public bool IsIncrement;

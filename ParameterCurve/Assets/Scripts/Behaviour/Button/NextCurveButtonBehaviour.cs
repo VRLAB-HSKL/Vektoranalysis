@@ -1,35 +1,36 @@
 using Controller;
+using Model;
 
-namespace Behaviours.Button
+namespace Behaviour.Button
 {
     /// <summary>
-    /// Button Behaviour used to start runs of travel objects along the curve line
+    /// Button Behaviour used to switch to the next curve in the current dataset
     /// </summary>
-    public class StartRunButtonBehaviour : AbstractButtonBehaviour
+    public class NextCurveButtonBehaviour : AbstractButtonBehaviour
     {
         /// <summary>
         /// Single world state controller instance <see cref="WorldStateController"/>
         /// </summary>
         public WorldStateController world;
-        
+
         /// <summary>
         /// Unity Start function
         /// ====================
         /// 
         /// This function is called before the first frame update
         /// </summary>
-        private new void Start()
+        protected new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalData.initFile.ApplicationSettings.TableSettings.ShowRunButton);
+            gameObject.SetActive(GlobalData.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
         }
 
         /// <summary>
-        /// Starts run of travel objects when the button is activated
+        /// Switches to the next curve when the button is activated
         /// </summary>
         protected override void HandleButtonEvent()
         {
-            WorldStateController.StartRun();
+            world.SwitchToNextDataset();
         }
     }
 }

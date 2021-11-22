@@ -3,6 +3,9 @@ using VRKL.MBU;
 
 namespace UI.States
 {
+    /// <summary>
+    /// Abstract state context
+    /// </summary>
     public abstract class StateContext
     {
         protected StateContext(State s)
@@ -11,7 +14,9 @@ namespace UI.States
         }
     }
 
-
+    /// <summary>
+    /// State context related to the ingame curve selection menu
+    /// </summary>
     public class CurveSelectionStateContext : StateContext
     {
         private AbstractCurveSelectionState _state;
