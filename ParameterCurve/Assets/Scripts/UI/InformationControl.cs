@@ -12,28 +12,88 @@ namespace UI
     /// </summary>
     public class InformationControl : MonoBehaviour
     {
+        /// <summary>
+        /// Parent game object containing all header elements
+        /// </summary>
         [Header("Header")] 
         public GameObject headerParent;
+        
+        /// <summary>
+        /// Source information label
+        /// </summary>
         public TextMeshProUGUI SourceLabel;
+        
+        /// <summary>
+        /// Current point index information label
+        /// </summary>
         public TextMeshProUGUI IndexLabel;
 
+        /// <summary>
+        /// Parent game object containing all point information related elements
+        /// </summary>
         [Header("PointInfo")] 
         public GameObject PointInfoParent;
+        
+        /// <summary>
+        /// Current t parameter value label
+        /// </summary>
         public TextMeshProUGUI TLabel;
+        
+        /// <summary>
+        /// Current x coordinate value label
+        /// </summary>
         public TextMeshProUGUI XLabel;
+        
+        /// <summary>
+        /// Current y coordinate value label
+        /// </summary>
         public TextMeshProUGUI YLabel;
-        public TextMeshProUGUI ZLabel;
+        
+        /// <summary>
+        /// Current y coordinate value label
+        /// </summary>
+        public TextMeshProUGUI zLabel;
 
+        /// <summary>
+        /// Parent game object containing all arc point information related elements
+        /// </summary>
         [Header("ArcLengthPointInfo")]
         public GameObject ArcLengthParent;
+        
+        /// <summary>
+        /// Curve arc length value label
+        /// </summary>
         public TextMeshProUGUI ArcLengthLabel;
+        
+        /// <summary>
+        /// Current arc t parameter value label
+        /// </summary>
         public TextMeshProUGUI ArcTLabel;
+        
+        /// <summary>
+        /// Current arc x coordinate value label
+        /// </summary>
         public TextMeshProUGUI ArcXLabel;
+        
+        /// <summary>
+        /// Current arc y coordinate value label
+        /// </summary>
         public TextMeshProUGUI ArcYLabel;
+        
+        /// <summary>
+        /// Current arc z coordinate value label
+        /// </summary>
         public TextMeshProUGUI ArcZLabel;
 
+        /// <summary>
+        /// Parent game object containing all time distance plot elements
+        /// </summary>
         [Header("TimeDistance")]
         public GameObject TimeDistanceParent;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public GameObject TimeDistanceStart;
         public GameObject TimeDistanceXAxis;
         public GameObject TimeDistanceYAxis;
@@ -119,7 +179,7 @@ namespace UI
                 TLabel.gameObject.SetActive(false);
                 XLabel.gameObject.SetActive(false);
                 YLabel.gameObject.SetActive(false);
-                ZLabel.gameObject.SetActive(false);
+                zLabel.gameObject.SetActive(false);
             
                 PointInfoParent.SetActive(false);
             }
@@ -173,7 +233,7 @@ namespace UI
                 TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
                 XLabel.text = curve?.points[pointIndex].x.ToString(floatFormat);
                 YLabel.text = curve?.points[pointIndex].y.ToString(floatFormat);
-                ZLabel.text = curve?.points[pointIndex].z.ToString(floatFormat);    
+                zLabel.text = curve?.points[pointIndex].z.ToString(floatFormat);    
             }
 
             if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
