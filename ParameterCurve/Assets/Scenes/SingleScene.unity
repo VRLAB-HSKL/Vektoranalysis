@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 26219980}
   - component: {fileID: 26219979}
   m_Layer: 5
-  m_Name: LabelZ
+  m_Name: PointLabelZ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -679,7 +679,7 @@ GameObject:
   - component: {fileID: 71526088}
   - component: {fileID: 71526087}
   m_Layer: 5
-  m_Name: SubHeader
+  m_Name: PointSubHeader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2146,7 +2146,7 @@ GameObject:
   - component: {fileID: 195036770}
   - component: {fileID: 195036769}
   m_Layer: 5
-  m_Name: ValueZ
+  m_Name: PointValueZ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2493,7 +2493,7 @@ GameObject:
   - component: {fileID: 202114998}
   - component: {fileID: 202114997}
   m_Layer: 5
-  m_Name: LabelX
+  m_Name: PointLabelX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4958,7 +4958,7 @@ MonoBehaviour:
   TLabel: {fileID: 2063077901}
   XLabel: {fileID: 1537640459}
   YLabel: {fileID: 1203359436}
-  ZLabel: {fileID: 195036769}
+  zLabel: {fileID: 195036769}
   ArcLengthParent: {fileID: 965102186}
   ArcLengthLabel: {fileID: 1876958022}
   ArcTLabel: {fileID: 699099109}
@@ -5541,7 +5541,7 @@ GameObject:
   - component: {fileID: 668767277}
   - component: {fileID: 668767276}
   m_Layer: 5
-  m_Name: LabelY
+  m_Name: PointLabelY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9768,7 +9768,7 @@ GameObject:
   - component: {fileID: 1009359558}
   - component: {fileID: 1009359557}
   m_Layer: 5
-  m_Name: LabelT
+  m_Name: PointLabelT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10786,7 +10786,7 @@ GameObject:
   - component: {fileID: 1203359437}
   - component: {fileID: 1203359436}
   m_Layer: 5
-  m_Name: ValueY
+  m_Name: PointValueY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13214,7 +13214,7 @@ GameObject:
   - component: {fileID: 1537640460}
   - component: {fileID: 1537640459}
   m_Layer: 5
-  m_Name: ValueX
+  m_Name: PointValueX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17478,7 +17478,7 @@ GameObject:
   - component: {fileID: 2063077902}
   - component: {fileID: 2063077901}
   m_Layer: 5
-  m_Name: ValueT
+  m_Name: PointValueT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
