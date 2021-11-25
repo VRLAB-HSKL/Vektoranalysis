@@ -212,6 +212,7 @@ namespace Controller
             infoWall.Update();
 
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
+            GlobalData.WorldCurveViewController.CurrentView.UpdateView();
             GlobalData.TableCurveViewController?.CurrentView.UpdateView();
         
         }
@@ -299,8 +300,9 @@ namespace Controller
             browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
             infoWall.Update();
 
-            //WorldViewController.CurrentView.UpdateView();
+            
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
+            GlobalData.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalData.TableCurveViewController?.CurrentView.UpdateView();
         }
 
@@ -336,6 +338,7 @@ namespace Controller
             infoWall.Update();
 
             GlobalData.WorldCurveViewController.UpdateViewsDelegate();
+            GlobalData.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalData.TableCurveViewController?.CurrentView.UpdateView();
         }
         
@@ -404,7 +407,7 @@ namespace Controller
             }
 
             // Start run on trigger press
-            if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Trigger))
+            if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Grip))
             {
                 Log.Debug("Run started with controller button!");
                 StartRun();
