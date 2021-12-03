@@ -218,8 +218,15 @@ namespace UI
             
             if (isRunBasedView)
             {
-                pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
-                pointIndex = (view as SimpleRunCurveWithArcLength).CurrentPointIndex;
+                if(view is SimpleRunCurveView)
+                {
+                    pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
+                }
+                
+                if(view is SimpleRunCurveWithArcLength)
+                {
+                    pointIndex = (view as SimpleRunCurveWithArcLength).CurrentPointIndex;
+                }
             }
                 
             if (pointIndex >= curve.points.Count) return;
