@@ -119,7 +119,7 @@ namespace Views.Display
         public override void UpdateView()
         {
             base.UpdateView();
-            if (!GlobalData.IsRunning) return;
+            if (!GlobalDataModel.IsRunning) return;
         
             SetArcTravelPoint();
             SetArcMovingFrame();
@@ -139,7 +139,7 @@ namespace Views.Display
             // On arrival at the last point, stop driving
             if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
             {
-                GlobalData.IsRunning = false;
+                GlobalDataModel.IsRunning = false;
                 return;
             }
         
@@ -156,7 +156,7 @@ namespace Views.Display
             var curve = CurrentCurve; 
             if (CurrentPointIndex == curve.worldPoints.Count - 1)
             {
-                GlobalData.IsRunning = false;
+                GlobalDataModel.IsRunning = false;
                 return;
             }
         

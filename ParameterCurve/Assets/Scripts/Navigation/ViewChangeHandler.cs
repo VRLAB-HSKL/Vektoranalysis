@@ -18,8 +18,8 @@ public class ViewChangeHandler : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            GlobalData.WorldCurveViewController.SwitchView(ViewIndex);
-            GlobalData.TableCurveViewController?.SwitchView(ViewIndex);
+            GlobalDataModel.WorldCurveViewController.SwitchView(ViewIndex);
+            GlobalDataModel.TableCurveViewController?.SwitchView(ViewIndex);
         }
 
         MeshRenderer msr = Target.GetComponent<MeshRenderer>();

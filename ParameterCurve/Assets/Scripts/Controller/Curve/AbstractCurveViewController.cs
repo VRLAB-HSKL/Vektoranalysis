@@ -8,7 +8,7 @@ namespace Controller.Curve
 {
     /// <summary>
     /// Abstract base class for all view controllers related to displaying curve data in global data model
-    /// <see cref="GlobalData"/>
+    /// <see cref="GlobalDataModel"/>
     /// </summary>
     public abstract class AbstractCurveViewController
     {

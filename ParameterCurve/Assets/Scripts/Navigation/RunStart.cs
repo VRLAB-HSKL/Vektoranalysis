@@ -21,7 +21,7 @@ public class RunStart : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            if (!GlobalData.IsRunning)
+            if (!GlobalDataModel.IsRunning)
             {
                 //world.StartRun();
             }

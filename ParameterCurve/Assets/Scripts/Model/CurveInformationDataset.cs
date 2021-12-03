@@ -71,8 +71,8 @@ public class CurveInformationDataset
             bool swapYZCoordinates = Is3DCurve;
             
             var newPoint = swapYZCoordinates ?
-                new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :
-                new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor;
+                new Vector3(point.x, point.z, point.y) * GlobalDataModel.PointScaleFactor :
+                new Vector3(point.x, point.y, point.z) * GlobalDataModel.PointScaleFactor;
 
             if (!Is3DCurve)
             {
@@ -91,8 +91,8 @@ public class CurveInformationDataset
             bool swapYZCoordinates = Is3DCurve;
             
             arcLengthWorldPoints.Add(swapYZCoordinates ?
-                new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalData.PointScaleFactor :
-                new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalData.PointScaleFactor);
+                new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalDataModel.PointScaleFactor :
+                new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalDataModel.PointScaleFactor);
 
         }
     }

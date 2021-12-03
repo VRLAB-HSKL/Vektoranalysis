@@ -33,15 +33,15 @@ namespace Views.Display
         
         /// <summary>
         /// Type of parent controller
-        /// ToDo: Does this make sense in the pattern ?
         /// </summary>
         protected readonly AbstractCurveViewController.CurveControllerType ControllerType;
     
         /// <summary>
         /// Current curve being displayed in the view. This model data is accessed through the static
-        /// <see cref="GlobalData"/> class, based on global curve index <see cref="GlobalData.CurrentCurveIndex"/>
+        /// <see cref="GlobalDataModel"/> class, based on global curve index <see cref="GlobalDataModel.CurrentCurveIndex"/>
         /// </summary>
-        protected static CurveInformationDataset CurrentCurve => GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+        protected static CurveInformationDataset CurrentCurve => 
+            GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
         
         /// <summary>
         /// Line renderer to display curve path
@@ -78,13 +78,15 @@ namespace Views.Display
         /// <param name="rootPos">Parent game object root position</param>
         /// <param name="scalingFactor">Point vector scaling factor</param>
         /// <param name="controllerType">Type of parent controller</param>
-        protected AbstractCurveView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor, AbstractCurveViewController.CurveControllerType controllerType)
+        protected AbstractCurveView(LineRenderer displayLr, Vector3 rootPos, 
+            float scalingFactor, 
+            AbstractCurveViewController.CurveControllerType controllerType)
         {
             Log.Info("AbstractCurveView.ArgumentConstructor()");
-            ControllerType = controllerType;
             DisplayLr = displayLr;
             _rootPos = rootPos;
             ScalingFactor = scalingFactor;
+            ControllerType = controllerType;
         }
         
         #endregion Constructors
@@ -136,7 +138,9 @@ namespace Views.Display
                 ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
         
             // Calculate new point
-            var newVector = flip ? new Vector3(point.x, point.z, point.y) : new Vector3(point.x, point.y, point.z);
+            var newVector = flip 
+                ? new Vector3(point.x, point.z, point.y) 
+                : new Vector3(point.x, point.y, point.z);
             newVector = _rootPos + newVector * ScalingFactor;
             return newVector;
         }

@@ -11,7 +11,7 @@ namespace Controller
 {
     /// <summary>
     /// Controls global game state of the scene. This class initializes important utilities like the global data
-    /// model <see cref="GlobalData"/>, and contains the main game loop. Additionally, game objects related to
+    /// model <see cref="GlobalDataModel"/>, and contains the main game loop. Additionally, game objects related to
     /// the different curve displays in the scene are mapped from the scene into the code. 
     /// </summary>
     public class WorldStateController : MonoBehaviour
@@ -114,7 +114,7 @@ namespace Controller
 
         /// <summary>
         /// Time passed since last traversal to the current point. Once this value is greater than
-        /// <see cref="GlobalData.RunSpeedFactor"/>, the travel object moves to the next point on the curve
+        /// <see cref="GlobalDataModel.RunSpeedFactor"/>, the travel object moves to the next point on the curve
         /// </summary>
         private float _updateTimer;
         
@@ -128,30 +128,30 @@ namespace Controller
         public static void StartRun()
         {
             Log.Info("Starting curve run");
-            GlobalData.IsRunning = true;        
-            GlobalData.WorldCurveViewController.StartRun();
-            GlobalData.TableCurveViewController?.StartRun();
+            GlobalDataModel.IsRunning = true;        
+            GlobalDataModel.WorldCurveViewController.StartRun();
+            GlobalDataModel.TableCurveViewController?.StartRun();
         }
 
         /// <summary>
-        /// Switch to the next curve in the current dataset <see cref="GlobalData.CurrentDataset"/>
+        /// Switch to the next curve in the current dataset <see cref="GlobalDataModel.CurrentDataset"/>
         /// </summary>
         public void SwitchToNextDataset()
         {
             // Stop driving
-            if(GlobalData.IsRunning)
+            if(GlobalDataModel.IsRunning)
             {
-                GlobalData.IsRunning = false;            
+                GlobalDataModel.IsRunning = false;            
             }
 
             // Increment data set index, reset to 0 on overflow
-            ++GlobalData.CurrentCurveIndex;
-            if (GlobalData.CurrentCurveIndex >= GlobalData.CurrentDataset.Count)
-                GlobalData.CurrentCurveIndex = 0;
+            ++GlobalDataModel.CurrentCurveIndex;
+            if (GlobalDataModel.CurrentCurveIndex >= GlobalDataModel.CurrentDataset.Count)
+                GlobalDataModel.CurrentCurveIndex = 0;
 
             
-            var worldView = GlobalData.WorldCurveViewController.CurrentView;
-            worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+            var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
+            worldView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].WorldScalingFactor;
             if(worldView.GetType() == typeof(SimpleRunCurveView) ||
                worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
             {
@@ -176,10 +176,10 @@ namespace Controller
             
             }
         
-            var tableView = GlobalData.TableCurveViewController?.CurrentView;
+            var tableView = GlobalDataModel.TableCurveViewController?.CurrentView;
             if (tableView != null)
             {
-                tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+                tableView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TableScalingFactor;
                 if (tableView.GetType() == typeof(SimpleRunCurveView) ||
                     tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
@@ -206,42 +206,42 @@ namespace Controller
             }
 
             // Display html resource
-            browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
+            browserWall.OpenURL(GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].NotebookURL);
         
             // Update info wall
             infoWall.Update();
 
-            GlobalData.WorldCurveViewController.UpdateViewsDelegate();
-            GlobalData.WorldCurveViewController.CurrentView.UpdateView();
-            GlobalData.TableCurveViewController?.CurrentView.UpdateView();
+            GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
+            GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
+            GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
         
         }
 
         /// <summary>
-        /// Switch to the previous curve in the current dataset <see cref="GlobalData.CurrentDataset"/>
+        /// Switch to the previous curve in the current dataset <see cref="GlobalDataModel.CurrentDataset"/>
         /// </summary>
         public void SwitchToPreviousDataset()
         {
             // Stop driving
-            if (GlobalData.IsRunning)
+            if (GlobalDataModel.IsRunning)
             {
-                if(GlobalData.WorldCurveViewController.CurrentView is null)
+                if(GlobalDataModel.WorldCurveViewController.CurrentView is null)
                 {
                     Log.Warn("ViewEmpty");
                 }
 
-                GlobalData.IsRunning = false;
+                GlobalDataModel.IsRunning = false;
             }
 
             // Decrement data set index, reset to last element on negative index
-            --GlobalData.CurrentCurveIndex;
-            if (GlobalData.CurrentCurveIndex < 0)
-                GlobalData.CurrentCurveIndex = GlobalData.CurrentDataset.Count - 1;
+            --GlobalDataModel.CurrentCurveIndex;
+            if (GlobalDataModel.CurrentCurveIndex < 0)
+                GlobalDataModel.CurrentCurveIndex = GlobalDataModel.CurrentDataset.Count - 1;
         
-            var worldView = GlobalData.WorldCurveViewController.CurrentView;
+            var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
             if (worldView != null)
             {
-                worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+                worldView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].WorldScalingFactor;
                 if (worldView.GetType() == typeof(SimpleRunCurveView) ||
                     worldView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
@@ -266,10 +266,10 @@ namespace Controller
                 }
             }
 
-            var tableView = GlobalData.TableCurveViewController?.CurrentView;
+            var tableView = GlobalDataModel.TableCurveViewController?.CurrentView;
             if (tableView != null)
             {
-                tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+                tableView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TableScalingFactor;
                 if (tableView.GetType() == typeof(SimpleRunCurveView) ||
                     tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
@@ -297,49 +297,49 @@ namespace Controller
             // tableView.UpdateView();
         
             // Display html resource
-            browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
+            browserWall.OpenURL(GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].NotebookURL);
             infoWall.Update();
 
             
-            GlobalData.WorldCurveViewController.UpdateViewsDelegate();
-            GlobalData.WorldCurveViewController.CurrentView?.UpdateView();
-            GlobalData.TableCurveViewController?.CurrentView.UpdateView();
+            GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
+            GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
+            GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
         }
 
         public void SwitchToSpecificDataset(string datasetIdentifier)
         {
             // Stop driving
-            if (GlobalData.IsRunning)
+            if (GlobalDataModel.IsRunning)
             {
-                GlobalData.IsRunning = false;
+                GlobalDataModel.IsRunning = false;
             }
 
-            if(GlobalData.CurrentDisplayGroup == GlobalData.CurveDisplayGroup.Exercises)
-                GlobalData.ExerciseCurveController.SetViewVisibility(true);
+            if(GlobalDataModel.CurrentDisplayGroup == GlobalDataModel.CurveDisplayGroup.Exercises)
+                GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
         
-            var index = GlobalData.CurrentDataset.FindIndex(
+            var index = GlobalDataModel.CurrentDataset.FindIndex(
                 x => x.Name.Equals(datasetIdentifier));
             if (index == -1) return;
 
-            GlobalData.CurrentCurveIndex = index;
+            GlobalDataModel.CurrentCurveIndex = index;
 
-            var worldView = GlobalData.WorldCurveViewController.CurrentView;
-            worldView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].WorldScalingFactor;
+            var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
+            worldView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].WorldScalingFactor;
 
 
-            var tableView = GlobalData.TableCurveViewController?.CurrentView;
+            var tableView = GlobalDataModel.TableCurveViewController?.CurrentView;
             if (tableView != null)
             {
-                tableView.ScalingFactor = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].TableScalingFactor;
+                tableView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TableScalingFactor;
             }
                 
             // Display html resource
-            browserWall.OpenURL(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].NotebookURL);
+            browserWall.OpenURL(GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].NotebookURL);
             infoWall.Update();
 
-            GlobalData.WorldCurveViewController.UpdateViewsDelegate();
-            GlobalData.WorldCurveViewController.CurrentView?.UpdateView();
-            GlobalData.TableCurveViewController?.CurrentView.UpdateView();
+            GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
+            GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
+            GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
         }
         
         #endregion Public functions
@@ -351,7 +351,7 @@ namespace Controller
         /// ====================
         /// 
         /// This function is called when the script instance is loaded. This is used to prepare the global data model
-        /// <see cref="GlobalData"/> before any gameplay happens. All future instantiation procedures should therefore
+        /// <see cref="GlobalDataModel"/> before any gameplay happens. All future instantiation procedures should therefore
         /// be done in this function.
         ///
         /// </summary>
@@ -370,7 +370,7 @@ namespace Controller
         private void Start()
         {
             // Display html resource
-            browserWall.OpenURL(GlobalData.DisplayCurveDatasets[GlobalData.CurrentCurveIndex].NotebookURL);
+            browserWall.OpenURL(GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex].NotebookURL);
 
             // Set plot line renderers
             infoWall.Update();
@@ -386,21 +386,21 @@ namespace Controller
         private void Update()
         {
             // During run
-            if (GlobalData.IsRunning)
+            if (GlobalDataModel.IsRunning)
             {
                 // Update time since last point step
                 _updateTimer += Time.deltaTime;
                 Log.Debug("deltaTime: " + Time.deltaTime + 
                           ", updateTimer: " + _updateTimer + 
-                          ", pointStepDuration: " + GlobalData.RunSpeedFactor +
-                          " - " + (_updateTimer >= GlobalData.RunSpeedFactor));
+                          ", pointStepDuration: " + GlobalDataModel.RunSpeedFactor +
+                          " - " + (_updateTimer >= GlobalDataModel.RunSpeedFactor));
                 
                 // If the time threshold has been reached, traverse to next point
-                if(_updateTimer >= GlobalData.RunSpeedFactor)
+                if(_updateTimer >= GlobalDataModel.RunSpeedFactor)
                 {
                     _updateTimer = 0f;
-                    GlobalData.WorldCurveViewController.CurrentView.UpdateView();
-                    GlobalData.TableCurveViewController?.CurrentView.UpdateView();
+                    GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
+                    GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
 
                     infoWall.Update();
                 }
@@ -422,7 +422,7 @@ namespace Controller
         }
 
         /// <summary>
-        /// Initialize global data model <see cref="GlobalData"/>
+        /// Initialize global data model <see cref="GlobalDataModel"/>
         /// </summary>
         private void InitializeModel()
         {
@@ -431,7 +431,7 @@ namespace Controller
             infoWall.InitPlotLengths();
             
             // Initialize global model
-            GlobalData.InitializeData();
+            GlobalDataModel.InitializeData();
         }
 
         /// <summary>
@@ -440,17 +440,17 @@ namespace Controller
         private void InitializeViewControllers()
         {
             // World display curve
-            var displayCurve = GlobalData.DisplayCurveDatasets[0];
-            GlobalData.WorldCurveViewController = new CurveViewController(
+            var displayCurve = GlobalDataModel.DisplayCurveDatasets[0];
+            GlobalDataModel.WorldCurveViewController = new CurveViewController(
                 worldRootElement, worldDisplayLr, 
                 worldTravelObject, worldArcLengthTravelObject, 
                 displayCurve.WorldScalingFactor, AbstractCurveViewController.CurveControllerType.World);
-            GlobalData.WorldCurveViewController.SetViewVisibility(true);
+            GlobalDataModel.WorldCurveViewController.SetViewVisibility(true);
 
             // Table display curve (if activated)
-            if (GlobalData.InitFile.ApplicationSettings.TableSettings.Activated)
+            if (GlobalDataModel.InitFile.ApplicationSettings.TableSettings.Activated)
             {
-                GlobalData.TableCurveViewController = new CurveViewController(
+                GlobalDataModel.TableCurveViewController = new CurveViewController(
                     tableRootElement, tableDisplayLr, 
                     tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
                     AbstractCurveViewController.CurveControllerType.Table);
@@ -461,9 +461,9 @@ namespace Controller
             }
 
             // Exercise controller
-            GlobalData.ExerciseCurveController = new ExerciseCurveViewController(
+            GlobalDataModel.ExerciseCurveController = new ExerciseCurveViewController(
                 selObjects.gameObject.transform, selObjects, pillarPrefab, AbstractCurveViewController.CurveControllerType.World);
-            GlobalData.ExerciseCurveController.SetViewVisibility(false);    
+            GlobalDataModel.ExerciseCurveController.SetViewVisibility(false);    
         }
         
     

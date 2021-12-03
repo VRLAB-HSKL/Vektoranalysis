@@ -70,7 +70,7 @@ namespace Import
             pd.ArcTravelObjColor = arcTravelObjColor;
 
             // Attempt to load image resource based on curve name        
-            var imgResPath = GlobalData.ImageResourcePath + curve.Info.Name;
+            var imgResPath = GlobalDataModel.ImageResourcePath + curve.Info.Name;
             var imgRes = Resources.Load(imgResPath) as Texture2D;
             if (imgRes != null)
             {

@@ -22,7 +22,7 @@ namespace Behaviour.Button
         private new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalData.InitFile.ApplicationSettings.TableSettings.ShowRunButton);
+            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowRunButton);
         }
 
         /// <summary>

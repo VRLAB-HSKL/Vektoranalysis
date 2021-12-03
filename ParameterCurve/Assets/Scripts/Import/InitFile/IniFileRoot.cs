@@ -8,7 +8,7 @@ namespace Import.InitFile
 {
     /// <summary>
     /// Root of the tree like structure the information of the init file is parsed into
-    /// <see cref="GlobalData.InitFile"/>
+    /// <see cref="GlobalDataModel.InitFile"/>
     /// </summary>
     [Serializable]
     public class InitFileRoot
@@ -194,7 +194,7 @@ namespace Import.InitFile
         /// <summary>
         /// Length of the curve
         /// </summary>
-        [JsonProperty("arcLength")]
+        [JsonProperty("arc_length")]
         public float ArcLength { get; set; }
         
         /// <summary>
@@ -272,19 +272,19 @@ namespace Import.InitFile
     [Serializable]
     public class Exercise
     {
-        [JsonProperty("id")]
+        [JsonProperty("identifier")]
         public int Id { get; set; }
         
         [JsonProperty("title")]
         public string Title { get; set; }
         
-        [JsonProperty("type")]
+        [JsonProperty("exercise_type")]
         public string Type { get; set; }
         
         [JsonProperty("description")]
         public string Description { get; set; }
         
-        [JsonProperty("subExercises")]
+        [JsonProperty("sub_exercises")]
         public List<SubExercise> SubExercises { get; set; }
     }
     

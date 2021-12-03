@@ -6,6 +6,7 @@ using log4net;
 using Model;
 using UnityEngine;
 using Views;
+using Views.Exercise;
 
 namespace Controller.Exercise
 {
@@ -18,7 +19,8 @@ namespace Controller.Exercise
         /// Model of the controller, representing a selection exercise
         /// </summary>
         private static SelectionExercise CurrentExercise => 
-            GlobalData.SelectionExercises.Any() ? GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex] : null;
+            GlobalDataModel.SelectionExercises.Any() 
+                ? GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex] : null;
 
         /// <summary>
         /// Chosen selections in selection exercise, all -1 per default for non-choice
@@ -56,12 +58,12 @@ namespace Controller.Exercise
                 CurrentDescription = CurrentExercise.Description
             };
 
-            // _views = new List<AbstractView>()
-            // {
-            //     selView
-            // };
-            //
-            // CurrentView = selView;
+            Views = new List<AbstractExerciseView>()
+            {
+                selView
+            };
+            
+            CurrentView = selView;
             
             
             
@@ -73,12 +75,18 @@ namespace Controller.Exercise
        
         public void NextSubExercise()
         {
-            if (CurrentExercise is null)
-                return;
-
-            // Calculate results if navigating to next on last sub exercise
-            if (GlobalData.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
+            // Disable main display on first navigation to the right
+            if (CurrentView.showMainDisplay && GlobalDataModel.CurrentSubExerciseIndex == 0)
             {
+                CurrentView.showMainDisplay = false;
+                CurrentView.UpdateView();
+                return;
+            }
+   
+            // Calculate results if navigating to next on last sub exercise
+            if (GlobalDataModel.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
+            {
+                // Print result summary
                 var sb = new StringBuilder("Exercise results:\n");
                 var correctCount = 0;
                 for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
@@ -93,34 +101,34 @@ namespace Controller.Exercise
                 
                 sb.Append("Result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
             
-                Log.Debug(sb.ToString());
+                //Log.Debug(sb.ToString());
+                Debug.Log(sb.ToString());
                 
                 return;
             }
             
-            ++GlobalData.CurrentSubExerciseIndex;
+            ++GlobalDataModel.CurrentSubExerciseIndex;
             CurrentView.UpdateView();
         }
 
         public void PreviousSubExercise()
         {
-            if (CurrentExercise is null)
-                return;
-            
-            if (GlobalData.CurrentSubExerciseIndex == 0)
+            if (GlobalDataModel.CurrentSubExerciseIndex == 0)
             {
+                CurrentView.showMainDisplay = true;
                 CurrentView.UpdateView();
                 return;
             }
             
-            --GlobalData.CurrentSubExerciseIndex;
+            --GlobalDataModel.CurrentSubExerciseIndex;
             CurrentView.UpdateView();
         }
 
         public void SetSelection(int choice)
         {
-            SelectionIndices[GlobalData.CurrentSubExerciseIndex] = choice;
-            CurrentExercise.ChosenAnswers[GlobalData.CurrentSubExerciseIndex] = choice;
+            Debug.Log("choice set: " + choice);
+            SelectionIndices[GlobalDataModel.CurrentSubExerciseIndex] = choice;
+            CurrentExercise.ChosenAnswers[GlobalDataModel.CurrentSubExerciseIndex] = choice;
         }
 
         public override void SetViewVisibility(bool value)

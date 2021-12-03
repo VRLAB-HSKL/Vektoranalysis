@@ -40,7 +40,8 @@ namespace Behaviour
 
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            GlobalData.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
+            //Debug.Log("choice: " + selectionChoice);
+            //GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
         }
 
         protected override void HandlePointerEnter(PointerEventData eventData){}

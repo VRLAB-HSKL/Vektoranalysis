@@ -22,7 +22,7 @@ namespace Behaviour.Button
         protected new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalData.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
+            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
         }
 
         /// <summary>

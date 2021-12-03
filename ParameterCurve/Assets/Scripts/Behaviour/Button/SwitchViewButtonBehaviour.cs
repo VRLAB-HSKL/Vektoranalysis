@@ -27,7 +27,7 @@ namespace Behaviour.Button
         private new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalData.InitFile.ApplicationSettings.TableSettings.ShowViewButtons);
+            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowViewButtons);
         }
 
         /// <summary>
@@ -35,8 +35,8 @@ namespace Behaviour.Button
         /// </summary>
         protected override void HandleButtonEvent()
         {        
-            GlobalData.WorldCurveViewController.SwitchView(viewIndex);
-            GlobalData.TableCurveViewController?.SwitchView(viewIndex);
+            GlobalDataModel.WorldCurveViewController.SwitchView(viewIndex);
+            GlobalDataModel.TableCurveViewController?.SwitchView(viewIndex);
         }
     }
 }

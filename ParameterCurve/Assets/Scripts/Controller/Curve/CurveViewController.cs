@@ -67,9 +67,9 @@ namespace Controller.Curve
 
             var initViewIndex = 0;
         
-            if (GlobalData.InitFile.DisplayCurves.Count > 0)
+            if (GlobalDataModel.InitFile.DisplayCurves.Count > 0)
             {
-                initViewIndex = GlobalData.InitFile.DisplayCurves[0].CurveSettings.DisplaySettings.View switch
+                initViewIndex = GlobalDataModel.InitFile.DisplayCurves[0].CurveSettings.DisplaySettings.View switch
                 {
                     "simple" => 0,
                     "run" => 1,
@@ -113,7 +113,7 @@ namespace Controller.Curve
             }
         
             // Set global marker
-            GlobalData.IsRunning = true;        
+            GlobalDataModel.IsRunning = true;        
         }
         
         #endregion Public functions

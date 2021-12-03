@@ -30,7 +30,7 @@ namespace UI
     
         public void OpenURL(string url)
         {
-            if (GlobalData.InitFile.ApplicationSettings.BrowserSettings.Activated)
+            if (GlobalDataModel.InitFile.ApplicationSettings.BrowserSettings.Activated)
             {
                 //Browser.OpenCommentFile(url);    
             }

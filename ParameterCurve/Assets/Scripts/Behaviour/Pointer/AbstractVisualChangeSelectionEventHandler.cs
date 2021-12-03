@@ -25,26 +25,15 @@ namespace Behaviour
         public bool isToggle;
 
 
-        //public ExerciseViewController threeSel;
-        
-        public int selectionChoice = -1;
+        public int selectionChoice;
 
         /// <summary>
         /// Signals if a pillar was selected or not
         /// </summary>
-        protected bool IsSelected
-        {
-            get
-            {
-                //Debug.Log("globalExerciseController is null: " + (GlobalData.exerciseController is null));
-                
-                bool isSel = selectionChoice ==
-                    GlobalData.ExerciseCurveController?.SelectionIndices[GlobalData.CurrentSubExerciseIndex]; //currentExerciseIndex;    
+        protected bool IsSelected =>
+            selectionChoice ==
+            GlobalDataModel.ExerciseCurveController?.SelectionIndices[GlobalDataModel.CurrentSubExerciseIndex];
 
-                return isSel;
-            }
-        }
-            
 
         /// <summary>
         /// Default material used for the initial, unselected state
@@ -60,9 +49,6 @@ namespace Behaviour
         /// Material used to signal that the target object was selected
         /// </summary>
         public Material selectionMat;
-
-
-
         
         /// <summary>
         /// Collection of pointers that are hovering over a clickable object. An object should only be displayed
@@ -118,7 +104,7 @@ namespace Behaviour
 
                     //_isSelected = !_isSelected;
 
-                    GlobalData.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
+                    GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
 
                     HandlePointerClick(eventData);        
                 }
@@ -139,40 +125,40 @@ namespace Behaviour
                     }
                 }
             }
-            // else if (eventData  is {button: PointerEventData.InputButton.Left})
-            // {
-            //     // Standalone button triggered!
-            //
-            //     if (isToggle)
-            //     {
-            //         var newMat = IsSelected ? hoverMat : selectionMat;
-            //
-            //         foreach (var m in MeshRenderers)
-            //         {
-            //             m.material = newMat;
-            //         }
-            //
-            //         //_isSelected = !_isSelected;    
-            //         
-            //         GlobalData.ExerciseController.SetSelection(IsSelected ? -1 : selectionChoice);
-            //         
-            //         HandlePointerClick(eventData);        
-            //     }
-            //     else
-            //     {
-            //         foreach (var m in MeshRenderers)
-            //         {
-            //             m.material = selectionMat;
-            //         }
-            //         
-            //         HandlePointerClick(eventData);
-            //         
-            //         foreach (var m in MeshRenderers)
-            //         {
-            //             m.material = hoverMat;
-            //         }
-            //     }
-            // }
+            else if (eventData  is {button: PointerEventData.InputButton.Left})
+            {
+                // Standalone button triggered!
+            
+                if (isToggle)
+                {
+                    var newMat = IsSelected ? hoverMat : selectionMat;
+            
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = newMat;
+                    }
+            
+                    //_isSelected = !_isSelected;    
+                    
+                    GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
+                    
+                    HandlePointerClick(eventData);        
+                }
+                else
+                {
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = selectionMat;
+                    }
+                    
+                    HandlePointerClick(eventData);
+                    
+                    foreach (var m in MeshRenderers)
+                    {
+                        m.material = hoverMat;
+                    }
+                }
+            }
         }
 
         public new void OnPointerEnter(PointerEventData eventData)

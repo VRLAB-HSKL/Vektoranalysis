@@ -115,7 +115,7 @@ namespace UI
         {
             get
             {
-                return GlobalData.WorldCurveViewController;
+                return GlobalDataModel.WorldCurveViewController;
             }
         }
 
@@ -145,8 +145,8 @@ namespace UI
             //Debug.Log("initFile is null: " + (GlobalData.initFile is null));
             //Debug.Log("initFile.information is null: " + (GlobalData.initFile.information is null));
         
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot || 
-                !GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated)
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot || 
+                !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
                 TimeVelocityParent.SetActive(false);
             }
@@ -156,8 +156,8 @@ namespace UI
                 _initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
             }
         
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot || 
-                !GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated)
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot || 
+                !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {   
                 TimeDistanceParent.SetActive(false);
             }
@@ -167,14 +167,14 @@ namespace UI
                 _initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
             }
 
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData || 
-                !GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated)
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData || 
+                !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
                 ArcLengthParent.SetActive(false);
             }
 
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowPointData || 
-                !GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated)
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowPointData || 
+                !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
                 TLabel.gameObject.SetActive(false);
                 XLabel.gameObject.SetActive(false);
@@ -184,8 +184,8 @@ namespace UI
                 PointInfoParent.SetActive(false);
             }
         
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo || 
-                !GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated)
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo || 
+                !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
                 SourceLabel.gameObject.SetActive(false);
                 IndexLabel.gameObject.SetActive(false);
@@ -204,19 +204,22 @@ namespace UI
     
         private void UpdateInfoLabels()
         {
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated) return;
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated) return;
 
-            var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+            var curve = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
+            
             var view = ObserevedCurveViewController.CurrentView;
-    
+
+            if ((view as SimpleRunCurveView) is null)
+                return;
         
-            int pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
+            var pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
 
             if (pointIndex >= curve.points.Count) return;
         
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
             {
-                SourceLabel.text = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].DisplayString;
+                SourceLabel.text = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].DisplayString;
             
                 IndexLabel.text = (pointIndex + 1) +
                                   " / " +
@@ -225,7 +228,7 @@ namespace UI
 
             string floatFormat = "0.#####";
 
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowPointData)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowPointData)
             {
                 if(pointIndex > curve.points.Count)
                     Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
@@ -236,9 +239,11 @@ namespace UI
                 zLabel.text = curve?.points[pointIndex].z.ToString(floatFormat);    
             }
 
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
             {
-                ArcLengthLabel.text = curve?.arcLength.ToString("0.###");
+                var arcLength = curve.arcLength.ToString("0.###");
+                //Debug.Log("arcLength: " + arcLength);
+                ArcLengthLabel.text = arcLength;
                 ArcTLabel.text = curve?.arcLengthParamValues[pointIndex].ToString(floatFormat);
                 ArcXLabel.text = curve?.arcLenghtPoints[pointIndex].x.ToString(floatFormat);
                 ArcYLabel.text = curve?.arcLenghtPoints[pointIndex].y.ToString(floatFormat);
@@ -248,14 +253,14 @@ namespace UI
 
         private void UpdatePlotTravelObjects()
         {
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated) return;
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated) return;
 
-            var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+            var curve = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
             var view = (ObserevedCurveViewController.CurrentView as SimpleRunCurveView);
 
             if (view is null)
             {
-                Debug.Log("Test123");
+                return;
             }
         
             var pointIndex = view.CurrentPointIndex;
@@ -264,7 +269,7 @@ namespace UI
         
             if (pointIndex > curve.points.Count) return;
         
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
                 // Set info plot travel objects
                 Vector2 tdPosVec = curve.timeDistancePoints[pointIndex];
@@ -273,7 +278,7 @@ namespace UI
                     _initTimeDistTravelPos + tdVec;    
             }
 
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
                 Vector2 tvPosVec = curve.timeVelocityPoints[pointIndex];
                 Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
@@ -285,11 +290,11 @@ namespace UI
 
         private void UpdatePlotLineRenderers()
         {
-            if (!GlobalData.InitFile.ApplicationSettings.InfoSettings.Activated) return;
+            if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated) return;
 
-            var curve = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+            var curve = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
         
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
             {
                 TimeDistLR.positionCount = curve.timeDistancePoints.Count;
                 for (int i = 0; i < curve.timeDistancePoints.Count; i++)
@@ -303,7 +308,7 @@ namespace UI
                 }    
             }
 
-            if (GlobalData.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
+            if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
                 TimeVelocityLR.positionCount = curve.timeVelocityPoints.Count;
                 for (int i = 0; i < curve.timeVelocityPoints.Count; i++)

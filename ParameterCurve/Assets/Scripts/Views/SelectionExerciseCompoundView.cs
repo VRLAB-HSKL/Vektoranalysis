@@ -9,12 +9,12 @@ using Views.Exercise;
 
 namespace Views
 {
-    public class SelectionExerciseCompoundView // : AbstractCompoundView
+    public class SelectionExerciseCompoundView : AbstractExerciseView // : AbstractCompoundView
     {
         public AbstractCurveViewController.CurveControllerType Type;
         
         private GameObject PillarPrefab;
-        private List<AbstractCurveView> curveViews = new List<AbstractCurveView>();
+        private List<AbstractExerciseView> curveViews { get; set; } = new List<AbstractExerciseView>();
         private Transform origin;
         
         private SelectionExerciseGameObjects selObjects { get; set; }
@@ -23,34 +23,35 @@ namespace Views
         {
             get
             {
-                return GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];
+                return GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
             }
         }
         
         
         //public ExercisePointDataset CurrentExerciseData { get; set; }
-        public int CurrentExerciseIndex { get; set; }
+        
         public string CurrentTitle { get; set; }
         public string CurrentDescription { get; set; }
-        public bool showMainDisplay { get; set; } = true;
         
-        [NonSerialized] 
         
-        public List<float[]> ScalingFactorList = new List<float[]>()
-        {
-            new[] {1f, 1f, 1f},
-            new[] {1f, 1f, 1f},
-            new[] {1f, 1f, 1f},
-            new[] {1f, 1f, 1f},
-            new[] {1f, 1f, 1f},
-            new[] {1f, 1f, 1f},
-        };
+        // [NonSerialized] 
+        //
+        // public List<float[]> ScalingFactorList = new List<float[]>()
+        // {
+        //     new[] {1f, 1f, 1f},
+        //     new[] {1f, 1f, 1f},
+        //     new[] {1f, 1f, 1f},
+        //     new[] {1f, 1f, 1f},
+        //     new[] {1f, 1f, 1f},
+        //     new[] {1f, 1f, 1f},
+        // };
 
         
         
         public SelectionExerciseCompoundView(
             SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, 
             ExercisePointDataset initData, AbstractCurveViewController.CurveControllerType type)
+            // : base(selObjects, pillarPrefab, origin, initData, type)
         {
             Type = type;
             PillarPrefab = pillarPrefab;
@@ -90,35 +91,30 @@ namespace Views
                             leftLR, 
                             leftPillar.transform.position + selObjects.CurveOffset, 
                             selObjects.ScalingFactor,
-                            SelectionExerciseView.PillarIdentifier.Left, Type));
+                            SelectionExerciseView.PillarIdentifier.Left));
             
             curveViews.Add(new SelectionExerciseView(
                             middleLR, 
                             middlePillar.transform.position + selObjects.CurveOffset, 
                             selObjects.ScalingFactor,
-                            SelectionExerciseView.PillarIdentifier.Middle, Type));
+                            SelectionExerciseView.PillarIdentifier.Middle));
             
             curveViews.Add(new SelectionExerciseView(
                             rightLR, 
                             rightPillar.transform.position + selObjects.CurveOffset, 
                             selObjects.ScalingFactor, 
-                            SelectionExerciseView.PillarIdentifier.Right, Type));
+                            SelectionExerciseView.PillarIdentifier.Right));
 
             UpdateView();
         }
 
-        public void UpdateView()
+        public override void UpdateView()
         {
-            //Debug.Log("SelectionExerciseView.UpdateView()");
-            // curveViews[0].SetCustomDataset(CurrentExerciseData.LeftDataset);
-            // curveViews[1].SetCustomDataset(CurrentExerciseData.MiddleDataset);
-            // curveViews[2].SetCustomDataset(CurrentExerciseData.RightDataset);
-
-            // curveViews[0].ScalingFactor = CurrentExerciseData.LeftDataset.SelectExercisePillarScalingFactor;
-            // curveViews[1].ScalingFactor = CurrentExerciseData.MiddleDataset.SelectExercisePillarScalingFactor;
-            // curveViews[2].ScalingFactor = CurrentExerciseData.RightDataset.SelectExercisePillarScalingFactor;
+            var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex]; 
             
-            
+            curveViews[0].ScalingFactor = currentSubExercise.LeftDataset.SelectExercisePillarScalingFactor;
+            curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;
+            curveViews[2].ScalingFactor = currentSubExercise.RightDataset.SelectExercisePillarScalingFactor;
             
             if (showMainDisplay)
             {
@@ -128,6 +124,7 @@ namespace Views
                 selObjects.HeaderText.text = string.Empty;
                 
                 ShowMainDisplayView();
+                
             }
             else
             {
@@ -136,24 +133,21 @@ namespace Views
                 selObjects.ExerciseTitle.text = CurrentTitle;
                 
                 // Start incrementing on small 'a' character
-                var subExerciseLetter = (char) (97 + CurrentExerciseIndex);
+                var subExerciseLetter = (char) (97 + GlobalDataModel.CurrentSubExerciseIndex);
                 selObjects.SubExerciseIdentifier.text = subExerciseLetter + ")";
-                selObjects.HeaderText.text = GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex]
-                    .Datasets[GlobalData.CurrentSubExerciseIndex].HeaderText;
+                selObjects.HeaderText.text = GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex]
+                    .Datasets[GlobalDataModel.CurrentSubExerciseIndex].HeaderText;
                 
                 ShowSelectionView();
+                
             }
 
-            foreach (AbstractCurveView v in curveViews)
+            foreach (AbstractExerciseView v in curveViews)
             {
                 v.UpdateView();
             }
         }
 
-        public void StartRun()
-        {
-            // ToDo: Refactor this in class hierarchy, is this even needed here ?
-        }
 
 
         private void ShowMainDisplayView()

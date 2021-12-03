@@ -3,19 +3,20 @@ using log4net;
 using Model;
 using UnityEngine;
 using Views.Display;
+using Views.Exercise;
 
 namespace Controller.Exercise
 {
     /// <summary>
     /// Abstract base class for all view controllers related to displaying curve data in global data model
-    /// <see cref="GlobalData"/>
+    /// <see cref="GlobalDataModel"/>
     /// </summary>
     public abstract class AbstractExerciseViewController
     {
         
         #region Public members
 
-        protected AbstractCurveView CurrentView { get; private set; }
+        protected AbstractExerciseView CurrentView { get; set; }
 
         #endregion Public members
 
@@ -57,7 +58,7 @@ namespace Controller.Exercise
         /// <summary>
         /// Collection of all views associated with this controller
         /// </summary>
-        private readonly List<AbstractCurveView> Views;
+        protected List<AbstractExerciseView> Views;
         
         #endregion Protected members
 
@@ -78,7 +79,7 @@ namespace Controller.Exercise
         {
             _rootElement = root;
 
-            Views = new List<AbstractCurveView>();
+            Views = new List<AbstractExerciseView>();
             
             InitViews();
         }

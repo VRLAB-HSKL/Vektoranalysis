@@ -5,7 +5,7 @@ using Views.Display;
 
 namespace Views.Exercise
 {
-    public class SelectionExerciseView : SimpleCurveView
+    public class SelectionExerciseView : AbstractExerciseView
     {
         public enum PillarIdentifier {Left = 0, Middle = 1, Right = 2}
 
@@ -15,20 +15,18 @@ namespace Views.Exercise
         {
             get
             {
-                //
-
-                var selExerc = GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];
+                var selExerc = GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
                 switch (Pillar)
                 {
                     case PillarIdentifier.Left:
-                        return selExerc.Datasets[GlobalData.CurrentSubExerciseIndex].LeftDataset;
+                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].LeftDataset;
                     
                     default:
                     case PillarIdentifier.Middle:
-                        return selExerc.Datasets[GlobalData.CurrentSubExerciseIndex].MiddleDataset;
+                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].MiddleDataset;
                     
                     case PillarIdentifier.Right:
-                        return selExerc.Datasets[GlobalData.CurrentSubExerciseIndex].RightDataset;
+                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].RightDataset;
                 }
 
             }
@@ -36,22 +34,20 @@ namespace Views.Exercise
         
         
         public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, 
-            PillarIdentifier pid, AbstractCurveViewController.CurveControllerType controllerType) : 
-            base(displayLR, rootPos, scalingFactor, controllerType)
+            PillarIdentifier pid) : 
+            base(displayLR, rootPos, scalingFactor)
         {
             Pillar = pid;
         }
         
         public override void UpdateView()
         {
-            CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
-            //ScalingFactor =
+            CurveInformationDataset curve = CurrentCurve; 
         
             var pointArr = curve.worldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
-                pointArr[i] = MapPointPos(pointArr[i]); //, curve.Is3DCurve);
+                pointArr[i] = MapPointPos(pointArr[i]);
             }
         
             DisplayLr.positionCount = curve.worldPoints.Count;

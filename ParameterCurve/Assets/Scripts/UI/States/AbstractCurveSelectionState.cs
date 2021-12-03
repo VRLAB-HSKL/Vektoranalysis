@@ -43,13 +43,13 @@ namespace UI.States
             GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
 
 
-            switch (GlobalData.CurrentDisplayGroup)
+            switch (GlobalDataModel.CurrentDisplayGroup)
             {
-                case GlobalData.CurveDisplayGroup.Display:
-                    GlobalData.WorldCurveViewController.SetViewVisibility(true);
+                case GlobalDataModel.CurveDisplayGroup.Display:
+                    GlobalDataModel.WorldCurveViewController?.SetViewVisibility(true);
                     break;
             
-                case GlobalData.CurveDisplayGroup.Exercises:
+                case GlobalDataModel.CurveDisplayGroup.Exercises:
                     //GlobalData.ExerciseController.SetViewVisibility(true);
                     break;
             }
@@ -57,9 +57,9 @@ namespace UI.States
         
         
             // Create buttons        
-            for (int i = 0; i < GlobalData.CurrentDataset.Count; i++)
+            for (int i = 0; i < GlobalDataModel.CurrentDataset.Count; i++)
             {
-                CurveInformationDataset pds = GlobalData.CurrentDataset[i];
+                CurveInformationDataset pds = GlobalDataModel.CurrentDataset[i];
                 GameObject tmpButton = MonoBehaviour.Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
 
                 tmpButton.name = pds.Name + "Button";
@@ -82,8 +82,8 @@ namespace UI.States
         public override void OnStateQuit()
         {
             // Hide all views
-            GlobalData.WorldCurveViewController.SetViewVisibility(false);
-            GlobalData.ExerciseCurveController.SetViewVisibility(false);
+            GlobalDataModel.WorldCurveViewController.SetViewVisibility(false);
+            GlobalDataModel.ExerciseCurveController.SetViewVisibility(false);
         
             // Clear old buttons
             GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];

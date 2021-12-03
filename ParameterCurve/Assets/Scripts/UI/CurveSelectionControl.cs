@@ -38,18 +38,18 @@ namespace UI
             CurveSelectionFSM = new CurveSelectionStateContext(DisplayState);
 
 
-            if (!GlobalData.InitFile.ApplicationSettings.SelectMenuSettings.Activated)
+            if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated)
             {
                 MainMenuParent.SetActive(false);
                 CurveMenuParent.SetActive(false);
                 return;
             };
         
-            string[] displayGrps = Enum.GetNames(typeof(GlobalData.CurveDisplayGroup));
+            string[] displayGrps = Enum.GetNames(typeof(GlobalDataModel.CurveDisplayGroup));
         
         
         
-            GlobalData.CurveDisplayGroup[] displayGrpValues = (GlobalData.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalData.CurveDisplayGroup));
+            GlobalDataModel.CurveDisplayGroup[] displayGrpValues = (GlobalDataModel.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalDataModel.CurveDisplayGroup));
             for (int i = 0; i < displayGrps.Length; i++)
             {
                 // Get current group name
@@ -61,8 +61,8 @@ namespace UI
                 switch (dgrpName)
                 {
                     case "Display":
-                        if (!GlobalData.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves ||
-                            !GlobalData.DisplayCurveDatasets.Any())
+                        if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves ||
+                            !GlobalDataModel.DisplayCurveDatasets.Any())
                         {
                             continue;
                         }
@@ -73,8 +73,8 @@ namespace UI
                     //     break;
                 
                     case "Exercises":
-                        if (!GlobalData.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises ||
-                            !GlobalData.SelectionExercises.Any())
+                        if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises ||
+                            !GlobalDataModel.SelectionExercises.Any())
                         {
                             continue;
                         }
@@ -89,7 +89,7 @@ namespace UI
             
             
                 // Create instance of button prefab
-                GlobalData.CurveDisplayGroup dgrpVal = displayGrpValues[i];
+                GlobalDataModel.CurveDisplayGroup dgrpVal = displayGrpValues[i];
                 GameObject tmpButton = Instantiate(MainMenuButtonPrefab, MainMenuButtonsParent.transform);
                 tmpButton.name = dgrpName + "GrpButton";
                 Destroy(tmpButton.GetComponent<RawImage>());
@@ -102,7 +102,7 @@ namespace UI
                 {
                     default:
                     case 0:
-                        b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Display));
+                        b.onClick.AddListener(() => SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display));
                         break;
 
                     // case 1:
@@ -110,28 +110,28 @@ namespace UI
                     //     break;
 
                     case 1:
-                        b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Exercises));
+                        b.onClick.AddListener(() => SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Exercises));
                         break;
                 }
             }
 
-            SwitchCurveGroup(GlobalData.CurveDisplayGroup.Display);
+            SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
         }
 
 
-        public void SwitchCurveGroup(GlobalData.CurveDisplayGroup cdg)
+        public void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
         {
-            if (!GlobalData.InitFile.ApplicationSettings.SelectMenuSettings.Activated) return;
+            if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated) return;
         
             // Update current display group
-            GlobalData.CurrentDisplayGroup = cdg;
+            GlobalDataModel.CurrentDisplayGroup = cdg;
 
         
             switch(cdg)
             {
                 default:
-                case GlobalData.CurveDisplayGroup.Display:
-                    if (GlobalData.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves)
+                case GlobalDataModel.CurveDisplayGroup.Display:
+                    if (GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves)
                         CurveSelectionFSM.State = DisplayState;
                     break;
                 //
@@ -141,14 +141,14 @@ namespace UI
                 //         CurveSelectionFSM.State = paramState;
                 //     break;
 
-                case GlobalData.CurveDisplayGroup.Exercises:
-                    if(GlobalData.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises)
+                case GlobalDataModel.CurveDisplayGroup.Exercises:
+                    if(GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises)
                         CurveSelectionFSM.State = exerciseState;
                     break;
             }
         
             // Reset curve and point indices
-            GlobalData.CurrentCurveIndex = 0;
+            GlobalDataModel.CurrentCurveIndex = 0;
             //GlobalData.CurrentPointIndex = 0;
 
         
@@ -162,7 +162,7 @@ namespace UI
                 Debug.Log("Browser Wall not initialized!");
             }
 
-            List<CurveInformationDataset> cds = GlobalData.CurrentDataset;
+            List<CurveInformationDataset> cds = GlobalDataModel.CurrentDataset;
 
             if(cds is null)
             {
@@ -172,7 +172,7 @@ namespace UI
             //Debug.Log("idx: " + GlobalData.CurrentCurveIndex);
             //Debug.Log("cdsCount: " + cds.Count);
 
-            CurveInformationDataset ds = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
+            CurveInformationDataset ds = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
 
             if(ds is null)
             {

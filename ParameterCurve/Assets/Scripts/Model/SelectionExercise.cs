@@ -13,7 +13,7 @@ public class SelectionExercise
     public List<ExercisePointDataset> Datasets;
     
     public List<int> CorrectAnswers;
-    public List<int> ChosenAnswers;
+    public List<int> ChosenAnswers { get; set; }
 
     public SelectionExercise(string title, string description, List<ExercisePointDataset> exercisePointDatasets , List<int> correctAnswers)
     {

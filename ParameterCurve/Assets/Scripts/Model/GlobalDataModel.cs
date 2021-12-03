@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using Calculation;
-using Calculation.NamedCurves;
-using Calculation.ParameterExercises;
 using Controller.Curve;
 using Controller.Exercise;
 using Import;
@@ -19,7 +16,7 @@ namespace Model
     /// Static global data model. This singular model is used as the single access point of imported data and static
     /// application settings.
     /// </summary>
-    public static class GlobalData
+    public static class GlobalDataModel
     {
         #region Public members
 
@@ -109,7 +106,7 @@ namespace Model
         /// Index used to access the current selection exercise. This value is modified to switch between main
         /// exercises, i.e. Exercise 1 -> Exercise 2
         /// </summary>
-        public static int CurrentExerciseIndex = 0;
+        public static int CurrentExerciseIndex { get; set; }= 0;
         
         /// <summary>
         /// Index used to access the current sub-exercise in the current selection exercise. This 
@@ -140,7 +137,7 @@ namespace Model
         /// <summary>
         /// Static log4net logger
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(GlobalData));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(GlobalDataModel));
         
         #endregion Private members
         
@@ -168,7 +165,7 @@ namespace Model
         
             var errors = new List<string>();
             ITraceWriter tr = new MemoryTraceWriter();
-            InitFileRoot jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
+            var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
                 new JsonSerializerSettings()
                 {
                     Error = delegate(object sender, ErrorEventArgs args)
@@ -177,21 +174,12 @@ namespace Model
                         Debug.Log("ErrorOccuredJSON");
                         args.ErrorContext.Handled = true;
                     },
-                    //FloatParseHandling = FloatParseHandling.Double
                     TraceWriter = tr
-                    //,
-                    //Converters = { new IsoDateTimeConverter()}
                 }
             
             );
         
             InitFile = jsr;
-        
-            //Debug.Log(tr);
-
-            //var path = "C:\\Users\\saerota\\Desktop\\newtonLog.txt";
-            //File.WriteAllText(path, tr.ToString());
-        
         
             for (var i = 0; i < jsr.DisplayCurves.Count; i++)
             {
@@ -199,10 +187,13 @@ namespace Model
                 DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
             }
 
-            for (int i = 0; i < jsr.Exercises.Count; i++)
+            for (var i = 0; i < jsr.Exercises.Count; i++)
             {
                 var ex = jsr.Exercises[i];
 
+                //if (ex is null) continue;
+                //if (ex.Type is null) continue;
+                
                 // Select3 exercise
                 if (ex.Type.Equals("select3"))
                 {
@@ -231,8 +222,6 @@ namespace Model
                     DisplayString = ex.Title,
                 });
             }
-        
         }
-    
     }
 }

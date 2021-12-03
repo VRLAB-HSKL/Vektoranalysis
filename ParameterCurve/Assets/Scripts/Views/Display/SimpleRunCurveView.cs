@@ -162,7 +162,7 @@ namespace Views.Display
         {
             base.UpdateView();
 
-            if (!GlobalData.IsRunning) return;
+            if (!GlobalDataModel.IsRunning) return;
             
             if (HasTravelPoint)
             {
@@ -172,7 +172,7 @@ namespace Views.Display
 
             if (CurrentPointIndex != CurrentCurve.points.Count - 1) return;
             
-            GlobalData.IsRunning = false;
+            GlobalDataModel.IsRunning = false;
             Log.Debug("Stopping run...!");
         }
 
@@ -182,7 +182,7 @@ namespace Views.Display
         public override void StartRun()
         {
             CurrentPointIndex = 0;
-            GlobalData.IsRunning = true;
+            GlobalDataModel.IsRunning = true;
         }
     
         /// <summary>
@@ -198,7 +198,7 @@ namespace Views.Display
             // On arrival at the last point, stop driving
             if (CurrentPointIndex == CurrentCurve.worldPoints.Count - 1)
             {
-                GlobalData.IsRunning = false; 
+                GlobalDataModel.IsRunning = false; 
                 return;
             }
 
@@ -219,7 +219,7 @@ namespace Views.Display
             // Stop run on last point
             if (CurrentPointIndex == curve.worldPoints.Count - 1)
             {
-                GlobalData.IsRunning = false;
+                GlobalDataModel.IsRunning = false;
                 return;
             }
         
