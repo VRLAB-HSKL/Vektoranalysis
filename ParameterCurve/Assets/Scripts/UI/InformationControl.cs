@@ -279,8 +279,6 @@ namespace UI
         
             var pointIndex = view.CurrentPointIndex;
 
-        
-        
             if (pointIndex > curve.points.Count) return;
         
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
