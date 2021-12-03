@@ -48,7 +48,8 @@ namespace Import
                 id = curve.Info.Id,
                 Name = curve.Info.Name,
                 DisplayString = curve.Info.DisplayText,
-                NotebookURL = string.Empty
+                NotebookURL = string.Empty,
+                View = curve.CurveSettings.DisplaySettings.View
             };
 
             // Read curve line color from init file

@@ -210,22 +210,29 @@ namespace UI
             
             var view = ObserevedCurveViewController.CurrentView;
 
-            if ((view as SimpleRunCurveView) is null)
-                return;
-        
-            var pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
+            //Debug.Log("test");
+            
+            var pointIndex = 0;
 
+            bool isRunBasedView = view is SimpleRunCurveView || view is SimpleRunCurveWithArcLength; 
+            
+            if (isRunBasedView)
+            {
+                pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
+                pointIndex = (view as SimpleRunCurveWithArcLength).CurrentPointIndex;
+            }
+                
             if (pointIndex >= curve.points.Count) return;
-        
+            
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
             {
                 SourceLabel.text = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].DisplayString;
-            
-                IndexLabel.text = (pointIndex + 1) +
-                                  " / " +
-                                  curve.points.Count;    
+                
+                IndexLabel.text = isRunBasedView ? (pointIndex + 1) + " / " + curve.points.Count : "0 / 0";
             }
 
+            if (!isRunBasedView) return;
+            
             string floatFormat = "0.#####";
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowPointData)

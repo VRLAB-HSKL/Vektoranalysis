@@ -149,6 +149,23 @@ namespace Controller
             if (GlobalDataModel.CurrentCurveIndex >= GlobalDataModel.CurrentDataset.Count)
                 GlobalDataModel.CurrentCurveIndex = 0;
 
+            switch (GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].View)
+            {
+                default:
+                    GlobalDataModel.WorldCurveViewController.SwitchView(0);
+                    GlobalDataModel.TableCurveViewController.SwitchView(0);
+                    break;
+                    
+                case "run":
+                    GlobalDataModel.WorldCurveViewController.SwitchView(1);
+                    GlobalDataModel.TableCurveViewController.SwitchView(1);
+                    break;
+                    
+                case "arc":
+                    GlobalDataModel.WorldCurveViewController.SwitchView(2);
+                    GlobalDataModel.TableCurveViewController.SwitchView(2);
+                    break;
+            }
             
             var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
             worldView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].WorldScalingFactor;
@@ -238,6 +255,24 @@ namespace Controller
             if (GlobalDataModel.CurrentCurveIndex < 0)
                 GlobalDataModel.CurrentCurveIndex = GlobalDataModel.CurrentDataset.Count - 1;
         
+            switch (GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].View)
+            {
+                default:
+                    GlobalDataModel.WorldCurveViewController.SwitchView(0);
+                    GlobalDataModel.TableCurveViewController.SwitchView(0);
+                    break;
+                    
+                case "run":
+                    GlobalDataModel.WorldCurveViewController.SwitchView(1);
+                    GlobalDataModel.TableCurveViewController.SwitchView(1);
+                    break;
+                    
+                case "arc":
+                    GlobalDataModel.WorldCurveViewController.SwitchView(2);
+                    GlobalDataModel.TableCurveViewController.SwitchView(2);
+                    break;
+            }
+            
             var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
             if (worldView != null)
             {
@@ -323,6 +358,24 @@ namespace Controller
 
             GlobalDataModel.CurrentCurveIndex = index;
 
+            switch (GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].View)
+            {
+                default:
+                    GlobalDataModel.WorldCurveViewController.SwitchView(0);
+                    GlobalDataModel.TableCurveViewController.SwitchView(0);
+                    break;
+                    
+                case "run":
+                    GlobalDataModel.WorldCurveViewController.SwitchView(1);
+                    GlobalDataModel.TableCurveViewController.SwitchView(1);
+                    break;
+                    
+                case "arc":
+                    GlobalDataModel.WorldCurveViewController.SwitchView(2);
+                    GlobalDataModel.TableCurveViewController.SwitchView(2);
+                    break;
+            }
+            
             var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
             worldView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].WorldScalingFactor;
 
@@ -446,7 +499,7 @@ namespace Controller
                 worldTravelObject, worldArcLengthTravelObject, 
                 displayCurve.WorldScalingFactor, AbstractCurveViewController.CurveControllerType.World);
             GlobalDataModel.WorldCurveViewController.SetViewVisibility(true);
-
+            
             // Table display curve (if activated)
             if (GlobalDataModel.InitFile.ApplicationSettings.TableSettings.Activated)
             {
