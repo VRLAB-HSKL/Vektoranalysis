@@ -54,8 +54,6 @@ namespace UI
             {
                 // Get current group name
                 string dgrpName = displayGrps[i];
-
-                //Debug.Log(GlobalData.initFile.ApplicationSettings.SelectMenuSettings.ShowExercises);
             
                 // Make sure group is activated
                 switch (dgrpName)
@@ -67,10 +65,6 @@ namespace UI
                             continue;
                         }
                         break;
-                    
-                    // case "Parameter":
-                    //     if (!GlobalData.initFile.curveSelection.paramCurves) continue;
-                    //     break;
                 
                     case "Exercises":
                         if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises ||
@@ -78,15 +72,9 @@ namespace UI
                         {
                             continue;
                         }
-                        
-                        break;
-                
-                    default:
+
                         break;
                 }
-
-            
-            
             
                 // Create instance of button prefab
                 GlobalDataModel.CurveDisplayGroup dgrpVal = displayGrpValues[i];
@@ -105,10 +93,6 @@ namespace UI
                         b.onClick.AddListener(() => SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display));
                         break;
 
-                    // case 1:
-                    //     //b.onClick.AddListener(() => SwitchCurveGroup(GlobalData.CurveDisplayGroup.Parameter));
-                    //     break;
-
                     case 1:
                         b.onClick.AddListener(() => SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Exercises));
                         break;
@@ -117,15 +101,13 @@ namespace UI
 
             SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
         }
-
-
+        
         public void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated) return;
         
             // Update current display group
             GlobalDataModel.CurrentDisplayGroup = cdg;
-
         
             switch(cdg)
             {
@@ -134,12 +116,6 @@ namespace UI
                     if (GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves)
                         CurveSelectionFSM.State = DisplayState;
                     break;
-                //
-                // case GlobalData.CurveDisplayGroup.Parameter:
-                //     
-                //     if(GlobalData.initFile.curveSelection.paramCurves)
-                //         CurveSelectionFSM.State = paramState;
-                //     break;
 
                 case GlobalDataModel.CurveDisplayGroup.Exercises:
                     if(GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises)
@@ -149,13 +125,8 @@ namespace UI
         
             // Reset curve and point indices
             GlobalDataModel.CurrentCurveIndex = 0;
-            //GlobalData.CurrentPointIndex = 0;
-
-        
 
             CurveSelectionFSM.State.OnStateUpdate();
-
-        
 
             if (world.browserWall is null)
             {
@@ -163,14 +134,10 @@ namespace UI
             }
 
             List<CurveInformationDataset> cds = GlobalDataModel.CurrentDataset;
-
             if(cds is null)
             {
                 Debug.Log("Datasets not initialized");
             }
-
-            //Debug.Log("idx: " + GlobalData.CurrentCurveIndex);
-            //Debug.Log("cdsCount: " + cds.Count);
 
             CurveInformationDataset ds = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
 
@@ -184,7 +151,5 @@ namespace UI
                 //if (world.BrowserWall is { }) world.BrowserWall.OpenURL(ds.NotebookURL);
             }
         }
-
-
     }
 }

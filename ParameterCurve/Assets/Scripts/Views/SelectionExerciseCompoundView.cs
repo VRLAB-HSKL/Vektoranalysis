@@ -9,7 +9,7 @@ using Views.Exercise;
 
 namespace Views
 {
-    public class SelectionExerciseCompoundView : AbstractExerciseView // : AbstractCompoundView
+    public class SelectionExerciseCompoundView : AbstractExerciseView
     {
         public AbstractCurveViewController.CurveControllerType Type;
         
@@ -19,33 +19,11 @@ namespace Views
         
         private SelectionExerciseGameObjects selObjects { get; set; }
 
-        private SelectionExercise CurrentSelectionExercise
-        {
-            get
-            {
-                return GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
-            }
-        }
-        
-        
-        //public ExercisePointDataset CurrentExerciseData { get; set; }
-        
+        private SelectionExercise CurrentSelectionExercise => 
+            GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
+
         public string CurrentTitle { get; set; }
         public string CurrentDescription { get; set; }
-        
-        
-        // [NonSerialized] 
-        //
-        // public List<float[]> ScalingFactorList = new List<float[]>()
-        // {
-        //     new[] {1f, 1f, 1f},
-        //     new[] {1f, 1f, 1f},
-        //     new[] {1f, 1f, 1f},
-        //     new[] {1f, 1f, 1f},
-        //     new[] {1f, 1f, 1f},
-        //     new[] {1f, 1f, 1f},
-        // };
-
         
         
         public SelectionExerciseCompoundView(
@@ -124,7 +102,6 @@ namespace Views
                 selObjects.HeaderText.text = string.Empty;
                 
                 ShowMainDisplayView();
-                
             }
             else
             {
