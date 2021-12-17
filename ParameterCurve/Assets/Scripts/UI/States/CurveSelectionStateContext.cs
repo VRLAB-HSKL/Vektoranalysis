@@ -10,7 +10,7 @@ namespace UI.States
     {
         protected StateContext(State s)
         {
-            Debug.Log(s.ToString());
+            //Debug.Log(s.ToString());
         }
     }
 

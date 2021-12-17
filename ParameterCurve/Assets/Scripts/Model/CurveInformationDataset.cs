@@ -9,6 +9,9 @@ public class CurveInformationDataset
     public string Name { get; set; } = string.Empty;
     public string DisplayString { get; set; } = string.Empty;
     public string NotebookURL = string.Empty;
+
+    public string View = string.Empty;
+    
     public Texture2D MenuButtonImage { get; set; }
 
 
