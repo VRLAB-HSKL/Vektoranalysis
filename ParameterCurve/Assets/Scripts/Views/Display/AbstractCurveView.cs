@@ -2,6 +2,7 @@ using Controller.Curve;
 using log4net;
 using Model;
 using UnityEngine;
+using VRKL.MBU;
 
 namespace Views.Display
 {
@@ -53,6 +54,8 @@ namespace Views.Display
         /// </summary>
         protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
+        protected WaypointManager _wpm;
+        
         #endregion Protected members
         
         #region Private members
@@ -61,11 +64,15 @@ namespace Views.Display
         /// Position of root object, used to translate point vectors
         /// </summary>
         private readonly Vector3 _rootPos;
+
+        
         
         /// <summary>
         /// Static log4net logger
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
+        
+        
         
         #endregion Private members
         
@@ -87,6 +94,8 @@ namespace Views.Display
             _rootPos = rootPos;
             ScalingFactor = scalingFactor;
             ControllerType = controllerType;
+
+            _wpm = new WaypointManager();
         }
         
         #endregion Constructors
@@ -115,6 +124,8 @@ namespace Views.Display
             // Update material
             DisplayLr.material.color = curve.CurveLineColor;
             DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
+
+            _wpm = new WaypointManager(pointArr, 0.1f, false);
         }
 
         /// <summary>

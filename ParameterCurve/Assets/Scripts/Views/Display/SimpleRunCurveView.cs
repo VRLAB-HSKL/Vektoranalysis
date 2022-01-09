@@ -166,7 +166,7 @@ namespace Views.Display
             
             if (HasTravelPoint)
             {
-                SetTravelObjectPoint();
+                SetTravelObjectWPM();//SetTravelObjectPoint();
                 SetMovingFrame();
             }
 
@@ -204,6 +204,24 @@ namespace Views.Display
 
             TravelObject.position = MapPointPos(CurrentCurve.worldPoints[CurrentPointIndex]);
             ++CurrentPointIndex;
+        }
+
+        public void SetTravelObjectWPM()
+        {
+            // Null checks
+            if (!HasTravelPoint) return;
+            if (TravelObject is null) return;
+            if (CurrentPointIndex < 0) return;
+            
+            // On arrival at the last point, stop driving
+            if (CurrentPointIndex == CurrentCurve.worldPoints.Count - 1)
+            {
+                GlobalDataModel.IsRunning = false; 
+                return;
+            }
+            
+            _wpm.NextWaypoint();
+            TravelObject.position = MapPointPos(_wpm.GetWaypoint());
         }
 
         /// <summary>
@@ -285,6 +303,9 @@ namespace Views.Display
             //(binormalArr[0] + binormalArr[1]).normalized);
             TravelObject.transform.LookAt(nextPos, worldUp);
         }
+        
+        
+        
         
         #endregion Public functions
     }
