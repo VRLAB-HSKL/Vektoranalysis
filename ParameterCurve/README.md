@@ -27,7 +27,7 @@ The current project version contains a working data set of curves in with differ
 
 The simulator based method is the most accessible to users, because no physical headset is needed to experience the main functions of the application. Although as with all VR applications, this will always be a reduced experience when compared to running the application on a HMD.
 
-If you have access to an android-based VR Headset, we have [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) that can be installed on these devices. These releases were used during the college exercises in which the application was used in. The students were given [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) devices, so all testing of the application was done on these devices. Other devices and platforms could be supported in the future if Unity is able to target them :-)
+If you have access to an android-based VR Headset, we have [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) that can be installed on these devices. These releases were used during the college exercises in which the application was used in. The students were given [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) devices, so all testing of the application was done on these devices. Other devices and platforms could be supported in the future if Unity is able to target them 😊
 
 <!--- 
 
