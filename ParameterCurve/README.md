@@ -1,4 +1,4 @@
-![Logo](https://seafile.rlp.net/f/4efcb4d9dca54945b9e0/?dl=1)
+![Logo](.assets/images/paramcurve_logo_transparent.png)
 
 
 
@@ -18,13 +18,35 @@ paper and chalkboards. While these lessons are often supported by digital teachi
 
 
 
+## Usage
+
+The current project version contains a working data set of curves in with different views. Using the Unity Editor, the project can be viewed in its bare structure (resources, scripts, ...). If you would like to see the application in action, there are currently two ways available:
+
+- Using the [Vive Input Utility Simulator](https://github.com/ViveSoftware/ViveInputUtility-Unity/wiki/Simulator)  in the Unity editor
+
+- Installing one of the provided .apks on an android-based VR headset
+
+
+
 
 
 <!--- 
 
+## Description
+
 Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
 
 - What was your motivation?- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")- What problem does it solve?- What did you learn?
+
+
+
+## Usage
+
+Provide instructions and examples for use. Include screenshots as needed.
+To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+    ```md    ![alt text](assets/images/screenshot.png)    ```
+
+
 
 
 
@@ -39,6 +61,7 @@ What are the steps required to install your project? Provide a step-by-step desc
 Provide instructions and examples for use. Include screenshots as needed.
 To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
     ```md    ![alt text](assets/images/screenshot.png)    ```
+
 ## Credits
 List your collaborators, if any, with links to their GitHub profiles.
 If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
