@@ -1,4 +1,4 @@
-![Logo](.assets/images/paramcurve_logo_transparent.png)
+![Logo](.assets/images/paramcurve_logo_white.png)
 
 
 
@@ -25,9 +25,17 @@ The current project version contains a working data set of curves in with differ
 
 - Installing one of the provided [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) on an [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) or comparable android based VR headset
 
-The simulator based method is the most accessible to users, because no physical headset is needed to experience the main functions of the application. Although as with all VR applications, this will always be a reduced experience when compared to running the application on a HMD.
+The simulator based method is the most accessible to most users since no physical headset is required to experience the basic functions of the application. Although, as with all virtual reality applications, this will always be a reduced experience when compared to running the application on an actual HMD.
 
-If you have access to an android-based VR Headset, we have [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) that can be installed on these devices. These releases were used during the college exercises in which the application was used in. The students were given [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) devices, so all testing of the application was done on these devices. Other devices and platforms could be supported in the future if Unity is able to target them 😊
+If you have access to an android-based VR Headset, we have [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) that can be installed on these devices. These releases were used during the college exercises in which the application was used in. The students were given [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) devices, so all testing of the application was done on these devices. Other devices and platforms could be supported in the future as long as  Unity supports them 😶
+
+
+
+![Lizenzlogo](https://licensebuttons.net/l/by-nc-sa/3.0/de/88x31.png)
+
+
+
+
 
 <!--- 
 
