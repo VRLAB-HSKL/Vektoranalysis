@@ -14,13 +14,7 @@ Eine VR-Applikation der Hochschule Kaiserslautern zur Visualisierung und Förder
 
 
 In universities and colleges, mathematical curves are often taught using analog materials like
-paper and chalkboards. While these seminars are often supported by digital teaching concepts, they are often limited to passive visualizations like videos or images. A new, more active medium is made possible through virtual reality. This medium allows many opportunities
-for new learning techniques to promote understanding beyond raw mathematical formulas
-and increase spatial imagining. For this project, we took the materials of an existing math
-college course to develop a virtual reality application and use it during the course. Import-
-ant factors and frameworks of immersive learning will be introduced and the development
-process will be documented. Lastly we attempt a personal evaluation of the application and
-take a look at future development steps.
+paper and chalkboards. While these lessons are often supported by digital teaching concepts, they are often limited to passive visualizations like videos or images. A new, more active medium is made possible through virtual reality. This medium enables new learning techniques to promote understanding beyond raw mathematical formulas and increase spatial imagination in students. For this project, we took the materials of an existing college level math course and  developed a virtual reality application that visualizes single curves in 3D space and allows for user interaction with an imported set of curves.   
 
 
 
