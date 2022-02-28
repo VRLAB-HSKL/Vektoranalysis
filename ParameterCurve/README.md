@@ -2,7 +2,6 @@
 
 
 
-# ParamCurve
 <!--
 
 Eine VR-Applikation der Hochschule Kaiserslautern zur Visualisierung und Förderung des besseren Verständnis von Parameterkurven. Parameterkurven 
@@ -11,7 +10,7 @@ Eine VR-Applikation der Hochschule Kaiserslautern zur Visualisierung und Förder
 
 -->
 
-
+## Description
 
 In universities and colleges, mathematical curves are often taught using analog materials like
 paper and chalkboards. While these lessons are often supported by digital teaching concepts, they are often limited to passive visualizations like videos or images. A new, more active medium is made possible through virtual reality. This medium enables new learning techniques to promote understanding beyond raw mathematical formulas and increase spatial imagination in students. For this project, we took the materials of an existing college level math course and  developed a virtual reality application that visualizes single curves in 3D space and allows for user interaction with an imported set of curves.   
@@ -20,15 +19,15 @@ paper and chalkboards. While these lessons are often supported by digital teachi
 
 ## Usage
 
-The current project version contains a working data set of curves in with different views. Using the Unity Editor, the project can be viewed in its bare structure (resources, scripts, ...). If you would like to see the application in action, there are currently two ways available:
+The current project version contains a working data set of curves in with different views. Using the Unity Editor, the project can be viewed in its bare structure (resources, scripts,...). If you would like to see the application in action, there are currently two ways to do so:
 
 - Using the [Vive Input Utility Simulator](https://github.com/ViveSoftware/ViveInputUtility-Unity/wiki/Simulator)  in the Unity editor
 
-- Installing one of the provided .apks on an android-based VR headset
+- Installing one of the provided [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) on an [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) or comparable android based VR headset
 
+The simulator based method is the most accessible to users, because no physical headset is needed to experience the main functions of the application. Although as with all VR applications, this will always be a reduced experience when compared to running the application on a HMD.
 
-
-
+If you have access to an android-based VR Headset, we have [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) that can be installed on these devices. These releases were used during the college exercises in which the application was used in. The students were given [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) devices, so all testing of the application was done on these devices. Other devices and platforms could be supported in the future if Unity is able to target them :-)
 
 <!--- 
 
