@@ -2,6 +2,7 @@ using Controller.Curve;
 using log4net;
 using Model;
 using UnityEngine;
+using VRKL.MBU;
 
 namespace Views.Display
 {
@@ -57,6 +58,9 @@ namespace Views.Display
         /// Static log4net logger
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
+
+        public WaypointManager _arcWpm;
+        
         
         #endregion Private members
         
@@ -107,6 +111,8 @@ namespace Views.Display
             ArcLengthBinormalLr = thirdChild.GetComponent<LineRenderer>();
             ArcLengthBinormalLr.positionCount = 2;
             _initArcBinormalLrWidth = ArcLengthBinormalLr.widthMultiplier;
+
+            _arcWpm = new WaypointManager();
         }
         
         #endregion Constructors
@@ -121,6 +127,18 @@ namespace Views.Display
             base.UpdateView();
             if (!GlobalDataModel.IsRunning) return;
         
+            var curve = CurrentCurve; 
+        
+            // Map points to world space location
+            var arcPointArr = curve.arcLengthWorldPoints.ToArray();
+            for (var i = 0; i < arcPointArr.Length; i++)
+            {
+                var point = arcPointArr[i];
+                arcPointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
+            }
+            
+            _arcWpm.SetWaypoints(arcPointArr);
+            
             SetArcTravelPoint();
             SetArcMovingFrame();
         }
@@ -147,6 +165,29 @@ namespace Views.Display
             ++CurrentPointIndex;
         }
 
+        public void SetArcTravelPointWPM()
+        {
+            var curve = CurrentCurve; 
+            
+            // Null checks
+            if (ArcLengthTravelObject is null) return;
+            if (CurrentPointIndex < 0) return;
+        
+            // On arrival at the last point, stop driving
+            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
+            {
+                GlobalDataModel.IsRunning = false;
+                return;
+            }
+        
+            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            
+            
+            
+            ++CurrentPointIndex;
+        }
+        
+        
         /// <summary>
         /// Set the fresnet equation based moving frame around the next point along the arc length parametrization
         /// based curve line

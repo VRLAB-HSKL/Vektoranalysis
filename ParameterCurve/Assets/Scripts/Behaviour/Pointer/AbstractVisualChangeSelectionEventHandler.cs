@@ -20,10 +20,13 @@ namespace Behaviour
         IPointerExitHandler,
         IPointerClickHandler
     {
+        #region Public members
+        
         public GameObject visualTarget;
         public bool updateChildrenRenderers;
         public bool isToggle;
 
+        #endregion Public members
 
         public int selectionChoice;
 
@@ -66,11 +69,13 @@ namespace Behaviour
             {
                 var mrs = new List<MeshRenderer>();
                 
+                // Get mesh renderer of the root node
                 if (visualTarget.TryGetComponent(out MeshRenderer mr))
                 {
                     mrs.Add(mr);
                 }
 
+                // Get mesh renderers of all children
                 if (updateChildrenRenderers)
                 {
                     mrs.AddRange(visualTarget.GetComponentsInChildren<MeshRenderer>());

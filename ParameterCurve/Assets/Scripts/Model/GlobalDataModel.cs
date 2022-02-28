@@ -115,7 +115,7 @@ namespace Model
     
     
         /// <summary>
-        /// Path to HTML resources in unity project file strucutre. Used to display local html files in in-game
+        /// Path to HTML resources in unity project file structure. Used to display local html files in in-game
         /// browser plugin
         /// </summary>
         public static string LocalHtmlResourcePath = Application.dataPath + "/Resources/html/";
@@ -124,6 +124,12 @@ namespace Model
         /// Path to image resources in unity project file structure
         /// </summary>
         public static string ImageResourcePath = "img/";
+
+        /// <summary>
+        /// Path to init file resource in unity project file structure
+        /// </summary>
+        private const string InitFileResourcePath = "json/init/initFile";
+
 
         /// <summary>
         /// Initialization file parse tree root
@@ -161,7 +167,7 @@ namespace Model
 
         private static void ParseIniFile()
         {
-            var json = Resources.Load("json/init/initv2", typeof(TextAsset) ) as TextAsset;
+            var json = Resources.Load(InitFileResourcePath, typeof(TextAsset) ) as TextAsset;
         
             var errors = new List<string>();
             ITraceWriter tr = new MemoryTraceWriter();

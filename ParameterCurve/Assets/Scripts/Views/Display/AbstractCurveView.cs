@@ -54,7 +54,7 @@ namespace Views.Display
         /// </summary>
         protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
-        protected WaypointManager _wpm;
+        
         
         #endregion Protected members
         
@@ -94,8 +94,6 @@ namespace Views.Display
             _rootPos = rootPos;
             ScalingFactor = scalingFactor;
             ControllerType = controllerType;
-
-            _wpm = new WaypointManager();
         }
         
         #endregion Constructors
@@ -125,7 +123,8 @@ namespace Views.Display
             DisplayLr.material.color = curve.CurveLineColor;
             DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
-            _wpm = new WaypointManager(pointArr, 0.1f, false);
+            //_wpm = new WaypointManager(curve.worldPoints.ToArray(), 0.01f, false);
+            
         }
 
         /// <summary>

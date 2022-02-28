@@ -2,6 +2,7 @@ using Controller.Curve;
 using log4net;
 using Model;
 using UnityEngine;
+using VRKL.MBU;
 
 namespace Views.Display
 {
@@ -85,6 +86,9 @@ namespace Views.Display
         /// </summary>
         private int _curPointIdx;
     
+        public WaypointManager _wpm { get; set; }
+        
+        
         /// <summary>
         /// Static log4net logger
         /// </summary>
@@ -149,6 +153,9 @@ namespace Views.Display
             BinormalLr = thirdChild.GetComponent<LineRenderer>();
             BinormalLr.positionCount = 2;
             _initBinormalLrWidth = BinormalLr.widthMultiplier;
+
+
+            _wpm = new WaypointManager();  //new Vector3[1], 0.01f, false);
         }
 
         #endregion Constructors
@@ -166,6 +173,16 @@ namespace Views.Display
             
             if (HasTravelPoint)
             {
+                // Map points to world space location
+                var pointArr = CurrentCurve.worldPoints.ToArray();
+                for (var i = 0; i < pointArr.Length; i++)
+                {
+                    var point = pointArr[i];
+                    pointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
+                }
+
+                _wpm.SetWaypoints(pointArr);
+                
                 SetTravelObjectWPM();//SetTravelObjectPoint();
                 SetMovingFrame();
             }
@@ -174,6 +191,8 @@ namespace Views.Display
             
             GlobalDataModel.IsRunning = false;
             Log.Debug("Stopping run...!");
+            
+            
         }
 
         /// <summary>
@@ -203,6 +222,7 @@ namespace Views.Display
             }
 
             TravelObject.position = MapPointPos(CurrentCurve.worldPoints[CurrentPointIndex]);
+            
             ++CurrentPointIndex;
         }
 
@@ -220,8 +240,15 @@ namespace Views.Display
                 return;
             }
             
-            _wpm.NextWaypoint();
-            TravelObject.position = MapPointPos(_wpm.GetWaypoint());
+            var pos = _wpm.GetWaypoint();
+            var target = _wpm.GetFollowupWaypoint();
+            var dist = Vector3.Distance(pos, target);
+            TravelObject.position = _wpm.Move(pos, dist);
+
+            
+            
+            //Debug.Log("pos: " + TravelObject.position);
+            //Debug.Log("og: " + pos + ", mapped: " + mapPos);
         }
 
         /// <summary>

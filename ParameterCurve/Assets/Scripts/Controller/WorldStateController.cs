@@ -174,6 +174,8 @@ namespace Controller
             {
                 if (worldView is SimpleRunCurveView runView)
                 {
+                    runView._wpm.ResetWaypoints();
+                    
                     runView.CurrentPointIndex = 0;
                     runView.SetTravelObjectPoint();
                     runView.SetMovingFrame();
@@ -184,6 +186,9 @@ namespace Controller
                 {
                     if (worldView is SimpleRunCurveWithArcLength arcView)
                     {
+                        arcView._wpm.ResetWaypoints();
+                        arcView._arcWpm.ResetWaypoints();
+                        
                         arcView.CurrentPointIndex = 0;
                         arcView.SetArcTravelPoint();
                         arcView.SetArcMovingFrame();
@@ -203,6 +208,7 @@ namespace Controller
                     // Debug.Log("adjust travel game object");
                     if (tableView is SimpleRunCurveView runView)
                     {
+                        runView._wpm.ResetWaypoints();
                         runView.CurrentPointIndex = 0;
                         runView.SetTravelObjectPoint();
                         runView.SetMovingFrame();
@@ -213,6 +219,8 @@ namespace Controller
                     {
                         if (tableView is SimpleRunCurveWithArcLength arcView)
                         {
+                            arcView._wpm.ResetWaypoints();
+                            arcView._arcWpm.ResetWaypoints();
                             arcView.CurrentPointIndex = 0;
                             arcView.SetArcTravelPoint();
                             arcView.SetArcMovingFrame();
@@ -282,6 +290,7 @@ namespace Controller
                 {
                     if (worldView is SimpleRunCurveView runView)
                     {
+                        runView._wpm.ResetWaypoints();
                         runView.CurrentPointIndex = 0;
                         runView.SetTravelObjectPoint();
                         runView.SetMovingFrame();
@@ -292,6 +301,8 @@ namespace Controller
                     {
                         if (worldView is SimpleRunCurveWithArcLength arcView)
                         {
+                            arcView._wpm.ResetWaypoints();
+                            arcView._arcWpm.ResetWaypoints();
                             arcView.CurrentPointIndex = 0;
                             arcView.SetArcTravelPoint();
                             arcView.SetArcMovingFrame();
@@ -310,6 +321,7 @@ namespace Controller
                 {
                     if (tableView is SimpleRunCurveView runView)
                     {
+                        runView._wpm.ResetWaypoints();
                         runView.CurrentPointIndex = 0;
                         runView.SetTravelObjectPoint();
                         runView.SetMovingFrame();
@@ -320,6 +332,8 @@ namespace Controller
                     {
                         if (tableView is SimpleRunCurveWithArcLength arcView)
                         {
+                            arcView._wpm.ResetWaypoints();
+                            arcView._arcWpm.ResetWaypoints();
                             arcView.CurrentPointIndex = 0;
                             arcView.SetArcTravelPoint();
                             arcView.SetArcMovingFrame();
