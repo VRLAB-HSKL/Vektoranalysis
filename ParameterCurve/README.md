@@ -1,4 +1,8 @@
-![Logo](.assets/images/paramcurve_logo_white.png)
+<div id="header" align="center">
+  <img src=".assets/images/paramcurve_logo_white.png" width="350"/>
+</div>
+
+
 
 
 
