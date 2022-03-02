@@ -21,7 +21,7 @@ paper and chalkboards. While these lessons are often supported by digital teachi
 
 <div id="header" align="center">
   <img src=".assets/images/worldCurve.PNG" width="350"/>
-  <img src=".assets/images/tableCurve.PNG" width="350"/>
+  <img src=".assets/images/tableCurve.PNG" width="400"/>
 </div>
 
 
