@@ -19,15 +19,20 @@ Eine VR-Applikation der Hochschule Kaiserslautern zur Visualisierung und Förder
 In universities and colleges, mathematical curves are often taught using analog materials like
 paper and chalkboards. While these lessons are often supported by digital teaching concepts, they are often limited to passive visualizations like videos or images. A new, more active medium is made possible through virtual reality. This medium enables new learning techniques to promote understanding beyond raw mathematical formulas and increase spatial imagination in students. For this project, we took the materials of an existing college level math course and  developed a virtual reality application that visualizes single curves in 3D space and allows for user interaction with an imported set of curves.   
 
+<div id="header" align="center">
+  <img src=".assets/images/worldCurve.png" width="350"/>
+  <img src=".assets/images/tableCurve.png" width="350"/>
+</div>
+
 
 
 ## Usage
 
-The current project version contains a working data set of curves in with different views. Using the Unity Editor, the project can be viewed in its bare structure (resources, scripts,...). If you would like to see the application in action, there are currently two ways to do so:
+The current project version contains a working data set of curves with different views. Using the Unity Editor (we used version _2020.3.22f_), the project can be viewed in its bare structure (resources, scripts,...). If you would like to see the application in action, there are currently two ways to do so:
 
 - Using the [Vive Input Utility Simulator](https://github.com/ViveSoftware/ViveInputUtility-Unity/wiki/Simulator)  in the Unity editor
 
-- Installing one of the provided [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) on an [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) or comparable android based VR headset
+- Installing one of the provided [.apks](https://github.com/VRLAB-HSKL/Vektoranalysis/releases) on an [HTC Vive Focus Plus](https://business.vive.com/us/product/focus-plus/) or a comparable android based VR headset
 
 The simulator based method is the most accessible to most users since no physical headset is required to experience the basic functions of the application. Although, as with all virtual reality applications, this will always be a reduced experience when compared to running the application on an actual HMD.
 
