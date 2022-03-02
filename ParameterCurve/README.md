@@ -20,8 +20,8 @@ In universities and colleges, mathematical curves are often taught using analog 
 paper and chalkboards. While these lessons are often supported by digital teaching concepts, they are often limited to passive visualizations like videos or images. A new, more active medium is made possible through virtual reality. This medium enables new learning techniques to promote understanding beyond raw mathematical formulas and increase spatial imagination in students. For this project, we took the materials of an existing college level math course and  developed a virtual reality application that visualizes single curves in 3D space and allows for user interaction with an imported set of curves.   
 
 <div id="header" align="center">
-  <img src=".assets/images/worldCurve.png" width="350"/>
-  <img src=".assets/images/tableCurve.png" width="350"/>
+  <img src=".assets/images/worldCurve.PNG" width="350"/>
+  <img src=".assets/images/tableCurve.PNG" width="350"/>
 </div>
 
 
