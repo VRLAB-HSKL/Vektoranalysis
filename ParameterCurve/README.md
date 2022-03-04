@@ -1,5 +1,5 @@
 <div id="header" align="center">
-  <img src=".assets/images/paramcurve_logo_white.png" width="300"/>
+  <img src=".assets/images/paramcurve_logo_transparent.png" width="300"/>
 </div>
 
 <!--
