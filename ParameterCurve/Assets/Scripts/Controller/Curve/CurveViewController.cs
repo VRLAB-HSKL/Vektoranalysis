@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Model;
 using UnityEngine;
 using Views.Display;
-using VRKL.MBU;
-
 namespace Controller.Curve
 {
     /// <summary>

@@ -418,8 +418,8 @@ namespace Controller
         /// ====================
         /// 
         /// This function is called when the script instance is loaded. This is used to prepare the global data model
-        /// <see cref="GlobalDataModel"/> before any gameplay happens. All future instantiation procedures should therefore
-        /// be done in this function.
+        /// <see cref="GlobalDataModel"/> before any gameplay happens. All future instantiation procedures should there-
+        /// fore be done in this function.
         ///
         /// </summary>
         private void Awake()

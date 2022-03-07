@@ -16,15 +16,9 @@ namespace Behaviour
     public class PillarSelectionEventHandler : AbstractVisualChangeSelectionEventHandler
     {
         //private ExerciseViewController threeSel;
-        
-        
+
         private void Update()
         {
-            // if (IsSelected) return;
-            //
-            // if (_hovers.Any()) return;
-            
-
             if (!IsSelected)
             {
                 var newMat = Hovers.Any() ? hoverMat : defaultMat;
@@ -38,14 +32,10 @@ namespace Behaviour
             
         }
 
-        protected override void HandlePointerClick(PointerEventData eventData)
-        {
-            //Debug.Log("choice: " + selectionChoice);
-            //GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
-        }
+        protected override void HandlePointerClick(PointerEventData eventData) {}
 
-        protected override void HandlePointerEnter(PointerEventData eventData){}
+        protected override void HandlePointerEnter(PointerEventData eventData) {}
 
-        protected override void HandlePointerExit(PointerEventData eventData){}
+        protected override void HandlePointerExit(PointerEventData eventData) {}
     }
 }

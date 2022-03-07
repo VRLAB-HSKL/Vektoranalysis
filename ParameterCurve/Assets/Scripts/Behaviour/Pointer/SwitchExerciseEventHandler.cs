@@ -2,10 +2,10 @@ using Model;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviour
+namespace Behaviour.Pointer
 {
     /// <summary>
-    /// Handles the Behaviour of the ingame navigation objects used to switch between exercises     
+    /// Handles the Behaviour of the in-game navigation objects used to switch between exercises     
     /// </summary>
     public class SwitchExerciseEventHandler : AbstractVisualChangeSelectionEventHandler
     {
@@ -25,14 +25,8 @@ namespace Behaviour
             }
         }
 
-        protected override void HandlePointerEnter(PointerEventData eventData)
-        {
-        
-        }
+        protected override void HandlePointerEnter(PointerEventData eventData) {}
 
-        protected override void HandlePointerExit(PointerEventData eventData)
-        {
-        
-        }
+        protected override void HandlePointerExit(PointerEventData eventData) {}
     }
 }
