@@ -11,6 +11,8 @@ namespace Import
     /// </summary>
     public static class DataImport
     {
+        #region Public members
+        
         /// <summary>
         /// Horizontal rendering size of the X axis of the time/distance plot on the information wall
         /// </summary>
@@ -31,9 +33,11 @@ namespace Import
         /// </summary>
         public static float TimeVelocityYAxisLength { get; set; }
 
+        #endregion Public members
 
         //private static NumberFormatInfo _nfi = new NumberFormatInfo() {NumberDecimalSeparator = "."};
 
+        #region Public functions
 
         /// <summary>
         /// Generate a local curve dataset from a <see cref="Curve"/> node that was generated during initial parsing of#
@@ -45,7 +49,7 @@ namespace Import
         {
             var pd = new CurveInformationDataset
             {
-                id = curve.Info.Id,
+                ID = curve.Info.Id,
                 Name = curve.Info.Name,
                 DisplayString = curve.Info.DisplayText,
                 NotebookURL = string.Empty,
@@ -79,23 +83,23 @@ namespace Import
             }
 
             pd.Is3DCurve = curve.Data.Dimension == 3;
-            pd.arcLength = curve.Data.ArcLength;
+            pd.ArcLength = curve.Data.ArcLength;
             pd.WorldScalingFactor = curve.Data.WorldScalingFactor;
             pd.TableScalingFactor = curve.Data.TableScalingFactor;
             pd.SelectExercisePillarScalingFactor = curve.Data.SelectExercisePillarScalingFactor;
-            pd.paramValues = curve.Data.Data.T;
-            pd.arcLength = curve.Data.ArcLength;
+            pd.ParamValues = curve.Data.Data.T;
+            pd.ArcLength = curve.Data.ArcLength;
 
             for (var j = 0; j < curve.Data.Data.T.Count; j++)
             {
-                pd.points.Add(new Vector3(
+                pd.Points.Add(new Vector3(
                     curve.Data.Data.PVec[j][0],
                     curve.Data.Data.PVec[j][1],
                     pd.Is3DCurve ? curve.Data.Data.PVec[j][2] : 0f
                 ));
 
-                pd.timeDistancePoints = CalculateTimeDistancePoints(pd.points);
-                pd.timeVelocityPoints = CalculateTimeVelocityPoints(pd.points);
+                pd.TimeDistancePoints = CalculateTimeDistancePoints(pd.Points);
+                pd.TimeVelocityPoints = CalculateTimeVelocityPoints(pd.Points);
 
                 var fsr = new FresnetSerretApparatus
                 {
@@ -115,9 +119,9 @@ namespace Import
                 fsr.Binormal = new Vector3(bin.x, bin.y, -Mathf.Abs(bin.z));
 
 
-                pd.fresnetApparatuses.Add(fsr);
-                pd.arcLengthParamValues = curve.Data.Data.ArcT;
-                pd.arcLenghtPoints.Add(new Vector3(
+                pd.FresnetApparatuses.Add(fsr);
+                pd.ArcLengthParamValues = curve.Data.Data.ArcT;
+                pd.ArcLenghtPoints.Add(new Vector3(
                     curve.Data.Data.ArcPVec[j][0],
                     curve.Data.Data.ArcPVec[j][1],
                     pd.Is3DCurve ? curve.Data.Data.ArcPVec[j][2] : 0f
@@ -141,7 +145,7 @@ namespace Import
                 arcFsr.Binormal = new Vector3(arcBin.x, arcBin.y, -Mathf.Abs(arcBin.z));
                 // Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
 
-                pd.arcLengthFresnetApparatuses.Add(arcFsr);
+                pd.ArcLengthFresnetApparatuses.Add(arcFsr);
             }
 
             pd.CalculateWorldPoints();
@@ -165,6 +169,10 @@ namespace Import
             );
         }
 
+        #endregion Public functions
+        
+        #region Private functions
+        
         /// <summary>
         /// Calculate in game time distance plot points based on imported curve polyline
         /// </summary>
@@ -264,6 +272,6 @@ namespace Import
             return tvPoints;
         }
 
-        
+        #endregion Private functions
     }
 }

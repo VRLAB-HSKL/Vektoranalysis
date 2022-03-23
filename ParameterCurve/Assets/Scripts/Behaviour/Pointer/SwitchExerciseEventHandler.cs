@@ -1,5 +1,4 @@
 using Model;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Behaviour.Pointer
@@ -9,13 +8,26 @@ namespace Behaviour.Pointer
     /// </summary>
     public class SwitchExerciseEventHandler : AbstractVisualChangeSelectionEventHandler
     {
-        public bool IsIncrement;
+        #region Public members
+        
+        /// <summary>
+        /// Signals whether this handler increments or decrements the index
+        /// </summary> 
+        public bool isIncrement;
 
+        #endregion Public members
+        
+        #region Protected functions
+        
+        /// <summary>
+        /// Handle click event to switch to next/previous exercise
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            Debug.Log("SwitchExerciseEventHandler: HandlePointerClick()");
+            //Debug.Log("SwitchExerciseEventHandler: HandlePointerClick()");
             
-            if (IsIncrement)
+            if (isIncrement)
             {
                 GlobalDataModel.ExerciseCurveController.NextSubExercise();
             }
@@ -25,8 +37,18 @@ namespace Behaviour.Pointer
             }
         }
 
+        /// <summary>
+        /// Handle click event on pointer enter
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerEnter(PointerEventData eventData) {}
 
+        /// <summary>
+        /// Handle click event on pointer exit
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerExit(PointerEventData eventData) {}
+        
+        #endregion Protected functions
     }
 }

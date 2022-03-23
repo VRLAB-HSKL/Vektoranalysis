@@ -15,21 +15,24 @@ namespace Controller.Exercise
     /// </summary>
     public class ExerciseCurveViewController : AbstractExerciseViewController
     {
+        #region Public members
+
         /// <summary>
-        /// Model of the controller, representing a selection exercise
+        /// Chosen selections in selection exercise, all -1 per default to represent non-choice
+        /// </summary>
+        public readonly List<int> SelectionIndices = new List<int>();
+
+        #endregion Public members
+        
+        #region Private members
+
+        /// <summary>
+        /// Data model of the controller, representing a selection exercise
         /// </summary>
         private static SelectionExercise CurrentExercise => 
             GlobalDataModel.SelectionExercises.Any() 
                 ? GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex] : null;
-
-        /// <summary>
-        /// Chosen selections in selection exercise, all -1 per default for non-choice
-        /// </summary>
-        public List<int> SelectionIndices = new List<int>();
-
         
-        #region Private members
-
         /// <summary>
         /// Static log4net logger instance
         /// </summary>
@@ -37,14 +40,21 @@ namespace Controller.Exercise
         
         #endregion Private members
         
+        #region Constructors
         
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="root">Root transform</param>
+        /// <param name="selObjs">Selectable objects</param>
+        /// <param name="pillarPrefab">Pillar prefab</param>
+        /// <param name="type">Controller type</param>
         public ExerciseCurveViewController(Transform root, SelectionExerciseGameObjects selObjs, GameObject pillarPrefab,
             AbstractCurveViewController.CurveControllerType type) : base(root)
         {
             // Return if no exercises were imported
             if (CurrentExercise == null) return;
-            
-            
+
             // Initialize all answers as 'none given'
             for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
             {
@@ -65,14 +75,19 @@ namespace Controller.Exercise
             
             CurrentView = selView;
             
-            
-            
             //CurrentView.UpdateView();
             InitViews();
             
             CurrentView.UpdateView();
         }
        
+        #endregion Constructors
+        
+        #region Public functions
+        
+        /// <summary>
+        /// Switch to next sub-exercise in current parent exercise
+        /// </summary>
         public void NextSubExercise()
         {
             // Disable main display on first navigation to the right
@@ -111,6 +126,10 @@ namespace Controller.Exercise
             CurrentView.UpdateView();
         }
 
+        
+        /// <summary>
+        /// Switch to previous sub-exercise in current parent exercise
+        /// </summary>
         public void PreviousSubExercise()
         {
             if (GlobalDataModel.CurrentSubExerciseIndex == 0)
@@ -124,13 +143,21 @@ namespace Controller.Exercise
             CurrentView.UpdateView();
         }
 
+        /// <summary>
+        /// Save selection based on user choice
+        /// </summary>
+        /// <param name="choice">Chosen value</param>
         public void SetSelection(int choice)
         {
-            Debug.Log("choice set: " + choice);
+            //Debug.Log("choice set: " + choice);
             SelectionIndices[GlobalDataModel.CurrentSubExerciseIndex] = choice;
             CurrentExercise.ChosenAnswers[GlobalDataModel.CurrentSubExerciseIndex] = choice;
         }
 
+        /// <summary>
+        /// Set visibility on current exercise view
+        /// </summary>
+        /// <param name="value">View visible?</param>
         public override void SetViewVisibility(bool value)
         {
             base.SetViewVisibility(value);
@@ -140,6 +167,7 @@ namespace Controller.Exercise
                 CurrentView.UpdateView();
             }
         }
-
+        
+        #endregion Public functions
     }
 }

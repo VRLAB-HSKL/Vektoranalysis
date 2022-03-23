@@ -130,7 +130,7 @@ namespace Views.Display
             var curve = CurrentCurve; 
         
             // Map points to world space location
-            var arcPointArr = curve.arcLengthWorldPoints.ToArray();
+            var arcPointArr = curve.ArcLengthWorldPoints.ToArray();
             for (var i = 0; i < arcPointArr.Length; i++)
             {
                 var point = arcPointArr[i];
@@ -155,13 +155,13 @@ namespace Views.Display
             if (CurrentPointIndex < 0) return;
         
             // On arrival at the last point, stop driving
-            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
+            if (CurrentPointIndex == curve.ArcLengthWorldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false;
                 return;
             }
         
-            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            ArcLengthTravelObject.position = MapPointPos(curve.ArcLengthWorldPoints[CurrentPointIndex]);
             ++CurrentPointIndex;
         }
 
@@ -174,13 +174,13 @@ namespace Views.Display
             if (CurrentPointIndex < 0) return;
         
             // On arrival at the last point, stop driving
-            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
+            if (CurrentPointIndex == curve.ArcLengthWorldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false;
                 return;
             }
         
-            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            ArcLengthTravelObject.position = MapPointPos(curve.ArcLengthWorldPoints[CurrentPointIndex]);
             
             
             
@@ -195,7 +195,7 @@ namespace Views.Display
         public void SetArcMovingFrame()
         {
             var curve = CurrentCurve; 
-            if (CurrentPointIndex == curve.worldPoints.Count - 1)
+            if (CurrentPointIndex == curve.WorldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false;
                 return;
@@ -205,7 +205,7 @@ namespace Views.Display
             var arcTangentArr = new Vector3[2];
             arcTangentArr[0] = arcObjPos;
             arcTangentArr[1] = arcObjPos + 
-                               curve.arcLengthFresnetApparatuses[CurrentPointIndex].Tangent.normalized * ScalingFactor;
+                               curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Tangent.normalized * ScalingFactor;
             ArcLengthTangentLr.SetPositions(arcTangentArr);
             ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * (ScalingFactor * 0.5f);
         
@@ -213,7 +213,7 @@ namespace Views.Display
             var arcNormalArr = new Vector3[2];
             arcNormalArr[0] = arcObjPos;
             arcNormalArr[1] = arcObjPos + 
-                              curve.arcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized *
+                              curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized *
                               ScalingFactor;
             ArcLengthNormalLr.SetPositions(arcNormalArr);
             ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * (ScalingFactor * 0.5f);
@@ -222,24 +222,24 @@ namespace Views.Display
             var arcBinormalArr = new Vector3[2];
             arcBinormalArr[0] = arcObjPos;
             arcBinormalArr[1] = arcObjPos + 
-                                curve.arcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized * 
+                                curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized * 
                                 ScalingFactor;
             ArcLengthBinormalLr.SetPositions(arcBinormalArr);
             ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * (ScalingFactor * 0.5f);
 
             Log.Debug("arcObjPos: " + arcObjPos +
-                          " arc_jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +
+                          " arc_jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
                           " arc_tangentArr: [" + arcTangentArr[0] + ", " + arcTangentArr[1] + "]" +
                           " length: " + (arcTangentArr[1] - arcTangentArr[0]).magnitude + "\n" + 
                           " arc_normalArr: [" + arcNormalArr[0] + ", " + arcNormalArr[1] + "]" +
                           " length: " + (arcNormalArr[1] - arcNormalArr[0]).magnitude + "\n" + 
-                          " arc_jsonBinormalPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Binormal + "] " +
+                          " arc_jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
                           " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
                           " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
 
-            var nextPos = MapPointPos(CurrentPointIndex < curve.arcLengthWorldPoints.Count - 1 
-                ? curve.arcLengthWorldPoints[CurrentPointIndex + 1] 
-                : curve.arcLengthWorldPoints[CurrentPointIndex]);
+            var nextPos = MapPointPos(CurrentPointIndex < curve.ArcLengthWorldPoints.Count - 1 
+                ? curve.ArcLengthWorldPoints[CurrentPointIndex + 1] 
+                : curve.ArcLengthWorldPoints[CurrentPointIndex]);
 
             var worldUp = new Vector3(0f, 0f, 1f); 
             //(arcBinormalArr[0] + arcBinormalArr[1]).normalized; 

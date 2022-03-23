@@ -1,19 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using log4net.Appender;
 using log4net.Core;
 using UnityEngine;
 
-/// <summary>
-/// Custom log4net appender to show logging messages in unity output console
-/// </summary>
-public class UnityAppender : AppenderSkeleton
+namespace Logging
 {
-    public bool ShowLogging = false;
-    
-    protected override void Append(LoggingEvent loggingEvent)
+    /// <summary>
+    /// Custom log4net appender to show logging messages in unity output console
+    /// </summary>
+    public class UnityAppender : AppenderSkeleton
     {
-        if (!ShowLogging) return;
-        Debug.Log(RenderLoggingEvent(loggingEvent));
+        #region Private members
+    
+        /// <summary>
+        /// Toggles logging to unity console
+        /// </summary>
+        private const bool ShowLogging = false;
+
+        #endregion Private members
+    
+        #region Protected functions
+    
+        protected override void Append(LoggingEvent loggingEvent)
+        {
+            if (!ShowLogging) return;
+            Debug.Log(RenderLoggingEvent(loggingEvent));
+        }
+    
+        #endregion Protected functions
     }
 }

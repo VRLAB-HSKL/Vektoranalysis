@@ -91,7 +91,7 @@ public class CockpitTravel : MonoBehaviour
 
     private void SetPoints()
     {
-        list = GlobalDataModel.CurrentDataset[CurveIndex].worldPoints;
+        list = GlobalDataModel.CurrentDataset[CurveIndex].WorldPoints;
         CurveLine.positionCount = list.Count;
         CurveLine.SetPositions(list.ToArray());
     }

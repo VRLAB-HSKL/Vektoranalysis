@@ -91,7 +91,6 @@ namespace Model
         /// </summary>
         public static int CurrentCurveIndex = 0;
         
-        
         /// <summary>
         /// Imported exercise curves
         /// </summary>
@@ -147,12 +146,18 @@ namespace Model
         
         #endregion Private members
         
+        #region Public functions
+        
         public static void InitializeData()
         {
             ParseIniFile();
             Log.Debug("Global Data initialized");
         }
+        
+        #endregion Public functions
     
+        #region Private functions
+        
         /// <summary>
         /// Setup configuration of the log4net logging framework
         /// </summary>
@@ -229,5 +234,7 @@ namespace Model
                 });
             }
         }
+        
+        #endregion Private functions
     }
 }

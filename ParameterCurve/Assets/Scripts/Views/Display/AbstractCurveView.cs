@@ -108,7 +108,7 @@ namespace Views.Display
             var curve = CurrentCurve; 
         
             // Map points to world space location
-            var pointArr = curve.worldPoints.ToArray();
+            var pointArr = curve.WorldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
                 var point = pointArr[i];

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Controller
 {
+    /// <summary>
+    /// World state controller for the cockpit scene
+    /// </summary>
     public class CockpitWorldStateController : MonoBehaviour
     {
         /// <summary>

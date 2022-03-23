@@ -101,7 +101,7 @@ namespace Behaviour
         /// <summary>
         /// Updates the visual state of the target game object if a click event was registered
         /// </summary>
-        /// <param name="eventData"></param>
+        /// <param name="eventData">Event data</param>
         public new void OnPointerClick(PointerEventData eventData)
         {
             // On button click with a VR controller
@@ -174,6 +174,10 @@ namespace Behaviour
             }
         }
 
+        /// <summary>
+        /// Updates the visual state of the target game object when a pointer enters the clickable area
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         public new void OnPointerEnter(PointerEventData eventData)
         {
             if (Hovers.Add(eventData) && Hovers.Count == 1)
@@ -189,6 +193,10 @@ namespace Behaviour
             }
         }
 
+        /// <summary>
+        /// Updates the visual state of the target game object when a pointer leaves the clickable area
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         public new void OnPointerExit(PointerEventData eventData)
         {
             if (Hovers.Remove(eventData) && Hovers.Count == 0)

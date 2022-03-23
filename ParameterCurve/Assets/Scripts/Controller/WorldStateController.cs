@@ -355,6 +355,10 @@ namespace Controller
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
         }
 
+        /// <summary>
+        /// Switch to a specific curve in the current dataset <see cref="GlobalDataModel.CurrentDataset"/>
+        /// based on given identifier
+        /// </summary>
         public void SwitchToSpecificDataset(string datasetIdentifier)
         {
             // Stop driving
@@ -392,7 +396,6 @@ namespace Controller
             
             var worldView = GlobalDataModel.WorldCurveViewController.CurrentView;
             worldView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].WorldScalingFactor;
-
 
             var tableView = GlobalDataModel.TableCurveViewController?.CurrentView;
             if (tableView != null)

@@ -44,13 +44,13 @@ namespace Views.Exercise
         {
             CurveInformationDataset curve = CurrentCurve; 
         
-            var pointArr = curve.worldPoints.ToArray();
+            var pointArr = curve.WorldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
                 pointArr[i] = MapPointPos(pointArr[i]);
             }
         
-            DisplayLr.positionCount = curve.worldPoints.Count;
+            DisplayLr.positionCount = curve.WorldPoints.Count;
             DisplayLr.SetPositions(pointArr);
         
             DisplayLr.material.color = curve.CurveLineColor;

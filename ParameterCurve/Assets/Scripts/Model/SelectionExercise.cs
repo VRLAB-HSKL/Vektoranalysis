@@ -1,50 +1,89 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-//public enum SelectionChoice { None = 0, LeftPillar = 1, MiddlePillar = 2, RightPillar = 3 }
-
-public class SelectionExercise
+namespace Model
 {
-    public string Title = string.Empty;
-    public string Description = string.Empty;
-    public int NumberOfSubExercises;
+    /// <summary>
+    /// Exercise based on selection execution
+    /// </summary>
+    public class SelectionExercise
+    {
+        #region Public members
+        
+        /// <summary>
+        /// Exercise title
+        /// </summary>
+        public string Title { get; }
+        
+        /// <summary>
+        /// Exercise description
+        /// </summary>
+        public string Description { get; }
+        
+        /// <summary>
+        /// Amount of sub-exercises in this exercise
+        /// </summary>
+        public int NumberOfSubExercises { get; }
 
-    public List<ExercisePointDataset> Datasets;
+        /// <summary>
+        /// Exercise datasets
+        /// </summary>
+        public List<ExercisePointDataset> Datasets { get; }
     
-    public List<int> CorrectAnswers;
-    public List<int> ChosenAnswers { get; set; }
+        /// <summary>
+        /// Sub-exercise answers
+        /// </summary>
+        public List<int> CorrectAnswers { get; }
+        
+        /// <summary>
+        /// Answers chosen by the user
+        /// </summary>
+        public List<int> ChosenAnswers { get; }
 
-    public SelectionExercise(string title, string description, List<ExercisePointDataset> exercisePointDatasets , List<int> correctAnswers)
-    {
-        Title = title;
-        Description = description;
-        NumberOfSubExercises = correctAnswers.Count;
+        #endregion Public members
+        
+        #region Constructors
 
-        Datasets = exercisePointDatasets;
-        CorrectAnswers = correctAnswers;
-        ChosenAnswers = new List<int>();
-        for(int i = 0; i < NumberOfSubExercises; i++)
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="title">Title of exercise</param>
+        /// <param name="description">Description of exercise</param>
+        /// <param name="exercisePointDatasets">Datasets of sub-exercises</param>
+        /// <param name="correctAnswers">Correct answers of sub-exercises</param>
+        public SelectionExercise(
+            string title, string description, List<ExercisePointDataset> exercisePointDatasets, 
+            List<int> correctAnswers)
         {
-            ChosenAnswers.Add(-1);
-        }        
+            Title = title;
+            Description = description;
+            NumberOfSubExercises = correctAnswers.Count;
+
+            Datasets = exercisePointDatasets;
+            CorrectAnswers = correctAnswers;
+            ChosenAnswers = new List<int>();
+            for(int i = 0; i < NumberOfSubExercises; i++)
+            {
+                ChosenAnswers.Add(-1);
+            }        
+        }
+        
+        #endregion Constructors
+
     }
 
-}
-
-public class ExercisePointDataset
-{
-    public string HeaderText { get; set; }
-    public CurveInformationDataset LeftDataset { get; set; }
-    public CurveInformationDataset MiddleDataset { get; set; }
-    public CurveInformationDataset RightDataset { get; set; }
-
-    public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
+    public class ExercisePointDataset
     {
-        HeaderText = headerText;
-        LeftDataset = leftDataset;
-        MiddleDataset = middleDataset;
-        RightDataset = rightDataset;
+        public string HeaderText { get; set; }
+        public CurveInformationDataset LeftDataset { get; set; }
+        public CurveInformationDataset MiddleDataset { get; set; }
+        public CurveInformationDataset RightDataset { get; set; }
+
+        public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
+        {
+            HeaderText = headerText;
+            LeftDataset = leftDataset;
+            MiddleDataset = middleDataset;
+            RightDataset = rightDataset;
+        }
     }
 }
-

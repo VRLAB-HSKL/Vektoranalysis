@@ -1,9 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using Controller;
-using HTC.UnityPlugin.Vive;
-using Model;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Behaviour
@@ -22,8 +17,6 @@ namespace Behaviour
             if (!IsSelected)
             {
                 var newMat = Hovers.Any() ? hoverMat : defaultMat;
-                
-                //Debug.Log(_hovers.Count);
                 foreach (var m in MeshRenderers)
                 {
                     //m.material =  newMat;
@@ -32,10 +25,22 @@ namespace Behaviour
             
         }
 
+        /// <summary>
+        /// Handles pointer click event
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerClick(PointerEventData eventData) {}
 
+        /// <summary>
+        /// Handles pointer enter event
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerEnter(PointerEventData eventData) {}
 
+        /// <summary>
+        /// Handles pointer exit event
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerExit(PointerEventData eventData) {}
     }
 }
