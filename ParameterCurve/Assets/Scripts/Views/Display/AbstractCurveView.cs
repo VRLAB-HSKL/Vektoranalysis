@@ -1,86 +1,160 @@
+using Controller.Curve;
+using log4net;
+using Model;
 using UnityEngine;
-using Views;
+using VRKL.MBU;
 
-public abstract class AbstractCurveView : AbstractView
+namespace Views.Display
 {
-    public readonly LineRenderer _displayLr;
-    private readonly Vector3 _rootPos;
-
-    public float ScalingFactor;
-
-    public bool HasTravelPoint { get; set; }
-    public bool HasArcLengthTravelPoint;
-
-    // protected bool HasCustomDataset;
-    // protected CurveInformationDataset CustomDataset;
-    protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
-
-
-
-    public CurveInformationDataset CurrentCurve
+    /// <summary>
+    /// Abstract base class for all views on curve data
+    /// </summary>
+    public abstract class AbstractCurveView
     {
-        get
+        #region Public members
+    
+        /// <summary>
+        /// Scaling factor, applied to all points in the view
+        /// </summary>
+        public float ScalingFactor;
+    
+        /// <summary>
+        /// True if this view has a game object to display runs 
+        /// </summary>
+        public bool HasTravelPoint { get; protected set; }
+    
+        /// <summary>
+        /// True if this view has a game object to display arc length parametrization based runs
+        /// </summary>
+        public bool HasArcLengthTravelPoint { get; protected set; }
+    
+        #endregion Public members
+        
+        #region Protected members
+        
+        /// <summary>
+        /// Type of parent controller
+        /// </summary>
+        protected readonly AbstractCurveViewController.CurveControllerType ControllerType;
+    
+        /// <summary>
+        /// Current curve being displayed in the view. This model data is accessed through the static
+        /// <see cref="GlobalDataModel"/> class, based on global curve index <see cref="GlobalDataModel.CurrentCurveIndex"/>
+        /// </summary>
+        protected static CurveInformationDataset CurrentCurve => 
+            GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
+        
+        /// <summary>
+        /// Line renderer to display curve path
+        /// </summary>
+        protected readonly LineRenderer DisplayLr;
+    
+        /// <summary>
+        /// Cached material property key to change material color of line on startup
+        /// </summary>
+        protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
+
+        
+        
+        #endregion Protected members
+        
+        #region Private members
+        
+        /// <summary>
+        /// Position of root object, used to translate point vectors
+        /// </summary>
+        private readonly Vector3 _rootPos;
+
+        
+        
+        /// <summary>
+        /// Static log4net logger
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
+        
+        
+        
+        #endregion Private members
+        
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="displayLr">Line renderer to display curve path</param>
+        /// <param name="rootPos">Parent game object root position</param>
+        /// <param name="scalingFactor">Point vector scaling factor</param>
+        /// <param name="controllerType">Type of parent controller</param>
+        protected AbstractCurveView(LineRenderer displayLr, Vector3 rootPos, 
+            float scalingFactor, 
+            AbstractCurveViewController.CurveControllerType controllerType)
         {
-            //
-
-            var ret = GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-                //GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex].Datasets;
-
-            return ret;
+            Log.Info("AbstractCurveView.ArgumentConstructor()");
+            DisplayLr = displayLr;
+            _rootPos = rootPos;
+            ScalingFactor = scalingFactor;
+            ControllerType = controllerType;
         }
-    }
-
-    
-    
-    
-    protected AbstractCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor)
-    {
-        _displayLr = displayLR;
-        _rootPos = rootPos;
-        ScalingFactor = scalingFactor;
-    }
-
-    public override void UpdateView()
-    {
-        CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
-        //ScalingFactor =
         
-        var pointArr = curve.worldPoints.ToArray();
-        for (var i = 0; i < pointArr.Length; i++)
+        #endregion Constructors
+
+        #region Public functions
+        
+        /// <summary>
+        /// Update view with current information
+        /// </summary>
+        public virtual void UpdateView()
         {
-            pointArr[i] = MapPointPos(pointArr[i]);
+            var curve = CurrentCurve; 
+        
+            // Map points to world space location
+            var pointArr = curve.worldPoints.ToArray();
+            for (var i = 0; i < pointArr.Length; i++)
+            {
+                var point = pointArr[i];
+                pointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
+            }
+
+            // Set line renderer positions
+            DisplayLr.positionCount = pointArr.Length;
+            DisplayLr.SetPositions(pointArr);
+        
+            // Update material
+            DisplayLr.material.color = curve.CurveLineColor;
+            DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
+
+            //_wpm = new WaypointManager(curve.worldPoints.ToArray(), 0.01f, false);
+            
         }
+
+        /// <summary>
+        /// Starts a run on the view, if a travel object is present
+        /// </summary>
+        public virtual void StartRun() {}
         
-        _displayLr.positionCount = curve.worldPoints.Count;
-        _displayLr.SetPositions(pointArr);
+        #endregion Public functions
         
-        _displayLr.material.color = curve.CurveLineColor;
-        _displayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
+        #region Protected functions
+        
+        /// <summary>
+        /// Maps a point to its correct world space location, based on parent game object position and scaling factor
+        /// </summary>
+        /// <param name="point">Source point vector</param>
+        /// <returns>Transformed point</returns>
+        protected Vector3 MapPointPos(Vector3 point)//, bool is3d)
+        {
+            // Flip curve upright based on controller type and dimension
+            var flip = 
+                ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
+        
+            // Calculate new point
+            var newVector = flip 
+                ? new Vector3(point.x, point.z, point.y) 
+                : new Vector3(point.x, point.y, point.z);
+            newVector = _rootPos + newVector * ScalingFactor;
+            return newVector;
+        }
 
+        #endregion Protected functions
     }
-
-    protected Vector3 MapPointPos(Vector3 point)
-    {
-        var newVector = _rootPos + point * ScalingFactor;
-        //if (!CurrentCurve.Is3DCurve) newVector.z = 0f;
-        return newVector;
-    }
-
-    // public void SetCustomDataset(CurveInformationDataset pds)
-    // {
-    //     CustomDataset = pds;
-    //     CustomDataset.CalculateWorldPoints();
-    //     HasCustomDataset = true;
-    // }
-    //
-    //
-    // public void ClearCustomDataset()
-    // {
-    //     HasCustomDataset = false;
-    //     CustomDataset = null;
-    // }
-
-
-    //public abstract void StartRun();
 }

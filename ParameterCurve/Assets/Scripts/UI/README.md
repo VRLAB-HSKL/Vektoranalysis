@@ -1,0 +1,15 @@
+# InformationControl
+
+Direkt hinter der Hauptkurvenansicht in der Mitte des Raumes werden an der Wand zusätzliche Informationen über die aktuell ausgewählte Kurve angezeigt. Neben den Bezeichner werden während einer Fahrt in einer fahrtbasierten Ansicht für jeden neu erreichen Punkt dessen lokale Informationen dargestellt. Zusätzlich wird auf der rechten Seite der aktuelle Punkt in Relation zu den anderen Punkte der Kurve gesetzt. In den beiden Diagrammen werden die zurückgelegte Distanz und die Beschleunigung entlang der Kurve global dargestellt. Zusätzlich wandern während einer Fahrt die beiden runden Elemente (in Abbildung Q türkis und rot gefärbt) von links nach rechts entlang der Zeitachse um die Eigenschaften des aktuellen Punkts in diesem Diagramm zu visualisieren. Einzelne Teilbereiche dieser Wand kann über die Initialisierungsdatei ein-/ausgeblendet werden, um die dargestellten Informationen individuell zu filtern. Für Aufgaben in denen bspw. eine Beschleunigungskurve einer Kurve zugeordnet werden soll, kann dieses Diagramm ausgeblendet werden.
+
+
+
+# BrowserControl
+
+Weiterführende Informationen, die über die aktuelle Kurve hinausgehen, werden an der linken Wand angezeigt. Aufgabenstellungen, Erläuterungen oder andere textuelle Informationen können hier platziert werden. Hierzu existiert ein _SimpleWebBrowser_ Asset, das bereits in anderen Projekten der Hochschule Anwendung fand. Diesem können URLs übergeben werden um Webseiten in der Szene auf einer Ebene anzuzeigen. In der aktuellen Version wurden zu Testzwecken lokale HTML Dateien aus Jupyter Notebooks generiert, die bei passendem Kurvenbezeichner angezeigt werden. Die Skriptklasse _BrowserControl_ ist eine Hüllklasse um den Ingame-Browser, die eine übergebene URL an den Browser weiterleitet.  
+
+
+
+# InformationControl
+
+An der rechten Wand des Raumes werden alle geladenen Kurven und Aufgaben dargestellt. Für jede Kurve die im Model vorhanden ist wird ein Button generiert, der bei Betätigung die assoziierte Kurve in die Ansichten lädt. Interaktion mit dieser Wand erfolgt durch einen Strahl, der von dem Benutzer aktiviert werden kann. Mit Drücken eines Controllerbuttons wird ein farblicher Strahl sichtbar, der aus dem Controller nach vorne herausprojiziert wird. Durch Zeigen mit dem Controller auf die Auswahlwand können die Buttons mit dem Trigger des Controllers aktiviert werden. Hält man den Trigger gedrückt und bewegt den Controller vertikal hoch- oder runter so kann die Bildaufleiste auf der rechten Seite der Wand gesteuert werden. Die Informationen der dynamisch generierten Schaltflächen entspringen der Initialisierungsdatei (Bezeichner) und lokalen Projektressourcen (Bilder). Die Bilder wurden mithilfe der Python Bibiliothek _matplotlib_ generiert und der Projektstruktur hinzugefügt. Zuteilung der Bilder erfolgt über den Kurvenbezeichner. 

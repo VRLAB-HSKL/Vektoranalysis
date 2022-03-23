@@ -9,8 +9,11 @@ using UnityEngine;
 /// </summary>
 public class UnityAppender : AppenderSkeleton
 {
+    public bool ShowLogging = false;
+    
     protected override void Append(LoggingEvent loggingEvent)
     {
+        if (!ShowLogging) return;
         Debug.Log(RenderLoggingEvent(loggingEvent));
     }
 }

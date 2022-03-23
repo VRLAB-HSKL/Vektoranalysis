@@ -1,11 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 
-public class ExerciseCurvesState : AbstractCurveSelectionState
+namespace UI.States
 {
-    public ExerciseCurvesState(
-        GameObject menuContent, GameObject prefab, WorldStateController world) : base(menuContent, prefab, world) { }
+    /// <summary>
+    /// Curve state used during selection and interaction of exercises in the exercises dataset
+    /// </summary>
+    public class ExerciseCurvesState : AbstractCurveSelectionState
+    {
+        public ExerciseCurvesState(
+            GameObject menuContent, GameObject prefab, WorldStateController world) : base(menuContent, prefab, world) { }
 
-    public override void OnStateUpdate() {}
+        public override void OnStateUpdate() {}
+    }
 }

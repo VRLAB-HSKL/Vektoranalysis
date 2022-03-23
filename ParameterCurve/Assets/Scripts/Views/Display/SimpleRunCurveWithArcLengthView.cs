@@ -1,181 +1,251 @@
-using System.Collections;
-using System.Collections.Generic;
+using Controller.Curve;
+using log4net;
+using Model;
 using UnityEngine;
+using VRKL.MBU;
 
-public class SimpleRunCurveWithArcLength : SimpleRunCurveView
+namespace Views.Display
 {
-    public Transform ArcLengthTravelObject;
+    /// <summary>
+    /// View on curve data with an attached game object to display runs along the arc length parametrization based
+    /// curve line. The user can start runs on this view. The travel object will then travel along the curve line in
+    /// addition to the regular travel object. This is used to display the difference between curve parametrization
+    /// methods
+    /// </summary>
+    public class SimpleRunCurveWithArcLength : SimpleRunCurveView
+    {
+        #region Private members
+        
+        /// <summary>
+        /// Used to move the associated game object along the curve line based on the arc length parametrization
+        /// </summary>
+        private Transform ArcLengthTravelObject { get; }
 
-    public LineRenderer ArcLengthTangentLR;
-    public LineRenderer ArcLengthNormalLR;
-    public LineRenderer ArcLengthBinormalLR;
+        /// <summary>
+        /// Displays the arc length parametrization based tangent of the current point
+        /// </summary>
+        private LineRenderer ArcLengthTangentLr { get; }
+        
+        /// <summary>
+        /// Displays the arc length parametrization based normal of the current point
+        /// </summary>
+        private LineRenderer ArcLengthNormalLr { get; }
+        
+        /// <summary>
+        /// Displays the arc length parametrization based binormal of the current point
+        /// </summary>
+        private LineRenderer ArcLengthBinormalLr { get; }
 
-    private Vector3 initArcLenghtTravelObjPos;
-    private float initArcTangentLRWidth;
-    private float initArcNormalLRWidth;
-    private float initArcBinormalLRWidth;
+        /// <summary>
+        /// Cached init line renderer width of the arc length parametrization based tangent vector.
+        /// Used to scale width based on scaling factor
+        /// </summary>
+        private readonly float _initArcTangentLrWidth;
+        
+        /// <summary>
+        /// Cached init line renderer width of the arc length parametrization based normal vector.
+        /// Used to scale width based on scaling factor
+        /// </summary>
+        private readonly float _initArcNormalLrWidth;
+        
+        /// <summary>
+        /// Cached init line renderer width of the arc length parametrization based binormal vector.
+        /// Used to scale width based on scaling factor
+        /// </summary>
+        private readonly float _initArcBinormalLrWidth;
     
-    public SimpleRunCurveWithArcLength(
-        LineRenderer displayLR, 
-        Vector3 rootPos, 
-        float scalingFactor,
-        Transform travelObject, 
-        Transform arcLengthTravelObject) : base(displayLR, rootPos, scalingFactor, travelObject)
-    {
-        ArcLengthTravelObject = arcLengthTravelObject;
+        /// <summary>
+        /// Static log4net logger
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
 
-        HasTravelPoint = true;
-        HasArcLengthTravelPoint = true;
-
-        CurveInformationDataset curve = CurrentCurve; //HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        var renderers = ArcLengthTravelObject.GetComponentsInChildren<MeshRenderer>();
-        foreach (var r in renderers)
+        public WaypointManager _arcWpm;
+        
+        
+        #endregion Private members
+        
+        #region Constructors
+        
+        public SimpleRunCurveWithArcLength(
+            LineRenderer displayLr, 
+            Vector3 rootPos, 
+            float scalingFactor,
+            Transform travelObject, 
+            Transform arcLengthTravelObject,
+            AbstractCurveViewController.CurveControllerType controllerType) 
+            : base(displayLr, rootPos, scalingFactor, travelObject, controllerType)
         {
-            r.material.color = curve.ArcTravelObjColor;
-            r.material.SetColor(EmissionColor, curve.ArcTravelObjColor);    
+            ArcLengthTravelObject = arcLengthTravelObject;
+
+            HasTravelPoint = true;
+            HasArcLengthTravelPoint = true;
+
+            CurveInformationDataset curve = CurrentCurve;
+            var renderers = ArcLengthTravelObject.GetComponentsInChildren<MeshRenderer>();
+            foreach (var r in renderers)
+            {
+                r.material.color = curve.ArcTravelObjColor;
+                r.material.SetColor(EmissionColor, curve.ArcTravelObjColor);    
+            }
+
+            // Setup arc length travel object
+            if (ArcLengthTravelObject.childCount > 0)
+            {
+                var firstChild = ArcLengthTravelObject.GetChild(0).gameObject;
+                ArcLengthTangentLr = firstChild.GetComponent<LineRenderer>();
+                ArcLengthTangentLr.positionCount = 2;
+                _initArcTangentLrWidth = ArcLengthTangentLr.widthMultiplier;
+            }
+
+            if (ArcLengthTravelObject.childCount > 1)
+            {
+                var secondChild = ArcLengthTravelObject.GetChild(1).gameObject;
+                ArcLengthNormalLr = secondChild.GetComponent<LineRenderer>();
+                ArcLengthNormalLr.positionCount = 2;
+                _initArcNormalLrWidth = ArcLengthNormalLr.widthMultiplier;
+            }
+
+            if (ArcLengthTravelObject.childCount <= 2) return;
+            
+            var thirdChild = ArcLengthTravelObject.GetChild(2).gameObject;
+            ArcLengthBinormalLr = thirdChild.GetComponent<LineRenderer>();
+            ArcLengthBinormalLr.positionCount = 2;
+            _initArcBinormalLrWidth = ArcLengthBinormalLr.widthMultiplier;
+
+            _arcWpm = new WaypointManager();
         }
         
+        #endregion Constructors
 
-        // Setup arc length travel object
-        initArcLenghtTravelObjPos = ArcLengthTravelObject.position;
-        if (ArcLengthTravelObject.childCount > 0)
+        #region Public functions
+        
+        /// <summary>
+        /// Update view
+        /// </summary>
+        public override void UpdateView()
         {
-            GameObject firstChild = ArcLengthTravelObject.GetChild(0).gameObject;
-            ArcLengthTangentLR = firstChild.GetComponent<LineRenderer>();
-            ArcLengthTangentLR.positionCount = 2;
-            initArcTangentLRWidth = ArcLengthTangentLR.widthMultiplier;
+            base.UpdateView();
+            if (!GlobalDataModel.IsRunning) return;
+        
+            var curve = CurrentCurve; 
+        
+            // Map points to world space location
+            var arcPointArr = curve.arcLengthWorldPoints.ToArray();
+            for (var i = 0; i < arcPointArr.Length; i++)
+            {
+                var point = arcPointArr[i];
+                arcPointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
+            }
+            
+            _arcWpm.SetWaypoints(arcPointArr);
+            
+            SetArcTravelPoint();
+            SetArcMovingFrame();
         }
 
-        if (ArcLengthTravelObject.childCount > 1)
+        /// <summary>
+        /// Set the travel object to the next point along the arc length parametrization based curve line
+        /// </summary>
+        public void SetArcTravelPoint()
         {
-            GameObject secondChild = ArcLengthTravelObject.GetChild(1).gameObject;
-            ArcLengthNormalLR = secondChild.GetComponent<LineRenderer>();
-            ArcLengthNormalLR.positionCount = 2;
-            initArcNormalLRWidth = ArcLengthNormalLR.widthMultiplier;
+            var curve = CurrentCurve; 
+            
+            // Null checks
+            if (ArcLengthTravelObject is null) return;
+            if (CurrentPointIndex < 0) return;
+        
+            // On arrival at the last point, stop driving
+            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
+            {
+                GlobalDataModel.IsRunning = false;
+                return;
+            }
+        
+            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            ++CurrentPointIndex;
         }
 
-        if (ArcLengthTravelObject.childCount > 2)
+        public void SetArcTravelPointWPM()
         {
-            GameObject thirdChild = ArcLengthTravelObject.GetChild(2).gameObject;
-            ArcLengthBinormalLR = thirdChild.GetComponent<LineRenderer>();
-            ArcLengthBinormalLR.positionCount = 2;
-            initArcBinormalLRWidth = ArcLengthBinormalLR.widthMultiplier;
-        }
-    }
-
-    public override void UpdateView()
-    {
-        base.UpdateView();
-        if (!GlobalData.IsRunning) return;
+            var curve = CurrentCurve; 
+            
+            // Null checks
+            if (ArcLengthTravelObject is null) return;
+            if (CurrentPointIndex < 0) return;
         
-        SetArcTravelPoint();
-        SetArcMovingFrame();
-
-        //Debug.Log("[" + currentPointIndex +"] normalPos: " + TravelObject.position + " ArcPos: " + ArcLengthTravelObject.position);
-        //Debug.Log("equal: " + (TravelObject.position == ArcLengthTravelObject.position));
+            // On arrival at the last point, stop driving
+            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
+            {
+                GlobalDataModel.IsRunning = false;
+                return;
+            }
         
-    }
-
-    private void SetArcTravelPoint()
-    {
-        CurveInformationDataset curve = CurrentCurve; //HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-        
-        // Null checks
-        if (ArcLengthTravelObject is null) return;
-        //if (GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].worldPoints is null) return;
-        if (CurrentPointIndex < 0) return;
-        
-        // if (GlobalData.CurrentPointIndex >= GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints.Count)
-        // {
-        //     //Debug.Log("Stop");
-        //     GlobalData.IsDriving = false;
-        //     return;
-        // }
-
-        // On arrival at the last point, stop driving
-        if (CurrentPointIndex >= curve.arcLengthWorldPoints.Count)
-        {
-            //Debug.Log("Stop");
-            GlobalData.IsRunning = false;
-            return;
+            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            
+            
+            
+            ++CurrentPointIndex;
         }
         
-        ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
-        ++CurrentPointIndex;
-
-    }
-
-    private void SetArcMovingFrame()
-    {
-        CurveInformationDataset curve = CurrentCurve; //HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
         
-        if (CurrentPointIndex >= curve.worldPoints.Count)
+        /// <summary>
+        /// Set the fresnet equation based moving frame around the next point along the arc length parametrization
+        /// based curve line
+        /// </summary>
+        public void SetArcMovingFrame()
         {
-            GlobalData.IsRunning = false;
-            return;
+            var curve = CurrentCurve; 
+            if (CurrentPointIndex == curve.worldPoints.Count - 1)
+            {
+                GlobalDataModel.IsRunning = false;
+                return;
+            }
+        
+            var arcObjPos = ArcLengthTravelObject.position;
+            var arcTangentArr = new Vector3[2];
+            arcTangentArr[0] = arcObjPos;
+            arcTangentArr[1] = arcObjPos + 
+                               curve.arcLengthFresnetApparatuses[CurrentPointIndex].Tangent.normalized * ScalingFactor;
+            ArcLengthTangentLr.SetPositions(arcTangentArr);
+            ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * (ScalingFactor * 0.5f);
+        
+
+            var arcNormalArr = new Vector3[2];
+            arcNormalArr[0] = arcObjPos;
+            arcNormalArr[1] = arcObjPos + 
+                              curve.arcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized *
+                              ScalingFactor;
+            ArcLengthNormalLr.SetPositions(arcNormalArr);
+            ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * (ScalingFactor * 0.5f);
+
+        
+            var arcBinormalArr = new Vector3[2];
+            arcBinormalArr[0] = arcObjPos;
+            arcBinormalArr[1] = arcObjPos + 
+                                curve.arcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized * 
+                                ScalingFactor;
+            ArcLengthBinormalLr.SetPositions(arcBinormalArr);
+            ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * (ScalingFactor * 0.5f);
+
+            Log.Debug("arcObjPos: " + arcObjPos +
+                          " arc_jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +
+                          " arc_tangentArr: [" + arcTangentArr[0] + ", " + arcTangentArr[1] + "]" +
+                          " length: " + (arcTangentArr[1] - arcTangentArr[0]).magnitude + "\n" + 
+                          " arc_normalArr: [" + arcNormalArr[0] + ", " + arcNormalArr[1] + "]" +
+                          " length: " + (arcNormalArr[1] - arcNormalArr[0]).magnitude + "\n" + 
+                          " arc_jsonBinormalPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Binormal + "] " +
+                          " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
+                          " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
+
+            var nextPos = MapPointPos(CurrentPointIndex < curve.arcLengthWorldPoints.Count - 1 
+                ? curve.arcLengthWorldPoints[CurrentPointIndex + 1] 
+                : curve.arcLengthWorldPoints[CurrentPointIndex]);
+
+            var worldUp = new Vector3(0f, 0f, 1f); 
+            //(arcBinormalArr[0] + arcBinormalArr[1]).normalized; 
+            ArcLengthTravelObject.transform.LookAt(nextPos, worldUp);
         }
         
-        //int pointIndex = GlobalData.CurrentCurveIndex;
-        // ArcLengthTravelObject.position =
-        //     MapPointPos(GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex].arcLengthWorldPoints[pointIndex]);
-
-        // Debug.Log("curve is null: " + (curve is null));
-        // Debug.Log("curve.arcLengthWorldPoints is null: " + (curve.arcLengthWorldPoints is null));
-        // Debug.Log("curve.arcLengthWorldPoints Count: " + (curve.arcLengthWorldPoints.Count));
-        //
-        // Debug.Log("curve.arcLengthFresnetFrames is null: " + (curve.arcLengthFresnetApparatuses is null));
-        // Debug.Log("curve.arcLengthFresnetFrames Count: " + (curve.arcLengthFresnetApparatuses.Count));
-        
-        
-        var arcObjPos = ArcLengthTravelObject.position;
-        Vector3[] arcTangentArr = new Vector3[2];
-        arcTangentArr[0] = arcObjPos;
-        arcTangentArr[1] = arcObjPos + 
-                           curve.arcLengthFresnetApparatuses[CurrentPointIndex].Tangent.normalized * ScalingFactor;
-        ArcLengthTangentLR.SetPositions(arcTangentArr);
-        ArcLengthTangentLR.widthMultiplier = initArcTangentLRWidth * (ScalingFactor * 0.5f);
-        
-
-        Vector3[] arcNormalArr = new Vector3[2];
-        arcNormalArr[0] = arcObjPos;
-        arcNormalArr[1] = arcObjPos + 
-                          curve.arcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized *
-                          ScalingFactor;
-        ArcLengthNormalLR.SetPositions(arcNormalArr);
-        ArcLengthNormalLR.widthMultiplier = initArcNormalLRWidth * (ScalingFactor * 0.5f);
-
-        
-        Vector3[] arcBinormalArr = new Vector3[2];
-        arcBinormalArr[0] = arcObjPos;
-        arcBinormalArr[1] = arcObjPos + 
-                            curve.arcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized * 
-                            ScalingFactor;
-        ArcLengthBinormalLR.SetPositions(arcBinormalArr);
-        ArcLengthBinormalLR.widthMultiplier = initArcBinormalLRWidth * (ScalingFactor * 0.5f);
-
-        // Debug.Log("arcObjPos: " + arcObjPos +
-        //           " arc_jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +
-        //           " arc_tangentArr: [" + arcTangentArr[0] + ", " + arcTangentArr[1] + "]" +
-        //           " length: " + (arcTangentArr[1] - arcTangentArr[0]).magnitude + "\n" + 
-        //           " arc_normalArr: [" + arcNormalArr[0] + ", " + arcNormalArr[1] + "]" +
-        //           " length: " + (arcNormalArr[1] - arcNormalArr[0]).magnitude + "\n" + 
-        //           " arc_jsonBinormalPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Binormal + "] " +
-        //           " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
-        //           " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
-        
-        
-        Vector3 nextPos;
-        if (CurrentPointIndex < curve.arcLengthWorldPoints.Count - 1)
-        {
-            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex + 1]);
-        }
-        else
-        {
-            nextPos = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
-        }
-
-        ArcLengthTravelObject.transform.LookAt(
-            nextPos, 
-            (arcBinormalArr[0] + arcBinormalArr[1]).normalized);
+        #endregion Public functions
     }
 }

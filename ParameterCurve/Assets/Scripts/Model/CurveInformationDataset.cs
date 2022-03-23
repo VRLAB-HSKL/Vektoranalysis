@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 
 public class CurveInformationDataset
 {
     public int id = 0;
-    public string Name = string.Empty;
-    public string DisplayString = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string DisplayString { get; set; } = string.Empty;
     public string NotebookURL = string.Empty;
+
+    public string View = string.Empty;
+    
     public Texture2D MenuButtonImage { get; set; }
 
 
@@ -68,10 +72,17 @@ public class CurveInformationDataset
             var point = ps[i];
 
             bool swapYZCoordinates = Is3DCurve;
-                
-            worldPoints.Add(swapYZCoordinates ?
-                new Vector3(point.x, point.z, point.y) * GlobalData.PointScaleFactor :
-                new Vector3(point.x, point.y, point.z) * GlobalData.PointScaleFactor);
+            
+            var newPoint = swapYZCoordinates ?
+                new Vector3(point.x, point.z, point.y) * GlobalDataModel.PointScaleFactor :
+                new Vector3(point.x, point.y, point.z) * GlobalDataModel.PointScaleFactor;
+
+            if (!Is3DCurve)
+            {
+                //newPoint.z += Random.Range(0f, 0.00125f);
+            }
+
+            worldPoints.Add(newPoint);
         }
         
         // Calcualte arc world points
@@ -83,8 +94,8 @@ public class CurveInformationDataset
             bool swapYZCoordinates = Is3DCurve;
             
             arcLengthWorldPoints.Add(swapYZCoordinates ?
-                new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalData.PointScaleFactor :
-                new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalData.PointScaleFactor);
+                new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalDataModel.PointScaleFactor :
+                new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalDataModel.PointScaleFactor);
 
         }
     }

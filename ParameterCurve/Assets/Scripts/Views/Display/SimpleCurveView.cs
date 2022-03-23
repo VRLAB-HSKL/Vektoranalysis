@@ -1,15 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+using Controller.Curve;
 using UnityEngine;
 
-public class SimpleCurveView : AbstractCurveView
+namespace Views.Display
 {
-    public SimpleCurveView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor) 
-        : base(displayLR, rootPos, scalingFactor) 
+    /// <summary>
+    /// Basic view on a display curve
+    /// </summary>
+    public class SimpleCurveView : AbstractCurveView
     {
-        HasTravelPoint = false;
-        HasArcLengthTravelPoint = false;
-    }
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="displayLr">Line renderer to display curve path</param>
+        /// <param name="rootPos">Parent game object root position</param>
+        /// <param name="scalingFactor">Point vector scaling factor</param>
+        /// <param name="controllerType">Type of parent controller</param>
+        public SimpleCurveView(LineRenderer displayLr, Vector3 rootPos, 
+            float scalingFactor, AbstractCurveViewController.CurveControllerType controllerType) 
+            : base(displayLr, rootPos, scalingFactor, controllerType) 
+        {
+            // Disable all travel points
+            HasTravelPoint = false;
+            HasArcLengthTravelPoint = false;
+        }
 
-    public override void StartRun() {}
+        #endregion Constructors
+    }
 }

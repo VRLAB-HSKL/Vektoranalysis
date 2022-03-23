@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using Controller.Curve;
+using Model;
+using UnityEngine;
+using Views.Display;
 
 namespace Views.Exercise
 {
-    public class SelectionExerciseView : SimpleCurveView
+    public class SelectionExerciseView : AbstractExerciseView
     {
         public enum PillarIdentifier {Left = 0, Middle = 1, Right = 2}
 
@@ -12,27 +15,26 @@ namespace Views.Exercise
         {
             get
             {
-                //
-
-                var selExerc = GlobalData.SelectionExercises[GlobalData.CurrentExerciseIndex];
+                var selExerc = GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
                 switch (Pillar)
                 {
                     case PillarIdentifier.Left:
-                        return selExerc.Datasets[GlobalData.CurrentSubExerciseIndex].LeftDataset;
+                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].LeftDataset;
                     
                     default:
                     case PillarIdentifier.Middle:
-                        return selExerc.Datasets[GlobalData.CurrentSubExerciseIndex].MiddleDataset;
+                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].MiddleDataset;
                     
                     case PillarIdentifier.Right:
-                        return selExerc.Datasets[GlobalData.CurrentSubExerciseIndex].RightDataset;
+                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].RightDataset;
                 }
 
             }
         }
         
         
-        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, PillarIdentifier pid) : 
+        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, 
+            PillarIdentifier pid) : 
             base(displayLR, rootPos, scalingFactor)
         {
             Pillar = pid;
@@ -40,9 +42,7 @@ namespace Views.Exercise
         
         public override void UpdateView()
         {
-            CurveInformationDataset curve = CurrentCurve; // HasCustomDataset ? CustomDataset : GlobalData.CurrentDataset[GlobalData.CurrentCurveIndex];
-
-            //ScalingFactor =
+            CurveInformationDataset curve = CurrentCurve; 
         
             var pointArr = curve.worldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
@@ -50,11 +50,11 @@ namespace Views.Exercise
                 pointArr[i] = MapPointPos(pointArr[i]);
             }
         
-            _displayLr.positionCount = curve.worldPoints.Count;
-            _displayLr.SetPositions(pointArr);
+            DisplayLr.positionCount = curve.worldPoints.Count;
+            DisplayLr.SetPositions(pointArr);
         
-            _displayLr.material.color = curve.CurveLineColor;
-            _displayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
+            DisplayLr.material.color = curve.CurveLineColor;
+            DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
         }
         

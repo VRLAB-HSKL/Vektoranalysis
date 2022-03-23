@@ -1,6 +1,8 @@
 using HTC.UnityPlugin.ColliderEvent;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
+using Model;
 using UnityEngine;
 
 
@@ -19,9 +21,9 @@ public class RunStart : AbstractButtonCollisionHandler
         WorldStateController world = Target.GetComponent<WorldStateController>();
         if (world != null)
         {
-            if (!GlobalData.IsRunning)
+            if (!GlobalDataModel.IsRunning)
             {
-                world.StartRun();
+                //world.StartRun();
             }
 
         }

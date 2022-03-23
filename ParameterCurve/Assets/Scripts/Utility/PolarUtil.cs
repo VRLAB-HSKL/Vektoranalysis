@@ -1,50 +1,54 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public static class PolarUtil
+namespace Utility
 {
-    public static Tuple<float, float> Polar2Cartesian(float r, float phi)
+    /// <summary>
+    /// Static class containing polar coordinates based utility calculation functions used in the application
+    /// </summary>
+    public static class PolarUtil
     {
-        float x = r * Mathf.Cos(phi);
-        float y = r * Mathf.Sin(phi);
-
-        return new Tuple<float, float>(x, y);
-    }
-
-    public static Tuple<float, float> Polar2CartesianFirstDerivative(float r, float phi)
-    {
-        float x = r * Mathf.Cos(phi) - r * Mathf.Sin(phi);
-        float y = r * Mathf.Sin(phi) + r * Mathf.Cos(phi);
-
-        return new Tuple<float, float>(x, y);
-    }
-
-
-    public static Tuple<float, float> PolarHelper(float r, float phi)
-    {        
-        if (r < 0f)
+        public static Tuple<float, float> Polar2Cartesian(float r, float phi)
         {
-            r = -r;
-            phi += Mathf.PI;
+            var x = r * Mathf.Cos(phi);
+            var y = r * Mathf.Sin(phi);
+
+            return new Tuple<float, float>(x, y);
         }
 
-        return new Tuple<float, float>(r, phi);
-    }
-
-
-    public static Tuple<float[], float[]> PolarHelper(float[] r, float[] phi)
-    {
-        for(int i = 0; i < r.Length; i++)
+        public static Tuple<float, float> Polar2CartesianFirstDerivative(float r, float phi)
         {
-            if(r[i] < 0f)
+            var x = r * Mathf.Cos(phi) - r * Mathf.Sin(phi);
+            var y = r * Mathf.Sin(phi) + r * Mathf.Cos(phi);
+
+            return new Tuple<float, float>(x, y);
+        }
+
+
+        public static Tuple<float, float> PolarHelper(float r, float phi)
+        {        
+            if (r < 0f)
             {
-                r[i] = -r[i];
-                phi[i] = phi[i] + Mathf.PI;
+                r = -r;
+                phi += Mathf.PI;
             }
+
+            return new Tuple<float, float>(r, phi);
         }
 
-        return new Tuple<float[], float[]>(r, phi);
+
+        // public static Tuple<float[], float[]> PolarHelper(float[] r, float[] phi)
+        // {
+        //     for(int i = 0; i < r.Length; i++)
+        //     {
+        //         if(r[i] < 0f)
+        //         {
+        //             r[i] = -r[i];
+        //             phi[i] = phi[i] + Mathf.PI;
+        //         }
+        //     }
+        //
+        //     return new Tuple<float[], float[]>(r, phi);
+        // }
     }
 }
