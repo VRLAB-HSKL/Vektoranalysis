@@ -86,7 +86,7 @@ namespace Views.Display
         /// </summary>
         private int _curPointIdx;
     
-        public WaypointManager _wpm { get; set; }
+        public WaypointManager Wpm { get; }
         
         
         /// <summary>
@@ -155,7 +155,7 @@ namespace Views.Display
             _initBinormalLrWidth = BinormalLr.widthMultiplier;
 
 
-            _wpm = new WaypointManager();  //new Vector3[1], 0.01f, false);
+            Wpm = new WaypointManager();  //new Vector3[1], 0.01f, false);
         }
 
         #endregion Constructors
@@ -181,9 +181,9 @@ namespace Views.Display
                     pointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
                 }
 
-                _wpm.SetWaypoints(pointArr);
+                Wpm.SetWaypoints(pointArr);
                 
-                SetTravelObjectWPM();//SetTravelObjectPoint();
+                SetTravelObjectWpm();//SetTravelObjectPoint();
                 SetMovingFrame();
             }
 
@@ -226,7 +226,7 @@ namespace Views.Display
             ++CurrentPointIndex;
         }
 
-        public void SetTravelObjectWPM()
+        public void SetTravelObjectWpm()
         {
             // Null checks
             if (!HasTravelPoint) return;
@@ -240,10 +240,10 @@ namespace Views.Display
                 return;
             }
             
-            var pos = _wpm.GetWaypoint();
-            var target = _wpm.GetFollowupWaypoint();
+            var pos = Wpm.GetWaypoint();
+            var target = Wpm.GetFollowupWaypoint();
             var dist = Vector3.Distance(pos, target);
-            TravelObject.position = _wpm.Move(pos, dist);
+            TravelObject.position = Wpm.Move(pos, dist);
 
             
             

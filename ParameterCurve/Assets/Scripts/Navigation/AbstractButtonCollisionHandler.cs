@@ -1,62 +1,92 @@
-using HTC.UnityPlugin.ColliderEvent;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using HTC.UnityPlugin.ColliderEvent;
 using UnityEngine;
 
-public abstract class AbstractButtonCollisionHandler : MonoBehaviour,
-    HTC.UnityPlugin.ColliderEvent.IColliderEventHoverEnterHandler,
-    HTC.UnityPlugin.ColliderEvent.IColliderEventHoverExitHandler
+namespace Navigation
 {
-    // Start is called before the first frame update
-    public GameObject Target;
-
-    public Material PressedMat;
-    private Material InitMat;
-
-
-    public Action OnHitFunc;
-
-    // Start is called before the first frame update
-    void Start()
+    public abstract class AbstractButtonCollisionHandler : MonoBehaviour,
+        IColliderEventHoverEnterHandler,
+        IColliderEventHoverExitHandler
     {
-        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
-        if (msr != null)
+
+        #region Public members
+        
+        /// <summary>
+        /// Start is called before the first frame update 
+        /// </summary>
+        public GameObject target;
+
+        /// <summary>
+        /// Material applied when the button is pressed
+        /// </summary>
+        public Material pressedMat;
+        
+        #endregion Public members
+        
+        #region Protected members
+        
+        /// <summary>
+        /// System action that is activated on collision
+        /// </summary>
+        protected Action OnHitFunc;
+        
+        #endregion Protected members
+        
+        #region Private members
+        
+        /// <summary>
+        /// Material applied initially when the button is not pressed
+        /// </summary>
+        private Material _initMat;
+
+        #endregion Private members
+
+        #region Public functions
+
+        /// <summary>
+        /// Called when collider enters button
+        /// </summary>
+        /// <param name="eventData">event data</param>
+        public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
         {
-            InitMat = msr.material;
+            OnHitFunc();
         }
-    }
 
-    public void OnColliderEventHoverEnter(ColliderHoverEventData eventData)
-    {
-        OnHitFunc();
-
-        //WorldStateController world = Target.GetComponent<WorldStateController>();
-        //if (world != null)
-        //{
-        //    if (!GlobalData.IsDriving)
-        //    {
-        //        OnHitFunc(); //world.StartRun();
-        //    }
-
-        //}
-
-        //MeshRenderer msr = Target.GetComponent<MeshRenderer>();
-        //if (msr != null)
-        //{
-        //    //if (msr.material == InitMat)
-        //    msr.material = PressedMat;
-        //}
-    }
-
-    public void OnColliderEventHoverExit(ColliderHoverEventData eventData)
-    {
-        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
-        if (msr != null)
+        /// <summary>
+        /// Called when collider exits button
+        /// </summary>
+        /// <param name="eventData">event data</param>
+        public void OnColliderEventHoverExit(ColliderHoverEventData eventData)
         {
-            //if (msr.material == PressedMat)
-            msr.material = InitMat;
+            var msr = target.GetComponent<MeshRenderer>();
+            if (msr != null)
+            {
+                msr.material = _initMat;
+            }
         }
-    }
+        
+        #endregion Public functions
 
+        #region Private functions
+
+        /// <summary>
+        /// Unity Start function
+        /// ====================
+        /// 
+        /// This function is called before the first frame update, after
+        /// <see>
+        ///     <cref>Awake</cref>
+        /// </see>
+        /// </summary>
+        private void Start()
+        {
+            var msr = target.GetComponent<MeshRenderer>();
+            if (msr != null)
+            {
+                _initMat = msr.material;
+            }
+        }
+        
+        #endregion Private functions
+    }
 }

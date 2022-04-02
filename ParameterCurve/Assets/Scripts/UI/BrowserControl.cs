@@ -6,9 +6,9 @@ using UnityEngine;
 namespace UI
 {
     /// <summary>
-    /// Control class for the ingame browser
+    /// Control class for the in-game browser
     ///
-    /// ToDo: Look for android compliant ingame browser and refactor this class 
+    /// ToDo: Look for android compliant in-game browser and refactor this class 
     /// </summary>
     public class BrowserControl : MonoBehaviour
     {

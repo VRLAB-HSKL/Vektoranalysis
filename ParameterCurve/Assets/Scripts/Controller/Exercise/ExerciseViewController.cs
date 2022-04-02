@@ -91,9 +91,9 @@ namespace Controller.Exercise
         public void NextSubExercise()
         {
             // Disable main display on first navigation to the right
-            if (CurrentView.showMainDisplay && GlobalDataModel.CurrentSubExerciseIndex == 0)
+            if (CurrentView.ShowMainDisplay && GlobalDataModel.CurrentSubExerciseIndex == 0)
             {
-                CurrentView.showMainDisplay = false;
+                CurrentView.ShowMainDisplay = false;
                 CurrentView.UpdateView();
                 return;
             }
@@ -134,7 +134,7 @@ namespace Controller.Exercise
         {
             if (GlobalDataModel.CurrentSubExerciseIndex == 0)
             {
-                CurrentView.showMainDisplay = true;
+                CurrentView.ShowMainDisplay = true;
                 CurrentView.UpdateView();
                 return;
             }

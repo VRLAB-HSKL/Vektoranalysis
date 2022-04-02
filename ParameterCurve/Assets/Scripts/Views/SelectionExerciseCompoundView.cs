@@ -94,7 +94,7 @@ namespace Views
             curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;
             curveViews[2].ScalingFactor = currentSubExercise.RightDataset.SelectExercisePillarScalingFactor;
             
-            if (showMainDisplay)
+            if (ShowMainDisplay)
             {
                 selObjects.MiddleDisplayText.text = CurrentDescription;
                 selObjects.ExerciseTitle.text = string.Empty;

@@ -5,31 +5,22 @@ using UnityEngine;
 namespace Navigation
 {
     /// <summary>
-    /// Change view based on set <see cref="viewIndex"/> on collision
+    /// Starts run on object collision
     /// </summary>
-    public class ViewChangeHandler : AbstractButtonCollisionHandler
+    public class RunStartCollisionHandler : AbstractButtonCollisionHandler
     {
-        #region Public members
-        
-        /// <summary>
-        /// Associated view index this handler should change to
-        /// </summary>
-        public int viewIndex;
-
-        #endregion Public members
-        
         #region Public functions
         
         /// <summary>
         /// Assign local function to inherited handler
         /// </summary>
-        public ViewChangeHandler()
+        public RunStartCollisionHandler()
         {
             OnHitFunc = HandleCollision;
         }
-
-        #endregion Public functions
         
+        #endregion Public functions
+
         #region Private functions
         
         /// <summary>
@@ -41,8 +32,11 @@ namespace Navigation
             var world = target.GetComponent<WorldStateController>();
             if (world != null)
             {
-                GlobalDataModel.WorldCurveViewController.SwitchView(viewIndex);
-                GlobalDataModel.TableCurveViewController?.SwitchView(viewIndex);
+                if (!GlobalDataModel.IsRunning)
+                {
+                    //world.StartRun();
+                }
+
             }
 
             // Visual update

@@ -25,7 +25,7 @@ namespace Views.Exercise
         /// </summary>
         public bool HasArcLengthTravelPoint { get; protected set; }
     
-        public bool showMainDisplay { get; set; } = true;
+        public bool ShowMainDisplay { get; set; } = true;
         
         //public int CurrentSubExerciseIndex { get; set; }
         
@@ -36,13 +36,15 @@ namespace Views.Exercise
         /// <summary>
         /// Type of parent controller
         /// </summary>
-        protected readonly AbstractCurveViewController.CurveControllerType ControllerType;
+        protected AbstractCurveViewController.CurveControllerType ControllerType { get; }
     
         /// <summary>
         /// Current curve being displayed in the view. This model data is accessed through the static
-        /// <see cref="GlobalDataModel"/> class, based on global curve index <see cref="GlobalDataModel.CurrentCurveIndex"/>
+        /// <see cref="GlobalDataModel"/> class, based on global curve index
+        /// <see cref="GlobalDataModel.CurrentCurveIndex"/>
         /// </summary>
-        protected static CurveInformationDataset CurrentCurve => GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
+        protected static CurveInformationDataset CurrentCurve 
+            => GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
         
         /// <summary>
         /// Line renderer to display curve path

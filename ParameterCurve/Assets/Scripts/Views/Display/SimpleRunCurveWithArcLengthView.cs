@@ -59,7 +59,7 @@ namespace Views.Display
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
 
-        public WaypointManager _arcWpm;
+        public readonly WaypointManager _arcWpm;
         
         
         #endregion Private members
@@ -165,29 +165,6 @@ namespace Views.Display
             ++CurrentPointIndex;
         }
 
-        public void SetArcTravelPointWPM()
-        {
-            var curve = CurrentCurve; 
-            
-            // Null checks
-            if (ArcLengthTravelObject is null) return;
-            if (CurrentPointIndex < 0) return;
-        
-            // On arrival at the last point, stop driving
-            if (CurrentPointIndex == curve.ArcLengthWorldPoints.Count - 1)
-            {
-                GlobalDataModel.IsRunning = false;
-                return;
-            }
-        
-            ArcLengthTravelObject.position = MapPointPos(curve.ArcLengthWorldPoints[CurrentPointIndex]);
-            
-            
-            
-            ++CurrentPointIndex;
-        }
-        
-        
         /// <summary>
         /// Set the fresnet equation based moving frame around the next point along the arc length parametrization
         /// based curve line

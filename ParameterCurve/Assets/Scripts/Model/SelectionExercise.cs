@@ -71,19 +71,53 @@ namespace Model
 
     }
 
+    /// <summary>
+    /// Dataset model class for sub-exercise data
+    /// </summary>
     public class ExercisePointDataset
     {
+        #region Public members
+        
+        /// <summary>
+        /// Header text of the dataset
+        /// </summary>
         public string HeaderText { get; set; }
+        
+        /// <summary>
+        /// Dataset of the left pillar
+        /// </summary>
         public CurveInformationDataset LeftDataset { get; set; }
+        
+        /// <summary>
+        /// Dataset of the middle pillar
+        /// </summary>
         public CurveInformationDataset MiddleDataset { get; set; }
+        
+        /// <summary>
+        /// Dataset of the right pillar
+        /// </summary>
         public CurveInformationDataset RightDataset { get; set; }
 
-        public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
+        #endregion Public members
+        
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="headerText">Header text</param>
+        /// <param name="leftDataset">Left pillar dataset</param>
+        /// <param name="middleDataset">Middle pillar dataset</param>
+        /// <param name="rightDataset">Right pillar dataset</param>
+        public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, 
+            CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
         {
             HeaderText = headerText;
             LeftDataset = leftDataset;
             MiddleDataset = middleDataset;
             RightDataset = rightDataset;
         }
+        
+        #endregion Constructors
     }
 }

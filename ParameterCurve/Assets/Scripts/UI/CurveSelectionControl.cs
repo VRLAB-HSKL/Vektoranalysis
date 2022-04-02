@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Model;
@@ -15,48 +14,99 @@ namespace UI
     /// </summary>
     public class CurveSelectionControl : MonoBehaviour
     {
-        public GameObject MainMenuParent;
-        public GameObject MainMenuButtonsParent;
-        public GameObject MainMenuButtonPrefab;
+        #region Public members
+        
+        /// <summary>
+        /// Root parent of the main category menu
+        /// </summary>
+        public GameObject mainMenuParent;
+        
+        /// <summary>
+        /// Parent for all generated main menu buttons
+        /// </summary>
+        public GameObject mainMenuButtonsParent;
+        
+        /// <summary>
+        /// Main menu button prefab
+        /// </summary>
+        public GameObject mainMenuButtonPrefab;
 
-        public GameObject CurveMenuParent;
-        public GameObject CurveMenuContent;
-        public GameObject CurveMenuButtonPrefab;
+        /// <summary>
+        /// Root parent of the curve selection sub menu
+        /// </summary>
+        public GameObject curveMenuParent;
+        
+        /// <summary>
+        /// Parent for all generated curve selection sub menu buttons
+        /// </summary>
+        public GameObject curveMenuContent;
+        
+        /// <summary>
+        /// Curve selection button prefab
+        /// </summary>
+        public GameObject curveMenuButtonPrefab;
 
+        /// <summary>
+        /// World instance
+        /// </summary>
         public WorldStateController world;
 
-        public CurveSelectionStateContext CurveSelectionFSM { get; set; }
+        #endregion Public members
+        
+        #region Private members
+        
+        /// <summary>
+        /// UI state machine
+        /// </summary>
+        private CurveSelectionStateContext CurveSelectionFsm { get; set; }
+        
+        /// <summary>
+        /// Initial display curves state
+        /// </summary>
+        private DisplayCurvesState _displayState;
+        
+        /// <summary>
+        /// Initial exercises state
+        /// </summary>
+        private ExerciseCurvesState _exerciseState;
 
-        public DisplayCurvesState DisplayState;
-        public ExerciseCurvesState exerciseState;
+        #endregion Private members
 
-        // Start is called before the first frame update
-        void Start()
+        #region Private functions
+        
+        /// <summary>
+        /// Unity Start function
+        /// ====================
+        /// 
+        /// This function is called before the first frame update, after
+        /// <see>
+        ///     <cref>Awake</cref>
+        /// </see>
+        /// </summary>
+        private void Start()
         {
-            DisplayState = new DisplayCurvesState(CurveMenuContent, CurveMenuButtonPrefab, world);
-            exerciseState = new ExerciseCurvesState(CurveMenuContent, CurveMenuButtonPrefab, world);
-            CurveSelectionFSM = new CurveSelectionStateContext(DisplayState);
-
+            _displayState = new DisplayCurvesState(curveMenuContent, curveMenuButtonPrefab, world);
+            _exerciseState = new ExerciseCurvesState(curveMenuContent, curveMenuButtonPrefab, world);
+            CurveSelectionFsm = new CurveSelectionStateContext(_displayState);
 
             if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated)
             {
-                MainMenuParent.SetActive(false);
-                CurveMenuParent.SetActive(false);
+                mainMenuParent.SetActive(false);
+                curveMenuParent.SetActive(false);
                 return;
             };
         
-            string[] displayGrps = Enum.GetNames(typeof(GlobalDataModel.CurveDisplayGroup));
+            var displayGroups = Enum.GetNames(typeof(GlobalDataModel.CurveDisplayGroup));
         
-        
-        
-            GlobalDataModel.CurveDisplayGroup[] displayGrpValues = (GlobalDataModel.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalDataModel.CurveDisplayGroup));
-            for (int i = 0; i < displayGrps.Length; i++)
+            var displayGrpValues = 
+                (GlobalDataModel.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalDataModel.CurveDisplayGroup));
+            for (var i = 0; i < displayGroups.Length; i++)
             {
                 // Get current group name
-                string dgrpName = displayGrps[i];
+                var curveDisplayGroupName = displayGroups[i];
             
                 // Make sure group is activated
-                switch (dgrpName)
+                switch (curveDisplayGroupName)
                 {
                     case "Display":
                         if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves ||
@@ -77,15 +127,15 @@ namespace UI
                 }
             
                 // Create instance of button prefab
-                GlobalDataModel.CurveDisplayGroup dgrpVal = displayGrpValues[i];
-                GameObject tmpButton = Instantiate(MainMenuButtonPrefab, MainMenuButtonsParent.transform);
-                tmpButton.name = dgrpName + "GrpButton";
+                var dgrpVal = displayGrpValues[i];
+                var tmpButton = Instantiate(mainMenuButtonPrefab, mainMenuButtonsParent.transform);
+                tmpButton.name = curveDisplayGroupName + "GrpButton";
                 Destroy(tmpButton.GetComponent<RawImage>());
 
-                TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
-                label.text = dgrpName;
+                var label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
+                label.text = curveDisplayGroupName;
 
-                Button b = tmpButton.GetComponent<Button>();
+                var b = tmpButton.GetComponent<Button>();
                 switch(i)
                 {
                     default:
@@ -101,8 +151,8 @@ namespace UI
 
             SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
         }
-        
-        public void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
+
+        private void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated) return;
         
@@ -114,33 +164,32 @@ namespace UI
                 default:
                 case GlobalDataModel.CurveDisplayGroup.Display:
                     if (GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves)
-                        CurveSelectionFSM.State = DisplayState;
+                        CurveSelectionFsm.State = _displayState;
                     break;
 
                 case GlobalDataModel.CurveDisplayGroup.Exercises:
                     if(GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises)
-                        CurveSelectionFSM.State = exerciseState;
+                        CurveSelectionFsm.State = _exerciseState;
                     break;
             }
         
             // Reset curve and point indices
             GlobalDataModel.CurrentCurveIndex = 0;
 
-            CurveSelectionFSM.State.OnStateUpdate();
+            CurveSelectionFsm.State.OnStateUpdate();
 
             if (world.browserWall is null)
             {
                 Debug.Log("Browser Wall not initialized!");
             }
 
-            List<CurveInformationDataset> cds = GlobalDataModel.CurrentDataset;
+            var cds = GlobalDataModel.CurrentDataset;
             if(cds is null)
             {
                 Debug.Log("Datasets not initialized");
             }
 
-            CurveInformationDataset ds = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
-
+            var ds = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
             if(ds is null)
             {
                 Debug.Log("Current dataset is null");
@@ -151,5 +200,7 @@ namespace UI
                 //if (world.BrowserWall is { }) world.BrowserWall.OpenURL(ds.NotebookURL);
             }
         }
+        
+        #endregion Private functions
     }
 }
