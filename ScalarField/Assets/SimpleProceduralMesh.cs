@@ -6,6 +6,39 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SimpleProceduralMesh : MonoBehaviour
 {
+    public static class ColorMap
+    {
+        
+        
+        
+    }
+    
+    public static class Sequential {
+
+        public enum MultiHue
+        {
+            BuGn, BuPu, GnBu, OrRd, PuBu, PuBuGn,
+            PuRd, RdPu, YlGn, YlGnBu, YlOrBr, YlOrRd    
+        }
+
+        public enum SingleHue
+        {
+            Blues, Greens, Greys, Oranges, Purples, Reds
+        }
+         
+    }
+
+    public enum Diverging
+    {
+        BrBg, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral
+    }
+
+    public enum Qualitative
+    {
+        Accent, Dark2, Paired, Pastel1, Pastel2, Set1, Set2, Set3
+    }
+    
+    
     private void OnEnable()
     {
         var mesh = new Mesh
