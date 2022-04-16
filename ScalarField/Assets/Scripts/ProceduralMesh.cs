@@ -65,5 +65,10 @@ namespace DefaultNamespace
             
             Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);
         }
+
+        private void GenerateCustomMesh()
+        {
+            
+        }
     }
 }
