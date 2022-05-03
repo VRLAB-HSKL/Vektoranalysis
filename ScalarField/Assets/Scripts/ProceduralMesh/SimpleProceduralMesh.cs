@@ -253,7 +253,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         
         mesh.normals = normals.ToArray();
 
-        var colorList = GenerateColors(vertices);
+        var colorList = ColorTransferFunction(vertices); //GenerateColors(vertices);
         mesh.colors = colorList.ToArray();
 
         // mesh.colors = new[]
@@ -296,6 +296,21 @@ public class SimpleProceduralMesh : MonoBehaviour
         sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         //Instantiate(new SphereCollider)
         sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
+
+        Debug.Log("contact point: " + contact.point);
+        
+        // var mesh = GetComponent<MeshFilter>().mesh;
+        // for (int i = 0; i < mesh.vertices.Length; i++)
+        // {
+        //     var point = mesh.vertices[i];
+        //     var pointVec = transform.TransformPoint(point); //new Vector3(point.x, point.y, point.z);
+        //     if (pointVec == contact.point)
+        //     {
+        //         Debug.Log("Collided point: " + contact.point);
+        //         break;
+        //     }
+        // }
+
     }
 
     private void OrderVerticesTriangle(List<Vector3> vertices)
@@ -581,4 +596,36 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         return colorList;
     }
+
+
+    private Color[] colors = new[]
+    {
+        Color.black,
+        Color.blue,
+        Color.magenta,
+        Color.red,
+        Color.white
+    };
+
+    private List<Color> ColorTransferFunction(List<Vector3> vertices)
+    {
+        var maxz = vertices.Max(v => v.z);
+        var minz = vertices.Min(v => v.z);
+        var rangeZ = math.abs(maxz - minz);
+        //var step = rangeZ / 255f;
+        var colorList = new List<Color>();
+
+        var n = colors.Length;
+
+        for (int i = 0; i < vertices.Count; i++)
+        {
+            var z = vertices[i].z;
+            float raw_ts = ((z - minz) / (maxz - minz)) * (n - 1);
+            int ts = (int) raw_ts;
+            colorList.Add(colors[ts]);
+        }
+
+        return colorList;
+    }
+    
 }

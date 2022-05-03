@@ -173,7 +173,13 @@ namespace Model
         private static void ParseIniFile()
         {
             var json = Resources.Load(InitFileResourcePath, typeof(TextAsset) ) as TextAsset;
-        
+
+            if (json != null)
+            {
+                // var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                // sphere.transform.position = Vector3.zero;
+            }
+            
             var errors = new List<string>();
             ITraceWriter tr = new MemoryTraceWriter();
             var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
