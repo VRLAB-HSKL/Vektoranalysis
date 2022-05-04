@@ -256,6 +256,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         var colorList = ColorTransferFunction(vertices); //GenerateColors(vertices);
         mesh.colors = colorList.ToArray();
 
+        
         // mesh.colors = new[]
         // {
         //     Color.red, Color.green, Color.blue
@@ -611,6 +612,9 @@ public class SimpleProceduralMesh : MonoBehaviour
     {
         var maxz = vertices.Max(v => v.z);
         var minz = vertices.Min(v => v.z);
+        
+        Debug.Log("min: " + minz + ", max: " + maxz);
+        
         var rangeZ = math.abs(maxz - minz);
         //var step = rangeZ / 255f;
         var colorList = new List<Color>();

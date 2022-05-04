@@ -357,7 +357,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 23b14ed39ef5ffe4a88ed29357ee48c8, type: 2}
+  - {fileID: 2100000, guid: f650bda1e13dc8a4d8ef6c2a36662cf1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -399,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5e9bf186b73aa4eb2f99c4b97c2bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnPointMat: {fileID: 0}
   NumerOfSamples: 100
 --- !u!64 &941685793
 MeshCollider:
