@@ -12,6 +12,7 @@ public class SimpleProceduralMesh : MonoBehaviour
 {
 
     public Material SpawnPointMat;
+    public Vector3 ScalingVector = Vector3.one;
     
     public static class ColorMap
     {
@@ -51,7 +52,6 @@ public class SimpleProceduralMesh : MonoBehaviour
     private void Awake()
     {
         initPos = transform.position;
-        Debug.Log("initPos: " + initPos);
         CustomCalc();
     }
 
@@ -117,8 +117,6 @@ public class SimpleProceduralMesh : MonoBehaviour
 
     
     
-    public int NumerOfSamples = 100;
-    
     
     
     private void CustomCalc()
@@ -133,25 +131,33 @@ public class SimpleProceduralMesh : MonoBehaviour
         var x_lower = -5f * math.PI;
         var x_upper = 5f * math.PI;
         var x_range = x_upper - x_lower;
-        var x_step = x_range / NumerOfSamples;
+        var x_step = x_range / GlobalDataModel.NumberOfSamples;
 
         var y_lower = -5f * math.PI;
         var y_upper = 5f * math.PI;
         var y_range = y_upper - y_lower;
-        var y_step = y_range / NumerOfSamples;
+        var y_step = y_range / GlobalDataModel.NumberOfSamples;
         
         var vertices = new List<Vector3>();
 
-        for(int i = 0; i < NumerOfSamples; i++)
+        for(int i = 0; i < GlobalDataModel.NumberOfSamples; i++)
         {
             var x = i * x_step;
             float y = 0f;
-            for (int j = 0; j < NumerOfSamples; j++)
+            for (int j = 0; j < GlobalDataModel.NumberOfSamples; j++)
             {
                 y = j * y_step;    
                 var z = -math.sin(x) * math.sin(y);
-            
-                vertices.Add(new Vector3(x, y, z));
+
+                var calculatedVector = new Vector3(x, y, z);
+                
+                // Switch axis to create horizontal mesh
+                var displayVector = new Vector3(x, z, y);
+                // Scale points to 1/10th
+                //displayVector *= ScalingVector;
+                displayVector = Vector3.Scale(displayVector, ScalingVector);
+                
+                vertices.Add(displayVector);
             }
 
         }
@@ -234,10 +240,6 @@ public class SimpleProceduralMesh : MonoBehaviour
         mesh.SetIndices(indices.ToArray(), topology, 0, true);
 
 
-
-        
-        
-
         // // flip normals on duplicated vertices
         // int normalsHalf = (int)math.floor(normals.Count * 0.5f);
         // for (int i = normalsHalf; i < normals.Count; i++)
@@ -288,18 +290,48 @@ public class SimpleProceduralMesh : MonoBehaviour
 
     }
 
+    private GameObject sphere;
+    
     private void OnCollisionEnter(Collision collision)
     {
         var contact = collision.GetContact(0);
 
-        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        if (sphere != null)
+        {
+            Destroy(sphere);
+        }
+        
+        
+        sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.transform.position = contact.point;
         sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         //Instantiate(new SphereCollider)
         sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
 
         Debug.Log("contact point: " + contact.point);
-        
+
+        sphere.name = "TravelTarget";
+
+        var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
+            collision.collider.transform.rotation);
+
+        GlobalDataModel.ClosestPointOnMesh = closestPoint;
+
+        if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit));
+        {
+            if (hit.collider is MeshCollider)
+            {
+                Debug.Log("Raycast Hit!");
+                var collider = hit.collider as MeshCollider;
+                var mesh = collider.sharedMesh;
+                
+                Debug.Log("Triangle: " + hit.triangleIndex + " / " + mesh.triangles.Length);
+                var p0 = mesh.vertices[mesh.triangles[hit.triangleIndex]];
+
+                GlobalDataModel.ClosestPointOnMesh = hit.point; //hit.collider.transform.TransformPoint(p0);
+            }
+        }
+
         // var mesh = GetComponent<MeshFilter>().mesh;
         // for (int i = 0; i < mesh.vertices.Length; i++)
         // {
@@ -381,15 +413,15 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         for (int i = 0; i < vertices.Count; i++)
         {
-            bool isUpperBound = i % NumerOfSamples == (NumerOfSamples - 1);
-            bool isLastColumn = i >= (NumerOfSamples * NumerOfSamples - NumerOfSamples);
+            bool isUpperBound = i % GlobalDataModel.NumberOfSamples == (GlobalDataModel.NumberOfSamples - 1);
+            bool isLastColumn = i >= (GlobalDataModel.NumberOfSamples * GlobalDataModel.NumberOfSamples - GlobalDataModel.NumberOfSamples);
             bool drawLowerLeftTriangle = !isLastColumn && !isUpperBound;
 
             if (drawLowerLeftTriangle)
             {
                 var firstIndex = i;
                 var secondIndex = i + 1;
-                var thirdIndex = i + NumerOfSamples;
+                var thirdIndex = i + GlobalDataModel.NumberOfSamples;
                 
                 // var str = "LowerFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
                 //           "LowerSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
@@ -403,25 +435,25 @@ public class SimpleProceduralMesh : MonoBehaviour
                 {
                     indicesList.Add(i);
                     indicesList.Add(i + 1);
-                    indicesList.Add(i + NumerOfSamples);    
+                    indicesList.Add(i + GlobalDataModel.NumberOfSamples);    
                 }
                 else
                 {
                     indicesList.Add(i);
-                    indicesList.Add(i + NumerOfSamples);
+                    indicesList.Add(i + GlobalDataModel.NumberOfSamples);
                     indicesList.Add(i + 1);
                 }
                     
             }
 
-            bool isLowerBound = i % NumerOfSamples == 0;
-            bool isFirstColumn = i < NumerOfSamples;
+            bool isLowerBound = i % GlobalDataModel.NumberOfSamples == 0;
+            bool isFirstColumn = i < GlobalDataModel.NumberOfSamples;
             bool drawUpperRightTriangle = !isLowerBound && !isFirstColumn;
 
             if (drawUpperRightTriangle)
             {
                 var firstIndex = i - 1;
-                var secondIndex = i - NumerOfSamples;
+                var secondIndex = i - GlobalDataModel.NumberOfSamples;
                 var thirdIndex = i;
                 
                 // var str =  "UpperFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
@@ -435,14 +467,14 @@ public class SimpleProceduralMesh : MonoBehaviour
                 if (windClockWise)
                 {
                     indicesList.Add(i - 1);
-                    indicesList.Add(i - NumerOfSamples);
+                    indicesList.Add(i - GlobalDataModel.NumberOfSamples);
                     indicesList.Add(i);    
                 }
                 else
                 {
                     indicesList.Add(i - 1);
                     indicesList.Add(i);
-                    indicesList.Add(i - NumerOfSamples);
+                    indicesList.Add(i - GlobalDataModel.NumberOfSamples);
                 }
                     
             }
@@ -466,14 +498,14 @@ public class SimpleProceduralMesh : MonoBehaviour
             
             // Up
             indices.Add(i + 1);
-            indices.Add(i + NumerOfSamples + 1);
+            indices.Add(i + GlobalDataModel.NumberOfSamples + 1);
             
             // Right
-            indices.Add(i + NumerOfSamples + 1);
-            indices.Add(i + NumerOfSamples);
+            indices.Add(i + GlobalDataModel.NumberOfSamples + 1);
+            indices.Add(i + GlobalDataModel.NumberOfSamples);
             
             // Down
-            indices.Add(i + NumerOfSamples);
+            indices.Add(i + GlobalDataModel.NumberOfSamples);
             indices.Add(i);
         }
 
@@ -519,8 +551,8 @@ public class SimpleProceduralMesh : MonoBehaviour
                     var normal = CalculateQuadNormal(
                         vertices[indices[i]],
                         vertices[indices[i + 1]],
-                        vertices[indices[i + NumerOfSamples + 1]],
-                        vertices[indices[i + NumerOfSamples]]
+                        vertices[indices[i + GlobalDataModel.NumberOfSamples + 1]],
+                        vertices[indices[i + GlobalDataModel.NumberOfSamples]]
                     );
                 }
 
