@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Calculation;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -115,7 +116,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    
+
     
     
     
@@ -128,40 +129,8 @@ public class SimpleProceduralMesh : MonoBehaviour
         
         //const int n = 100;
 
-        var x_lower = -5f * math.PI;
-        var x_upper = 5f * math.PI;
-        var x_range = x_upper - x_lower;
-        var x_step = x_range / GlobalDataModel.NumberOfSamples;
 
-        var y_lower = -5f * math.PI;
-        var y_upper = 5f * math.PI;
-        var y_range = y_upper - y_lower;
-        var y_step = y_range / GlobalDataModel.NumberOfSamples;
-        
-        var vertices = new List<Vector3>();
-
-        for(int i = 0; i < GlobalDataModel.NumberOfSamples; i++)
-        {
-            var x = i * x_step;
-            float y = 0f;
-            for (int j = 0; j < GlobalDataModel.NumberOfSamples; j++)
-            {
-                y = j * y_step;    
-                var z = -math.sin(x) * math.sin(y);
-
-                var calculatedVector = new Vector3(x, y, z);
-                
-                // Switch axis to create horizontal mesh
-                var displayVector = new Vector3(x, z, y);
-                // Scale points to 1/10th
-                //displayVector *= ScalingVector;
-                displayVector = Vector3.Scale(displayVector, ScalingVector);
-                
-                vertices.Add(displayVector);
-            }
-
-        }
-
+        var vertices = LocalCalc.CalculateField01(ScalingVector);
 
         var log = false;
         var sb = new StringBuilder();
@@ -327,8 +296,14 @@ public class SimpleProceduralMesh : MonoBehaviour
                 
                 Debug.Log("Triangle: " + hit.triangleIndex + " / " + mesh.triangles.Length);
                 var p0 = mesh.vertices[mesh.triangles[hit.triangleIndex]];
+                var p1 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 1];
+                var p2 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 2];
 
-                GlobalDataModel.ClosestPointOnMesh = hit.point; //hit.collider.transform.TransformPoint(p0);
+                var p = p0.y > p1.y ? p0 : p1;
+                p = p2.y > p.y ? p2 : p;
+                    
+                //GlobalDataModel.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
+                GlobalDataModel.EstimatedIndex = mesh.triangles[hit.triangleIndex];
             }
         }
 
@@ -559,7 +534,7 @@ public class SimpleProceduralMesh : MonoBehaviour
                 break;
         }
         
-        Debug.Log("vertices: " + vertices.Count + " normals: " + normals.Count);
+        // Debug.Log("vertices: " + vertices.Count + " normals: " + normals.Count);
 
         return normals;
 

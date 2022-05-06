@@ -4,7 +4,6 @@ Shader "Custom/TutorialShader"
 {	
 	Properties
 	{
-		_BaseValue("BaseValue", float) = 1.25
 		_MinValue("MinValue", float) = 0
 		_MaxValue("MaxValue", float) = 1
 		
@@ -62,64 +61,61 @@ Shader "Custom/TutorialShader"
 			float _MinValue;
 
 			int _ColorCount;
+
+			float4 _FloorColor;
+			float4 _CeilingColor;
+
+			float4 CalcualteBlendedColor(float4 baseColor, float4 floorColor, float4 ceilingColor,
+				float4 positionalFactor, float4 blendingFactor)
+			{
+				float4 blendingColor = float4(0, 0, 0, 1);
+				blendingColor += (1.0 - positionalFactor) * floorColor;
+				blendingColor += positionalFactor * ceilingColor;
+
+				float4 retCol = (1.0 - blendingFactor) * baseColor;
+				retCol += blendingFactor * blendingColor;
+				
+				return retCol;
+			}
 			
 			float4 colorTransferFunction(float4 pos, float3 objPos, float3 worldPos)
 			{
+				// Determine color index
 				float value = worldPos.y;
+
+				//if(value < _MinValue || value > _MaxValue) return float4(0, 0, 0, 1);
+				
 				float rawts = ((value - _MinValue) / (_MaxValue - _MinValue)) * (_ColorCount - 1);
-				uint ts = (int) rawts;
+				uint ts = (uint) rawts;
 
-				// if(value <= 0.25) ts = 0;
-				//
-				// if(value > 0.25 && value < 0.75) ts = 1;
-				//
-				// if(value <= 100) ts = 2;
-
+				// Calculate blending factor
 				float range = _MaxValue - _MinValue;
 				float val = value - _MinValue;
 				float factor = val / range;
+
+				// Activate blending, i.e. interpolate neighbouring colors into color of current class
+				bool blendColors = false;				
+				float blendingFactor = 0.25f;
 				
 				switch(ts)
 				{					
-					case 0: return _Color01 * factor;
-					case 1: return _Color02 * factor;
-					case 2: return _Color03 * factor;
-					case 3: return _Color04 * factor;
-
-					default:
-					case 4: return _Color05 * factor;
-					//float4(1, 1, 1, 1);					
+					case 0: return blendColors ?
+						CalcualteBlendedColor(_Color01, _FloorColor, _Color02,
+							factor, blendingFactor) : _Color01;
+					case 1: return blendColors ? CalcualteBlendedColor(_Color02, _Color01,
+						_Color03, factor, blendingFactor) : _Color02;
+					case 2: return blendColors ? CalcualteBlendedColor(_Color03, _Color02,
+						_Color04, factor, blendingFactor) : _Color03;
+					//case 1: return _Color02 + (blendColors ? (1.0 - factor) * _Color01 + factor * _Color03 : 0);
+					//case 2: return _Color03 + (blendColors ? (1.0 - factor) * _Color02 + factor * _Color04 : 0);
+					case 3: return _Color04 + (blendColors ? (1.0 - factor) * _Color03 + factor * _Color05 : 0);
+					case 4: return _Color05 + (blendColors ? (1.0 - factor) * _Color04 + factor * _CeilingColor : 0);
+					default: return _Color05; //float4(0, 0, 0, 1);
 				}
 
-				//
-				// for (int i = 0; i < vertices.Count; i++)
-				  //       {
-				  //           var z = vertices[i].z;
-				  //           float raw_ts = ((z - minz) / (maxz - minz)) * (n - 1);
-				  //           int ts = (int) raw_ts;
-				  //           colorList.Add(colors[ts]);
-				  //       }
-
-
-
-				
-
-				// if(z < 0)
-				// {
-				// 	return _Color01;
-				// }
-				//
-				// if(z == 0)
-				// {
-				// 	return _Color02;
-				// }
-				//
-				// if(z > 0)
-				// 	return _Color03;			
-				//
-
-				return float4(1, 1, 1, 1);
 			}
+
+			
 
 			
 		    float4 frag(FromVertToFrag i) : SV_Target

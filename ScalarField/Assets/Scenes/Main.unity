@@ -1181,6 +1181,7 @@ MonoBehaviour:
   buttonObject: {fileID: 1601351472}
   holdButton: 0
   field: {fileID: 1976931704}
+  distanceEpsilon: 0.01
 --- !u!1001 &1168186900
 PrefabInstance:
   m_ObjectHideFlags: 0

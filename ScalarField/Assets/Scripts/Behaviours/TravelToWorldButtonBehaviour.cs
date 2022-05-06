@@ -70,7 +70,7 @@ public class TravelToWorldButtonBehaviour : AbstractButtonBehaviour
         
         Debug.Log("Estimated index: " + index + ", smallest distance: " + smalledDist);
 
-        GlobalDataModel.EstimatedIndex = index;
+        //GlobalDataModel.EstimatedIndex = index;
 
         SceneManager.LoadScene("Detail");
         

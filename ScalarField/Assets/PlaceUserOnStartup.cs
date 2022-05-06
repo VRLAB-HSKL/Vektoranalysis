@@ -19,5 +19,9 @@ public class PlaceUserOnStartup : MonoBehaviour
         Debug.Log("Attempting to place at index: " + GlobalDataModel.EstimatedIndex + "/" + points.Count);
         var position = field.transform.TransformPoint(points[GlobalDataModel.EstimatedIndex]);
         user.transform.position = position;
+
+
+
+        user.transform.position = new Vector3(0f, 2f, 0f);
     }
 }
