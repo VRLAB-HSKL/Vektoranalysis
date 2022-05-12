@@ -130,18 +130,20 @@ public class SimpleProceduralMesh : MonoBehaviour
         //const int n = 100;
 
 
-        var vertices = LocalCalc.CalculateField01(ScalingVector);
+        var vertices_tuple = LocalCalc.CalculateField01(ScalingVector);
+        var raw_vertices = vertices_tuple.Item1;
+        var display_vertices = vertices_tuple.Item2;
 
         var log = false;
         var sb = new StringBuilder();
-        for (int i = 0; i < vertices.Count; i++)
+        for (int i = 0; i < display_vertices.Count; i++)
         {
-            sb.AppendLine(vertices[i].ToString());
+            sb.AppendLine(display_vertices[i].ToString());
         }
 
         if (log)
         {
-            Debug.Log("Init vertices List:" + vertices.Count + "\n" + sb);
+            Debug.Log("Init vertices List:" + display_vertices.Count + "\n" + sb);
         }
             
         sb.Clear();
@@ -169,18 +171,18 @@ public class SimpleProceduralMesh : MonoBehaviour
         {
             default:
             case MeshTopology.Triangles:
-                indices = GenerateTriangleIndices(vertices);
-                var backIndices = GenerateTriangleIndices(vertices, false);
-                vertices.AddRange(vertices);
+                indices = GenerateTriangleIndices(display_vertices);
+                var backIndices = GenerateTriangleIndices(display_vertices, false);
+                display_vertices.AddRange(display_vertices);
                 indices.AddRange(backIndices);
                 break;
             
             case MeshTopology.Lines:
-                indices = GenerateLineIndices(vertices);
+                indices = GenerateLineIndices(display_vertices);
                 break;
         }
             
-        mesh.vertices = vertices.ToArray();
+        mesh.vertices = display_vertices.ToArray();
         
         // var triangles = new List<int>();
         // for (int i = 0; i < vertices.Count; i+= 3)
@@ -216,7 +218,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         //     normals[i] *= -1;
         // }
 
-        var normals = CalculateNormals(vertices, indices, MeshTopology.Triangles);
+        var normals = CalculateNormals(display_vertices, indices, MeshTopology.Triangles);
         if (log)
         {
             Debug.Log("Normals:" + normals.Count);
@@ -224,15 +226,51 @@ public class SimpleProceduralMesh : MonoBehaviour
         
         mesh.normals = normals.ToArray();
 
-        var colorList = ColorTransferFunction(vertices); //GenerateColors(vertices);
+        var colorList = ColorTransferFunction(display_vertices); //GenerateColors(vertices);
         mesh.colors = colorList.ToArray();
 
+        
+        
         
         // mesh.colors = new[]
         // {
         //     Color.red, Color.green, Color.blue
         // };
 
+        Vector2[] uvs = new Vector2[display_vertices.Count];
+
+
+        var step = 1f / display_vertices.Count;
+
+        var x_min = display_vertices.Min(v => v.x);
+        var x_max = display_vertices.Max(v => v.x);
+        var y_min = display_vertices.Min(v => v.y);
+        var y_max = display_vertices.Max(v => v.y);
+        var z_min = display_vertices.Min(v => v.z);
+        var z_max = display_vertices.Max(v => v.z);    
+        
+        var x_range = Mathf.Abs(x_max - x_min);
+        var y_range = Mathf.Abs(y_max - y_min);
+        var z_range = Mathf.Abs(z_max - z_min);
+        
+        for (int i = 0; i < display_vertices.Count; i++)
+        {
+            var vertex = display_vertices[i];
+            var x = vertex.x + x_min;
+            var y = vertex.y + y_min;
+            var z = vertex.z - z_min;
+            
+            var x_factor = x / x_range;
+            var y_factor = y / y_range;
+            var z_factor = z / z_range;
+            
+            var uv_vec = new Vector2(x_factor, y_factor); //new Vector2(vertices[i].x, vertices[i].z);
+            Debug.Log("uv_vec: " + uv_vec);
+            uvs[i] = uv_vec;
+        }
+        mesh.uv = uvs;
+        
+        
         var lineIndices = new List<int>();
         
         //mesh.SetIndices(new int[] {0,1, 2,3, 4,5 }, MeshTopology.Lines, 0, true); 
@@ -286,7 +324,7 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         GlobalDataModel.ClosestPointOnMesh = closestPoint;
 
-        if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit));
+        if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
         {
             if (hit.collider is MeshCollider)
             {

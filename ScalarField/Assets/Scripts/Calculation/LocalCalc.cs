@@ -7,23 +7,27 @@ namespace Calculation
 {
     public static class LocalCalc
     {
-        public static List<Vector3> CalculateField01(Vector3 scalingVector)
+        public static Tuple<List<Vector3>, List<Vector3>> CalculateField01(Vector3 scalingVector)
         {
-            var x_lower = -5f * math.PI;
-            var x_upper = 5f * math.PI;
+            var x_lower = 0f;//-5f * math.PI;
+            var x_upper = 1f * math.PI;
             // var x_range = x_upper - x_lower;
             // var x_step = x_range / GlobalDataModel.NumberOfSamples;
 
             var x_values = CreateRange(x_lower, x_upper, GlobalDataModel.NumberOfSamples);
-            
-            var y_lower = -5f * math.PI;
-            var y_upper = 5f * math.PI;
+
+            var y_lower = 0f;//-5f * math.PI;
+            var y_upper = 2f * math.PI;
             // var y_range = y_upper - y_lower;
             // var y_step = y_range / GlobalDataModel.NumberOfSamples;
 
             var y_values = CreateRange(y_lower, y_upper, GlobalDataModel.NumberOfSamples);
-            
-            var vertices = new List<Vector3>();
+
+            var raw_vertices = new List<Vector3>();
+            var display_vertices = new List<Vector3>();
+
+            var zmin = float.MaxValue;
+            var zmax = float.MinValue;
 
             for(int i = 0; i < GlobalDataModel.NumberOfSamples; i++)
             {
@@ -34,20 +38,30 @@ namespace Calculation
                     y = y_values[j]; //j * y_step;    
                     var z = -math.sin(x) * math.sin(y);
 
+                    if (z < zmin) zmin = z;
+                    if (z > zmax) zmax = z;
+
                     var calculatedVector = new Vector3(x, y, z);
                 
+                    raw_vertices.Add(calculatedVector);
+                    
                     // Switch axis to create horizontal mesh
                     var displayVector = new Vector3(x, z, y);
+
+                    //var displayVector = new Vector3(y, z, x);
+                    
                     // Scale points to 1/10th
                     //displayVector *= ScalingVector;
                     displayVector = Vector3.Scale(displayVector, scalingVector);
                 
-                    vertices.Add(displayVector);
+                    display_vertices.Add(displayVector);
                 }
 
             }
 
-            return vertices;
+            Debug.Log("zmin: " + zmin + ", zmax: " + zmax);
+            
+            return new Tuple<List<Vector3>, List<Vector3>>(raw_vertices, display_vertices);
         }
 
         //private static float e = 2.71828182845904523536028747135266249775724709369995f;
