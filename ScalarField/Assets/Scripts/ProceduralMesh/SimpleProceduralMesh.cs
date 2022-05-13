@@ -12,8 +12,10 @@ using UnityEngine.UIElements;
 public class SimpleProceduralMesh : MonoBehaviour
 {
 
-    public Material SpawnPointMat;
     public Vector3 ScalingVector = Vector3.one;
+
+    public Texture2D Texture;
+    public BoxCollider Collider; 
     
     public static class ColorMap
     {
@@ -54,6 +56,7 @@ public class SimpleProceduralMesh : MonoBehaviour
     {
         initPos = transform.position;
         CustomCalc();
+        
     }
 
     private void OnEnable()
@@ -242,20 +245,20 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         var step = 1f / display_vertices.Count;
 
-        var x_min = display_vertices.Min(v => v.x);
-        var x_max = display_vertices.Max(v => v.x);
-        var y_min = display_vertices.Min(v => v.y);
-        var y_max = display_vertices.Max(v => v.y);
-        var z_min = display_vertices.Min(v => v.z);
-        var z_max = display_vertices.Max(v => v.z);    
+        var x_min = raw_vertices.Min(v => v.x);
+        var x_max = raw_vertices.Max(v => v.x);
+        var y_min = raw_vertices.Min(v => v.y);
+        var y_max = raw_vertices.Max(v => v.y);
+        var z_min = raw_vertices.Min(v => v.z);
+        var z_max = raw_vertices.Max(v => v.z);    
         
         var x_range = Mathf.Abs(x_max - x_min);
         var y_range = Mathf.Abs(y_max - y_min);
         var z_range = Mathf.Abs(z_max - z_min);
         
-        for (int i = 0; i < display_vertices.Count; i++)
+        for (int i = 0; i < raw_vertices.Count; i++)
         {
-            var vertex = display_vertices[i];
+            var vertex = raw_vertices[i];
             var x = vertex.x + x_min;
             var y = vertex.y + y_min;
             var z = vertex.z - z_min;
@@ -264,7 +267,7 @@ public class SimpleProceduralMesh : MonoBehaviour
             var y_factor = y / y_range;
             var z_factor = z / z_range;
             
-            var uv_vec = new Vector2(x_factor, y_factor); //new Vector2(vertices[i].x, vertices[i].z);
+            var uv_vec = new Vector2(y_factor, x_factor); //new Vector2(vertices[i].x, vertices[i].z);
             Debug.Log("uv_vec: " + uv_vec);
             uvs[i] = uv_vec;
         }
@@ -295,69 +298,73 @@ public class SimpleProceduralMesh : MonoBehaviour
         collider.convex = true;
         collider.sharedMesh = mesh;
 
-    }
-
-    private GameObject sphere;
-    
-    private void OnCollisionEnter(Collision collision)
-    {
-        var contact = collision.GetContact(0);
-
-        if (sphere != null)
-        {
-            Destroy(sphere);
-        }
-        
-        
-        sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.position = contact.point;
-        sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        //Instantiate(new SphereCollider)
-        sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
-
-        Debug.Log("contact point: " + contact.point);
-
-        sphere.name = "TravelTarget";
-
-        var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
-            collision.collider.transform.rotation);
-
-        GlobalDataModel.ClosestPointOnMesh = closestPoint;
-
-        if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
-        {
-            if (hit.collider is MeshCollider)
-            {
-                Debug.Log("Raycast Hit!");
-                var collider = hit.collider as MeshCollider;
-                var mesh = collider.sharedMesh;
-                
-                Debug.Log("Triangle: " + hit.triangleIndex + " / " + mesh.triangles.Length);
-                var p0 = mesh.vertices[mesh.triangles[hit.triangleIndex]];
-                var p1 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 1];
-                var p2 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 2];
-
-                var p = p0.y > p1.y ? p0 : p1;
-                p = p2.y > p.y ? p2 : p;
-                    
-                //GlobalDataModel.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
-                GlobalDataModel.EstimatedIndex = mesh.triangles[hit.triangleIndex];
-            }
-        }
-
-        // var mesh = GetComponent<MeshFilter>().mesh;
-        // for (int i = 0; i < mesh.vertices.Length; i++)
-        // {
-        //     var point = mesh.vertices[i];
-        //     var pointVec = transform.TransformPoint(point); //new Vector3(point.x, point.y, point.z);
-        //     if (pointVec == contact.point)
-        //     {
-        //         Debug.Log("Collided point: " + contact.point);
-        //         break;
-        //     }
-        // }
+        //var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        //plane.transform.position = transform.position;
+        //plane.transform.localScale = Vector3.Scale(plane.transform.localScale, ScalingVector);
 
     }
+    //
+    // private GameObject sphere;
+    //
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     var contact = collision.GetContact(0);
+    //
+    //     if (sphere != null)
+    //     {
+    //         Destroy(sphere);
+    //     }
+    //     
+    //     
+    //     sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    //     sphere.transform.position = contact.point;
+    //     sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+    //     //Instantiate(new SphereCollider)
+    //     sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
+    //
+    //     Debug.Log("contact point: " + contact.point);
+    //
+    //     sphere.name = "TravelTarget";
+    //
+    //     var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
+    //         collision.collider.transform.rotation);
+    //
+    //     GlobalDataModel.ClosestPointOnMesh = closestPoint;
+    //
+    //     if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
+    //     {
+    //         if (hit.collider is MeshCollider)
+    //         {
+    //             Debug.Log("Raycast Hit!");
+    //             var collider = hit.collider as MeshCollider;
+    //             var mesh = collider.sharedMesh;
+    //             
+    //             Debug.Log("Triangle: " + hit.triangleIndex + " / " + mesh.triangles.Length);
+    //             var p0 = mesh.vertices[mesh.triangles[hit.triangleIndex]];
+    //             var p1 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 1];
+    //             var p2 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 2];
+    //
+    //             var p = p0.y > p1.y ? p0 : p1;
+    //             p = p2.y > p.y ? p2 : p;
+    //                 
+    //             //GlobalDataModel.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
+    //             GlobalDataModel.EstimatedIndex = mesh.triangles[hit.triangleIndex];
+    //         }
+    //     }
+    //
+    //     // var mesh = GetComponent<MeshFilter>().mesh;
+    //     // for (int i = 0; i < mesh.vertices.Length; i++)
+    //     // {
+    //     //     var point = mesh.vertices[i];
+    //     //     var pointVec = transform.TransformPoint(point); //new Vector3(point.x, point.y, point.z);
+    //     //     if (pointVec == contact.point)
+    //     //     {
+    //     //         Debug.Log("Collided point: " + contact.point);
+    //     //         break;
+    //     //     }
+    //     // }
+    //
+    // }
 
     private void OrderVerticesTriangle(List<Vector3> vertices)
     {
