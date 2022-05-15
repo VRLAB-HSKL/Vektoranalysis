@@ -14,7 +14,6 @@ public class TravelToWorldButtonBehaviour : AbstractButtonBehaviour
     protected override void HandleButtonEvent()
     {
         
-        
         var travelObj = GameObject.Find("TravelTarget");
 
         if (travelObj is null)
@@ -34,48 +33,59 @@ public class TravelToWorldButtonBehaviour : AbstractButtonBehaviour
 
         var smalledDist = double.MaxValue;
         
-        for(var i = 0; i < points.Count; i++)
-        {
-            var point = field.gameObject.transform.TransformPoint(points[i]);
-            
-            // Translate to gameobject origin
-            //point += field.gameObject.transform.position;
-            
-            // Scale point based on gameobject global scaling
-            //point = Vector3.Scale(point, field.gameObject.transform.lossyScale);
-
-            // Only calculate distance based on 2d table dimension to circumvent mesh collider optimization
-            var dist = Math.Sqrt(point.x * travelPosition.x + point.z * travelPosition.z); 
-            //var dist = Vector3.Distance(point, travelPosition);
-
-            if (dist < smalledDist) 
-                smalledDist = dist;
-            
-            Debug.Log("initPoint: " + points[i] + ", transformedPoint: " + point + 
-                      ", travelPos: " + travelPosition + ", distance: " + dist);
-             
-            if ( dist < distanceEpsilon )
-            {
-                index = i;
-                //field.mesh.colors[i] = Color.magenta;
-                break;
-            }
-        }
-
-        if (index == -1)
-        {
-            Debug.Log("No matching index found! Smallest distance: " + smalledDist);
-            return;
-        }
+        // for(var i = 0; i < points.Count; i++)
+        // {
+        //     var point = field.gameObject.transform.TransformPoint(points[i]);
+        //     
+        //     // Translate to gameobject origin
+        //     //point += field.gameObject.transform.position;
+        //     
+        //     // Scale point based on gameobject global scaling
+        //     //point = Vector3.Scale(point, field.gameObject.transform.lossyScale);
+        //
+        //     // Only calculate distance based on 2d table dimension to circumvent mesh collider optimization
+        //     var dist = Math.Sqrt(point.x * travelPosition.x + point.z * travelPosition.z); 
+        //     //var dist = Vector3.Distance(point, travelPosition);
+        //
+        //     if (dist < smalledDist) 
+        //         smalledDist = dist;
+        //     
+        //     //Debug.Log("initPoint: " + points[i] + ", transformedPoint: " + point + 
+        //     //          ", travelPos: " + travelPosition + ", distance: " + dist);
+        //      
+        //     if ( dist < distanceEpsilon )
+        //     {
+        //         index = i;
+        //         //field.mesh.colors[i] = Color.magenta;
+        //         break;
+        //     }
+        // }
+        //
+        // if (index == -1)
+        // {
+        //     Debug.Log("No matching index found! Smallest distance: " + smalledDist);
+        // //    return;
+        // }
         
-        Debug.Log("Estimated index: " + index + ", smallest distance: " + smalledDist);
+        //Debug.Log("Estimated index: " + index + ", smallest distance: " + smalledDist);
 
         //GlobalDataModel.EstimatedIndex = index;
 
-        SceneManager.LoadScene("Detail");
+        var simpleMesh = field.GetComponent<SimpleProceduralMesh>();
+        GlobalDataModel.MainMeshScalingVector = simpleMesh.ScalingVector;
         
+        StartCoroutine(LoadSceneAsync("Detail"));
+
+    }
+
+    IEnumerator LoadSceneAsync(string name)
+    {
+        var asyncOp = SceneManager.LoadSceneAsync(name);
         
-        
+        while (!asyncOp.isDone)
+        {
+            yield return null;
+        }
     }
 
 }

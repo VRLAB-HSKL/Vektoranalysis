@@ -11,4 +11,5 @@ public static class GlobalDataModel
     public static int NumberOfSamples = 200;
 
     public static Vector3 ClosestPointOnMesh = Vector3.zero;
+    public static Vector3 MainMeshScalingVector = Vector3.one;
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class MapPlacement : MonoBehaviour
 {
+    public GameObject PointerObject;
     public Material SpawnPointMat;
 
     private GameObject sphere;
-    
+
     private void OnCollisionEnter(Collision collision)
     {
         var contact = collision.GetContact(0);
@@ -16,22 +17,45 @@ public class MapPlacement : MonoBehaviour
         {
             Destroy(sphere);
         }
-        
-        
+
+        if (collision.gameObject != PointerObject.gameObject)
+        {
+            // Debug.Log("collObjName: " + collision.gameObject.name +
+            //           ", pointerObjName: " + PointerObject.name);
+            //
+            return;
+        }
+
         sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.position = contact.point;
+        sphere.transform.position = new Vector3(contact.point.x, transform.position.y + 0.025f, contact.point.z);
+        
         sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         //Instantiate(new SphereCollider)
         sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
 
         Debug.Log("contact point: " + contact.point);
 
+        var transformedPoint = transform.InverseTransformPoint(contact.point);
+        
+        Debug.Log("transformed point: " + transformedPoint);
+
+        // var x = transformedPoint.x;
+        // var y = transformedPoint.y;
+        // var z = transformedPoint.z;
+
+        //x += 0.5f;
+        //y += 0.5f;
+
+        var finalPoint = transformedPoint;
+        
+        Debug.Log("final point: " + finalPoint);
+        
         sphere.name = "TravelTarget";
 
         var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
             collision.collider.transform.rotation);
 
-        GlobalDataModel.ClosestPointOnMesh = closestPoint;
+        GlobalDataModel.ClosestPointOnMesh = transformedPoint; //closestPoint;
 
         // if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
         // {

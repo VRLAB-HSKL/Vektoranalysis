@@ -55,12 +55,13 @@ namespace Calculation
                     //displayVector *= ScalingVector;
                     displayVector = Vector3.Scale(displayVector, scalingVector);
                 
+                    
                     display_vertices.Add(displayVector);
                 }
 
             }
 
-            Debug.Log("zmin: " + zmin + ", zmax: " + zmax);
+            //Debug.Log("zmin: " + zmin + ", zmax: " + zmax);
             
             return new Tuple<List<Vector3>, List<Vector3>>(raw_vertices, display_vertices);
         }

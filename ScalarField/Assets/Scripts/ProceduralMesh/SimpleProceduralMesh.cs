@@ -268,7 +268,7 @@ public class SimpleProceduralMesh : MonoBehaviour
             var z_factor = z / z_range;
             
             var uv_vec = new Vector2(y_factor, x_factor); //new Vector2(vertices[i].x, vertices[i].z);
-            Debug.Log("uv_vec: " + uv_vec);
+            //Debug.Log("uv_vec: " + uv_vec);
             uvs[i] = uv_vec;
         }
         mesh.uv = uvs;
@@ -287,10 +287,10 @@ public class SimpleProceduralMesh : MonoBehaviour
         var transformedPoint = transform.TransformPoint(bounds.center);
         var offset = initPos - transformedPoint;
         
-        Debug.Log(
-            "initPos: " + initPos + ", target: " + target + ", bounds: " + bounds.center + 
-            ", transformedPoint: " + transformedPoint + ", offset: " + offset
-        );
+        // Debug.Log(
+        //     "initPos: " + initPos + ", target: " + target + ", bounds: " + bounds.center + 
+        //     ", transformedPoint: " + transformedPoint + ", offset: " + offset
+        // );
         
         transform.position = target + offset;
 
@@ -665,7 +665,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         var maxz = vertices.Max(v => v.z);
         var minz = vertices.Min(v => v.z);
         
-        Debug.Log("min: " + minz + ", max: " + maxz);
+        //Debug.Log("min: " + minz + ", max: " + maxz);
         
         var rangeZ = math.abs(maxz - minz);
         //var step = rangeZ / 255f;
