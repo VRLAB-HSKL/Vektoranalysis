@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -15,14 +16,16 @@ namespace Calculation
             // var x_range = x_upper - x_lower;
             // var x_step = x_range / GlobalDataModel.NumberOfSamples;
 
-            var x_values = CreateRange(x_lower, x_upper, GlobalDataModel.NumberOfSamples);
+            var x_values = LinSpace(x_lower, x_upper, GlobalDataModel.NumberOfSamples).ToArray();
+                //CreateRange(x_lower, x_upper, GlobalDataModel.NumberOfSamples);
 
             var y_lower = 0f;//-5f * math.PI;
             var y_upper = 2f * math.PI;
             // var y_range = y_upper - y_lower;
             // var y_step = y_range / GlobalDataModel.NumberOfSamples;
 
-            var y_values = CreateRange(y_lower, y_upper, GlobalDataModel.NumberOfSamples);
+            var y_values = LinSpace(y_lower, y_upper, GlobalDataModel.NumberOfSamples).ToArray(); 
+                //CreateRange(y_lower, y_upper, GlobalDataModel.NumberOfSamples);
 
             var raw_vertices = new List<Vector3>();
             var display_vertices = new List<Vector3>();
@@ -30,6 +33,8 @@ namespace Calculation
             var zmin = float.MaxValue;
             var zmax = float.MinValue;
 
+            
+            
             for(int i = 0; i < GlobalDataModel.NumberOfSamples; i++)
             {
                 var x = x_values[i];//i * x_step;
@@ -83,6 +88,52 @@ namespace Calculation
             }
 
             return values;
+        }
+        
+        /// <summary>
+        /// Source: https://gist.github.com/wcharczuk/3948606
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static IEnumerable<float> Arange(float start, int count)
+        {
+            return Enumerable.Range((int)start, count).Select(v => (float)v);
+        }
+        
+        /// <summary>
+        /// Source: https://gist.github.com/wcharczuk/3948606
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="num"></param>
+        /// <param name="endpoint"></param>
+        /// <returns></returns>
+        public static IEnumerable<float> LinSpace(float start, float stop, int num, bool endpoint = true)
+        {
+            var result = new List<float>();
+            if (num <= 0)
+            {
+                return result;
+            }
+
+            if (endpoint)
+            {
+                if (num == 1) 
+                {
+                    return new List<float>() { start };
+                }
+
+                var step = (stop - start)/ ((float)num - 1.0f);
+                result = Arange(0, num).Select(v => (v * step) + start).ToList();
+            }
+            else 
+            {
+                var step = (stop - start) / (float)num;
+                result = Arange(0, num).Select(v => (v * step) + start).ToList();
+            }
+
+            return result;
         }
         
         public static Tuple<List<Vector3>, List<Vector3>> CalculateField02(Vector3 scalingVector)
