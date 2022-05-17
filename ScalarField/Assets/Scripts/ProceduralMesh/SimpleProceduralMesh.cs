@@ -281,19 +281,29 @@ public class SimpleProceduralMesh : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
 
         // Move mesh to target destination
-        //var tfp = transform.position;
+        
+        // # Get mesh bounds
         var bounds = GetComponent<MeshFilter>().mesh.bounds;
+        
+        // # Create target vector
         var target = new Vector3(0f, 1.2f, 0f);
+        
+        // # Transform center of mesh position to global scope
         var transformedPoint = transform.TransformPoint(bounds.center);
+        
+        // Calculate offset between initial position and mesh center
         var offset = initPos - transformedPoint;
+
+        offset = new Vector3(offset.x, offset.y + 0.25f, offset.z);
         
         // Debug.Log(
         //     "initPos: " + initPos + ", target: " + target + ", bounds: " + bounds.center + 
         //     ", transformedPoint: " + transformedPoint + ", offset: " + offset
         // );
         
+        // Position mesh based on offset to position 
         transform.position = target + offset;
-
+        
         var collider = GetComponent<MeshCollider>();
         //collider.convex = true;
         collider.sharedMesh = mesh;
