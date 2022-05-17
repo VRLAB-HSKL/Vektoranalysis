@@ -20,9 +20,9 @@ public class MapPlacement : MonoBehaviour
 
         if (collision.gameObject != PointerObject.gameObject)
         {
-            // Debug.Log("collObjName: " + collision.gameObject.name +
-            //           ", pointerObjName: " + PointerObject.name);
-            //
+            Debug.Log("collObjName: " + collision.gameObject.name +
+                      ", pointerObjName: " + PointerObject.name);
+            
             return;
         }
 
