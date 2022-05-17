@@ -17,175 +17,104 @@ public class SimpleProceduralMesh : MonoBehaviour
     public Texture2D Texture;
     public BoxCollider Collider; 
     
-    public static class ColorMap
-    {
-        
-        
-        
-    }
-    
-    public static class Sequential {
-
-        public enum MultiHue
-        {
-            BuGn, BuPu, GnBu, OrRd, PuBu, PuBuGn,
-            PuRd, RdPu, YlGn, YlGnBu, YlOrBr, YlOrRd    
-        }
-
-        public enum SingleHue
-        {
-            Blues, Greens, Greys, Oranges, Purples, Reds
-        }
-         
-    }
-
-    public enum Diverging
-    {
-        BrBg, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral
-    }
-
-    public enum Qualitative
-    {
-        Accent, Dark2, Paired, Pastel1, Pastel2, Set1, Set2, Set3
-    }
-
+    // public static class ColorMap
+    // {
+    //     
+    //     
+    //     
+    // }
+    //
+    // public static class Sequential {
+    //
+    //     public enum MultiHue
+    //     {
+    //         BuGn, BuPu, GnBu, OrRd, PuBu, PuBuGn,
+    //         PuRd, RdPu, YlGn, YlGnBu, YlOrBr, YlOrRd    
+    //     }
+    //
+    //     public enum SingleHue
+    //     {
+    //         Blues, Greens, Greys, Oranges, Purples, Reds
+    //     }
+    //      
+    // }
+    //
+    // public enum Diverging
+    // {
+    //     BrBg, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral
+    // }
+    //
+    // public enum Qualitative
+    // {
+    //     Accent, Dark2, Paired, Pastel1, Pastel2, Set1, Set2, Set3
+    // }
+    //
 
     private Vector3 initPos = Vector3.zero;
 
     private void Awake()
     {
         initPos = transform.position;
-        CustomCalc();
-        
+        GenerateFieldMesh();
     }
 
-    private void OnEnable()
-    {
-        
-        return;
-        
-        var mesh = new Mesh
-        {
-            name="Procedural Mesh"
-        };
-
-        
-        
-        
-        mesh.vertices = new[]
-        {
-            Vector3.zero, Vector3.right, Vector3.up, new Vector3(1f, 1f)
-            //new Vector3(1.1f, 0f), new Vector3(0f, 1.1f), new Vector3(1.1f, 1.1f)
-        };
-
-        
-        
-        mesh.triangles = new[]
-        {
-            0, 2, 1, 1, 2, 3
-        };
-
-        
-        
-        
-        
-        var normals = new List<Vector3>();
-        
-        
-        mesh.normals = new[]
-        {
-            Vector3.back, Vector3.back, Vector3.back, Vector3.back 
-        };
-
-        mesh.uv = new[]
-        {
-            Vector2.zero, Vector2.right, Vector2.up, Vector2.one
-            
-        };
-
-        // mesh.colors = new[]
-        // {
-        //     Color.red, Color.green, Color.blue
-        // };
-
-        mesh.tangents = new[]
-        {
-            new Vector4(1f, 0f, 0f, -1f),
-            new Vector4(1f, 0f, 0f, -1f),
-            new Vector4(1f, 0f, 0f, -1f),
-            new Vector4(1f, 0f, 0f, -1f)
-        };
-        
-        GetComponent<MeshFilter>().mesh = mesh;
-    }
+    // private void OnEnable()
+    // {
+    //     
+    //     return;
+    //     
+    //     
+    // }
 
 
     
     
     
-    private void CustomCalc()
+    private void GenerateFieldMesh()
     {
         var mesh = new Mesh
         {
-            name="Procedural Mesh",
+            name="Scalar field mesh",
         };
         
-        //const int n = 100;
-
-
         var vertices_tuple = LocalCalc.CalculateField01(ScalingVector);
-        var raw_vertices = vertices_tuple.Item1;
-        var display_vertices = vertices_tuple.Item2;
+        var rawVertices = vertices_tuple.Item1;
+        var displayVertices = vertices_tuple.Item2;
 
         var log = false;
         var sb = new StringBuilder();
-        for (int i = 0; i < display_vertices.Count; i++)
+        for (int i = 0; i < displayVertices.Count; i++)
         {
-            sb.AppendLine(display_vertices[i].ToString());
+            sb.AppendLine(displayVertices[i].ToString());
         }
 
         if (log)
         {
-            Debug.Log("Init vertices List:" + display_vertices.Count + "\n" + sb);
+            Debug.Log("Init vertices List:" + displayVertices.Count + "\n" + sb);
         }
             
         sb.Clear();
 
-        
-        // for (int i = 0; i < vertices.Count; i++)
-        // {
-        //     sb.AppendLine(vertices[i].ToString());
-        // }
-        //
-        // Debug.Log("Ordered vertices List:" + vertices.Count +"\n" + sb);
-        
-        // // Double vertices
-        // orderedVertices.AddRange(orderedVertices);
-        //
-        
-        
-
         var topology = MeshTopology.Triangles;
-
-
         var indices = new List<int>();
 
         switch (topology)
         {
             default:
             case MeshTopology.Triangles:
-                indices = GenerateTriangleIndices(display_vertices);
-                var backIndices = GenerateTriangleIndices(display_vertices, false);
-                display_vertices.AddRange(display_vertices);
+                indices = GenerateTriangleIndices(displayVertices, true);
+                // Draw triangles twice to cover both sides
+                var backIndices = GenerateTriangleIndices(displayVertices, false);
+                displayVertices.AddRange(displayVertices);
                 indices.AddRange(backIndices);
                 break;
             
             case MeshTopology.Lines:
-                indices = GenerateLineIndices(display_vertices);
+                indices = GenerateLineIndices(displayVertices);
                 break;
         }
             
-        mesh.vertices = display_vertices.ToArray();
+        mesh.vertices = displayVertices.ToArray();
         
         // var triangles = new List<int>();
         // for (int i = 0; i < vertices.Count; i+= 3)
@@ -221,7 +150,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         //     normals[i] *= -1;
         // }
 
-        var normals = CalculateNormals(display_vertices, indices, MeshTopology.Triangles);
+        var normals = CalculateNormals(displayVertices, indices, MeshTopology.Triangles);
         if (log)
         {
             Debug.Log("Normals:" + normals.Count);
@@ -229,7 +158,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         
         mesh.normals = normals.ToArray();
 
-        var colorList = ColorTransferFunction(display_vertices); //GenerateColors(vertices);
+        var colorList = ColorTransferFunction(displayVertices); //GenerateColors(vertices);
         mesh.colors = colorList.ToArray();
 
         
@@ -240,25 +169,25 @@ public class SimpleProceduralMesh : MonoBehaviour
         //     Color.red, Color.green, Color.blue
         // };
 
-        Vector2[] uvs = new Vector2[display_vertices.Count];
+        Vector2[] uvs = new Vector2[displayVertices.Count];
 
 
-        var step = 1f / display_vertices.Count;
+        var step = 1f / displayVertices.Count;
 
-        var x_min = raw_vertices.Min(v => v.x);
-        var x_max = raw_vertices.Max(v => v.x);
-        var y_min = raw_vertices.Min(v => v.y);
-        var y_max = raw_vertices.Max(v => v.y);
-        var z_min = raw_vertices.Min(v => v.z);
-        var z_max = raw_vertices.Max(v => v.z);    
+        var x_min = rawVertices.Min(v => v.x);
+        var x_max = rawVertices.Max(v => v.x);
+        var y_min = rawVertices.Min(v => v.y);
+        var y_max = rawVertices.Max(v => v.y);
+        var z_min = rawVertices.Min(v => v.z);
+        var z_max = rawVertices.Max(v => v.z);    
         
         var x_range = Mathf.Abs(x_max - x_min);
         var y_range = Mathf.Abs(y_max - y_min);
         var z_range = Mathf.Abs(z_max - z_min);
         
-        for (int i = 0; i < raw_vertices.Count; i++)
+        for (int i = 0; i < rawVertices.Count; i++)
         {
-            var vertex = raw_vertices[i];
+            var vertex = rawVertices[i];
             var x = vertex.x + x_min;
             var y = vertex.y + y_min;
             var z = vertex.z - z_min;
@@ -313,69 +242,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         //plane.transform.localScale = Vector3.Scale(plane.transform.localScale, ScalingVector);
 
     }
-    //
-    // private GameObject sphere;
-    //
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     var contact = collision.GetContact(0);
-    //
-    //     if (sphere != null)
-    //     {
-    //         Destroy(sphere);
-    //     }
-    //     
-    //     
-    //     sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-    //     sphere.transform.position = contact.point;
-    //     sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-    //     //Instantiate(new SphereCollider)
-    //     sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
-    //
-    //     Debug.Log("contact point: " + contact.point);
-    //
-    //     sphere.name = "TravelTarget";
-    //
-    //     var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
-    //         collision.collider.transform.rotation);
-    //
-    //     GlobalDataModel.ClosestPointOnMesh = closestPoint;
-    //
-    //     if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
-    //     {
-    //         if (hit.collider is MeshCollider)
-    //         {
-    //             Debug.Log("Raycast Hit!");
-    //             var collider = hit.collider as MeshCollider;
-    //             var mesh = collider.sharedMesh;
-    //             
-    //             Debug.Log("Triangle: " + hit.triangleIndex + " / " + mesh.triangles.Length);
-    //             var p0 = mesh.vertices[mesh.triangles[hit.triangleIndex]];
-    //             var p1 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 1];
-    //             var p2 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 2];
-    //
-    //             var p = p0.y > p1.y ? p0 : p1;
-    //             p = p2.y > p.y ? p2 : p;
-    //                 
-    //             //GlobalDataModel.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
-    //             GlobalDataModel.EstimatedIndex = mesh.triangles[hit.triangleIndex];
-    //         }
-    //     }
-    //
-    //     // var mesh = GetComponent<MeshFilter>().mesh;
-    //     // for (int i = 0; i < mesh.vertices.Length; i++)
-    //     // {
-    //     //     var point = mesh.vertices[i];
-    //     //     var pointVec = transform.TransformPoint(point); //new Vector3(point.x, point.y, point.z);
-    //     //     if (pointVec == contact.point)
-    //     //     {
-    //     //         Debug.Log("Collided point: " + contact.point);
-    //     //         break;
-    //     //     }
-    //     // }
-    //
-    // }
-
+    
     private void OrderVerticesTriangle(List<Vector3> vertices)
     {
         int n = (int)math.floor(vertices.Count * 0.5); 
@@ -463,15 +330,15 @@ public class SimpleProceduralMesh : MonoBehaviour
 
                 if (windClockWise)
                 {
-                    indicesList.Add(i);
-                    indicesList.Add(i + 1);
-                    indicesList.Add(i + GlobalDataModel.NumberOfSamples);    
+                    indicesList.Add(firstIndex);
+                    indicesList.Add(secondIndex);
+                    indicesList.Add(thirdIndex);    
                 }
                 else
                 {
-                    indicesList.Add(i);
-                    indicesList.Add(i + GlobalDataModel.NumberOfSamples);
-                    indicesList.Add(i + 1);
+                    indicesList.Add(firstIndex);
+                    indicesList.Add(thirdIndex);
+                    indicesList.Add(secondIndex);
                 }
                     
             }
@@ -495,16 +362,16 @@ public class SimpleProceduralMesh : MonoBehaviour
                 // Upper right triangle
 
                 if (windClockWise)
-                {
-                    indicesList.Add(i - 1);
-                    indicesList.Add(i - GlobalDataModel.NumberOfSamples);
-                    indicesList.Add(i);    
+                {    
+                    indicesList.Add(firstIndex);
+                    indicesList.Add(secondIndex);
+                    indicesList.Add(thirdIndex);    
                 }
                 else
                 {
-                    indicesList.Add(i - 1);
-                    indicesList.Add(i);
-                    indicesList.Add(i - GlobalDataModel.NumberOfSamples);
+                    indicesList.Add(firstIndex);
+                    indicesList.Add(thirdIndex);
+                    indicesList.Add(secondIndex);
                 }
                     
             }
