@@ -295,7 +295,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         transform.position = target + offset;
 
         var collider = GetComponent<MeshCollider>();
-        collider.convex = true;
+        //collider.convex = true;
         collider.sharedMesh = mesh;
 
         //var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);

@@ -7,11 +7,21 @@ using UnityEngine.UIElements;
 public class PlaceUserOnStartup : MonoBehaviour
 {
     public MeshFilter field;
+
+    public GameObject Cockpit;
+    
+    /// <summary>
+    /// Positional offset, initially used to place the cockpit below the player
+    /// </summary>
+    public Vector3 CockpitOffset = new Vector3(0f, -2f, 0f);
+
+    private GameObject user;
+    private Vector3 MainPointPosition = Vector3.zero;
     
     // Start is called before the first frame update
     void Start()
     {
-        var user = GameObject.Find("ViveRig");
+        user = GameObject.Find("ViveRig");
 
         if (user is null) return;
 
@@ -62,17 +72,20 @@ public class PlaceUserOnStartup : MonoBehaviour
 
 
         var finalY = 2f;
-        
+        var hitPoint = Vector3.zero;
         
         // Shoot down and up in hopes of hitting the mesh and positioning the player above the hit point
         if (Physics.Raycast(new Ray(finalPoint, Vector3.down), out RaycastHit hitDown))
         {
-            finalY += hitDown.point.y; 
+            finalY += hitDown.point.y;
+            Debug.Log("DownHit: " + finalY);
             //finalPoint.Set(finalPoint.x, hitDown.point.y + verticalOffset, finalPoint.z); 
         }
         else if (Physics.Raycast(new Ray(finalPoint, Vector3.up), out RaycastHit hitUp))
         {
             finalY += hitUp.point.y;
+            
+            Debug.Log("UpHit: " + finalY);
         }
         
         finalPoint = new Vector3(finalPoint.x, finalY, finalPoint.z); 
@@ -81,7 +94,54 @@ public class PlaceUserOnStartup : MonoBehaviour
         //field.GetComponent<MeshFilter>().mesh.RecalculateTangents();
         
         user.transform.position = finalPoint;
+        Cockpit.transform.position = finalPoint; // + CockpitOffset;
+        
+        DrawMainPoint();
+        
+        DrawArrow(Vector3.up, 10f);
+    }
+
+
+    private void DrawMainPoint()
+    {
+        if (Physics.Raycast(new Ray(user.transform.position, Vector3.down), out RaycastHit hitDown))
+        {
+            Debug.Log("MainPointHit");
+
+            MainPointPosition = hitDown.point;
+            
+            var pointMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+            pointMarker.transform.position = MainPointPosition;
+
+            //pointMarker.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            pointMarker.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 0f);
+        }
+    }
+
+    private void DrawArrow(Vector3 direction, float length = 1f)
+    {
+        var arrowObj = new GameObject("Arrow_" + direction);
+        arrowObj.transform.parent = this.gameObject.transform;
+
+        var pointCount = 5;
+        var points = new Vector3[pointCount]; //List<Vector3>();
+        var step = length / pointCount;
+        
+        for(var i = 0; i < pointCount; i++)
+            points[i] = MainPointPosition + i * step * direction;
+        
+        
+        var lr = arrowObj.AddComponent<LineRenderer>();
+        lr.SetPositions(points);
+        lr.material.color = Color.red;
+        lr.widthMultiplier = 0.1f;
+        
+        
+
+        //var arrowObj2 = Instantiate(arrowObj, this.transform);
+        //arrowObj2.transform.position = MainPointPosition; // + direction;
 
     }
-    
 }

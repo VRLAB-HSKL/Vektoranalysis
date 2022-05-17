@@ -9,16 +9,13 @@ public class AttachCockpit : MonoBehaviour
     /// </summary>
     public Transform TargetTf;
 
-    /// <summary>
-    /// Positional offset, initially used to place the cockpit below the player
-    /// </summary>
-    public Vector3 CockpitOffset = new Vector3(0f, -2f, 0f);
+    
     
     // Update is called once per frame
-    void Update()
+    void Start()
     {
         // Update cockpit position
-        transform.position = TargetTf.position + CockpitOffset;
+        //transform.position = TargetTf.position + CockpitOffset;
         
         // Rotate cockpit
         

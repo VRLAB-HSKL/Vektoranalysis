@@ -168,6 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 941685791}
+  Cockpit: {fileID: 1385281786}
+  CockpitOffset: {x: 0, y: -2, z: 0}
 --- !u!1001 &72275064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -274,7 +276,7 @@ PrefabInstance:
     - target: {fileID: -697443324221006964, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0826576b5bfdf5842a99be1ca4580222, type: 2}
+      objectReference: {fileID: 2100000, guid: d984fb9cd0d5f2845bfdcfd7928d54a3, type: 2}
     - target: {fileID: -670863790442153342, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -607,13 +609,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385281786}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bc8fef588c12394b943f481f2942aad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTf: {fileID: 1920035181}
-  CockpitOffset: {x: 0, y: -2, z: 0}
 --- !u!4 &1920035181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 431768, guid: cbfd31aaac017204885fcc03f0579a1a, type: 3}
