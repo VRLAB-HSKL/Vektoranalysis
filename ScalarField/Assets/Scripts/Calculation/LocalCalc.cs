@@ -6,6 +6,18 @@ using UnityEngine;
 
 namespace Calculation
 {
+    public class ScalarField
+    {
+        public Tuple<float, float> parameterRangeX;
+        public Tuple<float, float> parameterRangeY;
+        public int numberOfSamples = GlobalDataModel.NumberOfSamples;
+
+        //public delegate float CalculatePoint(float x, float y);
+
+        public Func<float, float, float> CalculatePoint;
+
+    }
+    
     public static class LocalCalc
     {
         public static Tuple<List<Vector3>, List<Vector3>> CalculateField01(Vector3 scalingVector)
@@ -138,16 +150,16 @@ namespace Calculation
         
         public static Tuple<List<Vector3>, List<Vector3>> CalculateField02(Vector3 scalingVector)
         {
-            var x_lower = -10f;
-            var x_upper = 10f;
+            var x_lower = -2f;
+            var x_upper = 2f;
             // var x_range = x_upper - x_lower;
             // var x_step = x_range / GlobalDataModel.NumberOfSamples;
 
             var x_values = CreateRange(x_lower, x_upper, GlobalDataModel.NumberOfSamples);
             
             
-            var y_lower = -10f;
-            var y_upper = 10f;
+            var y_lower = -2f;
+            var y_upper = 2f;
             // var y_range = y_upper - y_lower;
             // var y_step = y_range / GlobalDataModel.NumberOfSamples;
 
@@ -166,10 +178,10 @@ namespace Calculation
                     //var r = Mathf.Sqrt(x * x + y * y );
                     //var z = (float) (Math.Pow((float)Math.E, r) * Math.Cos(6f * r));
 
-                    //var r = Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
-                    //var z = Mathf.Pow((float)Math.E, r) * Mathf.Cos(6f * r); //Mathf.Sin(r) / r;
+                    var r = Mathf.Sqrt(x * x + y * y);
+                    var z = Mathf.Exp(-r) * Mathf.Cos(6f * r); //Mathf.Sin(r) / r;
 
-                    var z = (Mathf.Cos(x * x + y * y)) / (1 + x * x + y * y);
+                    //var z = (Mathf.Cos(x * x + y * y)) / (1 + x * x + y * y);
                     
                     //var z = 100 * Mathf.Pow((y - x * x), 2) + Mathf.Pow((1f - x), 2);
                     
@@ -194,5 +206,73 @@ namespace Calculation
 
             return new Tuple<List<Vector3>, List<Vector3>>(raw_vertices, display_vertices);
         }
+
+
+        public static Tuple<List<Vector3>, List<Vector3>> CalculateField(ScalarField sf, Vector3 scalingVector)
+        {
+            //var x_lower = -2f;
+            //var x_upper = 2f;
+            // var x_range = x_upper - x_lower;
+            // var x_step = x_range / GlobalDataModel.NumberOfSamples;
+
+            var x_values = CreateRange(
+                sf.parameterRangeX.Item1, 
+                sf.parameterRangeX.Item2, 
+                GlobalDataModel.NumberOfSamples
+            );
+            
+            //var y_lower = -2f;
+            //var y_upper = 2f;
+            // var y_range = y_upper - y_lower;
+            // var y_step = y_range / GlobalDataModel.NumberOfSamples;
+
+            var y_values = CreateRange(
+                sf.parameterRangeY.Item1, 
+                sf.parameterRangeY.Item2, 
+                GlobalDataModel.NumberOfSamples
+            );
+
+            var raw_vertices = new List<Vector3>();
+            var display_vertices = new List<Vector3>();
+
+            for(var i = 0; i < GlobalDataModel.NumberOfSamples; i++)
+            {
+                var x = x_values[i];
+                for (int j = 0; j < GlobalDataModel.NumberOfSamples; j++)
+                {
+                    var y = y_values[j];
+                    //var r = Mathf.Sqrt(x * x + y * y );
+                    //var z = (float) (Math.Pow((float)Math.E, r) * Math.Cos(6f * r));
+
+                    // var r = Mathf.Sqrt(x * x + y * y);
+                    // var z = Mathf.Exp(-r) * Mathf.Cos(6f * r); //Mathf.Sin(r) / r;
+
+                    var z = sf.CalculatePoint(x, y);
+                    
+                    //var z = (Mathf.Cos(x * x + y * y)) / (1 + x * x + y * y);
+                    
+                    //var z = 100 * Mathf.Pow((y - x * x), 2) + Mathf.Pow((1f - x), 2);
+                    
+                    //var z = Mathf.Pow(x, 2) + Mathf.Pow(y, 2);
+                    var calculatedVector = new Vector3(x, y, z);
+
+                    raw_vertices.Add(calculatedVector);
+                    
+                    //Debug.Log("calculatedVector: " + calculatedVector);
+                    
+                    // Switch axis to create horizontal mesh
+                    var displayVector = new Vector3(x, z, y);
+                    
+                    // Scale points based on set scalign vector
+                    displayVector = Vector3.Scale(displayVector, scalingVector);
+                
+                    display_vertices.Add(displayVector);
+                }
+
+            }
+
+            return new Tuple<List<Vector3>, List<Vector3>>(raw_vertices, display_vertices);
+        }
+        
     }
 }

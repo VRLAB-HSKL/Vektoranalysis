@@ -11,9 +11,12 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SimpleProceduralMesh : MonoBehaviour
 {
-
+    public Transform RenderingTarget;
+    public Vector3 PositionOffset;
     public Vector3 ScalingVector = Vector3.one;
 
+    
+    
     public Texture2D Texture;
     public BoxCollider Collider; 
     
@@ -56,6 +59,12 @@ public class SimpleProceduralMesh : MonoBehaviour
     {
         initPos = transform.position;
         GenerateFieldMesh();
+
+        if (Texture != null)
+        {
+            var mat = GetComponent<MeshRenderer>().material;
+            mat.mainTexture = Texture;
+        }
     }
 
     // private void OnEnable()
@@ -77,9 +86,18 @@ public class SimpleProceduralMesh : MonoBehaviour
             name="Scalar field mesh",
         };
         
-        var vertices_tuple = LocalCalc.CalculateField01(ScalingVector);
-        var rawVertices = vertices_tuple.Item1;
-        var displayVertices = vertices_tuple.Item2;
+        var sf = new ScalarField()
+        {
+            parameterRangeX = new Tuple<float, float>(-2f, 2f),
+            parameterRangeY = new Tuple<float, float>(-2f, 2f),
+            CalculatePoint = delegate(float x, float y)
+            {
+                var r = Mathf.Sqrt(x * x + y * y);
+                return Mathf.Exp(-r) * Mathf.Cos(6f * r);
+            }
+        };
+        
+        var (rawVertices, displayVertices) = LocalCalc.CalculateField(sf, ScalingVector);
 
         var log = false;
         var sb = new StringBuilder();
@@ -215,15 +233,15 @@ public class SimpleProceduralMesh : MonoBehaviour
         var bounds = GetComponent<MeshFilter>().mesh.bounds;
         
         // # Create target vector
-        var target = new Vector3(0f, 1.2f, 0f);
+        var target = RenderingTarget.position + PositionOffset;
         
         // # Transform center of mesh position to global scope
-        var transformedPoint = transform.TransformPoint(bounds.center);
+        //var transformedPoint = transform.TransformPoint(bounds.center);
         
         // Calculate offset between initial position and mesh center
-        var offset = initPos - transformedPoint;
+        //var offset = initPos - transformedPoint;
 
-        offset = new Vector3(offset.x, offset.y + 0.25f, offset.z);
+        //offset = new Vector3(offset.x, offset.y + 0.25f, offset.z);
         
         // Debug.Log(
         //     "initPos: " + initPos + ", target: " + target + ", bounds: " + bounds.center + 
@@ -231,7 +249,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         // );
         
         // Position mesh based on offset to position 
-        transform.position = target + offset;
+        transform.position = target; // + offset;
         
         var collider = GetComponent<MeshCollider>();
         //collider.convex = true;
