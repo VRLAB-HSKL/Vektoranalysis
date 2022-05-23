@@ -1,0 +1,235 @@
+% This is a special document class, provided in the file VRARWorkshop.cls
+% It contains special format options for the workshop proceedings.
+% In this sample document, we illustrate the template's usage.
+% It is assumed, that the reader has basic knowledge about the LaTeX System.
+
+% First of all choose the right document class. The default layout style will
+% choose English as default language. If you are writing your text in German
+% please enable the <german> option here. If you choose English as your 
+% language, leave out the <german> option. If the option is set, native
+% language encoding will be activated i.e. you will be able to type ü
+% instead of "u or \"u. 
+% NOTE: If you are experiencing strange errors when TeXing your document after
+% a change to the <german> option, try rebuilding the whole document including 
+% the bibTeX file.
+
+
+
+% German option set
+%\documentclass[german]{VRARWorkshop}
+% English option set
+\documentclass{VRARWorkshop}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ngerman}
+\usepackage[hidelinks]{hyperref}
+% Define your paper's title. This has to be done BEFORE \begin{document}!
+\title{ParamCurve - Immersive Learning for Parametric Curves}
+
+% Define the list of authors of your paper. This has to be done BEFORE 
+% \begin{document}!
+% one or several authors from the SAME INSTITUTION
+\authors{~} 
+%\authors{Vorname1 Name1, Vorname2 Name2}
+% several authors from DIFFERENT INSTITUTIONS
+% \authors{Vorname1 Name1\VRARafftag{\ast}, Vorname2 Name2 \VRARafftag{\dagger}}
+
+%\authors{Benedict Särota, Manfred Brill}
+
+
+% Define the list of authors' affiliations. If you have authors from several 
+% institutions, please choose the table format given below. The class file
+% provides the command \VRARafftag{<tagchar>}, which should be used to create 
+% tags on different institutions.  In order to use it, insert the tag command 
+% with the corresponding tag character after the author's name and in front of 
+% the first entry in the affiliation table entry. As tag chars we use \ast, 
+% \dagger, \star, \ddagger, \diamond, in this order. If you need to include 
+% more than 5 institutions (which should be highly unlikely) feel free to add 
+% symbols as appropriate. This also has to be done BEFORE \begin{document}.
+
+% one or several authors from the SAME INSTITUTION
+\affiliations{~} %<---- anonymous submission
+%\affiliations{
+%    Musterinstitut \\
+%    Musterstr. 1 \\
+%    08150 Musterstadt \\
+%    Tel.: +49 (0)815 / 40 90 - 158 \\
+%    Fax: +49 (0)815 / 40 90 - 115 \\
+%    E-Mail: mustermann@provider.de
+%}
+
+%\affiliations{
+%    University of Applied Sciences Kaiserslautern \\
+%    Amerikstr. 1 \\
+%    66482 Zweibrücken \\
+%    Tel.: +49 (0)815 / 40 90 - 158 \\
+%    Fax: +49 (0)815 / 40 90 - 115 \\
+%    E-Mail: benedict.saerota@hs-kl.de
+%}
+
+
+
+
+% several authors from DIFFERENT INSTITUTIONS
+%\affiliations{
+%\begin{tabular}{cc}
+%\VRARafftag{\ast} Musterinstitut1 & \VRARafftag{\dagger} Musterinstitut2\\
+%Musterstr. 1  & Musterstr. 1  \\
+%08150 Musterstadt & 08150 Musterstadt\\
+%Tel.: +49 (0)815 / 40 90 - 158  &  \\
+%Fax: +49 (0)815 / 40 90 - 115 & \\
+%E-Mail: mustermann@provider.de & 
+%\end{tabular}
+%}
+
+% Write up your abstract here...
+\abstract{%
+In higher education mathematical curves are often taught using traditional materials like paper, boards and slides. 
+While these classes are often supported by digital teaching concepts, they are often limited to passive visualizations like videos or images. 
+A new, more interactive approach is made possible through virtual reality. 
+This medium offers many opportunities for new learning techniques that promote understanding beyond mathematical formulas and increase spatial imagining. 
+In this project, we use the analog and digital assets of an existing mathematics class to develop an immersive learning application for parametric curves.
+}
+
+% Give some keywords
+\keywords{Interactive learning environments, VR}
+
+% Finally you get to work ;-) Start your document and...
+\begin{document}
+% ...begin with the introduction section right away. The title format
+% will be generated automatically at the top of the page.
+
+\section{Introduction}
+
+The learning process of mathematical concepts in university classes is often a hard and dry process based on symbols, formulas and abstraction.
+While a subset of students will always struggle with this approach, the underlying knowledge remains important for applications in scientific and industrial contexts.
+Very often the facilitation of insights and deeper understanding is supported by non-interactive visualizations like images and animations. 
+Early in the 1990s virtual reality was already being denoted as a paradigm shift in the educational space \cite{Bricken1992}. 
+In the following years and decades, concrete learning effects have been associated with effective and targeted use
+of virtual reality \cite{Mikropoulos2011, Merchant2014}.
+For many years immersive learning applications for schools and universities have been actively
+developed and used \cite{ILRN_21}.
+Learning environments profit from the immersion of the user.
+This is due to the ability to construct environments that allow multiple levels of cognitive sensors through 
+real-time and a natural interaction.
+
+A first theoretical model of important factors that contribute to the development of successful immersive learning applications was presented by Salzman \cite{Salzman1999}. 
+Further elaboration was created by Lee et al. \cite{Lee2010}. 
+These factors create a collection of metrics that aid the development and evaluation of immersive learning applications. 
+Virtual reality aims to obfuscate the context of the outer world.
+The user exists in a virtual environment that allows for different kinds of interaction \cite{Ren2015}. 
+
+In order to incorporate such interactive experiences in a class, educational concepts are needed.
+One such concept is microlearning, an emerging sub-category of learning that divides complex knowledge structures into small, single units of knowledge called nuggets \cite{Horst2019}. 
+This allows educators to pick different approaches for each nugget, i.e. using a virtual reality application to communicate the knowledge of a single nugget if the content of the nuggets profits from such an interactive environment. 
+Targeting only singular nuggets is vastly preferable when compared to attempts of forcing whole curricula into a single technology.
+%
+\section{An immersive learning application for a mathematics class}
+Harnessing the potential of this type of immersive experiences for the purpose of learning requires applications that correctly map learning goals of individual classes and make them accessible to the target audience.
+In this poster we present \textit{ParamCurve} our prototype of a virtual reality application that aims to visualize parametric curves to facilitate insights and deeper understanding of the concepts presented in a mathematics class in a computer science program.
+Gray \cite{gray_06} uses Mathematica, we decided to use Python as programming language.
+The existing set of learning materials based on \LaTeX{}, Python and Markdown is the basis for \textit{ParamCurve}.
+
+The Python module contains a lot of 2D and 3D curves and algorithms like arc length computation or arc length parametrization.
+In the exercises, students actively change this code basis. They not only code in Python but also build new and interactive Jupyter Notebooks.
+We expanded this Python module to be able to export the computed data in an JSON file containing
+curve and algorithmic data.
+This way we can map changes made by us or the students immediately in our immersive  learning application.
+We also export system configurations that allow for scene configuration in the immersive application.
+Upon starting our virtual reality application, the imported curves are rendered in the virtual environment.
+They can be viewed in different ways and allow for simple interaction.
+The Python code and the source for \textit{ParamCurve} is publicly available as a GitHub repository.% \cite{BenedictSaerota2021}.
+
+Students have access to this repository and the immersive learning application.
+We use the virtual reality application in the classroom with a set of all-in-one Head-Mounted Displays
+and in our lab on HTC Vive Pro.
+We also provide releases of the application for different platforms like Google Cardboard, HTC Focus Plus,
+Oculus Quest or OpenVR-based HMDs, so students can use the exported data for study at home, preparing
+exercises or the exam.
+
+\section{ParamCurve}
+We implemented \textit{ParamCurve} using the Unity Game Engine and the Vive Input Utility \cite{viu}.
+With VIU we can support a wide range of hardware settings in our lab, the classroom and for homework.
+Like other immersive learning applications built in our lab we decided to use a virtual seminar room to ease the transition between the real and virtual environment.
+Figure~\ref{fig:isoView} shows an isometric view of this room.
+The scale used is derived from a small classroom on our campus.
+
+\begin{figure}[h!]
+  \begin{center}
+  \includegraphics[width=79mm]{./images/isometricView.png}
+  \caption{\label{fig:isoView}
+           Isometric view of the virtual room}
+   \end{center}
+\end{figure}
+
+
+Based on values in the initialization file, elements of the room are dis-/enabled.
+We use this configuration to present examples from the class and exercises, where students have to examine given curves or a set a curves and their parameter functions.
+Curve data is imported as a single curve or a set of curves that can be navigated through to select individual curves for visualization.
+A single curve is rendered once in the middle of the room, and a second time in smaller scale on an examination table.
+The display view simply visualizes the curve in the virtual environment. This examination table shown in figure~\ref{fig:table} resembles the visualization in a Jupyter notebook or on paper.
+
+% \begin{figure}[htb]
+%  \centering
+%  \includegraphics[width=.7\linewidth]{./images/tableCurve.png}
+%  \caption{\label{fig:table}
+%           A 2D curve on the examination table}
+%\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=79mm]{./images/tableCurve.png}
+        \caption{\label{fig:table}}
+    \end{center}
+\end{figure}
+
+The run view in figure~\ref{fig:airplanes} adds small airplane models to the curve that can be triggered to fly along the curve, moving and rotating based on Frenet frames.
+This view is used in class to highlight the concepts of velocity, accelaration, arc length and local coordinate systems on a parametric curve.
+The exported data always contains an arc length parametrization of the visualized curves.
+Once a run is triggered, both planes move along the curve, differing in speed and orientation due to their parametrization.
+This way students get a hands-on experience of mathematical concepts like arc length parametrization or ease-in-ease-out animation.
+
+\begin{figure}[h!]
+  \begin{center}
+  \includegraphics[width=79mm]{./images/airplanes.png}
+  \caption{\label{fig:airplanes}
+           Different parametrizations in the run view}
+   \end{center}
+\end{figure}
+
+The walls of the room allow for further interaction. The browser wall displays Jupyter notebooks or other webpages
+containing additional information related to the current curve or exercise.
+On the information wall we render geometric data values or plots that update during flights in the run view again visualizing  velocity,  arc length and other curve attributes. %in figure~\ref{fig:informationwall}.
+A curve selection wall offers the opportunity to switch between specific curves directly.
+
+%\begin{figure}[htb]
+%  \centering
+%  \includegraphics[width=0.5\linewidth]{./images/velocity.png}
+%  \caption{\label{fig:informationwall}
+%           Display of velocity and arc length of a curve on the information wall}
+%\end{figure}
+%-------------------------------------------------------------------------
+\section{Future work}
+
+The current prototype version is the result of a master thesis.
+%We plan to optimize the application.  
+More functionality will be added to the examination table, allowing for even more granular inspection of the visualizations.
+We work on a different scene providing a first-person experience for the run view.
+Users will be able to switch from the room view to first-person and back with a set of
+scene transition techniques.
+
+First small experiments in the winter term already showed the potential of our approach.
+Once restrictions related to the global pandemic have been lifted, we will do a thorough evaluation
+to improvem the application and the learning arrangement.
+This evaluation will be based on the given immersive learning factors and
+hopefully evaluating a "`joy of use"' effect, leading to increased student engagement with the mathematical concepts.
+
+This prototype is part of a three-part set of immersive learning applications related to different classes currently being taught on our campus. 
+This includes an existing application related to ray tracing  used in a computer graphics class and a application for the immersive  visualization of scalar and vector fields, again in the mathematics class. 
+
+%set appropriate bib style
+\VRARsetbibstyle
+\bibliography{bib/masterBib}
+
+\end{document} 

@@ -1,0 +1,13 @@
+
+# Temporary LaTex files
+.aux
+.log
+.out
+.synczex.gz
+
+
+# Single files
+Formatting.pdf
+vrarlogo.jpg
+VRARTeXample.bib
+VRARWorkshop.cls
