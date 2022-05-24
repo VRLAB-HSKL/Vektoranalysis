@@ -22,7 +22,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{ngerman}
+%\usepackage{ngerman}
 \usepackage[hidelinks]{hyperref}
 % Define your paper's title. This has to be done BEFORE \begin{document}!
 \title{ParamCurve - Immersive Learning for Parametric Curves}
@@ -153,7 +153,7 @@ We implemented \textit{ParamCurve} using the Unity Game Engine and the Vive Inpu
 With VIU we can support a wide range of hardware settings in our lab, the classroom and for homework.
 Like other immersive learning applications built in our lab we decided to use a virtual seminar room to ease the transition between the real and virtual environment.
 Figure~\ref{fig:isoView} shows an isometric view of this room.
-The scale used is derived from a small classroom on our campus.
+The scale is derived from a small classroom on our campus.
 
 \begin{figure}[h!]
   \begin{center}
@@ -162,7 +162,6 @@ The scale used is derived from a small classroom on our campus.
            Isometric view of the virtual room}
    \end{center}
 \end{figure}
-
 
 Based on values in the initialization file, elements of the room are dis-/enabled.
 We use this configuration to present examples from the class and exercises, where students have to examine given curves or a set a curves and their parameter functions.
@@ -184,7 +183,7 @@ The display view simply visualizes the curve in the virtual environment. This ex
     \end{center}
 \end{figure}
 
-The run view in figure~\ref{fig:airplanes} adds small airplane models to the curve that can be triggered to fly along the curve, moving and rotating based on Frenet frames.
+The run view in figure \ref{fig:airplanes} adds small airplane models to the curve that can be triggered to fly along the curve, moving and rotating based on Frenet frames.
 This view is used in class to highlight the concepts of velocity, accelaration, arc length and local coordinate systems on a parametric curve.
 The exported data always contains an arc length parametrization of the visualized curves.
 Once a run is triggered, both planes move along the curve, differing in speed and orientation due to their parametrization.
@@ -200,7 +199,7 @@ This way students get a hands-on experience of mathematical concepts like arc le
 
 The walls of the room allow for further interaction. The browser wall displays Jupyter notebooks or other webpages
 containing additional information related to the current curve or exercise.
-On the information wall we render geometric data values or plots that update during flights in the run view again visualizing  velocity,  arc length and other curve attributes. %in figure~\ref{fig:informationwall}.
+On the information wall we render geometric data values or plots that update during flights in the run view, again visualizing velocity, arc length and other curve attributes. %in figure~\ref{fig:informationwall}.
 A curve selection wall offers the opportunity to switch between specific curves directly.
 
 %\begin{figure}[htb]
@@ -215,18 +214,18 @@ A curve selection wall offers the opportunity to switch between specific curves 
 The current prototype version is the result of a master thesis.
 %We plan to optimize the application.  
 More functionality will be added to the examination table, allowing for even more granular inspection of the visualizations.
-We work on a different scene providing a first-person experience for the run view.
+We are working on a different scene providing a first-person experience for the run view.
 Users will be able to switch from the room view to first-person and back with a set of
 scene transition techniques.
 
-First small experiments in the winter term already showed the potential of our approach.
+First small experiments in the 2021 winter term already showed the potential of our approach.
 Once restrictions related to the global pandemic have been lifted, we will do a thorough evaluation
-to improvem the application and the learning arrangement.
+to improve the application and the learning arrangement.
 This evaluation will be based on the given immersive learning factors and
-hopefully evaluating a "`joy of use"' effect, leading to increased student engagement with the mathematical concepts.
+hopefully evaluating a "joy of use" effect, leading to increased student engagement with the mathematical concepts.
 
 This prototype is part of a three-part set of immersive learning applications related to different classes currently being taught on our campus. 
-This includes an existing application related to ray tracing  used in a computer graphics class and a application for the immersive  visualization of scalar and vector fields, again in the mathematics class. 
+This includes an existing application related to ray tracing used in a computer graphics class and a application for the immersive visualization of scalar and vector fields, again in the mathematics class. 
 
 %set appropriate bib style
 \VRARsetbibstyle
