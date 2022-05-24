@@ -142,6 +142,57 @@ namespace UI
         // Start is called before the first frame update
         void Start()
         {
+            FindObjectsInScene();
+            HideObjectsBasedOnInitFile();
+        }
+
+
+        public void Update()
+        {
+            UpdateInfoLabels();
+            UpdatePlotTravelObjects();
+            UpdatePlotLineRenderers();
+        }
+
+        private void FindObjectsInScene()
+        {
+            // Header
+            headerParent ??= GameObject.Find("BasicHeader");
+            if(SourceLabel is null) GameObject.Find("ValueSource");
+            if(IndexLabel is null) GameObject.Find("ValuePoints");
+            
+            // PointInfo
+            PointInfoParent ??= GameObject.Find("PointInfo");
+            if(TLabel is null) GameObject.Find("PointValueT");
+            if(XLabel is null) GameObject.Find("PointValueX");
+            if(YLabel is null) GameObject.Find("PointValueY");
+            if(zLabel is null) GameObject.Find("PointValueZ");
+            
+            // ArcLengthPointInfo
+            ArcLengthParent ??= GameObject.Find("ArcLengthInfo");
+            if(ArcLengthLabel is null) GameObject.Find("ArcLength");
+            if(ArcTLabel is null) GameObject.Find("ArcValueT");
+            if(ArcXLabel is null) GameObject.Find("ArcValueX");
+            if(ArcYLabel is null) GameObject.Find("ArcValueY");
+            if(ArcZLabel is null) GameObject.Find("ArcValueZ");
+            
+            // TimeDistance
+            TimeDistanceParent ??= GameObject.Find("TimeDistanceDiagram");
+            TimeDistanceStart ??= GameObject.Find("distancePolyline");
+            TimeDistanceXAxis ??= GameObject.Find("distanceXAxis");
+            TimeDistanceYAxis ??= GameObject.Find("distanceYAxis");
+            TimeDistanceTravelObject ??= GameObject.Find("distancePointer");
+            
+            // TimeVelocity
+            TimeVelocityParent ??= GameObject.Find("TimeVelocityDiagram");
+            TimeVelocityStart ??= GameObject.Find("velocityPolyline");
+            TimeVelocityXAxis ??= GameObject.Find("velocityXAxis");
+            TimeVelocityYAxis ??= GameObject.Find("velocityYAxis");
+            TimeVelocityTravelObject ??= GameObject.Find("velocityPointer");
+        }
+
+        private void HideObjectsBasedOnInitFile()
+        {
             //Debug.Log("initFile is null: " + (GlobalData.initFile is null));
             //Debug.Log("initFile.information is null: " + (GlobalData.initFile.information is null));
         
@@ -193,14 +244,7 @@ namespace UI
                 headerParent.SetActive(false);
             }
         }
-
-
-        public void Update()
-        {
-            UpdateInfoLabels();
-            UpdatePlotTravelObjects();
-            UpdatePlotLineRenderers();
-        }
+        
     
         private void UpdateInfoLabels()
         {
