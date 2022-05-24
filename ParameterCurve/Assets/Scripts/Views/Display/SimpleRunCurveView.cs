@@ -183,7 +183,8 @@ namespace Views.Display
 
                 _wpm.SetWaypoints(pointArr);
                 
-                SetTravelObjectWPM();//SetTravelObjectPoint();
+                //SetTravelObjectWPM();
+                SetTravelObjectPoint();
                 SetMovingFrame();
             }
 

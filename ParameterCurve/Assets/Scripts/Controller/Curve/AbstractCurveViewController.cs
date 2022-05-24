@@ -92,7 +92,7 @@ namespace Controller.Curve
             RootElement = root;
 
             Views = new List<AbstractCurveView>();
-            Wpm = new WaypointManager(new Vector3[1], 0.1f, false);
+            Wpm = new WaypointManager(new Vector3[2], 0.1f);
             //Wpm.SetWaypoints();
             
             InitViews();

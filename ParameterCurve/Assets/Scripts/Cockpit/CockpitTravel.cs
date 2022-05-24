@@ -38,7 +38,7 @@ public class CockpitTravel : MonoBehaviour
         CurveLine.positionCount = n;
         CurveLine.SetPositions(list.ToArray());
 
-        wpm = new WaypointManager(list.ToArray(), 0.1f, false);
+        wpm = new WaypointManager(list.ToArray(), 0.1f);
 
         //Debug.Log(CurveLine.positionCount);
     }

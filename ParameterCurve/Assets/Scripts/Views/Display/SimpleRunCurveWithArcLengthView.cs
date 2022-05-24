@@ -139,7 +139,7 @@ namespace Views.Display
             
             _arcWpm.SetWaypoints(arcPointArr);
             
-            SetArcTravelPoint();
+            SetArcTravelPoint(); //SetArcTravelPointWPM();
             SetArcMovingFrame();
         }
 
@@ -187,6 +187,17 @@ namespace Views.Display
             ++CurrentPointIndex;
         }
         
+        // /// <summary>
+        // /// Start run
+        // /// </summary>
+        // public override void StartRun()
+        // {
+        //     base.StartRun();
+        //     
+        //     CurrentPointIndex = 0;
+        //     GlobalDataModel.IsRunning = true;
+        // }
+        //
         
         /// <summary>
         /// Set the fresnet equation based moving frame around the next point along the arc length parametrization
