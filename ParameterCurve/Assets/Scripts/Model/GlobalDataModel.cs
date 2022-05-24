@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Controller.Curve;
 using Controller.Exercise;
 using Import;
@@ -7,6 +8,7 @@ using Import.InitFile;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TMPro;
 using UnityEngine;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
@@ -167,7 +169,7 @@ namespace Model
 
         private static void ParseIniFile()
         {
-            var json = Resources.Load(InitFileResourcePath, typeof(TextAsset) ) as TextAsset;
+            var json = Resources.Load(InitFileResourcePath) as TextAsset; //Resources.Load(InitFileResourcePath, typeof(TextAsset) ) as TextAsset;
         
             var errors = new List<string>();
             ITraceWriter tr = new MemoryTraceWriter();
@@ -184,7 +186,7 @@ namespace Model
                 }
             
             );
-        
+            
             InitFile = jsr;
         
             for (var i = 0; i < jsr.DisplayCurves.Count; i++)
