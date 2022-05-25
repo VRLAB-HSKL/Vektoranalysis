@@ -55,16 +55,13 @@ public class SimpleProceduralMesh : MonoBehaviour
 
     private Vector3 initPos = Vector3.zero;
 
-    private void Awake()
+    private void Start()
     {
         initPos = transform.position;
         GenerateFieldMesh();
 
-        if (Texture != null)
-        {
-            var mat = GetComponent<MeshRenderer>().material;
-            mat.mainTexture = Texture;
-        }
+        var mat = GetComponent<MeshRenderer>().material;
+        mat.mainTexture = Texture != null ? Texture : GlobalDataModel.CurrentField.meshTexture;
     }
 
     // private void OnEnable()
@@ -86,32 +83,53 @@ public class SimpleProceduralMesh : MonoBehaviour
             name="Scalar field mesh",
         };
         
-        var sf = new ScalarField()
-        {
-            parameterRangeX = new Tuple<float, float>(-2f, 2f),
-            parameterRangeY = new Tuple<float, float>(-2f, 2f),
-            CalculatePoint = delegate(float x, float y)
-            {
-                var r = Mathf.Sqrt(x * x + y * y);
-                return Mathf.Exp(-r) * Mathf.Cos(6f * r);
-            }
-        };
+        // var sf = new ScalarField()
+        // {
+        //     parameterRangeX = new Tuple<float, float>(-2f, 2f),
+        //     parameterRangeY = new Tuple<float, float>(-2f, 2f),
+        //     CalculatePoint = delegate(float x, float y)
+        //     {
+        //         var r = Mathf.Sqrt(x * x + y * y);
+        //         return Mathf.Exp(-r) * Mathf.Cos(6f * r);
+        //     }
+        // };
+        //
         
-        var (rawVertices, displayVertices) = LocalCalc.CalculateField(sf, ScalingVector);
+        //var (rawVertices, displayVertices) = LocalCalc.CalculateField(sf, ScalingVector);
 
-        var log = false;
-        var sb = new StringBuilder();
-        for (int i = 0; i < displayVertices.Count; i++)
-        {
-            sb.AppendLine(displayVertices[i].ToString());
-        }
+        var sf = GlobalDataModel.CurrentField;
 
-        if (log)
+        var rawVertices = sf.pointVectors;
+        var displayVertices = new List<Vector3>();
+        
+        for (var i = 0; i < rawVertices.Count; i++)
         {
-            Debug.Log("Init vertices List:" + displayVertices.Count + "\n" + sb);
-        }
+            var rawVector = rawVertices[i];
             
-        sb.Clear();
+            // Switch y and z axis to create horizontal mesh
+            var displayVector = new Vector3(rawVector[0], rawVector[2], rawVector[1]);
+            
+            // ToDo: Replace this static process by dynamically scaling final mesh until it fits certain bounds
+            // Scale points based on set scaling vector
+            displayVector = Vector3.Scale(displayVector, ScalingVector);
+            
+            displayVertices.Add(displayVector);
+        }
+        
+        
+        // var log = false;
+        // var sb = new StringBuilder();
+        // for (int i = 0; i < displayVertices.Count; i++)
+        // {
+        //     sb.AppendLine(displayVertices[i].ToString());
+        // }
+        //
+        // if (log)
+        // {
+        //     Debug.Log("Init vertices List:" + displayVertices.Count + "\n" + sb);
+        // }
+            
+        //sb.Clear();
 
         var topology = MeshTopology.Triangles;
         var indices = new List<int>();
@@ -144,16 +162,16 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         //mesh.triangles = triangles.ToArray();
 
-        for (int i = 0; i < indices.Count; i++)
-        {
-            sb.AppendLine(indices[i].ToString());
-        }
-
-        if (log)
-        {
-            Debug.Log("Indices list:" + indices.Count +"\n" + sb);
-        }
-        sb.Clear();
+        // for (int i = 0; i < indices.Count; i++)
+        // {
+        //     sb.AppendLine(indices[i].ToString());
+        // }
+        //
+        // if (log)
+        // {
+        //     Debug.Log("Indices list:" + indices.Count +"\n" + sb);
+        // }
+        // sb.Clear();
         
         //mesh.triangles = indices.ToArray();
 
@@ -169,18 +187,16 @@ public class SimpleProceduralMesh : MonoBehaviour
         // }
 
         var normals = CalculateNormals(displayVertices, indices, MeshTopology.Triangles);
-        if (log)
-        {
-            Debug.Log("Normals:" + normals.Count);
-        }
+        // if (log)
+        // {
+        //     Debug.Log("Normals:" + normals.Count);
+        // }
         
         mesh.normals = normals.ToArray();
 
-        var colorList = ColorTransferFunction(displayVertices); //GenerateColors(vertices);
-        mesh.colors = colorList.ToArray();
+        // var colorList = ColorTransferFunction(displayVertices); //GenerateColors(vertices);
+        // mesh.colors = colorList.ToArray();
 
-        
-        
         
         // mesh.colors = new[]
         // {

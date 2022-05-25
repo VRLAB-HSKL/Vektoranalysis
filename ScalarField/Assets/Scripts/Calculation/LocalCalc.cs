@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace Calculation
 {
-    public class ScalarField
-    {
-        public Tuple<float, float> parameterRangeX;
-        public Tuple<float, float> parameterRangeY;
-        public int numberOfSamples = GlobalDataModel.NumberOfSamples;
-
-        //public delegate float CalculatePoint(float x, float y);
-
-        public Func<float, float, float> CalculatePoint;
-
-    }
+    
     
     public static class LocalCalc
     {
