@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Calculation;
 using UnityEngine;
 
 public class MapPlacement : MonoBehaviour
@@ -12,18 +14,18 @@ public class MapPlacement : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         var contact = collision.GetContact(0);
+        
+        if (collision.gameObject != PointerObject.gameObject)
+        {
+            // Debug.Log("collObjName: " + collision.gameObject.name +
+            //           ", pointerObjName: " + PointerObject.name);
+            
+            return;
+        }
 
         if (sphere != null)
         {
             Destroy(sphere);
-        }
-
-        if (collision.gameObject != PointerObject.gameObject)
-        {
-            Debug.Log("collObjName: " + collision.gameObject.name +
-                      ", pointerObjName: " + PointerObject.name);
-            
-            return;
         }
 
         sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -33,11 +35,61 @@ public class MapPlacement : MonoBehaviour
         //Instantiate(new SphereCollider)
         sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
 
-        Debug.Log("contact point: " + contact.point);
+        
+        sphere.name = "TravelTarget";
+        
 
+        var horizontalCoordinate = contact.point.z;
+        var verticalCoordinate = contact.point.x;
+
+        var xRangeMin = GlobalDataModel.InitFile.x_param_range[0]; //GlobalDataModel.InitFile.points.Min(p => p[0]);
+        var xRangeMax = GlobalDataModel.InitFile.x_param_range[1]; //GlobalDataModel.InitFile.points.Max(p => p[0]);
+
+        var yRangeMin = GlobalDataModel.InitFile.y_param_range[0];
+        var yRangeMax = GlobalDataModel.InitFile.x_param_range[1];
+
+        var mappedX = CalcUtility.MapRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
+        
+        var mappedY = CalcUtility.MapRange(verticalCoordinate, -0.5f, 0.5f, yRangeMin, yRangeMax);
+        
+        // var mappedX = CalcUtility.MapRange(x, )
+        //
+        // var tmp = CalcUtility.MapRange()
+
+        
+        
         var transformedPoint = transform.InverseTransformPoint(contact.point);
         
-        Debug.Log("transformed point: " + transformedPoint);
+        
+        
+
+        var finalIndex = 0;
+        
+        
+        var closest = int.MaxValue;
+        var minDifference = int.MaxValue;
+        for(var i = 0; i < GlobalDataModel.InitFile.points.Count; i++)
+        {
+            var point = GlobalDataModel.InitFile.points[i];
+            var differenceX = Mathf.Abs(point[0] - mappedX);
+            var differenceY = Mathf.Abs(point[1] - mappedY);
+
+            var difference = differenceX + differenceY;
+            
+            if (minDifference > difference)
+            {
+                minDifference = (int)difference;
+                closest = i;
+            }
+        }
+
+        GlobalDataModel.EstimatedIndex = closest;
+        
+        Debug.Log("contact point: " + contact.point + ", transformed point: " + transformedPoint +
+                  ", mapped values: (" + mappedX + ", " + mappedY + ")" + 
+                  ", estimated index: " + GlobalDataModel.EstimatedIndex);
+        
+        //Debug.Log();
 
         // var x = transformedPoint.x;
         // var y = transformedPoint.y;
@@ -46,16 +98,16 @@ public class MapPlacement : MonoBehaviour
         //x += 0.5f;
         //y += 0.5f;
 
-        var finalPoint = transformedPoint;
+        //var finalPoint = transformedPoint;
         
-        Debug.Log("final point: " + finalPoint);
+        //Debug.Log("final point: " + finalPoint);
         
-        sphere.name = "TravelTarget";
+        
 
-        var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
-            collision.collider.transform.rotation);
+        //var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
+        //    collision.collider.transform.rotation);
 
-        GlobalDataModel.ClosestPointOnMesh = transformedPoint; //closestPoint;
+        //GlobalDataModel.ClosestPointOnMesh = transformedPoint; //closestPoint;
 
         // if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
         // {

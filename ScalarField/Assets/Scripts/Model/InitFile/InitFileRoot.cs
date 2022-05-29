@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Valve.Newtonsoft.Json;
+using System.Text;
+using Newtonsoft.Json;
+
+//using Valve.Newtonsoft.Json;
 
 namespace Model.InitFile
 {
@@ -11,24 +14,42 @@ namespace Model.InitFile
         public string id { get; set; }
         
         [JsonProperty("color_map_id")] 
-        public string colorMapId { get; set; }
+        public string color_map_id { get; set; }
         
         [JsonProperty("color_map_data_classes_count")] 
-        public string colorMapDataClassesCount { get; set; }
+        public string color_map_data_classes_count { get; set; }
         
         [JsonProperty("x_param_range")] 
-        public List<float> xParamRange { get; set; }
+        public List<float> x_param_range { get; set; }
         
         [JsonProperty("y_param_range")] 
-        public List<float> yParamRange { get; set; }
+        public List<float> y_param_range { get; set; }
         
         [JsonProperty("z_expr")] 
-        public string zExpression { get; set; }
+        public string z_expression { get; set; }
         
         [JsonProperty("sample_count")] 
-        public int sampleCount { get; set; }
+        public int sample_count { get; set; }
         
         [JsonProperty("points")]
-        public List<float[]> pointVec { get; set; }
+        public List<float[]> points { get; set; }
+
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("id: " + id);
+            sb.AppendLine("color_map_id: " + id);
+            sb.AppendLine("color_map_data_classes_count: " + color_map_data_classes_count);
+            sb.AppendLine("x_param_range: " + x_param_range);
+            sb.AppendLine("y_param_range: " + y_param_range);
+            sb.AppendLine("z_expr: " + z_expression);
+            sb.AppendLine("sample_count: " + sample_count);
+            sb.AppendLine("points: " + points);
+            
+            return sb.ToString();
+        }
+        
     }
 }

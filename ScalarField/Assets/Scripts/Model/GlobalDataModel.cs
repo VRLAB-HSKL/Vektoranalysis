@@ -5,9 +5,11 @@ using System.Text;
 using Calculation;
 using Model;
 using Model.InitFile;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
-using Valve.Newtonsoft.Json;
-using Valve.Newtonsoft.Json.Serialization;
+//using Valve.Newtonsoft.Json;
+//using Valve.Newtonsoft.Json.Serialization;
 
 public static class GlobalDataModel
 {
@@ -19,6 +21,7 @@ public static class GlobalDataModel
     public static int NumberOfSamples = 200;
 
     public static Vector3 ClosestPointOnMesh = Vector3.zero;
+    
     public static Vector3 MainMeshScalingVector = Vector3.one;
 
     public static string InitFileResourcePath = "json/init/sf_initFile";
@@ -53,13 +56,18 @@ public static class GlobalDataModel
             
         );
 
+        //var jsr = JsonUtility.FromJson<InitFileRoot>(json.text);
+        
+        if(jsr is null)
+            Debug.Log("Failed to deserialize json!\n" + jsr);
+
         InitFile = jsr;
 
         var sf = new ScalarField()
         {
             id = InitFile.id,
-            colorMapId = InitFile.colorMapId,
-            colorMapDataClassesCount = InitFile.colorMapDataClassesCount,
+            colorMapId = InitFile.color_map_id,
+            colorMapDataClassesCount = InitFile.color_map_data_classes_count,
             parameterRangeX = new Tuple<float, float>(-2.0f, 2.0f),
             parameterRangeY = new Tuple<float, float>(-2.0f, 2.0f),
             sampleCount = NumberOfSamples
@@ -67,9 +75,9 @@ public static class GlobalDataModel
 
         //var sb = new StringBuilder();
         
-        for (var i = 0; i < InitFile.pointVec.Count; i++)
+        for (var i = 0; i < InitFile.points.Count; i++)
         {
-            var point = InitFile.pointVec[i];
+            var point = InitFile.points[i];
             //sb.AppendLine(point[0] + ", " + point[1] + ", " + point[2]);
             sf.pointVectors.Add(new Vector3(point[0], point[1], point[2]));
         }

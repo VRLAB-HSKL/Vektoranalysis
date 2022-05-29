@@ -265,17 +265,26 @@ public class SimpleProceduralMesh : MonoBehaviour
         // );
         
         // Position mesh based on offset to position 
-        transform.position = target; // + offset;
+        //transform.position = target; // + offset;
+        
+        
         
         var collider = GetComponent<MeshCollider>();
         //collider.convex = true;
         collider.sharedMesh = mesh;
 
-        //var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        //plane.transform.position = transform.position;
-        //plane.transform.localScale = Vector3.Scale(plane.transform.localScale, ScalingVector);
-
+        
+        PositionMeshCenterAtOrigin();        
     }
+    
+    
+    private void PositionMeshCenterAtOrigin()
+    {
+        var tmp = Vector3.zero - GetComponent<MeshRenderer>().bounds.center;
+        Debug.Log("MeshPositioningVector: " + tmp);
+        transform.position += tmp;
+    }
+    
     
     private void OrderVerticesTriangle(List<Vector3> vertices)
     {
@@ -337,6 +346,8 @@ public class SimpleProceduralMesh : MonoBehaviour
         }
         
     }
+    
+    
 
     private List<int> GenerateTriangleIndices(List<Vector3> vertices, bool windClockWise = true)
     {

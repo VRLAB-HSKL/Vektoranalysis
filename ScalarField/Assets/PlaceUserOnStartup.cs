@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using Calculation;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlaceUserOnStartup : MonoBehaviour
 {
     public MeshFilter field;
-
     public GameObject Cockpit;
     
     /// <summary>
@@ -25,52 +22,41 @@ public class PlaceUserOnStartup : MonoBehaviour
 
         if (user is null) return;
 
-        // var points = new List<Vector3>();
-        // field.mesh.GetVertices(points);
-        //
-        // Debug.Log("Attempting to place at index: " + GlobalDataModel.EstimatedIndex + "/" + points.Count);
-        // var position = field.transform.TransformPoint(points[GlobalDataModel.EstimatedIndex]);
-        // user.transform.position = position;
+        var estimatedIndex = GlobalDataModel.EstimatedIndex; 
+        var initValues = GlobalDataModel.InitFile.points[estimatedIndex];
 
-
-
-        var initVector = GlobalDataModel.ClosestPointOnMesh;//new Vector3(0.5f, 0f, -0.5f);
-            //GlobalDataModel.ClosestPointOnMesh; //new Vector3(1f, 0f, 1f); 
-        //GlobalDataModel.MainMeshScalingVector;
-        // var scaleVector = new Vector3(1f /initScaleVector.x, 1f /initScaleVector.y, 1f /initScaleVector.z);
-        // var finalPoint = Vector3.Scale(GlobalDataModel.ClosestPointOnMesh, scaleVector);
-        //     
-        // Debug.Log("initScaleVector: " + initScaleVector + ", scaleVector: " + scaleVector +
-        //     "\nPlacing at final point: " + finalPoint);
-
-        //var offsetVector = new Vector3(initScaleVector.x - 0.5f, initScaleVector.y, initScaleVector.z - 0.5f);
-
+        var initVector = new Vector3(initValues[0], initValues[1], initValues[2]);
+        
+        var xMin = GlobalDataModel.InitFile.x_param_range[0];
+        var xMax = GlobalDataModel.InitFile.x_param_range[1];
+        
+        var yMin = GlobalDataModel.InitFile.y_param_range[0];
+        var yMax = GlobalDataModel.InitFile.y_param_range[1];
+        
+        var zMin = GlobalDataModel.InitFile.points.Min(p => p[2]);
+        var zMax = GlobalDataModel.InitFile.points.Max(p => p[2]);
+        
+        
+        var mappedX = CalcUtility.MapRange(initValues[0], xMin, xMax, 0f, 1f);
+        var mappedY = CalcUtility.MapRange(initValues[1], yMin, yMax, 0f, 1f);
+        
+        //ToDo: Map z values based on vertical bounding box, useful for curves like banana
+        var mappedZ = CalcUtility.MapRange(initValues[2], zMin, zMax, 0f, 10f);
+        
         // Flip sign on x coordinate
-        initVector = new Vector3(-initVector.x, initVector.y, initVector.z);
+        //var initVector = new Vector3(-initValues[0], initValues[1], initValues[2]);
 
-        //initVector = new Vector3(initVector.x + 0.5f, initVector.y, initVector.z + 0.5f);
+        var mappedVector = new Vector3(mappedX, mappedY, mappedZ);
         
-        //var offsetVector = initScaleVector;
-
         var boundsSize = field.mesh.bounds.size;
-        var finalPoint = initVector;
-        finalPoint = new Vector3(
-            finalPoint.z * boundsSize.x, 
-            finalPoint.y,
-            finalPoint.x * boundsSize.z);
+        var extentsSize = field.mesh.bounds.extents;
+        var finalPoint = new Vector3(
+            mappedVector.x * extentsSize.x, //finalPoint.z * boundsSize.x, 
+            mappedVector.z, // Re-flip y and z coordinates
+            mappedVector.y * extentsSize.z //finalPoint.x * boundsSize.z);
+        ); 
         
-        
-        //var finalPoint = new Vector3(offsetVector.x * 10f, offsetVector.y * 10f, offsetVector.z);
-
-        
-        
-        Debug.Log("initScaleVector: " + initVector + //", offsetVector: " + offsetVector +
-             "\nPlacing at final point: " + finalPoint);
-        
-        Debug.Log("MeshBounds x z: " + field.mesh.bounds.extents.x + " " + field.mesh.bounds.extents.z);
-
-
-
+        // Adjust vertical cockpit position based on raycast hit
         var finalY = 2f;
         var hitPoint = Vector3.zero;
         
@@ -79,7 +65,6 @@ public class PlaceUserOnStartup : MonoBehaviour
         {
             finalY += hitDown.point.y;
             Debug.Log("DownHit: " + finalY);
-            //finalPoint.Set(finalPoint.x, hitDown.point.y + verticalOffset, finalPoint.z); 
         }
         else if (Physics.Raycast(new Ray(finalPoint, Vector3.up), out RaycastHit hitUp))
         {
@@ -88,10 +73,17 @@ public class PlaceUserOnStartup : MonoBehaviour
             Debug.Log("UpHit: " + finalY);
         }
         
-        finalPoint = new Vector3(finalPoint.x, finalY, finalPoint.z); 
+        //finalPoint = new Vector3(finalPoint.x, finalY, finalPoint.z); 
         
-        //field.GetComponent<MeshFilter>().mesh.RecalculateNormals();
-        //field.GetComponent<MeshFilter>().mesh.RecalculateTangents();
+        
+        Debug.Log("initVector: " + initVector + 
+                  ", mapped vector: " + mappedVector + 
+                  "Placing at final point: " + finalPoint);
+        
+        Debug.Log("MeshBounds size x y z: " + boundsSize.x + " " + boundsSize.y + " " + boundsSize.z +
+                  ", MeshBounds extents x y z: " + extentsSize.x + " " 
+                  + extentsSize.y + " " + extentsSize.z);
+        
         
         user.transform.position = finalPoint;
         Cockpit.transform.position = finalPoint; // + CockpitOffset;
@@ -101,6 +93,8 @@ public class PlaceUserOnStartup : MonoBehaviour
         DrawArrow(Vector3.up, 10f);
     }
 
+    
+    
 
     private void DrawMainPoint()
     {
