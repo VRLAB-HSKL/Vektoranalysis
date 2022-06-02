@@ -99,15 +99,12 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         var sf = GlobalDataModel.CurrentField;
 
-        var rawVertices = sf.pointVectors;
+        var dVertices = sf.displayPoints;
         var displayVertices = new List<Vector3>();
         
-        for (var i = 0; i < rawVertices.Count; i++)
+        for (var i = 0; i < dVertices.Count; i++)
         {
-            var rawVector = rawVertices[i];
-            
-            // Switch y and z axis to create horizontal mesh
-            var displayVector = new Vector3(rawVector[0], rawVector[2], rawVector[1]);
+            var displayVector = dVertices[i];
             
             // ToDo: Replace this static process by dynamically scaling final mesh until it fits certain bounds
             // Scale points based on set scaling vector
@@ -179,13 +176,6 @@ public class SimpleProceduralMesh : MonoBehaviour
         mesh.SetIndices(indices.ToArray(), topology, 0, true);
 
 
-        // // flip normals on duplicated vertices
-        // int normalsHalf = (int)math.floor(normals.Count * 0.5f);
-        // for (int i = normalsHalf; i < normals.Count; i++)
-        // {
-        //     normals[i] *= -1;
-        // }
-
         var normals = CalculateNormals(displayVertices, indices, MeshTopology.Triangles);
         // if (log)
         // {
@@ -208,20 +198,20 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         var step = 1f / displayVertices.Count;
 
-        var x_min = rawVertices.Min(v => v.x);
-        var x_max = rawVertices.Max(v => v.x);
-        var y_min = rawVertices.Min(v => v.y);
-        var y_max = rawVertices.Max(v => v.y);
-        var z_min = rawVertices.Min(v => v.z);
-        var z_max = rawVertices.Max(v => v.z);    
+        var x_min = dVertices.Min(v => v.x);
+        var x_max = dVertices.Max(v => v.x);
+        var y_min = dVertices.Min(v => v.y);
+        var y_max = dVertices.Max(v => v.y);
+        var z_min = dVertices.Min(v => v.z);
+        var z_max = dVertices.Max(v => v.z);    
         
         var x_range = Mathf.Abs(x_max - x_min);
         var y_range = Mathf.Abs(y_max - y_min);
         var z_range = Mathf.Abs(z_max - z_min);
         
-        for (int i = 0; i < rawVertices.Count; i++)
+        for (int i = 0; i < dVertices.Count; i++)
         {
-            var vertex = rawVertices[i];
+            var vertex = dVertices[i];
             var x = vertex.x + x_min;
             var y = vertex.y + y_min;
             var z = vertex.z - z_min;

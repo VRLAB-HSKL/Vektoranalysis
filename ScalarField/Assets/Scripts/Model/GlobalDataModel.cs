@@ -21,14 +21,18 @@ public static class GlobalDataModel
     public static int NumberOfSamples = 200;
 
     public static Vector3 ClosestPointOnMesh = Vector3.zero;
-    
-    public static Vector3 MainMeshScalingVector = Vector3.one;
 
+    public static Vector3 MainMeshScalingVector = new Vector3(0.2f, 0.2f, 0.2f);
+    public static Vector3 DetailMeshScalingVector = new Vector3(10f, 10f, 10f);
+    
+    
     public static string InitFileResourcePath = "json/init/sf_initFile";
 
     public static InitFileRoot InitFile { get; set; }
     
     public static ScalarField CurrentField { get; set; }
+    
+    
     
     
     public static void InitializeData()
@@ -79,7 +83,8 @@ public static class GlobalDataModel
         {
             var point = InitFile.points[i];
             //sb.AppendLine(point[0] + ", " + point[1] + ", " + point[2]);
-            sf.pointVectors.Add(new Vector3(point[0], point[1], point[2]));
+            sf.rawPoints.Add(new Vector3(point[0], point[1], point[2]));
+            sf.displayPoints.Add(new Vector3(point[0], point[2], point[1]));
         }
 
         //Debug.Log(sb);
@@ -90,12 +95,8 @@ public static class GlobalDataModel
                        cmapId + "_" + cmapDataClassesCount + "_texture";
         
         Debug.Log(ressPath);
-
-        
         
         var texture = Resources.Load(ressPath) as Texture2D;
-
-        
 
         if (texture is null)
         {

@@ -22,6 +22,7 @@ namespace Model
 
         public Func<float, float, float> CalculatePoint;
 
-        public List<Vector3> pointVectors { get; } = new List<Vector3>();
+        public List<Vector3> rawPoints { get; } = new List<Vector3>();
+        public List<Vector3> displayPoints { get; set; } = new List<Vector3>();
     }
 }
