@@ -8,24 +8,48 @@ using Calculation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
 public class CreateContourlines : MonoBehaviour
 {
+    public List<float> ContourValues = new List<float>();
     public bool ShowLinesInMesh = true;
+    
+    
     public float epsilon = 0.01f;
     public Vector3 positionOffset = new Vector3(0f, 0.125f, 0f);
     public float lineThicknessMultiplier = 0.0125f;
-    
-    private List<float> ContourValues = new List<float>();
 
+    [Header("Gizmos")]
+    public Vector3 PointScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+    public GameObject ArrowPrefab;
+    public Vector3 ArrowScale = Vector3.one;
+    
+    
+    //private List<float> ContourValues = new List<float>();
+
+    private List<GameObject> ContourLineObjects = new List<GameObject>();
+    
     private List<List<Vector3>> isolinePointArrays;
     private Vector3 parentOrigin;
     private Vector3 ScalingVector = GlobalDataModel.DetailMeshScalingVector;
+
+    public void ShowContourLines(bool isVisible)
+    {
+        foreach (var line in ContourLineObjects)
+        {
+            line.gameObject.SetActive(isVisible);
+        }
+        
+        
+    }
+
     
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // ToDo: Import values from init file
         ContourValues = new List<float>()
@@ -36,8 +60,55 @@ public class CreateContourlines : MonoBehaviour
         parentOrigin = transform.parent.position;
         
         CalculateContourLines();
+        
+        //ShowContourLines(false);
+
+        for (var i = 0; i < ContourLineObjects.Count; i++)
+        {
+            DrawSphereOnLine(i, 1);
+            DrawArrowOnLine(i, 1, Vector3.up);    
+        }
+        
     }
 
+    
+    private void DrawSphereOnLine(int lineIndex, int pointIndex)
+    {
+        var obj = ContourLineObjects[lineIndex];
+        var lr = obj.GetComponent<LineRenderer>();
+        var linePoints = new Vector3[lr.positionCount];
+        lr.GetPositions(linePoints);
+
+        var point = linePoints[pointIndex];
+
+        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+        sphere.name = "Sphere_" + lineIndex + "_" + pointIndex;
+        sphere.transform.parent = obj.transform;
+
+        sphere.transform.localScale = PointScale;
+        sphere.GetComponent<MeshRenderer>().material.color = Color.red;
+
+        sphere.transform.position = point;
+    }
+
+    private void DrawArrowOnLine(int lineIndex, int pointIndex, Vector3 direction)
+    {
+        var obj = ContourLineObjects[lineIndex];
+        var lr = obj.GetComponent<LineRenderer>();
+        var linePoints = new Vector3[lr.positionCount];
+        lr.GetPositions(linePoints);
+
+        var point = linePoints[pointIndex];
+
+        var arrow = Instantiate(ArrowPrefab, obj.transform);
+        arrow.transform.position = point;
+        //arrow.GetComponent<ArrowController>().PointTowards(direction);
+        arrow.transform.LookAt(direction);
+    }
+
+    
+    
     private void CalculateContourLines()
     {
         isolinePointArrays = new List<List<Vector3>>();
@@ -78,6 +149,7 @@ public class CreateContourlines : MonoBehaviour
             
             isolinePointArrays.Add(finalPointList);
         }
+
         
         for (var i = 0; i < isolinePointArrays.Count; i++)
         {
@@ -118,9 +190,11 @@ public class CreateContourlines : MonoBehaviour
             lr.positionCount = pointList.Count;
             lr.SetPositions(newPointList.ToArray());
             // ToDo: Set contour line color based on color map value color
-            lr.material.color = Color.green;
+            lr.material.color = Random.ColorHSV();
             lr.widthMultiplier = lineThicknessMultiplier; // 0.0125f;
             lr.loop = true;
+            
+            ContourLineObjects.Add(go);
         }
     }
 }
