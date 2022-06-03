@@ -281,5 +281,59 @@ namespace Calculation
             // b1 + (s - a1) * (b2 - b1) / (a2 - a1);
             return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
         }
+        
+        
+        
+        
+        public static double cross(Vector3 O, Vector3 A, Vector3 B)
+        {
+            return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+        }
+
+        /// <summary>
+        /// Source: https://stackoverflow.com/questions/14671206/how-to-compute-convex-hull-in-c-sharp
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="compareEpsilon"></param>
+        /// <param name="sortInPlace"></param>
+        /// <returns></returns>
+        public static List<Vector3> GetConvexHull(List<Vector3> points, float epsilonTolerance = 0.001f)
+        {
+            if (points == null)
+                return null;
+
+            if (points.Count() <= 1)
+                return points;
+
+            int n = points.Count(), k = 0;
+            var H = new List<Vector3>(new Vector3[2 * n]);
+
+            points.Sort((a, b) =>
+                Math.Abs(a.x - b.x) < epsilonTolerance ? a.y.CompareTo(b.y) : a.x.CompareTo(b.x));
+
+            // Build lower hull
+            for (int i = 0; i < n; ++i)
+            {
+                while (k >= 2 && cross(H[k - 2], H[k - 1], points[i]) <= 0)
+                    k--;
+                H[k++] = points[i];
+            }
+
+            // Build upper hull
+            for (int i = n - 2, t = k + 1; i >= 0; i--)
+            {
+                while (k >= t && cross(H[k - 2], H[k - 1], points[i]) <= 0)
+                    k--;
+                H[k++] = points[i];
+            }
+
+            return H.Take(k - 1).ToList();
+        }
+        
+        
     }
+    
+    
+    
+    
 }

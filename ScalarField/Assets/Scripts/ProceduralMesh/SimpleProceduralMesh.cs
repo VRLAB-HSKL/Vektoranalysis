@@ -59,7 +59,8 @@ public class SimpleProceduralMesh : MonoBehaviour
     {
         initPos = transform.position;
         GenerateFieldMesh();
-
+        PositionMeshCenterAtOrigin();   
+        
         var mat = GetComponent<MeshRenderer>().material;
         mat.mainTexture = Texture != null ? Texture : GlobalDataModel.CurrentField.meshTexture;
     }
@@ -105,6 +106,9 @@ public class SimpleProceduralMesh : MonoBehaviour
         for (var i = 0; i < dVertices.Count; i++)
         {
             var displayVector = dVertices[i];
+            
+            // Add table position offset
+            //displayVector += PositionOffset; //new Vector3(0f, 1.25f, -2f);
             
             // ToDo: Replace this static process by dynamically scaling final mesh until it fits certain bounds
             // Scale points based on set scaling vector
@@ -255,24 +259,23 @@ public class SimpleProceduralMesh : MonoBehaviour
         // );
         
         // Position mesh based on offset to position 
-        //transform.position = target; // + offset;
+        transform.position += PositionOffset; //target; // + offset;
         
         
         
         var collider = GetComponent<MeshCollider>();
         //collider.convex = true;
         collider.sharedMesh = mesh;
-
-        
-        PositionMeshCenterAtOrigin();        
+     
     }
     
     
     private void PositionMeshCenterAtOrigin()
     {
-        var tmp = Vector3.zero - GetComponent<MeshRenderer>().bounds.center;
+        var tmp = transform.position - GetComponent<MeshRenderer>().bounds.center;
         Debug.Log("MeshPositioningVector: " + tmp);
-        transform.position += tmp;
+        //transform.position += tmp;
+        transform.parent.position = tmp;
     }
     
     
