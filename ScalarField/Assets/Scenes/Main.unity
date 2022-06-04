@@ -314,9 +314,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed77ef1c35f10b8489f3b11ea6bb60e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ContourValues: []
+  ShowLinesInMesh: 0
   epsilon: 0.01
   positionOffset: {x: 0, y: 0.05, z: 0}
-  ShowLinesInMesh: 0
+  lineThicknessMultiplier: 0.0125
+  PointScale: {x: 0.5, y: 0.5, z: 0.5}
+  ArrowPrefab: {fileID: 0}
+  ArrowScale: {x: 1, y: 1, z: 1}
 --- !u!1 &79150605
 GameObject:
   m_ObjectHideFlags: 0
@@ -3432,7 +3437,7 @@ MonoBehaviour:
   RenderingTarget: {fileID: 1023735031}
   PositionOffset: {x: 0, y: 0.25, z: 0}
   ScalingVector: {x: 0.2, y: 0.2, z: 0.2}
-  Texture: {fileID: 0}
+  Texture: {fileID: 2800000, guid: 37ad8546715b184498128cf21710b783, type: 3}
   Collider: {fileID: 0}
 --- !u!23 &1976931703
 MeshRenderer:

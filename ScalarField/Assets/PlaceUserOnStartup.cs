@@ -76,13 +76,13 @@ public class PlaceUserOnStartup : MonoBehaviour
         //finalPoint = new Vector3(finalPoint.x, finalY, finalPoint.z); 
         
         
-        Debug.Log("initVector: " + initVector + 
-                  ", mapped vector: " + mappedVector + 
-                  "Placing at final point: " + finalPoint);
-        
-        Debug.Log("MeshBounds size x y z: " + boundsSize.x + " " + boundsSize.y + " " + boundsSize.z +
-                  ", MeshBounds extents x y z: " + extentsSize.x + " " 
-                  + extentsSize.y + " " + extentsSize.z);
+        // Debug.Log("initVector: " + initVector + 
+        //           ", mapped vector: " + mappedVector + 
+        //           "Placing at final point: " + finalPoint);
+        //
+        // Debug.Log("MeshBounds size x y z: " + boundsSize.x + " " + boundsSize.y + " " + boundsSize.z +
+        //           ", MeshBounds extents x y z: " + extentsSize.x + " " 
+        //           + extentsSize.y + " " + extentsSize.z);
         
         
         user.transform.position = finalPoint;

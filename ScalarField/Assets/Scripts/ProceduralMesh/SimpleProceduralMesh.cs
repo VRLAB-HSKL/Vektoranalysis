@@ -62,7 +62,18 @@ public class SimpleProceduralMesh : MonoBehaviour
         PositionMeshCenterAtOrigin();   
         
         var mat = GetComponent<MeshRenderer>().material;
-        mat.mainTexture = Texture != null ? Texture : GlobalDataModel.CurrentField.meshTexture;
+
+        if (Texture is null)
+        {
+            mat.mainTexture = GlobalDataModel.CurrentField.meshTexture;
+        }
+        else
+        {
+            
+            mat.mainTexture = Texture;
+        }
+        
+          
     }
 
     // private void OnEnable()
@@ -84,20 +95,6 @@ public class SimpleProceduralMesh : MonoBehaviour
             name="Scalar field mesh",
         };
         
-        // var sf = new ScalarField()
-        // {
-        //     parameterRangeX = new Tuple<float, float>(-2f, 2f),
-        //     parameterRangeY = new Tuple<float, float>(-2f, 2f),
-        //     CalculatePoint = delegate(float x, float y)
-        //     {
-        //         var r = Mathf.Sqrt(x * x + y * y);
-        //         return Mathf.Exp(-r) * Mathf.Cos(6f * r);
-        //     }
-        // };
-        //
-        
-        //var (rawVertices, displayVertices) = LocalCalc.CalculateField(sf, ScalingVector);
-
         var sf = GlobalDataModel.CurrentField;
 
         var dVertices = sf.displayPoints;
@@ -197,8 +194,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         //     Color.red, Color.green, Color.blue
         // };
 
-        Vector2[] uvs = new Vector2[displayVertices.Count];
-
+        var uvs = new Vector2[displayVertices.Count];
 
         var step = 1f / displayVertices.Count;
 
@@ -209,23 +205,15 @@ public class SimpleProceduralMesh : MonoBehaviour
         var z_min = dVertices.Min(v => v.z);
         var z_max = dVertices.Max(v => v.z);    
         
-        var x_range = Mathf.Abs(x_max - x_min);
-        var y_range = Mathf.Abs(y_max - y_min);
-        var z_range = Mathf.Abs(z_max - z_min);
-        
         for (int i = 0; i < dVertices.Count; i++)
         {
             var vertex = dVertices[i];
-            var x = vertex.x + x_min;
-            var y = vertex.y + y_min;
-            var z = vertex.z - z_min;
+
+            var x = CalcUtility.MapRange(vertex.x, x_min, x_max, 0f, 1f);
+            var y = CalcUtility.MapRange(vertex.y, y_min, y_max, 0f, 1f);
+            var z = CalcUtility.MapRange(vertex.z, z_min, z_max, 0f, 1f);
             
-            var x_factor = x / x_range;
-            var y_factor = y / y_range;
-            var z_factor = z / z_range;
-            
-            var uv_vec = new Vector2(y_factor, x_factor); //new Vector2(vertices[i].x, vertices[i].z);
-            //Debug.Log("uv_vec: " + uv_vec);
+            var uv_vec = new Vector2(x, z + 0.5f); 
             uvs[i] = uv_vec;
         }
         mesh.uv = uvs;

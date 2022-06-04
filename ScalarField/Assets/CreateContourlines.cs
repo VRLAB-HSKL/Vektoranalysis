@@ -104,7 +104,11 @@ public class CreateContourlines : MonoBehaviour
         var arrow = Instantiate(ArrowPrefab, obj.transform);
         arrow.transform.position = point;
         //arrow.GetComponent<ArrowController>().PointTowards(direction);
-        arrow.transform.LookAt(direction);
+
+        var lookPoint = point + direction;
+        
+        Debug.Log("Point: " + point + ", LookPoint: " + lookPoint);
+        arrow.transform.LookAt(lookPoint);
     }
 
     
@@ -190,7 +194,7 @@ public class CreateContourlines : MonoBehaviour
             lr.positionCount = pointList.Count;
             lr.SetPositions(newPointList.ToArray());
             // ToDo: Set contour line color based on color map value color
-            lr.material.color = Random.ColorHSV();
+            lr.material.color = Color.green;//Random.ColorHSV();
             lr.widthMultiplier = lineThicknessMultiplier; // 0.0125f;
             lr.loop = true;
             
