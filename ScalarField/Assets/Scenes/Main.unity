@@ -320,8 +320,9 @@ MonoBehaviour:
   positionOffset: {x: 0, y: 0.05, z: 0}
   lineThicknessMultiplier: 0.0125
   PointScale: {x: 0.5, y: 0.5, z: 0.5}
-  ArrowPrefab: {fileID: 0}
+  ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
   ArrowScale: {x: 1, y: 1, z: 1}
+  BoundingBox: {fileID: 851291624}
 --- !u!1 &79150605
 GameObject:
   m_ObjectHideFlags: 0
@@ -3437,7 +3438,8 @@ MonoBehaviour:
   RenderingTarget: {fileID: 1023735031}
   PositionOffset: {x: 0, y: 0.25, z: 0}
   ScalingVector: {x: 0.2, y: 0.2, z: 0.2}
-  Texture: {fileID: 2800000, guid: 37ad8546715b184498128cf21710b783, type: 3}
+  BoundingBox: {fileID: 851291624}
+  Texture: {fileID: 2800000, guid: e17a81f26eb9393468d2dbf7273cc653, type: 3}
   Collider: {fileID: 0}
 --- !u!23 &1976931703
 MeshRenderer:
@@ -3458,7 +3460,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d7c14ad54d882f444bb986e80e082146, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

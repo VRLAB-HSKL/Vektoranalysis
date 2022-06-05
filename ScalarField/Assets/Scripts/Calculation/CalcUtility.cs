@@ -276,10 +276,20 @@ namespace Calculation
         /// <param name="outMin"></param>
         /// <param name="outMax"></param>
         /// <returns></returns>
-        public static float MapRange(float value, float inMin, float inMax, float outMin, float outMax)
+        public static float MapValueToRange(float value, float inMin, float inMax, float outMin, float outMax)
         {
             // b1 + (s - a1) * (b2 - b1) / (a2 - a1);
             return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
+        }
+
+        public static Vector3 MapVectorToRange(Vector3 vec, Vector3 inMin, Vector3 inMax, Vector3 outMin,
+            Vector3 outMax)
+        {
+            return new Vector3(
+                MapValueToRange(vec[0], inMin[0], inMax[0], outMin[0], outMax[0]),
+                MapValueToRange(vec[1], inMin[1], inMax[1], outMin[1], outMax[1]),
+                MapValueToRange(vec[2], inMin[2], inMax[2], outMin[2], outMax[2])
+            );
         }
         
         

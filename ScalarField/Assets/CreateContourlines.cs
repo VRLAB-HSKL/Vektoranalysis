@@ -26,7 +26,10 @@ public class CreateContourlines : MonoBehaviour
 
     public GameObject ArrowPrefab;
     public Vector3 ArrowScale = Vector3.one;
-    
+
+    public GameObject BoundingBox;
+
+    private Vector3 bbExtents;
     
     //private List<float> ContourValues = new List<float>();
 
@@ -58,7 +61,10 @@ public class CreateContourlines : MonoBehaviour
         };
 
         parentOrigin = transform.parent.position;
+
+        bbExtents = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
         
+            
         CalculateContourLines();
         
         //ShowContourLines(false);
@@ -86,7 +92,37 @@ public class CreateContourlines : MonoBehaviour
         sphere.name = "Sphere_" + lineIndex + "_" + pointIndex;
         sphere.transform.parent = obj.transform;
 
-        sphere.transform.localScale = PointScale;
+        // Scale sphere to about 5% the size of the bounding box
+        var bbScale = BoundingBox.transform.localScale;
+        var maxScale = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
+        var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
+        newScale *= 0.05f;
+        sphere.transform.localScale = newScale;
+
+        // var sphereVertices = new List<Vector3>();
+        // sphere.GetComponent<MeshFilter>().mesh.GetVertices(sphereVertices);
+        //
+        // var newVertices = new List<Vector3>();
+        //
+        // var x_min = sphereVertices.Min(v => v.x);
+        // var x_max = sphereVertices.Max(v => v.x);
+        // var y_min = sphereVertices.Min(v => v.y);
+        // var y_max = sphereVertices.Max(v => v.y);
+        // var z_min = sphereVertices.Min(v => v.z);
+        // var z_max = sphereVertices.Max(v => v.z);     
+        //
+        // for (var i = 0; i < sphereVertices.Count; ++i)
+        // {
+        //     var nv = CalcUtility.MapVectorToRange(sphereVertices[i],
+        //         new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
+        //         -bbExtents, bbExtents
+        //     );
+        //     
+        //     newVertices.Add(nv);
+        // }
+        //
+        // sphere.GetComponent<MeshFilter>().mesh.SetVertices(newVertices);
+        
         sphere.GetComponent<MeshRenderer>().material.color = Color.red;
 
         sphere.transform.position = point;
@@ -105,9 +141,17 @@ public class CreateContourlines : MonoBehaviour
         arrow.transform.position = point;
         //arrow.GetComponent<ArrowController>().PointTowards(direction);
 
+        // Scale arrow to about 10% the size of the bounding box
+        var bbScale = BoundingBox.transform.localScale;
+        var maxScale = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
+        var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
+        newScale *= 0.1f;
+        arrow.transform.localScale = newScale;
+        
+        
         var lookPoint = point + direction;
         
-        Debug.Log("Point: " + point + ", LookPoint: " + lookPoint);
+        //Debug.Log("Point: " + point + ", LookPoint: " + lookPoint);
         arrow.transform.LookAt(lookPoint);
     }
 
@@ -116,6 +160,16 @@ public class CreateContourlines : MonoBehaviour
     private void CalculateContourLines()
     {
         isolinePointArrays = new List<List<Vector3>>();
+
+        var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
+        
+        var x_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.x);
+        var x_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.x);
+        var y_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.y);
+        var y_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.y);
+        var z_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.z);
+        var z_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.z);    
+        
         
         for (var i = 0; i < ContourValues.Count; i++)
         {
@@ -160,20 +214,26 @@ public class CreateContourlines : MonoBehaviour
             var pointList = isolinePointArrays[i];
             if (pointList.Count == 0) continue;
             
-            var go = new GameObject("IsoLine_" + ContourValues[i]);
+            var go = new GameObject("ContourLine_" + ContourValues[i]);
             go.transform.SetParent(transform);
             
             var lr = go.AddComponent<LineRenderer>();
 
-            // ToDo: Make this dynamic based on loaded scene
             // Scale points for main scene mesh 
             var newPointList = new List<Vector3>();
             for (var j = 0; j < pointList.Count; j++)
             {
                 var p = pointList[j];
                 // Scale point to match mesh scaling
-                var newp = Vector3.Scale(p, ScalingVector);
+                //var newp = Vector3.Scale(p, ScalingVector);
 
+                var x = CalcUtility.MapValueToRange(p.x, x_min, x_max, -bb.x, bb.x);
+                var y = CalcUtility.MapValueToRange(p.y, y_min, y_max, -bb.y, bb.y);
+                var z = CalcUtility.MapValueToRange(p.z, z_min, z_max, -bb.z, bb.z);
+                
+                var newp = new Vector3(x, y, z); 
+                
+                
                 if (ShowLinesInMesh)
                 {
                     newp += parentOrigin + new Vector3(0f, 0.25f, 0f); //positionOffset;

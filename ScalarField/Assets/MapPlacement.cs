@@ -48,9 +48,9 @@ public class MapPlacement : MonoBehaviour
         var yRangeMin = GlobalDataModel.InitFile.y_param_range[0];
         var yRangeMax = GlobalDataModel.InitFile.x_param_range[1];
 
-        var mappedX = CalcUtility.MapRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
+        var mappedX = CalcUtility.MapValueToRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
         
-        var mappedY = CalcUtility.MapRange(verticalCoordinate, -0.5f, 0.5f, yRangeMin, yRangeMax);
+        var mappedY = CalcUtility.MapValueToRange(verticalCoordinate, -0.5f, 0.5f, yRangeMin, yRangeMax);
         
         // var mappedX = CalcUtility.MapRange(x, )
         //

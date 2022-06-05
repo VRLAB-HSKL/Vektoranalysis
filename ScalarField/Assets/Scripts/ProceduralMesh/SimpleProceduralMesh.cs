@@ -14,44 +14,12 @@ public class SimpleProceduralMesh : MonoBehaviour
     public Transform RenderingTarget;
     public Vector3 PositionOffset;
     public Vector3 ScalingVector = Vector3.one;
-
+    public GameObject BoundingBox;
     
     
     public Texture2D Texture;
     public BoxCollider Collider; 
     
-    // public static class ColorMap
-    // {
-    //     
-    //     
-    //     
-    // }
-    //
-    // public static class Sequential {
-    //
-    //     public enum MultiHue
-    //     {
-    //         BuGn, BuPu, GnBu, OrRd, PuBu, PuBuGn,
-    //         PuRd, RdPu, YlGn, YlGnBu, YlOrBr, YlOrRd    
-    //     }
-    //
-    //     public enum SingleHue
-    //     {
-    //         Blues, Greens, Greys, Oranges, Purples, Reds
-    //     }
-    //      
-    // }
-    //
-    // public enum Diverging
-    // {
-    //     BrBg, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral
-    // }
-    //
-    // public enum Qualitative
-    // {
-    //     Accent, Dark2, Paired, Pastel1, Pastel2, Set1, Set2, Set3
-    // }
-    //
 
     private Vector3 initPos = Vector3.zero;
 
@@ -99,6 +67,16 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         var dVertices = sf.displayPoints;
         var displayVertices = new List<Vector3>();
+
+        
+        var x_min = dVertices.Min(v => v.x);
+        var x_max = dVertices.Max(v => v.x);
+        var y_min = dVertices.Min(v => v.y);
+        var y_max = dVertices.Max(v => v.y);
+        var z_min = dVertices.Min(v => v.z);
+        var z_max = dVertices.Max(v => v.z);    
+        
+        var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
         
         for (var i = 0; i < dVertices.Count; i++)
         {
@@ -109,9 +87,18 @@ public class SimpleProceduralMesh : MonoBehaviour
             
             // ToDo: Replace this static process by dynamically scaling final mesh until it fits certain bounds
             // Scale points based on set scaling vector
-            displayVector = Vector3.Scale(displayVector, ScalingVector);
+            // displayVector = Vector3.Scale(displayVector, ScalingVector);
+
+            // var x = CalcUtility.MapValueToRange(displayVector.x, x_min, x_max, -bb.x, bb.x);
+            // var y = CalcUtility.MapValueToRange(displayVector.y, y_min, y_max, -bb.y, bb.y);
+            // var z = CalcUtility.MapValueToRange(displayVector.z, z_min, z_max, -bb.z, bb.z);
+
+            var mappedVec = CalcUtility.MapVectorToRange(
+                displayVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
+                new Vector3(-bb.x, -bb.y, -bb.z), new Vector3(bb.x, bb.y, bb.z)
+            );
             
-            displayVertices.Add(displayVector);
+            displayVertices.Add(mappedVec);
         }
         
         
@@ -198,26 +185,22 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         var step = 1f / displayVertices.Count;
 
-        var x_min = dVertices.Min(v => v.x);
-        var x_max = dVertices.Max(v => v.x);
-        var y_min = dVertices.Min(v => v.y);
-        var y_max = dVertices.Max(v => v.y);
-        var z_min = dVertices.Min(v => v.z);
-        var z_max = dVertices.Max(v => v.z);    
         
-        for (int i = 0; i < dVertices.Count; i++)
+        
+        for (var i = 0; i < dVertices.Count; i++)
         {
             var vertex = dVertices[i];
 
-            var x = CalcUtility.MapRange(vertex.x, x_min, x_max, 0f, 1f);
-            var y = CalcUtility.MapRange(vertex.y, y_min, y_max, 0f, 1f);
-            var z = CalcUtility.MapRange(vertex.z, z_min, z_max, 0f, 1f);
+            var x = CalcUtility.MapValueToRange(vertex.x, x_min, x_max, 0f, 1f);
+            //var y = CalcUtility.MapRange(vertex.y, y_min, y_max, 0f, 1f);
+            var z = CalcUtility.MapValueToRange(vertex.z, z_min, z_max, 0f, 1f);
             
-            var uv_vec = new Vector2(x, z + 0.5f); 
-            uvs[i] = uv_vec;
+            // Offset vertical v coordinate by half the texture to match imported texture
+            var offset = 0.5f;
+            uvs[i] = new Vector2(x, z);
         }
-        mesh.uv = uvs;
         
+        mesh.uv = uvs;
         
         var lineIndices = new List<int>();
         

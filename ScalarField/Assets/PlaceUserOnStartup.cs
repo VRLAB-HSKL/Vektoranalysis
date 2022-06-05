@@ -12,6 +12,8 @@ public class PlaceUserOnStartup : MonoBehaviour
     /// </summary>
     public Vector3 CockpitOffset = new Vector3(0f, -2f, 0f);
 
+    public bool SpawnAtEagle;
+    
     private GameObject user;
     private Vector3 MainPointPosition = Vector3.zero;
     
@@ -22,6 +24,9 @@ public class PlaceUserOnStartup : MonoBehaviour
 
         if (user is null) return;
 
+        
+        
+        
         var estimatedIndex = GlobalDataModel.EstimatedIndex; 
         var initValues = GlobalDataModel.InitFile.points[estimatedIndex];
 
@@ -37,11 +42,11 @@ public class PlaceUserOnStartup : MonoBehaviour
         var zMax = GlobalDataModel.InitFile.points.Max(p => p[2]);
         
         
-        var mappedX = CalcUtility.MapRange(initValues[0], xMin, xMax, 0f, 1f);
-        var mappedY = CalcUtility.MapRange(initValues[1], yMin, yMax, 0f, 1f);
+        var mappedX = CalcUtility.MapValueToRange(initValues[0], xMin, xMax, 0f, 1f);
+        var mappedY = CalcUtility.MapValueToRange(initValues[1], yMin, yMax, 0f, 1f);
         
         //ToDo: Map z values based on vertical bounding box, useful for curves like banana
-        var mappedZ = CalcUtility.MapRange(initValues[2], zMin, zMax, 0f, 10f);
+        var mappedZ = CalcUtility.MapValueToRange(initValues[2], zMin, zMax, 0f, 10f);
         
         // Flip sign on x coordinate
         //var initVector = new Vector3(-initValues[0], initValues[1], initValues[2]);
@@ -83,14 +88,33 @@ public class PlaceUserOnStartup : MonoBehaviour
         // Debug.Log("MeshBounds size x y z: " + boundsSize.x + " " + boundsSize.y + " " + boundsSize.z +
         //           ", MeshBounds extents x y z: " + extentsSize.x + " " 
         //           + extentsSize.y + " " + extentsSize.z);
+
+
+        if (SpawnAtEagle)
+        {
+            var eaglePoint = GameObject.Find("EaglePoint");
+            finalPoint = eaglePoint.transform.position;
+            user.transform.position = finalPoint;
+            user.transform.rotation = eaglePoint.transform.rotation;
+            
+            Cockpit.transform.position = finalPoint;
+            Cockpit.transform.rotation = eaglePoint.transform.rotation;
+        }
+        else
+        {
+            user.transform.position = finalPoint;
+            Cockpit.transform.position = finalPoint; // + CockpitOffset;    
+        }
         
         
-        user.transform.position = finalPoint;
-        Cockpit.transform.position = finalPoint; // + CockpitOffset;
         
         DrawMainPoint();
         
         DrawArrow(Vector3.up, 10f);
+        
+        
+        
+        
     }
 
     
