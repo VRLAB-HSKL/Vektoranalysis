@@ -22,10 +22,14 @@ public class SimpleProceduralMesh : MonoBehaviour
     
 
     private Vector3 initPos = Vector3.zero;
-
+    private Vector3 targetOrigin = Vector3.zero;
+    
     private void Start()
     {
         initPos = transform.position;
+
+        targetOrigin = RenderingTarget.transform.TransformPoint(RenderingTarget.transform.position);
+        
         GenerateFieldMesh();
         PositionMeshCenterAtOrigin();   
         
@@ -85,19 +89,21 @@ public class SimpleProceduralMesh : MonoBehaviour
             // Add table position offset
             //displayVector += PositionOffset; //new Vector3(0f, 1.25f, -2f);
             
-            // ToDo: Replace this static process by dynamically scaling final mesh until it fits certain bounds
-            // Scale points based on set scaling vector
-            // displayVector = Vector3.Scale(displayVector, ScalingVector);
-
-            // var x = CalcUtility.MapValueToRange(displayVector.x, x_min, x_max, -bb.x, bb.x);
-            // var y = CalcUtility.MapValueToRange(displayVector.y, y_min, y_max, -bb.y, bb.y);
-            // var z = CalcUtility.MapValueToRange(displayVector.z, z_min, z_max, -bb.z, bb.z);
-
             var mappedVec = CalcUtility.MapVectorToRange(
                 displayVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
                 new Vector3(-bb.x, -bb.y, -bb.z), new Vector3(bb.x, bb.y, bb.z)
             );
             
+            //var translatedVec = mappedVec + targetOrigin;
+            
+            Debug.Log(
+                "displayVector: " + displayVector + 
+                ", targetOrigin: " + targetOrigin +
+                ", mappedVector: " + mappedVec
+                //", translatedVec: " + translatedVec
+                  
+            );
+
             displayVertices.Add(mappedVec);
         }
         

@@ -94,11 +94,21 @@ public class CreateContourlines : MonoBehaviour
 
         // Scale sphere to about 5% the size of the bounding box
         var bbScale = BoundingBox.transform.localScale;
-        var maxScale = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
-        var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
-        newScale *= 0.05f;
-        sphere.transform.localScale = newScale;
-
+        var maxScaleFactor = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
+        var maxVector = new Vector3(maxScaleFactor, maxScaleFactor, maxScaleFactor);
+        // float divX = 1f / maxScale;
+        // float divY = 1f / maxScale;
+        // float divZ = 1f / maxScale;
+        // var divScale = new Vector3(divX, divY, divZ);
+        var newScale = maxVector * 0.025f; // * 1f; //0.05f;
+        
+        sphere.transform.localScale = Vector3.Scale(Vector3.one, newScale);
+                                
+        // Debug.Log("bbScale: " + bbScale + ", maxScale: " + maxVector +  
+        //           // ", divValues: " + divX + " " + divY + " " + divZ +
+        //           // ", divScale: " + divScale.x + " " + divScale.y + " " + divScale.z +
+        //          ", newScale: " + newScale.x + " " + newScale.y + " " + newScale.z);
+        
         // var sphereVertices = new List<Vector3>();
         // sphere.GetComponent<MeshFilter>().mesh.GetVertices(sphereVertices);
         //
@@ -144,9 +154,10 @@ public class CreateContourlines : MonoBehaviour
         // Scale arrow to about 10% the size of the bounding box
         var bbScale = BoundingBox.transform.localScale;
         var maxScale = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
-        var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
-        newScale *= 0.1f;
-        arrow.transform.localScale = newScale;
+        // var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
+        var maxVector = new Vector3(maxScale, maxScale, maxScale);
+        var newScale = maxVector * 0.05f;
+        arrow.transform.localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
         
         
         var lookPoint = point + direction;

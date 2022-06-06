@@ -11,6 +11,20 @@ public class MapPlacement : MonoBehaviour
 
     private GameObject sphere;
 
+    private void Start()
+    {
+        var mr = GetComponent<MeshRenderer>();
+
+        var cm = GlobalDataModel.InitFile.color_map_id;
+        var dataClassesCount = GlobalDataModel.InitFile.color_map_data_classes_count;
+        var texture = Resources.Load(
+            "texture_maps/" + cm + "/" + dataClassesCount + "/" +
+            cm + "_" + dataClassesCount + "_texture.png"
+        ) as Texture2D;
+        
+        mr.material.mainTexture = texture;
+    }
+    
     private void OnCollisionEnter(Collision collision)
     {
         var contact = collision.GetContact(0);
