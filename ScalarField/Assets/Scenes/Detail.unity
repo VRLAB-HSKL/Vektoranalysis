@@ -163,7 +163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 45892915}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ebff12db10fdb6459a9e0967203abb8, type: 3}
   m_Name: 
@@ -226,7 +226,7 @@ PrefabInstance:
     - target: {fileID: -8436908338302418060, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 46e193b634d82a94da13a13e289032fc, type: 2}
+      objectReference: {fileID: 2100000, guid: d984fb9cd0d5f2845bfdcfd7928d54a3, type: 2}
     - target: {fileID: -8219812068089440707, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -314,15 +314,15 @@ PrefabInstance:
     - target: {fileID: 3747267029993709142, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 159f582a7edb3e540b02fd67a7a63bb3, type: 2}
+      objectReference: {fileID: 2100000, guid: d984fb9cd0d5f2845bfdcfd7928d54a3, type: 2}
     - target: {fileID: 4754060649969547009, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 159f582a7edb3e540b02fd67a7a63bb3, type: 2}
+      objectReference: {fileID: 2100000, guid: d984fb9cd0d5f2845bfdcfd7928d54a3, type: 2}
     - target: {fileID: 4876210883979780893, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 159f582a7edb3e540b02fd67a7a63bb3, type: 2}
+      objectReference: {fileID: 2100000, guid: d984fb9cd0d5f2845bfdcfd7928d54a3, type: 2}
     - target: {fileID: 6089558473801840183, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -330,7 +330,7 @@ PrefabInstance:
     - target: {fileID: 6178608895106136121, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 520d3fdd774e15040810769e94940ca4, type: 2}
+      objectReference: {fileID: 2100000, guid: ae97aaea94bb4b641b6bd8d08202fdb8, type: 2}
     - target: {fileID: 8197785179279072888, guid: 3866cb1d1632f9e4dad848b25cb9cd62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1119,7 +1119,7 @@ MonoBehaviour:
   PositionOffset: {x: 0, y: 0, z: 0}
   ScalingVector: {x: 10, y: 10, z: 10}
   BoundingBox: {fileID: 674071311}
-  Texture: {fileID: 2800000, guid: e17a81f26eb9393468d2dbf7273cc653, type: 3}
+  Texture: {fileID: 2800000, guid: 5426d71904c7a4045a437b0eac22a791, type: 3}
   Collider: {fileID: 0}
 --- !u!64 &941685793
 MeshCollider:

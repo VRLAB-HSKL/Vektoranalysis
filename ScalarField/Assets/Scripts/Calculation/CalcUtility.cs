@@ -312,9 +312,13 @@ namespace Calculation
             if (points == null)
                 return null;
 
-            if (points.Count() <= 1)
+            if (points.Count <= 1)
                 return points;
 
+            // Order points by x coordinate to improve convex hull approximation
+            points = points.OrderBy(p => p.x).ToList();
+            
+            
             int n = points.Count(), k = 0;
             var H = new List<Vector3>(new Vector3[2 * n]);
 

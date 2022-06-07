@@ -16,7 +16,6 @@ public class CreateContourlines : MonoBehaviour
     public List<float> ContourValues = new List<float>();
     public bool ShowLinesInMesh = true;
     
-    
     public float epsilon = 0.01f;
     public Vector3 positionOffset = new Vector3(0f, 0.125f, 0f);
     public float lineThicknessMultiplier = 0.0125f;
@@ -31,11 +30,10 @@ public class CreateContourlines : MonoBehaviour
 
     private Vector3 bbExtents;
     
-    //private List<float> ContourValues = new List<float>();
 
     private List<GameObject> ContourLineObjects = new List<GameObject>();
+    private List<List<Vector3>> isolinePointLists;
     
-    private List<List<Vector3>> isolinePointArrays;
     private Vector3 parentOrigin;
     private Vector3 ScalingVector = GlobalDataModel.DetailMeshScalingVector;
 
@@ -71,10 +69,35 @@ public class CreateContourlines : MonoBehaviour
 
         for (var i = 0; i < ContourLineObjects.Count; i++)
         {
+            // Draw example points on contour lines
             DrawSphereOnLine(i, 1);
-            DrawArrowOnLine(i, 1, Vector3.up);    
+            DrawArrowOnLine(i, 1, Vector3.up);
         }
+
+        var scalingFactor = 10f;
+        var yOffset = 15f;
         
+        var pathPoints = new List<Vector3>
+        {
+            Vector3.zero * scalingFactor + new Vector3(0f, yOffset, 0f),
+            Vector3.forward * scalingFactor + new Vector3(0f, yOffset, 0f),
+            Vector3.left * scalingFactor + new Vector3(0f, yOffset, 0f),
+            Vector3.back * scalingFactor + new Vector3(0f, yOffset, 0f),
+            Vector3.right * scalingFactor + new Vector3(0f, yOffset, 0f)
+        };
+        
+        // for (var i = 0; i < isolinePointLists.Count; i++)
+        // {
+        //     var list = isolinePointLists[i];
+        //     if (list.Count == 0) continue;
+        //
+        //     var point = list.First();
+        //     //Debug.Log("iso line " + i + " point: " + point);
+        //     
+        //     pathPoints.Add(point);
+        // }
+        
+        DrawPath(pathPoints);
     }
 
     
@@ -148,6 +171,7 @@ public class CreateContourlines : MonoBehaviour
         var point = linePoints[pointIndex];
 
         var arrow = Instantiate(ArrowPrefab, obj.transform);
+        arrow.name = "Arrow_" + lineIndex + "_" + pointIndex;
         arrow.transform.position = point;
         //arrow.GetComponent<ArrowController>().PointTowards(direction);
 
@@ -166,11 +190,98 @@ public class CreateContourlines : MonoBehaviour
         arrow.transform.LookAt(lookPoint);
     }
 
+    private void DrawSphere(Vector3 point, Transform parent, Color color)
+    {
+        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere.name = "Sphere_point_" + point;
+        sphere.transform.parent = parent;
+
+        // Scale sphere to about 5% the size of the bounding box
+        var bbScale = BoundingBox.transform.localScale;
+        var maxScaleFactor = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
+        var maxVector = new Vector3(maxScaleFactor, maxScaleFactor, maxScaleFactor);
+        // float divX = 1f / maxScale;
+        // float divY = 1f / maxScale;
+        // float divZ = 1f / maxScale;
+        // var divScale = new Vector3(divX, divY, divZ);
+        var newScale = maxVector * 0.025f; // * 1f; //0.05f;
+        
+        sphere.transform.localScale = Vector3.Scale(Vector3.one, newScale);
+                                
+        sphere.GetComponent<MeshRenderer>().material.color = color;
+
+        sphere.transform.position = point;
+    }
+
+    private void DrawArrow(Vector3 start, Vector3 target, Transform parent)
+    {
+        var arrow = Instantiate(ArrowPrefab, parent);
+        arrow.name = "Arrow_" + start + "_to_" + target;
+        arrow.transform.position = start;
+        //arrow.GetComponent<ArrowController>().PointTowards(direction);
+
+        // Scale arrow to about 10% the size of the bounding box
+        var bbScale = BoundingBox.transform.localScale;
+        var maxScale = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
+        // var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
+        var maxVector = new Vector3(maxScale, maxScale, maxScale);
+        var newScale = maxVector * 0.05f;
+        arrow.transform.localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
+        
+        //var direction = target - start;
+        
+        //ToDo: Scale arrow length wise based on distance
+        // var dirMag = direction.magnitude;
+        // arrow.transform.localScale = Vector3.Scale(arrow.transform.localScale, new Vector3(1f, 1f, dirMag));
+
+        //var centerPos = (start + target) * 0.5f;
+        
+        //arrow.transform.localScale = Vector3.Scale(arrow.transform.localScale, new Vector3(1f, 1f, scaleZ));
+
+        //var lookPoint = start + direction;
+        arrow.transform.LookAt(target);
+    }
+    
+    private void DrawPath(List<Vector3> points)
+    {
+        if (points.Count == 0) return;
+
+        var path = new GameObject
+        {
+            transform =
+            {
+                parent = transform
+            },
+            name = "Path_" + points[0]
+        };
+
+        Debug.Log("Creating empty path parent");
+        Instantiate(path);
+
+        if (points.Count == 1)
+        {
+            DrawSphere(points[0], path.transform, Color.green);
+        }
+        else
+        {
+            path.name += "_to_" + points[points.Count - 1];
+            
+            for (var i = 0; i < points.Count; i++)
+            {
+                DrawSphere(points[i], path.transform, Color.green);
+                
+                // Draw arrow for every element except for the last one, because there is no next point to connect to
+                if(i < points.Count - 1)
+                    DrawArrow(points[i], points[i + 1], path.transform);
+            }
+        }
+        
+    }
     
     
     private void CalculateContourLines()
     {
-        isolinePointArrays = new List<List<Vector3>>();
+        isolinePointLists = new List<List<Vector3>>();
 
         var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
         
@@ -203,11 +314,7 @@ public class CreateContourlines : MonoBehaviour
                 }
             }
 
-            //displayPointList = CalcUtility.GetConvexHull(displayPointList);
-
-            var orderedList = rawPointList.OrderBy(p => p.x).ToList();
-
-            var hullPointList = CalcUtility.GetConvexHull(orderedList);
+            var hullPointList = CalcUtility.GetConvexHull(rawPointList);
             var finalPointList = new List<Vector3>();
             
             foreach (var point in hullPointList)
@@ -216,13 +323,13 @@ public class CreateContourlines : MonoBehaviour
                 finalPointList.Add(displayPointList[index]);
             }
             
-            isolinePointArrays.Add(finalPointList);
+            isolinePointLists.Add(finalPointList);
         }
 
         
-        for (var i = 0; i < isolinePointArrays.Count; i++)
+        for (var i = 0; i < isolinePointLists.Count; i++)
         {
-            var pointList = isolinePointArrays[i];
+            var pointList = isolinePointLists[i];
             if (pointList.Count == 0) continue;
             
             var go = new GameObject("ContourLine_" + ContourValues[i]);
