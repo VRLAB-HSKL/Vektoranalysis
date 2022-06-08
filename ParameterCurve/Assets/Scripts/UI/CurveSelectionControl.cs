@@ -24,7 +24,7 @@ namespace UI
         /// <summary>
         /// Parent for all generated main menu buttons
         /// </summary>
-        public GameObject mainMenuButtonsParent;
+        public GameObject mainMenuContent;
         
         /// <summary>
         /// Main menu button prefab
@@ -73,7 +73,12 @@ namespace UI
         #endregion Private members
 
         #region Private functions
-        
+
+        private void Awake()
+        {
+            FindObjectsInScene();
+        }
+
         /// <summary>
         /// Unity Start function
         /// ====================
@@ -85,6 +90,8 @@ namespace UI
         /// </summary>
         private void Start()
         {
+            
+
             _displayState = new DisplayCurvesState(curveMenuContent, curveMenuButtonPrefab, world);
             _exerciseState = new ExerciseCurvesState(curveMenuContent, curveMenuButtonPrefab, world);
             CurveSelectionFsm = new CurveSelectionStateContext(_displayState);
@@ -128,7 +135,7 @@ namespace UI
             
                 // Create instance of button prefab
                 var dgrpVal = displayGrpValues[i];
-                var tmpButton = Instantiate(mainMenuButtonPrefab, mainMenuButtonsParent.transform);
+                var tmpButton = Instantiate(mainMenuButtonPrefab, mainMenuContent.transform);
                 tmpButton.name = curveDisplayGroupName + "GrpButton";
                 Destroy(tmpButton.GetComponent<RawImage>());
 
@@ -200,7 +207,19 @@ namespace UI
                 //if (world.BrowserWall is { }) world.BrowserWall.OpenURL(ds.NotebookURL);
             }
         }
-        
+
+
+        private void FindObjectsInScene()
+        {
+            mainMenuParent ??= GameObject.Find("MainMenu");
+            mainMenuContent ??= GameObject.Find("MainMenuContent");
+            //mainMenuButtonPrefab ??= 
+
+            curveMenuParent ??= GameObject.Find("CurveMenu");
+            curveMenuContent ??= GameObject.Find("CurveMenuContent");
+        }
+
+
         #endregion Private functions
     }
 }

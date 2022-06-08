@@ -85,7 +85,7 @@ namespace UI.States
         /// <summary>
         /// Called on leaving the state
         /// </summary>
-        public override void OnStateExit()
+        public override void OnStateQuit()
         {
             // Hide all views
             GlobalDataModel.WorldCurveViewController.SetViewVisibility(false);

@@ -170,9 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f96d4869215d7544bc4b0b2dce6cbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 26821154}
-  PressedMat: {fileID: 2100000, guid: cb72e3f6d81c7234aba65bc276969234, type: 2}
-  ViewIndex: 0
+  target: {fileID: 0}
+  pressedMat: {fileID: 0}
+  viewIndex: 0
 --- !u!136 &1187302
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2983,7 +2983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e11728267d8a96645994e8d49793247f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 26821154}
+  target: {fileID: 0}
 --- !u!1 &222584539
 GameObject:
   m_ObjectHideFlags: 0
@@ -3841,12 +3841,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c86b32e17dda2e45a27efba7c05fc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainMenuParent: {fileID: 1768755573}
-  MainMenuButtonsParent: {fileID: 1187910000}
-  MainMenuButtonPrefab: {fileID: 5485140406154464302, guid: e429efa0e9c530c43b26505faa40b500, type: 3}
-  CurveMenuParent: {fileID: 1294974256}
-  CurveMenuContent: {fileID: 99440963}
-  CurveMenuButtonPrefab: {fileID: 3674468508832717730, guid: b40898bfde376f345b0b2fe0ec7c2cb1, type: 3}
+  mainMenuParent: {fileID: 0}
+  mainMenuButtonsParent: {fileID: 0}
+  mainMenuButtonPrefab: {fileID: 5485140406154464302, guid: e429efa0e9c530c43b26505faa40b500, type: 3}
+  curveMenuParent: {fileID: 0}
+  curveMenuContent: {fileID: 0}
+  curveMenuButtonPrefab: {fileID: 3674468508832717730, guid: b40898bfde376f345b0b2fe0ec7c2cb1, type: 3}
   world: {fileID: 1842699572}
 --- !u!1 &350197460
 GameObject:
@@ -5502,7 +5502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fadba2d76c6b9d74a8f86a6b6d1cbe2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 26821154}
+  target: {fileID: 0}
 --- !u!136 &616668363
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6598,7 +6598,7 @@ GameObject:
   - component: {fileID: 767925015}
   - component: {fileID: 767925014}
   m_Layer: 5
-  m_Name: Viewport
+  m_Name: CurveMenuViewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7797,8 +7797,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646a7834f776b2c4b8ee531f5c9177ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 26821154}
-  PressedMat: {fileID: 2100000, guid: cb72e3f6d81c7234aba65bc276969234, type: 2}
+  target: {fileID: 0}
+  pressedMat: {fileID: 0}
 --- !u!1 &899168578
 GameObject:
   m_ObjectHideFlags: 0
@@ -11649,7 +11649,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1294974257}
   m_Layer: 5
-  m_Name: CurveButtons
+  m_Name: CurveMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16014,7 +16014,7 @@ GameObject:
   - component: {fileID: 1768755574}
   - component: {fileID: 1768755575}
   m_Layer: 5
-  m_Name: MainButtons
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16955,7 +16955,7 @@ GameObject:
   - component: {fileID: 1922406978}
   - component: {fileID: 1922406977}
   m_Layer: 5
-  m_Name: Viewport
+  m_Name: MainMenuViewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -35,7 +35,7 @@ namespace UI.States
             get => _state;
             set
             {
-                _state?.OnStateExit();
+                _state?.OnStateQuit();
                 value.OnStateEntered();
                 _state = value;
             }
