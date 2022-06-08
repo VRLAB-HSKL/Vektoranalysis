@@ -3841,11 +3841,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c86b32e17dda2e45a27efba7c05fc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuParent: {fileID: 0}
-  mainMenuButtonsParent: {fileID: 0}
+  mainMenuParent: {fileID: 1768755573}
+  mainMenuContent: {fileID: 1187910000}
   mainMenuButtonPrefab: {fileID: 5485140406154464302, guid: e429efa0e9c530c43b26505faa40b500, type: 3}
-  curveMenuParent: {fileID: 0}
-  curveMenuContent: {fileID: 0}
+  curveMenuParent: {fileID: 1294974256}
+  curveMenuContent: {fileID: 99440963}
   curveMenuButtonPrefab: {fileID: 3674468508832717730, guid: b40898bfde376f345b0b2fe0ec7c2cb1, type: 3}
   world: {fileID: 1842699572}
 --- !u!1 &350197460
