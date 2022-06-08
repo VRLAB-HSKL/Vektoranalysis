@@ -22,7 +22,7 @@ namespace Views.Display
             get => _curPointIdx;
             set
             {
-                if (value >= CurrentCurve.Points.Count) return;
+                if (value >= CurrentCurve.points.Count) return;
                 _curPointIdx = value;
             }
         }
@@ -86,7 +86,7 @@ namespace Views.Display
         /// </summary>
         private int _curPointIdx;
     
-        public WaypointManager Wpm { get; }
+        public WaypointManager _wpm { get; set; }
         
         
         /// <summary>
@@ -155,7 +155,7 @@ namespace Views.Display
             _initBinormalLrWidth = BinormalLr.widthMultiplier;
 
 
-            Wpm = new WaypointManager();  //new Vector3[1], 0.01f, false);
+            _wpm = new WaypointManager();  //new Vector3[1], 0.01f, false);
         }
 
         #endregion Constructors
@@ -174,20 +174,21 @@ namespace Views.Display
             if (HasTravelPoint)
             {
                 // Map points to world space location
-                var pointArr = CurrentCurve.WorldPoints.ToArray();
+                var pointArr = CurrentCurve.worldPoints.ToArray();
                 for (var i = 0; i < pointArr.Length; i++)
                 {
                     var point = pointArr[i];
                     pointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
                 }
 
-                Wpm.SetWaypoints(pointArr);
+                _wpm.SetWaypoints(pointArr);
                 
-                SetTravelObjectWpm();//SetTravelObjectPoint();
+                //SetTravelObjectWPM();
+                SetTravelObjectPoint();
                 SetMovingFrame();
             }
 
-            if (CurrentPointIndex != CurrentCurve.Points.Count - 1) return;
+            if (CurrentPointIndex != CurrentCurve.points.Count - 1) return;
             
             GlobalDataModel.IsRunning = false;
             Log.Debug("Stopping run...!");
@@ -215,18 +216,18 @@ namespace Views.Display
             if (CurrentPointIndex < 0) return;
 
             // On arrival at the last point, stop driving
-            if (CurrentPointIndex == CurrentCurve.WorldPoints.Count - 1)
+            if (CurrentPointIndex == CurrentCurve.worldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false; 
                 return;
             }
 
-            TravelObject.position = MapPointPos(CurrentCurve.WorldPoints[CurrentPointIndex]);
+            TravelObject.position = MapPointPos(CurrentCurve.worldPoints[CurrentPointIndex]);
             
             ++CurrentPointIndex;
         }
 
-        public void SetTravelObjectWpm()
+        public void SetTravelObjectWPM()
         {
             // Null checks
             if (!HasTravelPoint) return;
@@ -234,16 +235,16 @@ namespace Views.Display
             if (CurrentPointIndex < 0) return;
             
             // On arrival at the last point, stop driving
-            if (CurrentPointIndex == CurrentCurve.WorldPoints.Count - 1)
+            if (CurrentPointIndex == CurrentCurve.worldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false; 
                 return;
             }
             
-            var pos = Wpm.GetWaypoint();
-            var target = Wpm.GetFollowupWaypoint();
+            var pos = _wpm.GetWaypoint();
+            var target = _wpm.GetFollowupWaypoint();
             var dist = Vector3.Distance(pos, target);
-            TravelObject.position = Wpm.Move(pos, dist);
+            TravelObject.position = _wpm.Move(pos, dist);
 
             
             
@@ -262,7 +263,7 @@ namespace Views.Display
             var curve = CurrentCurve;
             
             // Stop run on last point
-            if (CurrentPointIndex == curve.WorldPoints.Count - 1)
+            if (CurrentPointIndex == curve.worldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false;
                 return;
@@ -270,9 +271,9 @@ namespace Views.Display
         
             // Get curve data
             var travelObjPosition = TravelObject.position;
-            var tangent = curve.FresnetApparatuses[CurrentPointIndex].Tangent.normalized;
-            var normal = curve.FresnetApparatuses[CurrentPointIndex].Normal.normalized;
-            var binormal = curve.FresnetApparatuses[CurrentPointIndex].Binormal.normalized;
+            var tangent = curve.fresnetApparatuses[CurrentPointIndex].Tangent.normalized;
+            var normal = curve.fresnetApparatuses[CurrentPointIndex].Normal.normalized;
+            var binormal = curve.fresnetApparatuses[CurrentPointIndex].Binormal.normalized;
         
             // Prevent z-buffer fighting
             tangent.z += 0.001f;
@@ -309,19 +310,19 @@ namespace Views.Display
             BinormalLr.widthMultiplier = _initBinormalLrWidth * ScalingFactor;
         
             Log.Debug("objPos: " + travelObjPosition +
-                      " jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
+                      " jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +
                       " tangentArr: [" + _tangentArr[0] + ", " + _tangentArr[1] + "]" +
                       " length: " + (_tangentArr[1] - _tangentArr[0]).magnitude + "\n" + 
                       " normalArr: [" + _normalArr[0] + ", " + _normalArr[1] + "]" +
                       " length: " + (_normalArr[1] - _normalArr[0]).magnitude + "\n" + 
-                      " jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
+                      " jsonBinormalPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Binormal + "] " +
                       " binormalArr: [" + _binormalArr[0] + ", " + _binormalArr[1] + "]" +
                       " length: " + (_binormalArr[1] - _binormalArr[0]).magnitude);
 
             // Make sure object is facing in the correct direction
-            var nextPos = MapPointPos(CurrentPointIndex < curve.WorldPoints.Count - 1
-                ? curve.WorldPoints[CurrentPointIndex + 1] 
-                : curve.WorldPoints[CurrentPointIndex]);
+            var nextPos = MapPointPos(CurrentPointIndex < curve.worldPoints.Count - 1
+                ? curve.worldPoints[CurrentPointIndex + 1] 
+                : curve.worldPoints[CurrentPointIndex]);
             
             var worldUp = ControllerType == AbstractCurveViewController.CurveControllerType.World 
                 ? new Vector3(0f, 0f, -1f) 

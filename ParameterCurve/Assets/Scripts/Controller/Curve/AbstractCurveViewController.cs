@@ -3,6 +3,7 @@ using log4net;
 using Model;
 using UnityEngine;
 using Views.Display;
+using VRKL.MBU;
 
 namespace Controller.Curve
 {
@@ -15,7 +16,7 @@ namespace Controller.Curve
         /// <summary>
         /// Type enum
         /// </summary>
-        public enum CurveControllerType { World = 0, Table = 1 }
+        public enum CurveControllerType { World = 0, Table = 1 };
         
         #region Public members
         
@@ -67,7 +68,7 @@ namespace Controller.Curve
         protected List<AbstractCurveView> Views;
 
 
-        //protected WaypointManager Wpm;
+        protected WaypointManager Wpm;
         
         #endregion Protected members
         
@@ -91,7 +92,7 @@ namespace Controller.Curve
             RootElement = root;
 
             Views = new List<AbstractCurveView>();
-            //Wpm = new WaypointManager(new Vector3[1], 0.1f, false);
+            Wpm = new WaypointManager(new Vector3[2], 0.1f);
             //Wpm.SetWaypoints();
             
             InitViews();

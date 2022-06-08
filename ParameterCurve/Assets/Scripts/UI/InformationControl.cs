@@ -12,8 +12,6 @@ namespace UI
     /// </summary>
     public class InformationControl : MonoBehaviour
     {
-        #region Public members
-        
         /// <summary>
         /// Parent game object containing all header elements
         /// </summary>
@@ -23,33 +21,33 @@ namespace UI
         /// <summary>
         /// Source information label
         /// </summary>
-        public TextMeshProUGUI sourceLabel;
+        public TextMeshProUGUI SourceLabel;
         
         /// <summary>
         /// Current point index information label
         /// </summary>
-        public TextMeshProUGUI indexLabel;
+        public TextMeshProUGUI IndexLabel;
 
         /// <summary>
         /// Parent game object containing all point information related elements
         /// </summary>
         [Header("PointInfo")] 
-        public GameObject pointInfoParent;
+        public GameObject PointInfoParent;
         
         /// <summary>
         /// Current t parameter value label
         /// </summary>
-        public TextMeshProUGUI tLabel;
+        public TextMeshProUGUI TLabel;
         
         /// <summary>
         /// Current x coordinate value label
         /// </summary>
-        public TextMeshProUGUI xLabel;
+        public TextMeshProUGUI XLabel;
         
         /// <summary>
         /// Current y coordinate value label
         /// </summary>
-        public TextMeshProUGUI yLabel;
+        public TextMeshProUGUI YLabel;
         
         /// <summary>
         /// Current y coordinate value label
@@ -60,313 +58,292 @@ namespace UI
         /// Parent game object containing all arc point information related elements
         /// </summary>
         [Header("ArcLengthPointInfo")]
-        public GameObject arcLengthParent;
+        public GameObject ArcLengthParent;
         
         /// <summary>
         /// Curve arc length value label
         /// </summary>
-        public TextMeshProUGUI arcLengthLabel;
+        public TextMeshProUGUI ArcLengthLabel;
         
         /// <summary>
         /// Current arc t parameter value label
         /// </summary>
-        public TextMeshProUGUI arcTLabel;
+        public TextMeshProUGUI ArcTLabel;
         
         /// <summary>
         /// Current arc x coordinate value label
         /// </summary>
-        public TextMeshProUGUI arcXLabel;
+        public TextMeshProUGUI ArcXLabel;
         
         /// <summary>
         /// Current arc y coordinate value label
         /// </summary>
-        public TextMeshProUGUI arcYLabel;
+        public TextMeshProUGUI ArcYLabel;
         
         /// <summary>
         /// Current arc z coordinate value label
         /// </summary>
-        public TextMeshProUGUI arcZLabel;
+        public TextMeshProUGUI ArcZLabel;
 
         /// <summary>
         /// Parent game object containing all time distance plot elements
         /// </summary>
         [Header("TimeDistance")]
-        public GameObject timeDistanceParent;
+        public GameObject TimeDistanceParent;
         
         /// <summary>
-        /// Start of the time distance plot
+        /// 
         /// </summary>
-        public GameObject timeDistanceStart;
-        
-        /// <summary>
-        /// X Axis of the time distance plot
-        /// </summary>
-        public GameObject timeDistanceXAxis;
-        
-        /// <summary>
-        /// Y Axis of the time distance plot
-        /// </summary>
-        public GameObject timeDistanceYAxis;
-        
-        /// <summary>
-        /// Travel object of the time distance plot
-        /// </summary>
-        public GameObject timeDistanceTravelObject;
-        
-        
+        public GameObject TimeDistanceStart;
+        public GameObject TimeDistanceXAxis;
+        public GameObject TimeDistanceYAxis;
+        public GameObject TimeDistanceTravelObject;
+        private LineRenderer TimeDistLR;
     
-        /// <summary>
-        /// Parent game object containing all time velocity plot elements
-        /// </summary>
         [Header("TimeVelocity")]
-        public GameObject timeVelocityParent;
-        
-        /// <summary>
-        /// Start of the time velocity plot
-        /// </summary>
-        public GameObject timeVelocityStart;
-        
-        /// <summary>
-        /// X axis of the time velocity plot
-        /// </summary>
-        public GameObject timeVelocityXAxis;
-        
-        /// <summary>
-        /// Y axis of the time velocity plot
-        /// </summary>
-        public GameObject timeVelocityYAxis;
-        
-        /// <summary>
-        /// Travel object of the time velocity plot
-        /// </summary>
-        public GameObject timeVelocityTravelObject;
-        
-        #endregion Public members
-        
-        #region Private members
-        
-        /// <summary>
-        /// Line renderer for the curve on the time distance plot
-        /// </summary>
-        private LineRenderer _timeDistLr;
-        
-        /// <summary>
-        /// Line renderer for the curve of the time velocity plot
-        /// </summary>
-        private LineRenderer _timeVelocityLr;
+        public GameObject TimeVelocityParent;
+        public GameObject TimeVelocityStart;
+        public GameObject TimeVelocityXAxis;
+        public GameObject TimeVelocityYAxis;
+        public GameObject TimeVelocityTravelObject;
+        private LineRenderer TimeVelocityLR;
     
-        /// <summary>
-        /// Cached initial position of the time distance plot travel object, used to reset travel object
-        /// </summary>
         private Vector3 _initTimeDistTravelPos;
-        
-        /// <summary>
-        /// Cached initial position of the time velocity plot travel object, used to reset travel object
-        /// </summary>
         private Vector3 _initTimeVelocityTravelPos;
 
-        /// <summary>
-        /// Number format for displaying float values
-        /// </summary>
-        private const string FloatFormat = "0.#####";
-
-        /// <summary>
-        /// Local wrapper for static world instance
-        /// </summary>
-        private static CurveViewController ObservedCurveViewController => GlobalDataModel.WorldCurveViewController;
-
-        #endregion Private members
-        
-        #region Public functions
-        
-        /// <summary>
-        /// Initializes length parameters based on rendered axis lengths 
-        /// </summary>
-        public void InitPlotLengths()
+        public CurveViewController ObserevedCurveViewController
         {
-            var xRenderer = timeDistanceXAxis.GetComponent<MeshRenderer>();
-            var yRenderer = timeDistanceYAxis.GetComponent<MeshRenderer>();    
-            
-            DataImport.TimeDistanceXAxisLength = xRenderer.bounds.size.x;
-            DataImport.TimeDistanceYAxisLength = yRenderer.bounds.size.y;
-            xRenderer = timeVelocityXAxis.GetComponent<MeshRenderer>();
-            yRenderer = timeVelocityYAxis.GetComponent<MeshRenderer>();
-            DataImport.TimeVelocityXAxisLength = xRenderer.bounds.size.x;
-            DataImport.TimeVelocityYAxisLength = yRenderer.bounds.size.y;
+            get
+            {
+                return GlobalDataModel.WorldCurveViewController;
+            }
         }
 
-        /// <summary>
-        /// Unity Update function
-        /// =====================
-        ///
-        /// Core game loop, is called once per frame
-        /// </summary>
+        public void InitPlotLengths()
+        {
+            var xrenderer = TimeDistanceXAxis.GetComponent<MeshRenderer>();
+            var yrenderer = TimeDistanceYAxis.GetComponent<MeshRenderer>();    
+            
+            //Debug.Log("xRenderer_x: " + xrenderer.bounds.size.x);
+            // Debug.Log("xRenderer_y: " + xrenderer.bounds.size.y);
+            // Debug.Log("xRenderer_z: " + xrenderer.bounds.size.z);
+            // Debug.Log("yRenderer: " + yrenderer.bounds.size);
+            
+            DataImport.TimeDistanceXAxisLength = xrenderer.bounds.size.x;
+            DataImport.TimeDistanceYAxisLength = yrenderer.bounds.size.y;
+        
+            xrenderer = TimeVelocityXAxis.GetComponent<MeshRenderer>();
+            yrenderer = TimeVelocityYAxis.GetComponent<MeshRenderer>();
+
+            DataImport.TimeVelocityXAxisLength = xrenderer.bounds.size.x;
+            DataImport.TimeVelocityYAxisLength = yrenderer.bounds.size.y;
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            FindObjectsInScene();
+            HideObjectsBasedOnInitFile();
+        }
+
+
         public void Update()
         {
             UpdateInfoLabels();
             UpdatePlotTravelObjects();
             UpdatePlotLineRenderers();
         }
-        
-        #endregion Public functions
-        
-        #region Private functions
-        
-        /// <summary>
-        /// Unity Start function
-        /// ====================
-        /// 
-        /// This function is called before the first frame update, after
-        /// <see>
-        ///     <cref>Awake</cref>
-        /// </see>
-        /// </summary>
-        private void Start()
+
+        private void FindObjectsInScene()
         {
+            // Header
+            headerParent ??= GameObject.Find("BasicHeader");
+            if(SourceLabel is null) GameObject.Find("ValueSource");
+            if(IndexLabel is null) GameObject.Find("ValuePoints");
+            
+            // PointInfo
+            PointInfoParent ??= GameObject.Find("PointInfo");
+            if(TLabel is null) GameObject.Find("PointValueT");
+            if(XLabel is null) GameObject.Find("PointValueX");
+            if(YLabel is null) GameObject.Find("PointValueY");
+            if(zLabel is null) GameObject.Find("PointValueZ");
+            
+            // ArcLengthPointInfo
+            ArcLengthParent ??= GameObject.Find("ArcLengthInfo");
+            if(ArcLengthLabel is null) GameObject.Find("ArcLength");
+            if(ArcTLabel is null) GameObject.Find("ArcValueT");
+            if(ArcXLabel is null) GameObject.Find("ArcValueX");
+            if(ArcYLabel is null) GameObject.Find("ArcValueY");
+            if(ArcZLabel is null) GameObject.Find("ArcValueZ");
+            
+            // TimeDistance
+            TimeDistanceParent ??= GameObject.Find("TimeDistanceDiagram");
+            TimeDistanceStart ??= GameObject.Find("distancePolyline");
+            TimeDistanceXAxis ??= GameObject.Find("distanceXAxis");
+            TimeDistanceYAxis ??= GameObject.Find("distanceYAxis");
+            TimeDistanceTravelObject ??= GameObject.Find("distancePointer");
+            
+            // TimeVelocity
+            TimeVelocityParent ??= GameObject.Find("TimeVelocityDiagram");
+            TimeVelocityStart ??= GameObject.Find("velocityPolyline");
+            TimeVelocityXAxis ??= GameObject.Find("velocityXAxis");
+            TimeVelocityYAxis ??= GameObject.Find("velocityYAxis");
+            TimeVelocityTravelObject ??= GameObject.Find("velocityPointer");
+        }
+
+        private void HideObjectsBasedOnInitFile()
+        {
+            //Debug.Log("initFile is null: " + (GlobalData.initFile is null));
+            //Debug.Log("initFile.information is null: " + (GlobalData.initFile.information is null));
+        
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot || 
                 !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
-                timeVelocityParent.SetActive(false);
+                TimeVelocityParent.SetActive(false);
             }
             else
             {
-                _timeVelocityLr = timeVelocityStart.GetComponent<LineRenderer>();
-                _initTimeVelocityTravelPos = timeVelocityTravelObject.transform.position;
+                TimeVelocityLR = TimeVelocityStart.GetComponent<LineRenderer>();
+                _initTimeVelocityTravelPos = TimeVelocityTravelObject.transform.position;
             }
         
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot || 
                 !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {   
-                timeDistanceParent.SetActive(false);
+                TimeDistanceParent.SetActive(false);
             }
             else
             {   
-                _timeDistLr = timeDistanceStart.GetComponent<LineRenderer>();
-                _initTimeDistTravelPos = timeDistanceTravelObject.transform.position;
+                TimeDistLR = TimeDistanceStart.GetComponent<LineRenderer>();
+                _initTimeDistTravelPos = TimeDistanceTravelObject.transform.position;
             }
 
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData || 
                 !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
-                arcLengthParent.SetActive(false);
+                ArcLengthParent.SetActive(false);
             }
 
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowPointData || 
                 !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
-                tLabel.gameObject.SetActive(false);
-                xLabel.gameObject.SetActive(false);
-                yLabel.gameObject.SetActive(false);
+                TLabel.gameObject.SetActive(false);
+                XLabel.gameObject.SetActive(false);
+                YLabel.gameObject.SetActive(false);
                 zLabel.gameObject.SetActive(false);
             
-                pointInfoParent.SetActive(false);
+                PointInfoParent.SetActive(false);
             }
         
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo || 
                 !GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated)
             {
-                sourceLabel.gameObject.SetActive(false);
-                indexLabel.gameObject.SetActive(false);
+                SourceLabel.gameObject.SetActive(false);
+                IndexLabel.gameObject.SetActive(false);
             
                 headerParent.SetActive(false);
             }
         }
         
-        /// <summary>
-        /// Update all activated labels
-        /// </summary>
+    
         private void UpdateInfoLabels()
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated) return;
 
             var curve = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
-            var view = ObservedCurveViewController.CurrentView;
+            
+            var view = ObserevedCurveViewController.CurrentView;
 
+            //Debug.Log("test");
+            
             var pointIndex = 0;
-            var isRunBasedView = view is SimpleRunCurveView; 
+
+            bool isRunBasedView = view is SimpleRunCurveView || view is SimpleRunCurveWithArcLength; 
             
             if (isRunBasedView)
             {
-                pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
-
-                if(view is SimpleRunCurveWithArcLength length)
+                if(view is SimpleRunCurveView)
                 {
-                    pointIndex = length.CurrentPointIndex;
+                    pointIndex = (view as SimpleRunCurveView).CurrentPointIndex;
+                }
+                
+                if(view is SimpleRunCurveWithArcLength)
+                {
+                    pointIndex = (view as SimpleRunCurveWithArcLength).CurrentPointIndex;
                 }
             }
                 
-            if (pointIndex >= curve.Points.Count) return;
+            if (pointIndex >= curve.points.Count) return;
             
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
             {
-                sourceLabel.text = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].DisplayString;
+                SourceLabel.text = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].DisplayString;
                 
-                indexLabel.text = isRunBasedView ? pointIndex + 1 + " / " + curve.Points.Count : "0 / 0";
+                IndexLabel.text = isRunBasedView ? (pointIndex + 1) + " / " + curve.points.Count : "0 / 0";
             }
 
             if (!isRunBasedView) return;
             
+            string floatFormat = "0.#####";
+
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowPointData)
             {
-                if(pointIndex > curve.Points.Count)
-                    Debug.Log("pointIndex: " + pointIndex + " / " + curve.Points.Count);
+                if(pointIndex > curve.points.Count)
+                    Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
             
-                tLabel.text = curve.ParamValues[pointIndex].ToString(FloatFormat);
-                xLabel.text = curve.Points[pointIndex].x.ToString(FloatFormat);
-                yLabel.text = curve.Points[pointIndex].y.ToString(FloatFormat);
-                zLabel.text = curve.Points[pointIndex].z.ToString(FloatFormat);    
+                TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
+                XLabel.text = curve?.points[pointIndex].x.ToString(floatFormat);
+                YLabel.text = curve?.points[pointIndex].y.ToString(floatFormat);
+                zLabel.text = curve?.points[pointIndex].z.ToString(floatFormat);    
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
             {
-                var arcLength = curve.ArcLength.ToString("0.###");
-                arcLengthLabel.text = arcLength;
-                arcTLabel.text = curve.ArcLengthParamValues[pointIndex].ToString(FloatFormat);
-                arcXLabel.text = curve.ArcLenghtPoints[pointIndex].x.ToString(FloatFormat);
-                arcYLabel.text = curve.ArcLenghtPoints[pointIndex].y.ToString(FloatFormat);
-                arcZLabel.text = curve.ArcLenghtPoints[pointIndex].z.ToString(FloatFormat);    
+                var arcLength = curve.arcLength.ToString("0.###");
+                //Debug.Log("arcLength: " + arcLength);
+                ArcLengthLabel.text = arcLength;
+                ArcTLabel.text = curve?.arcLengthParamValues[pointIndex].ToString(floatFormat);
+                ArcXLabel.text = curve?.arcLenghtPoints[pointIndex].x.ToString(floatFormat);
+                ArcYLabel.text = curve?.arcLenghtPoints[pointIndex].y.ToString(floatFormat);
+                ArcZLabel.text = curve?.arcLenghtPoints[pointIndex].z.ToString(floatFormat);    
             }
         }
 
-        /// <summary>
-        /// Update all activated plot travel objects
-        /// </summary>
         private void UpdatePlotTravelObjects()
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated) return;
 
             var curve = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
+            var view = (ObserevedCurveViewController.CurrentView as SimpleRunCurveView);
 
-            if (!(ObservedCurveViewController.CurrentView is SimpleRunCurveView view))
+            if (view is null)
             {
                 return;
             }
         
             var pointIndex = view.CurrentPointIndex;
-            if (pointIndex > curve.Points.Count) return;
 
+            if (pointIndex > curve.points.Count) return;
+        
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
                 // Set info plot travel objects
-                var tdPosVec = curve.TimeDistancePoints[pointIndex];
-                var tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
-                timeDistanceTravelObject.transform.position =
+                Vector2 tdPosVec = curve.timeDistancePoints[pointIndex];
+                Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
+                TimeDistanceTravelObject.transform.position =
                     _initTimeDistTravelPos + tdVec;    
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                var tvPosVec = curve.TimeVelocityPoints[pointIndex];
-                var tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
-                timeVelocityTravelObject.transform.position =
+                Vector2 tvPosVec = curve.timeVelocityPoints[pointIndex];
+                Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
+                TimeVelocityTravelObject.transform.position =
                     _initTimeVelocityTravelPos + tvVec;    
             }
 
         }
 
-        /// <summary>
-        /// Update all activated plot line renderers
-        /// </summary>
         private void UpdatePlotLineRenderers()
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.Activated) return;
@@ -375,35 +352,33 @@ namespace UI
         
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
             {
-                _timeDistLr.positionCount = curve.TimeDistancePoints.Count;
-                for (var i = 0; i < curve.TimeDistancePoints.Count; i++)
+                TimeDistLR.positionCount = curve.timeDistancePoints.Count;
+                for (int i = 0; i < curve.timeDistancePoints.Count; i++)
                 {
-                    var p = curve.TimeDistancePoints[i];
-                    var newPos = timeDistanceStart.transform.position;            
+                    Vector2 p = curve.timeDistancePoints[i];
+                    Vector3 newPos = TimeDistanceStart.transform.position;            
                     newPos.x += p.x;
                     newPos.y += p.y;
                     newPos.z -= Random.Range(0f, 0.005f); // 0.0125f;
-                    _timeDistLr.SetPosition(i, newPos);
+                    TimeDistLR.SetPosition(i, newPos);
                 }    
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                _timeVelocityLr.positionCount = curve.TimeVelocityPoints.Count;
-                for (var i = 0; i < curve.TimeVelocityPoints.Count; i++)
+                TimeVelocityLR.positionCount = curve.timeVelocityPoints.Count;
+                for (int i = 0; i < curve.timeVelocityPoints.Count; i++)
                 {
-                    var p = curve.TimeVelocityPoints[i];
-                    var newPos = timeVelocityStart.transform.position;
+                    Vector2 p = curve.timeVelocityPoints[i];
+                    Vector3 newPos = TimeVelocityStart.transform.position;
                     newPos.x += p.x;
                     newPos.y += p.y;
                     newPos.z -= Random.Range(0f, 0.005f);
-                    _timeVelocityLr.SetPosition(i, newPos);
+                    TimeVelocityLR.SetPosition(i, newPos);
                 }    
             }
 
         }
-        
-        #endregion Private functions
 
     }
 }

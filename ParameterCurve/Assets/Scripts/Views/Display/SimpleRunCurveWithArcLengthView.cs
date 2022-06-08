@@ -59,7 +59,7 @@ namespace Views.Display
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
 
-        public readonly WaypointManager _arcWpm;
+        public WaypointManager _arcWpm;
         
         
         #endregion Private members
@@ -130,7 +130,7 @@ namespace Views.Display
             var curve = CurrentCurve; 
         
             // Map points to world space location
-            var arcPointArr = curve.ArcLengthWorldPoints.ToArray();
+            var arcPointArr = curve.arcLengthWorldPoints.ToArray();
             for (var i = 0; i < arcPointArr.Length; i++)
             {
                 var point = arcPointArr[i];
@@ -139,7 +139,7 @@ namespace Views.Display
             
             _arcWpm.SetWaypoints(arcPointArr);
             
-            SetArcTravelPoint();
+            SetArcTravelPoint(); //SetArcTravelPointWPM();
             SetArcMovingFrame();
         }
 
@@ -155,16 +155,50 @@ namespace Views.Display
             if (CurrentPointIndex < 0) return;
         
             // On arrival at the last point, stop driving
-            if (CurrentPointIndex == curve.ArcLengthWorldPoints.Count - 1)
+            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false;
                 return;
             }
         
-            ArcLengthTravelObject.position = MapPointPos(curve.ArcLengthWorldPoints[CurrentPointIndex]);
+            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
             ++CurrentPointIndex;
         }
 
+        public void SetArcTravelPointWPM()
+        {
+            var curve = CurrentCurve; 
+            
+            // Null checks
+            if (ArcLengthTravelObject is null) return;
+            if (CurrentPointIndex < 0) return;
+        
+            // On arrival at the last point, stop driving
+            if (CurrentPointIndex == curve.arcLengthWorldPoints.Count - 1)
+            {
+                GlobalDataModel.IsRunning = false;
+                return;
+            }
+        
+            ArcLengthTravelObject.position = MapPointPos(curve.arcLengthWorldPoints[CurrentPointIndex]);
+            
+            
+            
+            ++CurrentPointIndex;
+        }
+        
+        // /// <summary>
+        // /// Start run
+        // /// </summary>
+        // public override void StartRun()
+        // {
+        //     base.StartRun();
+        //     
+        //     CurrentPointIndex = 0;
+        //     GlobalDataModel.IsRunning = true;
+        // }
+        //
+        
         /// <summary>
         /// Set the fresnet equation based moving frame around the next point along the arc length parametrization
         /// based curve line
@@ -172,7 +206,7 @@ namespace Views.Display
         public void SetArcMovingFrame()
         {
             var curve = CurrentCurve; 
-            if (CurrentPointIndex == curve.WorldPoints.Count - 1)
+            if (CurrentPointIndex == curve.worldPoints.Count - 1)
             {
                 GlobalDataModel.IsRunning = false;
                 return;
@@ -182,7 +216,7 @@ namespace Views.Display
             var arcTangentArr = new Vector3[2];
             arcTangentArr[0] = arcObjPos;
             arcTangentArr[1] = arcObjPos + 
-                               curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Tangent.normalized * ScalingFactor;
+                               curve.arcLengthFresnetApparatuses[CurrentPointIndex].Tangent.normalized * ScalingFactor;
             ArcLengthTangentLr.SetPositions(arcTangentArr);
             ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * (ScalingFactor * 0.5f);
         
@@ -190,7 +224,7 @@ namespace Views.Display
             var arcNormalArr = new Vector3[2];
             arcNormalArr[0] = arcObjPos;
             arcNormalArr[1] = arcObjPos + 
-                              curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized *
+                              curve.arcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized *
                               ScalingFactor;
             ArcLengthNormalLr.SetPositions(arcNormalArr);
             ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * (ScalingFactor * 0.5f);
@@ -199,24 +233,24 @@ namespace Views.Display
             var arcBinormalArr = new Vector3[2];
             arcBinormalArr[0] = arcObjPos;
             arcBinormalArr[1] = arcObjPos + 
-                                curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized * 
+                                curve.arcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized * 
                                 ScalingFactor;
             ArcLengthBinormalLr.SetPositions(arcBinormalArr);
             ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * (ScalingFactor * 0.5f);
 
             Log.Debug("arcObjPos: " + arcObjPos +
-                          " arc_jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
+                          " arc_jsonTangentPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Tangent + "] " +
                           " arc_tangentArr: [" + arcTangentArr[0] + ", " + arcTangentArr[1] + "]" +
                           " length: " + (arcTangentArr[1] - arcTangentArr[0]).magnitude + "\n" + 
                           " arc_normalArr: [" + arcNormalArr[0] + ", " + arcNormalArr[1] + "]" +
                           " length: " + (arcNormalArr[1] - arcNormalArr[0]).magnitude + "\n" + 
-                          " arc_jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
+                          " arc_jsonBinormalPoint: [" + curve.fresnetApparatuses[CurrentPointIndex].Binormal + "] " +
                           " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
                           " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
 
-            var nextPos = MapPointPos(CurrentPointIndex < curve.ArcLengthWorldPoints.Count - 1 
-                ? curve.ArcLengthWorldPoints[CurrentPointIndex + 1] 
-                : curve.ArcLengthWorldPoints[CurrentPointIndex]);
+            var nextPos = MapPointPos(CurrentPointIndex < curve.arcLengthWorldPoints.Count - 1 
+                ? curve.arcLengthWorldPoints[CurrentPointIndex + 1] 
+                : curve.arcLengthWorldPoints[CurrentPointIndex]);
 
             var worldUp = new Vector3(0f, 0f, 1f); 
             //(arcBinormalArr[0] + arcBinormalArr[1]).normalized; 
