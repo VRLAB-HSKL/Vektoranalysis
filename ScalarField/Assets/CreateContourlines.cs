@@ -8,6 +8,8 @@ public class CreateContourlines : MonoBehaviour
 {
     public List<float> ContourValues = new List<float>();
 
+    public Material LineMat;
+    
     private bool _showLinesInMesh;
 
     public bool ShowLinesInMesh;
@@ -27,6 +29,7 @@ public class CreateContourlines : MonoBehaviour
 
     private Vector3 bbExtents;
     
+    private bool ShowLines = true;
 
     private List<GameObject> ContourLineObjects = new List<GameObject>();
     private List<List<Vector3>> isolinePointLists;
@@ -43,6 +46,14 @@ public class CreateContourlines : MonoBehaviour
     }
 
 
+    private bool _linesVisible = true;
+    
+    public void ToggleContourLines()
+    {
+        _linesVisible = !_linesVisible;
+        ShowContourLines(_linesVisible);
+    }
+    
     public void MapVerticalLinePositionsToMesh(bool mapToVertical)
     {
         // foreach (var line in ContourLineObjects)
@@ -83,31 +94,31 @@ public class CreateContourlines : MonoBehaviour
             {
                 var p = pointList[j];
                 // Scale point to match mesh scaling
-                //var newp = Vector3.Scale(p, ScalingVector);
+                var newP = Vector3.Scale(p, ScalingVector);
 
                 // var x = CalcUtility.MapValueToRange(p.x, x_min, x_max, -bb.x, bb.x);
                 // var y = CalcUtility.MapValueToRange(p.y, y_min, y_max, -bb.y, bb.y);
                 // var z = CalcUtility.MapValueToRange(p.z, z_min, z_max, -bb.z, bb.z);
 
-                var newp = CalcUtility.MapVectorToRange(p,
+                newP = CalcUtility.MapVectorToRange(p,
                     GlobalDataModel.CurrentField.MinRawValues, GlobalDataModel.CurrentField.MaxRawValues,
                     -bbExtents, bbExtents);
                 
                 if (mapToVertical)
                 {
-                    newp += parentOrigin + new Vector3(0f, 0.25f, 0f); //positionOffset;
+                    newP += parentOrigin + new Vector3(0f, 0.25f, 0f); //positionOffset;
                 }
                 else
                 {
                     // Null vertical coordinate so all contour lines are on the same xz plane
-                    newp = new Vector3(newp.x, 0f, newp.z);
+                    newP = new Vector3(newP.x, 0f, newP.z);
                     
                     // Move contour point to game object origin + custom offset
-                    newp += parentOrigin + positionOffset;    
+                    newP += parentOrigin + positionOffset;    
                 }
 
                 // Add changed point to list
-                newPointList.Add(newp);
+                newPointList.Add(newP);
             }
 
             
@@ -116,6 +127,18 @@ public class CreateContourlines : MonoBehaviour
             lr.SetPositions(newPointList.ToArray());
         }
         
+    }
+
+
+    public void ToggleLineVerticalPositions()
+    {
+        ShowLinesInMesh = !ShowLinesInMesh;
+        MapVerticalLinePositionsToMesh(ShowLinesInMesh);
+
+        var mr = GameObject.Find("SimpleField").GetComponent<MeshRenderer>();
+        var mat = mr.material;
+        mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, ShowLinesInMesh ? 0.25f : 1f);
+        mr.material = mat;
     }
     
     
@@ -127,6 +150,8 @@ public class CreateContourlines : MonoBehaviour
         // {
         //     -0.75f, -0.5f, -0.25f, 0f, 0.25f, 0.5f, 0.75f
         // };
+        
+        
 
         var dataClassesCount = float.Parse(GlobalDataModel.InitFile.color_map_data_classes_count);
         //var numberOfDividingLines = dataClassesCount - 1;
@@ -145,17 +170,13 @@ public class CreateContourlines : MonoBehaviour
             var value = GlobalDataModel.CurrentField.MinRawValues.z + i * step;
             Debug.Log("Contour value " + i + " : " + value);
             ContourValues.Add(value);
-            
         }
         
         parentOrigin = transform.parent.position;
-
         bbExtents = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
-        
             
         CalculateContourLines();
-        
-        //ShowContourLines(false);
+        ShowContourLines(_linesVisible);
 
         var bbLocalScale = BoundingBox.transform.localScale;
         for (var i = 0; i < ContourLineObjects.Count; i++)
@@ -209,7 +230,6 @@ public class CreateContourlines : MonoBehaviour
         // var z_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.z);
         // var z_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.z);    
         //;
-        
         
         for (var i = 0; i < ContourValues.Count; i++)
         {
@@ -269,7 +289,7 @@ public class CreateContourlines : MonoBehaviour
             var lr = go.AddComponent<LineRenderer>();
             
             // ToDo: Set contour line color based on color map value color
-            lr.material.color = Color.green;//Random.ColorHSV();
+            lr.material = LineMat; //.color = new Color(1f, 255);//Random.ColorHSV();
             lr.widthMultiplier = lineThicknessMultiplier; // 0.0125f;
             lr.loop = true;
             

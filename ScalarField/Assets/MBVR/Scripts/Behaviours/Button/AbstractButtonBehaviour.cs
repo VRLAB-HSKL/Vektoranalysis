@@ -88,6 +88,10 @@ namespace VR.Scripts.Behaviours.Button
         }
 
 
+        private void Start()
+        {
+            buttonObject ??= transform.GetChild(1);
+        }
 
         // Update is called once per frame
         /// <summary>
