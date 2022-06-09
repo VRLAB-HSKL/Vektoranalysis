@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Calculation;
 using Model;
@@ -31,8 +32,10 @@ public static class GlobalDataModel
     public static InitFileRoot InitFile { get; set; }
     
     public static ScalarField CurrentField { get; set; }
-    
-    
+
+
+    //public static float ZMinValue;
+    //public static float ZMaxValue;
     
     
     public static void InitializeData()
@@ -87,6 +90,18 @@ public static class GlobalDataModel
             sf.displayPoints.Add(new Vector3(point[0], point[2], point[1]));
         }
 
+        sf.MinRawValues = new Vector3(
+                sf.rawPoints.Min(v => v.x),
+                sf.rawPoints.Min(v => v.y),
+                sf.rawPoints.Min(v => v.z)
+        );
+        
+        sf.MaxRawValues = new Vector3(
+            sf.rawPoints.Max(v => v.x),
+            sf.rawPoints.Max(v => v.y),
+            sf.rawPoints.Max(v => v.z)
+        );  
+        
         //Debug.Log(sb);
 
         var cmapId = sf.colorMapId;

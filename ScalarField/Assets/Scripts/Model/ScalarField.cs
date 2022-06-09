@@ -22,6 +22,9 @@ namespace Model
 
         public Func<float, float, float> CalculatePoint;
 
+        public Vector3 MinRawValues = new Vector3();
+        public Vector3 MaxRawValues = new Vector3();
+        
         public List<Vector3> rawPoints { get; } = new List<Vector3>();
         public List<Vector3> displayPoints { get; set; } = new List<Vector3>();
     }
