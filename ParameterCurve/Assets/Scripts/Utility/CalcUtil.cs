@@ -25,5 +25,22 @@ namespace Utility
 
             return distance;
         }
+        
+        /// <summary>
+        /// Maps a value form one range to another range.
+        ///
+        /// Source: https://rosettacode.org/wiki/Map_range#C.23
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="inMin"></param>
+        /// <param name="inMax"></param>
+        /// <param name="outMin"></param>
+        /// <param name="outMax"></param>
+        /// <returns></returns>
+        public static float MapRange(float value, float inMin, float inMax, float outMin, float outMax)
+        {
+            // b1 + (s - a1) * (b2 - b1) / (a2 - a1);
+            return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
+        }
     }
 }

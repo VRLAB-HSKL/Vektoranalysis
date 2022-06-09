@@ -63,7 +63,7 @@ namespace Views.Display
         /// <summary>
         /// Position of root object, used to translate point vectors
         /// </summary>
-        private readonly Vector3 _rootPos;
+        public readonly Vector3 _rootPos;
 
         
         

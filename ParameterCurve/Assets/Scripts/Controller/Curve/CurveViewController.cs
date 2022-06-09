@@ -11,6 +11,12 @@ namespace Controller.Curve
     /// </summary>
     public class CurveViewController : AbstractCurveViewController
     {
+        #region Public members
+
+        public LineRenderer DisplayLr;
+        
+        #endregion Public members
+        
         #region Private members
         
         // ToDo:
@@ -43,6 +49,8 @@ namespace Controller.Curve
         public CurveViewController(Transform root, LineRenderer displayLineRenderer, Transform travel, 
             Transform arcTravel, float scalingFactor, CurveControllerType type) : base(root)
         {
+            DisplayLr = displayLineRenderer;
+            
             _travelObject = travel;
             _arcLengthTravelObject = arcTravel;
 

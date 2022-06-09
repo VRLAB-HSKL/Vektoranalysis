@@ -315,6 +315,10 @@ namespace Controller
             var tableView = GlobalDataModel.TableCurveViewController?.CurrentView;
             if (tableView != null)
             {
+                var rootPos = tableView._rootPos;
+                //
+                // GlobalDataModel.TableCurveViewController.
+                
                 tableView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TableScalingFactor;
                 if (tableView.GetType() == typeof(SimpleRunCurveView) ||
                     tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
@@ -521,6 +525,19 @@ namespace Controller
                     tableRootElement, tableDisplayLr, 
                     tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
                     AbstractCurveViewController.CurveControllerType.Table);
+
+                
+                // // Add global position of parent object into points
+                // var lrPositions = new Vector3[tableDisplayLr.positionCount]; 
+                // tableDisplayLr.GetPositions(lrPositions);
+                //
+                // var newPositions = new Vector3[tableDisplayLr.positionCount];
+                // for(var i = 0; i < lrPositions.Length; i++)
+                // {
+                //     newPositions[i] = lrPositions[i] + tableDisplayLr.transform.position;
+                // }
+                //
+                // tableDisplayLr.SetPositions(newPositions);
             }
             else
             {

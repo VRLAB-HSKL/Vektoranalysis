@@ -192,7 +192,8 @@ namespace Model
             for (var i = 0; i < jsr.DisplayCurves.Count; i++)
             {
                 var curve = jsr.DisplayCurves[i];
-                DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
+                var pd = DataImport.CreatePointDatasetFromCurve(curve);
+                DisplayCurveDatasets.Add(pd);
             }
 
             for (var i = 0; i < jsr.Exercises.Count; i++)

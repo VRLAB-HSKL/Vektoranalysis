@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using HTC.UnityPlugin.Vive;
 using UnityEngine;
+using UnityEngine.XR.OpenXR.Features.Interactions;
 
 
 public class VRClampDirection : MonoBehaviour
@@ -84,71 +86,86 @@ public class VRClampDirection : MonoBehaviour
     /// <returns>void</returns>
     void Update()
     {
-        if (XDirection)
-        {
-            //if (this.gameObject.transform.localPosition.x >= StartPosition.x + OffsetX)
-            //{ this.gameObject.transform.localPosition = new Vector3(StartPosition.x + OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
+        var currPos = transform.localPosition;
+        var x = XDirection ? Mathf.Clamp(currPos.x, XDirLowerBound, XDirUpperBound) : currPos.x;
+        var y = YDirection ? Mathf.Clamp(currPos.y, YDirLowerBound, YDirUpperBound) : currPos.y;
+        var z = ZDirection ? Mathf.Clamp(currPos.z, ZDirLowerBound, ZDirUpperBound) : currPos.z;
 
-            //if (this.gameObject.transform.localPosition.x <= StartPosition.x - OffsetX)
-            //{ this.gameObject.transform.localPosition = new Vector3(StartPosition.x - OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
-
-            if (transform.localPosition.x >= XDirUpperBound)
-            {
-                transform.localPosition = new Vector3(XDirUpperBound, transform.localPosition.y, transform.localPosition.z);
-            }
-                
-            if(transform.localPosition.x <= XDirLowerBound)
-            {
-                transform.localPosition = new Vector3(XDirLowerBound, transform.localPosition.y, transform.localPosition.z);
-            }
-        }
+        transform.localPosition = new Vector3(x, y, z);
 
 
-
-
-        if (YDirection)
-        {
-
-
-            //if (this.gameObject.transform.localPosition.y >= StartPosition.y + OffsetY)
-            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y + OffsetY, this.gameObject.transform.localPosition.z); }
-
-            //if (this.gameObject.transform.localPosition.y <= StartPosition.y - OffsetY)
-            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y - OffsetY, this.gameObject.transform.localPosition.z); }
-
-            if (transform.localPosition.y >= YDirUpperBound)
-            {
-                transform.localPosition = new Vector3(transform.localPosition.x, YDirUpperBound, transform.localPosition.z);
-            }
-
-            if (transform.localPosition.y <= YDirLowerBound)
-            {
-                transform.localPosition = new Vector3(transform.localPosition.x, YDirLowerBound, transform.localPosition.z);
-            }
-
-        }
-
-
-
-
-        if (ZDirection)
-        {
-            //if (this.gameObject.transform.localPosition.z >= StartPosition.z + OffsetZ)
-            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y + OffsetY, StartPosition.z + OffsetZ); }
-
-            //if (this.gameObject.transform.localPosition.z <= StartPosition.z - OffsetZ)
-            //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y - OffsetY, StartPosition.z - OffsetZ); }
-
-            if (transform.localPosition.z >= ZDirUpperBound)
-            {
-                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, ZDirUpperBound);
-            }
-
-            if (transform.localPosition.z <= ZDirLowerBound)
-            {
-                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, ZDirLowerBound);
-            }
-        }
+        
+        
+        // if (XDirection)
+        // {
+        //     var x = Mathf.Clamp(transform.localPosition.x, XDirLowerBound, XDirUpperBound);
+        // }
+        //
+        // if (XDirection)
+        // {
+        //     //if (this.gameObject.transform.localPosition.x >= StartPosition.x + OffsetX)
+        //     //{ this.gameObject.transform.localPosition = new Vector3(StartPosition.x + OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
+        //
+        //     //if (this.gameObject.transform.localPosition.x <= StartPosition.x - OffsetX)
+        //     //{ this.gameObject.transform.localPosition = new Vector3(StartPosition.x - OffsetX, this.gameObject.transform.localPosition.y, this.gameObject.transform.localPosition.z); }
+        //
+        //     if (transform.localPosition.x >= XDirUpperBound)
+        //     {
+        //         Debug.Log("XDirUpperBound");
+        //         transform.localPosition = new Vector3(XDirUpperBound, transform.localPosition.y, transform.localPosition.z);
+        //         
+        //     }
+        //         
+        //     if(transform.localPosition.x <= XDirLowerBound)
+        //     {
+        //         Debug.Log("XDirLowerBound");
+        //         transform.localPosition = new Vector3(XDirLowerBound, transform.localPosition.y, transform.localPosition.z);
+        //     }
+        // }
+        //
+        // if (YDirection)
+        // {
+        //
+        //
+        //     //if (this.gameObject.transform.localPosition.y >= StartPosition.y + OffsetY)
+        //     //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y + OffsetY, this.gameObject.transform.localPosition.z); }
+        //
+        //     //if (this.gameObject.transform.localPosition.y <= StartPosition.y - OffsetY)
+        //     //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, StartPosition.y - OffsetY, this.gameObject.transform.localPosition.z); }
+        //
+        //     if (transform.localPosition.y >= YDirUpperBound)
+        //     {
+        //         transform.localPosition = new Vector3(transform.localPosition.x, YDirUpperBound, transform.localPosition.z);
+        //     }
+        //
+        //     if (transform.localPosition.y <= YDirLowerBound)
+        //     {
+        //         transform.localPosition = new Vector3(transform.localPosition.x, YDirLowerBound, transform.localPosition.z);
+        //     }
+        //
+        // }
+        //
+        //
+        //
+        //
+        // if (ZDirection)
+        // {
+        //     //if (this.gameObject.transform.localPosition.z >= StartPosition.z + OffsetZ)
+        //     //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y + OffsetY, StartPosition.z + OffsetZ); }
+        //
+        //     //if (this.gameObject.transform.localPosition.z <= StartPosition.z - OffsetZ)
+        //     //{ this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x, this.gameObject.transform.localPosition.y - OffsetY, StartPosition.z - OffsetZ); }
+        //
+        //     if (transform.localPosition.z >= ZDirUpperBound)
+        //     {
+        //         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, ZDirUpperBound);
+        //     }
+        //
+        //     if (transform.localPosition.z <= ZDirLowerBound)
+        //     {
+        //         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, ZDirLowerBound);
+        //     }
+        // }
     }
 }
 

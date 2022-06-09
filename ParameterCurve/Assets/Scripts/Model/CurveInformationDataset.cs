@@ -71,7 +71,7 @@ public class CurveInformationDataset
         {
             var point = ps[i];
 
-            bool swapYZCoordinates = Is3DCurve;
+            var swapYZCoordinates = Is3DCurve;
             
             var newPoint = swapYZCoordinates ?
                 new Vector3(point.x, point.z, point.y) * GlobalDataModel.PointScaleFactor :
@@ -85,7 +85,7 @@ public class CurveInformationDataset
             worldPoints.Add(newPoint);
         }
         
-        // Calcualte arc world points
+        // Calculate arc world points
         arcLengthWorldPoints.Clear();
         for (int i = 0; i < arcLenghtPoints.Count; i++)
         {
