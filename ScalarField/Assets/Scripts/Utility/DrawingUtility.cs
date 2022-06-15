@@ -5,7 +5,7 @@ namespace Calculation
 {
     public static class DrawingUtility
     {
-        public static void DrawSphereOnLine(GameObject line, int pointIndex, Vector3 bbScale)
+        public static GameObject DrawSphereOnLine(GameObject line, int pointIndex, Vector3 bbScale)
         {
             var obj = line;
             var lr = obj.GetComponent<LineRenderer>();
@@ -40,13 +40,12 @@ namespace Calculation
 
             sphere.transform.position = point;
 
+            return sphere;
         }
 
-        public static void DrawArrowOnLine(
-            GameObject line, int pointIndex, 
+        public static GameObject DrawArrowOnLine(GameObject line, int pointIndex, 
             GameObject arrowPrefab, Vector3 direction,
-            Vector3 bbScale
-            )
+            Vector3 bbScale)
         {
             var obj = line;
             var lr = obj.GetComponent<LineRenderer>();
@@ -72,6 +71,8 @@ namespace Calculation
             
             //Debug.Log("Point: " + point + ", LookPoint: " + lookPoint);
             arrow.transform.LookAt(lookPoint);
+            
+            return arrow;
         }
 
         public static void DrawSphere(Vector3 point, Transform parent, Color color, Vector3 bbScale)
@@ -98,7 +99,7 @@ namespace Calculation
 
         public static void DrawArrow(Vector3 start, Vector3 target, Transform parent, GameObject ArrowPrefab, Vector3 bbScale)
         {
-            var arrow = GameObject.Instantiate(ArrowPrefab, parent);
+            var arrow = Object.Instantiate(ArrowPrefab, parent);
             arrow.name = "Arrow_" + start + "_to_" + target;
             arrow.transform.position = start;
             //arrow.GetComponent<ArrowController>().PointTowards(direction);
@@ -139,11 +140,11 @@ namespace Calculation
             };
 
             Debug.Log("Creating empty path parent");
-            GameObject.Instantiate(path);
+            Object.Instantiate(path);
 
             if (points.Count == 1)
             {
-                DrawSphere(points[0], path.transform, Color.green, bbScale);
+                DrawSphere(points[0], path.transform, Color.gray, bbScale);
             }
             else
             {
@@ -151,7 +152,7 @@ namespace Calculation
                 
                 for (var i = 0; i < points.Count; i++)
                 {
-                    DrawSphere(points[i], path.transform, Color.green, bbScale);
+                    DrawSphere(points[i], path.transform, Color.gray, bbScale);
                     
                     // Draw arrow for every element except for the last one, because there is no next point to connect to
                     if(i < points.Count - 1)

@@ -47,6 +47,9 @@ public class CreateContourlines : MonoBehaviour
         {
             line.gameObject.SetActive(isVisible);
         }
+        
+        var attenuation = isVisible ? 0.25f : 1f;
+        SetMeshTransparency(attenuation);
     }
 
 
@@ -60,40 +63,6 @@ public class CreateContourlines : MonoBehaviour
     
     public void MapVerticalLinePositionsToMesh(bool mapToVertical)
     {
-        // foreach (var line in ContourLineObjects)
-        // {
-        //     var lr = line.GetComponent<LineRenderer>();
-        //     var points = new Vector3[lr.positionCount];
-        //     lr.GetPositions(points);
-        //
-        //     var newPoints = new Vector3[lr.positionCount];
-        //     foreach (var p in points)
-        //     {
-        //         var newP = new Vector3();
-        //         if (ShowLinesInMesh)
-        //         {
-        //             newp += parentOrigin + new Vector3(0f, 0.25f, 0f); //positionOffset;
-        //             
-        //             
-        //         }
-        //         else
-        //         {
-        //             // Null vertical coordinate so all contour lines are on the same xz plane
-        //             newp = new Vector3(newp.x, 0f, newp.z);
-        //             
-        //             // Move contour point to game object origin + custom offset
-        //             newp += parentOrigin + positionOffset;    
-        //         }
-        //     }
-        //     
-        // }
-
-        //Debug.Log("Isoline Count: " + isolinePointLists.Count + ", ContourLineObjectCount: " + ContourLineObjects.Count);
-
-        
-        
-        
-        
         for (var i = 0; i < isolineDisplayPointLists.Count; i++)
         {
             var pointList = isolineDisplayPointLists[i];
@@ -102,37 +71,24 @@ public class CreateContourlines : MonoBehaviour
             for (var j = 0; j < pointList.Count; j++)
             {
                 var p = pointList[j];
-                // Scale point to match mesh scaling
-                //var newP = Vector3.Scale(p, ScalingVector);
-
-                // var x = CalcUtility.MapValueToRange(p.x, x_min, x_max, -bb.x, bb.x);
-                // var y = CalcUtility.MapValueToRange(p.y, y_min, y_max, -bb.y, bb.y);
-                // var z = CalcUtility.MapValueToRange(p.z, z_min, z_max, -bb.z, bb.z);
-
+     
                 // Flip coordinates to rotate it to the vertical xz plane
                 var flippedVector = new Vector3(p.Raw.x, p.Raw.z, p.Raw.y);
-
-                
-                // var scaledVector = CalcUtility.MapVectorToRange(flippedVector,
-                //     GlobalDataModel.CurrentField.MinRawValues, GlobalDataModel.CurrentField.MaxRawValues,
-                //     -bbExtents, bbExtents);
 
                 var inMinVec = GlobalDataModel.CurrentField.MinRawValues;
                 var inMaxVec = GlobalDataModel.CurrentField.MaxRawValues;
                 
-                var scaledX = CalcUtility.MapValueToRange(flippedVector.x, inMinVec.x, inMaxVec.x, -bbExtents.x, bbExtents.x);
+                var scaledX = CalcUtility.MapValueToRange(flippedVector.x, inMinVec.x, inMaxVec.x, 
+                    -bbExtents.x, bbExtents.x);
 
-                // Use min and max z values to accomodate coordinate flip
-                var scaledY = CalcUtility.MapValueToRange(flippedVector.y, inMinVec.z, inMaxVec.z, -bbExtents.y, bbExtents.y);
+                // Use min and max z values on y coordinate to accomodate coordinate flip
+                var scaledY = CalcUtility.MapValueToRange(flippedVector.y, inMinVec.z, inMaxVec.z, 
+                    -bbExtents.y, bbExtents.y);
                 
-                // USe min and max y values to accomodate coordinate flip
-                var scaledZ = CalcUtility.MapValueToRange(flippedVector.z, inMinVec.y, inMaxVec.y, -bbExtents.z, bbExtents.z);
+                // USe min and max y values on z coordinate to accomodate coordinate flip
+                var scaledZ = CalcUtility.MapValueToRange(flippedVector.z, inMinVec.y, inMaxVec.y, 
+                    -bbExtents.z, bbExtents.z);
                 
-                
-                // Debug.Log("initPoint: " + p + ", scaledPoint: " + newP + " with value mapping from " +
-                //           "range: " + GlobalDataModel.CurrentField.MinRawValues + " | " 
-                //           + GlobalDataModel.CurrentField.MaxRawValues + " to " + -bbExtents + " | " + bbExtents);
-
                 var scaledVector = new Vector3(scaledX, scaledY, scaledZ);
                 
                 if (mapToVertical)
@@ -169,9 +125,6 @@ public class CreateContourlines : MonoBehaviour
         // Update underlying material of mesh to make it transparent when showing lines inside the mesh
         // mat = TextureUtility.ChangeMaterialRenderMode(mat,
         //     _showLinesInMesh ? TextureUtility.BlendMode.Transparent : TextureUtility.BlendMode.Opaque);
-        
-        var attenuation = ShowLinesInMesh ? 0.25f : 1f;
-        SetMeshTransparency(attenuation);
         
     }
 
@@ -211,10 +164,11 @@ public class CreateContourlines : MonoBehaviour
             
         CalculateContourLines();
         ShowContourLines(_linesVisible);
-
-        MapVerticalLinePositionsToMesh(ShowLinesInMesh);
-        var attenuation = ShowLinesInMesh ? 0.25f : 1f;
+        var attenuation = _linesVisible ? 0.25f : 1f;
         SetMeshTransparency(attenuation);
+        
+        MapVerticalLinePositionsToMesh(ShowLinesInMesh);
+        
 
         var bbLocalScale = BoundingBox.transform.localScale;
         for (var i = 0; i < ContourLineObjects.Count; i++)

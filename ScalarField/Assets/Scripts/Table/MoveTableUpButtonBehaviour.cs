@@ -55,7 +55,7 @@ namespace Table
         /// </remarks>
         /// <returns>void</returns>
         /// 
-        private new void Start()
+        private void Start()
         {
             //base.Start();
             
