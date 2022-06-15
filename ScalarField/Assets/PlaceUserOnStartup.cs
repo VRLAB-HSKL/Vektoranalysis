@@ -69,13 +69,13 @@ public class PlaceUserOnStartup : MonoBehaviour
         if (Physics.Raycast(new Ray(finalPoint, Vector3.down), out RaycastHit hitDown))
         {
             finalY += hitDown.point.y;
-            Debug.Log("DownHit: " + finalY);
+            //Debug.Log("DownHit: " + finalY);
         }
         else if (Physics.Raycast(new Ray(finalPoint, Vector3.up), out RaycastHit hitUp))
         {
             finalY += hitUp.point.y;
             
-            Debug.Log("UpHit: " + finalY);
+            //Debug.Log("UpHit: " + finalY);
         }
         
         //finalPoint = new Vector3(finalPoint.x, finalY, finalPoint.z); 
