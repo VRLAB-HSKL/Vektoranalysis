@@ -15,7 +15,7 @@ public class SimpleProceduralMesh : MonoBehaviour
     public Vector3 PositionOffset;
     public Vector3 ScalingVector = Vector3.one;
     public GameObject BoundingBox;
-    
+    public bool PositionMeshAtOrigin;
     
     public Texture2D Texture;
     public BoxCollider Collider; 
@@ -23,15 +23,24 @@ public class SimpleProceduralMesh : MonoBehaviour
 
     private Vector3 initPos = Vector3.zero;
     private Vector3 targetOrigin = Vector3.zero;
+    private Vector3 parentOrigin;
     
     private void Start()
     {
         initPos = transform.position;
 
         targetOrigin = RenderingTarget.transform.TransformPoint(RenderingTarget.transform.position);
+
+        parentOrigin = transform.parent.position;
+
+        //Debug.Log("parentOrigin: " + parentOrigin);
         
         GenerateFieldMesh();
-        PositionMeshCenterAtOrigin();   
+        
+        if (PositionMeshAtOrigin)
+        {
+            PositionMeshCenterAtOrigin();
+        }   
         
         var mat = GetComponent<MeshRenderer>().material;
 
@@ -63,13 +72,6 @@ public class SimpleProceduralMesh : MonoBehaviour
           
     }
 
-    // private void OnEnable()
-    // {
-    //     
-    //     return;
-    //     
-    //     
-    // }
 
 
     
@@ -96,28 +98,32 @@ public class SimpleProceduralMesh : MonoBehaviour
         var z_max = dVertices.Max(v => v.z);    
         
         var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
+        var bbCenter = BoundingBox.GetComponent<MeshRenderer>().bounds.center;
         
         for (var i = 0; i < dVertices.Count; i++)
         {
             var displayVector = dVertices[i];
             
             // Add table position offset
-            //displayVector += PositionOffset; //new Vector3(0f, 1.25f, -2f);
+            var translatedVector = displayVector + bbCenter; //parentOrigin;//PositionOffset; //new Vector3(0f, 1.25f, -2f);
+
+            //var translatedVector = new Vector3(displayVector.x, displayVector.y + bbCenter.y, displayVector.z);
             
             var mappedVec = CalcUtility.MapVectorToRange(
-                displayVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
-                new Vector3(-bb.x, -bb.y, -bb.z), new Vector3(bb.x, bb.y, bb.z)
+                translatedVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
+                -bb, bb
             );
             
             //var translatedVec = mappedVec + targetOrigin;
             
-            // Debug.Log(
-            //     "displayVector: " + displayVector + 
-            //     ", targetOrigin: " + targetOrigin +
-            //     ", mappedVector: " + mappedVec
-            //     //", translatedVec: " + translatedVec
-            //       
-            // );
+            Debug.Log(
+                "displayVector: " + displayVector + 
+                ", bbCenter: " + bbCenter +
+                ", translatedVector: " + translatedVector +
+                ", mappedVector: " + mappedVec
+                //", translatedVec: " + translatedVec
+                  
+            );
 
             displayVertices.Add(mappedVec);
         }
@@ -217,7 +223,7 @@ public class SimpleProceduralMesh : MonoBehaviour
             var z = CalcUtility.MapValueToRange(vertex.z, z_min, z_max, 0f, 1f);
             
             // Offset vertical v coordinate by half the texture to match imported texture
-            var offset = 0.5f;
+            //var offset = 0.5f;
             uvs[i] = new Vector2(x, z);
         }
         
@@ -251,7 +257,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         // );
         
         // Position mesh based on offset to position 
-        transform.position += PositionOffset; //target; // + offset;
+        //transform.position += PositionOffset; //target; // + offset;
         
         
         
@@ -265,6 +271,7 @@ public class SimpleProceduralMesh : MonoBehaviour
     private void PositionMeshCenterAtOrigin()
     {
         var tmp = transform.position - GetComponent<MeshRenderer>().bounds.center;
+        //var tmp = BoundingBox.GetComponent<MeshRenderer>().bounds.center;
         //Debug.Log("MeshPositioningVector: " + tmp);
         //transform.position += tmp;
         transform.parent.position = tmp;

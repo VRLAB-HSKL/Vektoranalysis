@@ -25,6 +25,8 @@ namespace Model
         public Vector3 MinRawValues = new Vector3();
         public Vector3 MaxRawValues = new Vector3();
         
+        
+        // ToDo: Replace this with single collection of PointData class
         public List<Vector3> rawPoints { get; } = new List<Vector3>();
         public List<Vector3> displayPoints { get; set; } = new List<Vector3>();
     }

@@ -9,6 +9,8 @@ using Vector3 = UnityEngine.Vector3;
 
 public class CreateContourlines : MonoBehaviour
 {
+    public GameObject Field;
+    
     public List<float> ContourValues = new List<float>();
 
     public Material LineMat;
@@ -130,7 +132,7 @@ public class CreateContourlines : MonoBehaviour
 
     private void SetMeshTransparency(float attenuation)
     {
-        var mr = GameObject.Find("SimpleField").GetComponent<MeshRenderer>();
+        var mr = Field.GetComponent<MeshRenderer>();
         var mat = mr.material;
         mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, attenuation);
         mr.material = mat;
