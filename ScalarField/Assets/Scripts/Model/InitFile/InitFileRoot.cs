@@ -34,7 +34,12 @@ namespace Model.InitFile
         [JsonProperty("points")]
         public List<float[]> points { get; set; }
 
+        [JsonProperty("isoline_values")]
+        public List<float> IsolineValues { get; set; }
 
+        [JsonProperty("isoline_points")]
+        public List<List<float[]>> IsolinePoints { get; set; }
+        
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -47,6 +52,8 @@ namespace Model.InitFile
             sb.AppendLine("z_expr: " + z_expression);
             sb.AppendLine("sample_count: " + sample_count);
             sb.AppendLine("points: " + points);
+            sb.AppendLine("isoline_values: " + IsolineValues);
+            sb.AppendLine("isoline_points: " + IsolinePoints);
             
             return sb.ToString();
         }

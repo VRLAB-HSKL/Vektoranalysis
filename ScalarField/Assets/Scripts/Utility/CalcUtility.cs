@@ -291,8 +291,11 @@ namespace Calculation
                 MapValueToRange(vec[2], inMin[2], inMax[2], outMin[2], outMax[2])
             );
         }
-        
-        
+
+        public static Vector3 MapVectorToBBox(Vector3 vec, Vector3 inMin, Vector3 inMax, Bounds bbox)
+        {
+            return MapVectorToRange(vec, inMin, inMax, -bbox.extents, bbox.extents);
+        }
         
         
         public static double cross(Vector3 O, Vector3 A, Vector3 B)

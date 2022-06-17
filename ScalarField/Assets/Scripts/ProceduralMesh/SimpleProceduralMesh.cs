@@ -116,14 +116,14 @@ public class SimpleProceduralMesh : MonoBehaviour
             
             //var translatedVec = mappedVec + targetOrigin;
             
-            Debug.Log(
-                "displayVector: " + displayVector + 
-                ", bbCenter: " + bbCenter +
-                ", translatedVector: " + translatedVector +
-                ", mappedVector: " + mappedVec
-                //", translatedVec: " + translatedVec
-                  
-            );
+            // Debug.Log(
+            //     "displayVector: " + displayVector + 
+            //     ", bbCenter: " + bbCenter +
+            //     ", translatedVector: " + translatedVector +
+            //     ", mappedVector: " + mappedVec
+            //     //", translatedVec: " + translatedVec
+            //       
+            // );
 
             displayVertices.Add(mappedVec);
         }

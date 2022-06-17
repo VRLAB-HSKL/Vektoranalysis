@@ -70,14 +70,14 @@ public static class GlobalDataModel
 
         InitFile = jsr;
 
-        var sf = new ScalarField()
+        var sf = new ScalarField
         {
             id = InitFile.id,
             colorMapId = InitFile.color_map_id,
             colorMapDataClassesCount = InitFile.color_map_data_classes_count,
-            parameterRangeX = new Tuple<float, float>(-2.0f, 2.0f),
-            parameterRangeY = new Tuple<float, float>(-2.0f, 2.0f),
-            sampleCount = NumberOfSamples
+            parameterRangeX = new Tuple<float, float>(InitFile.x_param_range[0], InitFile.x_param_range[1]),
+            parameterRangeY = new Tuple<float, float>(InitFile.y_param_range[0], InitFile.y_param_range[1]),
+            sampleCount = InitFile.sample_count
         };
 
         //var sb = new StringBuilder();
@@ -100,16 +100,35 @@ public static class GlobalDataModel
             sf.rawPoints.Max(v => v.x),
             sf.rawPoints.Max(v => v.y),
             sf.rawPoints.Max(v => v.z)
-        );  
-        
-        //Debug.Log(sb);
+        );
+
+
+        sf.isolineValues = jsr.IsolineValues;
+
+        var lst = new List<List<Vector3>>();
+        foreach (var line in jsr.IsolinePoints)
+        {
+            var vecList = new List<Vector3>();
+            foreach (var point in line)
+            {
+                vecList.Add(new Vector3(point[0], point[1], point[2]));
+            }
+            lst.Add(vecList);
+        }
+
+        sf.isolinePoints = lst;
+
+        foreach (var line in sf.isolinePoints)
+        {
+            Debug.Log("iso line number of points: " + line.Count);
+        }
 
         var cmapId = sf.colorMapId;
         var cmapDataClassesCount = sf.colorMapDataClassesCount;
         var ressPath = "texture_maps/" + cmapId + "/" + cmapDataClassesCount + "/" +
                        cmapId + "_" + cmapDataClassesCount + "_texture";
         
-        Debug.Log(ressPath);
+        Debug.Log("Selected texture: " +ressPath);
         
         var texture = Resources.Load(ressPath) as Texture2D;
 

@@ -29,5 +29,10 @@ namespace Model
         // ToDo: Replace this with single collection of PointData class
         public List<Vector3> rawPoints { get; } = new List<Vector3>();
         public List<Vector3> displayPoints { get; set; } = new List<Vector3>();
+
+        public List<float> isolineValues { get; set; } = new List<float>();
+
+        public List<List<Vector3>> isolinePoints { get; set; } = new List<List<Vector3>>();
+        
     }
 }

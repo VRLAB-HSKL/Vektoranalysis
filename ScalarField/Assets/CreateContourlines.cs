@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using Calculation;
 using Model;
 using UnityEngine;
@@ -150,16 +151,26 @@ public class CreateContourlines : MonoBehaviour
         step /= dataClassesCount;
 
         //Debug.Log("Min: " + minZ + ", Max: " + maxZ + ", step: " + step);
+
+        ContourValues = GlobalDataModel.InitFile.IsolineValues; //new List<float>();
         
-        ContourValues = new List<float>();
+        // // Draw line for all steps except the first and the last (min and max value has no dividing line)
+        // for (var i = 1; i < dataClassesCount; i++)
+        // {
+        //     var value = GlobalDataModel.CurrentField.MinRawValues.z + i * step;
+        //     //Debug.Log("Contour value " + i + " : " + value);
+        //     ContourValues.Add(value);
+        // }
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Imported isoline values:");
         
-        // Draw line for all steps except the first and the last (min and max value has no dividing line)
-        for (var i = 1; i < dataClassesCount; i++)
+        foreach (var isoval in ContourValues)
         {
-            var value = GlobalDataModel.CurrentField.MinRawValues.z + i * step;
-            //Debug.Log("Contour value " + i + " : " + value);
-            ContourValues.Add(value);
+            sb.AppendLine(isoval.ToString());
         }
+        
+        Debug.Log(sb);
         
         parentOrigin = transform.parent.position;
         bbExtents = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
@@ -227,54 +238,54 @@ public class CreateContourlines : MonoBehaviour
         
         for (var i = 0; i < ContourValues.Count; i++)
         {
-            var isoValue = ContourValues[i];
-            //Debug.Log("contour value: " + isoValue);
-            
-            var rawPointList = new List<Vector3>();
-            var displayPointList = new List<Vector3>();
-            for(var j = 0; j < GlobalDataModel.CurrentField.rawPoints.Count; ++j)
-            {
-                var point = GlobalDataModel.CurrentField.rawPoints[j];
-                
-                if (Mathf.Abs(point.z - isoValue) <= epsilon)
-                {
-                    // Debug.Log("Isoline hit !\n" +
-                    //           "iso value: " + isoValue + "\n" +
-                    //           "point z: " + point.z + "\n" + 
-                    //           "display point: " + GlobalDataModel.CurrentField.displayPoints[j]
-                    //      s     );
-                    rawPointList.Add(point);
-                    displayPointList.Add(GlobalDataModel.CurrentField.displayPoints[j]);
-                }
-            }
+            // //Debug.Log("contour value: " + isoValue);
+            //
+            // var rawPointList = new List<Vector3>();
+            // var displayPointList = new List<Vector3>();
+            // for(var j = 0; j < GlobalDataModel.CurrentField.rawPoints.Count; ++j)
+            // {
+            //     var point = GlobalDataModel.CurrentField.rawPoints[j];
+            //     
+            //     if (Mathf.Abs(point.z - isoValue) <= epsilon)
+            //     {
+            //         // Debug.Log("Isoline hit !\n" +
+            //         //           "iso value: " + isoValue + "\n" +
+            //         //           "point z: " + point.z + "\n" + 
+            //         //           "display point: " + GlobalDataModel.CurrentField.displayPoints[j]
+            //         //      s     );
+            //         rawPointList.Add(point);
+            //         displayPointList.Add(GlobalDataModel.CurrentField.displayPoints[j]);
+            //     }
+            // }
             //
             // Debug.Log("contour value: " + isoValue + ", found points: " + displayPointList.Count);
 
+            var isoValue = ContourValues[i];
+            var importedPointList = GlobalDataModel.CurrentField.isolinePoints[i];
+            
             // Skip convex hull algorithm and the rest on empty point list
-            if (!displayPointList.Any())
+            if (!importedPointList.Any())
             {
                 Debug.LogWarning("No points found for contour value " + isoValue, this);
                 continue;
             }
             
-            var hullPointList = CalcUtility.GetConvexHull(rawPointList);
+            var hullPointList = CalcUtility.GetConvexHull(importedPointList);
             var finalPointList = new List<PointData>();
             
             foreach (var point in hullPointList)
             {
-                var index = rawPointList.IndexOf(point);
-                var pd = new PointData()
+                var index = importedPointList.IndexOf(point);
+                var pd = new PointData
                 {
-                    Raw = rawPointList[index],
-                    Display = displayPointList[index]
+                    Raw = importedPointList[index],
+                    Display = GlobalDataModel.CurrentField.displayPoints.Find(p => p == point)  
                 };
                 finalPointList.Add(pd);
             }
             
             isolineDisplayPointLists.Add(finalPointList);
         }
-        
-        //Debug.Log("isolines: " + isolinePointLists.Count + ", contourObjects: " + ContourLineObjects.Count);
         
         for (var i = 0; i < isolineDisplayPointLists.Count; i++)
         {
