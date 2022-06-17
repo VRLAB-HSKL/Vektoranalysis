@@ -10,56 +10,66 @@ public class CockpitTravel : MonoBehaviour
 {
     public LineRenderer CurveLine;
     public GameObject TravelObjectParent;
+    public GameObject Cockpit;
+    public LineRenderer TangentLine;
+    public LineRenderer NormalLine;
+    public LineRenderer BinormalLine;
 
     private float _updateTimer;
-    private int index;
 
     private WaypointManager wpm;
+    private List<Vector3> curvePoints;
+    private List<Vector3> tangentPositions;
+    private List<Vector3> normalPositions;
+    private List<Vector3> binormalPositions;
+    private int index;
+    private int size;
 
     private string path = "Assets/Resources/linecoords.txt";
 
     // Start is called before the first frame update
     void Start()
     {
-        /*int n = 500;
-        float xLength = 10f;
-        float yLength = 10f;
+        tangentPositions = new List<Vector3>();
+        normalPositions = new List<Vector3>();
+        binormalPositions = new List<Vector3>();
+        curvePoints = new List<Vector3>();
+        index = 0;
 
-        float stepFactor = 1f / n;
-        
-        float xStep = xLength * stepFactor;
-        float yStep = yLength * stepFactor;
-        
-        
-        var list = new List<Vector3>();
-        for (int i = 0; i < n; i++)
-        {
-            float x = xStep * i;
-            float y = yStep * i;
-            list.Add(new Vector3(x, y, 0f));
-        }
-        
-
-        CurveLine.positionCount = n;
-        CurveLine.SetPositions(list.ToArray());*/
-
-        var list = new List<Vector3>();
         using (StreamReader reader = new StreamReader(path)) {
-            string pos = "";
-            int size = int.Parse(reader.ReadLine());
+            string str = "";
+            size = int.Parse(reader.ReadLine());
             CurveLine.positionCount = size;
             for(int i = 0; i < size; i++)
             {
-                pos = reader.ReadLine();
-                string[] xyz = pos.Split(' ');
+                //read in current point xyz coordinates
+                str = reader.ReadLine();
+                string[] xyz = str.Split(' ');
                 Vector3 coords = new Vector3(float.Parse(xyz[0]), float.Parse(xyz[1]), float.Parse(xyz[2]));
                 CurveLine.SetPosition(i, coords);
-                list.Add(coords);
+                curvePoints.Add(coords);
+
+                //read in current tangent vector
+                str = reader.ReadLine();
+                string[] tXYZ = str.Split(' ');
+                Vector3 tangent = new Vector3(float.Parse(tXYZ[0]), float.Parse(tXYZ[1]), float.Parse(tXYZ[2]));
+                tangentPositions.Add(tangent);
+
+                //read in current normal vector
+                str = reader.ReadLine();
+                string[] nXYZ = str.Split(' ');
+                Vector3 normal = new Vector3(float.Parse(nXYZ[0]), float.Parse(nXYZ[1]), float.Parse(nXYZ[2]));
+                normalPositions.Add(normal);
+
+                //read in current binormal vector
+                str = reader.ReadLine();
+                string[] bXYZ = str.Split(' ');
+                Vector3 binormal = new Vector3(float.Parse(bXYZ[0]), float.Parse(bXYZ[1]), float.Parse(bXYZ[2]));
+                binormalPositions.Add(binormal);
             }
         }
-        wpm = new WaypointManager(list.ToArray(), 0.1f);
+        wpm = new WaypointManager(curvePoints.ToArray(), 0.1f);
 
-        //Debug.Log(CurveLine.positionCount);
     }
 
     // Update is called once per frame
@@ -73,14 +83,31 @@ public class CockpitTravel : MonoBehaviour
         {
             _updateTimer = 0f;
 
-            //TravelObjectParent.transform.position = CurveLine.GetPosition(index);
+            TangentLine.SetPosition(0, Cockpit.transform.position);
+            TangentLine.SetPosition(1, Cockpit.transform.position + tangentPositions[wpm.Current]);
+            //TangentLine.SetPosition(1, Cockpit.transform.position + tangentPositions[index]);
+
+            NormalLine.SetPosition(0, Cockpit.transform.position);
+            NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[wpm.Current]);
+            //NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[index]);
+
+            BinormalLine.SetPosition(0, Cockpit.transform.position);
+            BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[wpm.Current]);
+            //BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[index]);
+
             var pos = wpm.GetWaypoint();
             var target = wpm.GetFollowupWaypoint();
             var dist = Vector3.Distance(pos, target);
             TravelObjectParent.transform.LookAt(target);
             TravelObjectParent.transform.position = wpm.Move(pos, dist);
-            
-            ++index;
+
+            //without waypoint manager
+            /*Vector3 nextPosition = curvePoints[index];
+            TravelObjectParent.transform.LookAt(nextPosition);
+            TravelObjectParent.transform.position = nextPosition;
+            index++;
+
+            if(index == size) { index = 0; }*/
         }
     }
 }
