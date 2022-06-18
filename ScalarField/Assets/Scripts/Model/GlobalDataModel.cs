@@ -72,19 +72,19 @@ public static class GlobalDataModel
 
         var sf = new ScalarField
         {
-            id = InitFile.id,
-            colorMapId = InitFile.color_map_id,
-            colorMapDataClassesCount = InitFile.color_map_data_classes_count,
-            parameterRangeX = new Tuple<float, float>(InitFile.x_param_range[0], InitFile.x_param_range[1]),
-            parameterRangeY = new Tuple<float, float>(InitFile.y_param_range[0], InitFile.y_param_range[1]),
-            sampleCount = InitFile.sample_count
+            id = InitFile.Info.id,
+            colorMapId = InitFile.Info.color_map_id,
+            colorMapDataClassesCount = InitFile.Info.color_map_data_classes_count,
+            parameterRangeX = new Tuple<float, float>(InitFile.Info.x_param_range[0], InitFile.Info.x_param_range[1]),
+            parameterRangeY = new Tuple<float, float>(InitFile.Info.y_param_range[0], InitFile.Info.y_param_range[1]),
+            sampleCount = InitFile.Info.sample_count
         };
 
         //var sb = new StringBuilder();
         
-        for (var i = 0; i < InitFile.points.Count; i++)
+        for (var i = 0; i < InitFile.Data.mesh.points.Count; i++)
         {
-            var point = InitFile.points[i];
+            var point = InitFile.Data.mesh.points[i];
             //sb.AppendLine(point[0] + ", " + point[1] + ", " + point[2]);
             sf.rawPoints.Add(new Vector3(point[0], point[1], point[2]));
             sf.displayPoints.Add(new Vector3(point[0], point[2], point[1]));
@@ -103,10 +103,10 @@ public static class GlobalDataModel
         );
 
 
-        sf.isolineValues = jsr.IsolineValues;
+        sf.isolineValues = jsr.Data.isolines.Values;
 
         var lst = new List<List<Vector3>>();
-        foreach (var line in jsr.IsolinePoints)
+        foreach (var line in jsr.Data.isolines.ConvexHulls)
         {
             var vecList = new List<Vector3>();
             foreach (var point in line)
@@ -120,7 +120,7 @@ public static class GlobalDataModel
 
         foreach (var line in sf.isolinePoints)
         {
-            Debug.Log("iso line number of points: " + line.Count);
+            //Debug.Log("iso line number of points: " + line.Count);
         }
 
         var cmapId = sf.colorMapId;

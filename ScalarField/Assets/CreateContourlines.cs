@@ -143,16 +143,16 @@ public class CreateContourlines : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        var dataClassesCount = float.Parse(GlobalDataModel.InitFile.color_map_data_classes_count);
-        //var numberOfDividingLines = dataClassesCount - 1;
-        var minZ = GlobalDataModel.CurrentField.MinRawValues.z;
-        var maxZ = GlobalDataModel.CurrentField.MaxRawValues.z;
-        var step = Mathf.Abs(maxZ - minZ); 
-        step /= dataClassesCount;
+        // var dataClassesCount = float.Parse(GlobalDataModel.InitFile.Info.color_map_data_classes_count);
+        // //var numberOfDividingLines = dataClassesCount - 1;
+        // var minZ = GlobalDataModel.CurrentField.MinRawValues.z;
+        // var maxZ = GlobalDataModel.CurrentField.MaxRawValues.z;
+        // var step = Mathf.Abs(maxZ - minZ); 
+        // step /= dataClassesCount;
 
         //Debug.Log("Min: " + minZ + ", Max: " + maxZ + ", step: " + step);
 
-        ContourValues = GlobalDataModel.InitFile.IsolineValues; //new List<float>();
+        ContourValues = GlobalDataModel.InitFile.Data.isolines.Values; //new List<float>();
         
         // // Draw line for all steps except the first and the last (min and max value has no dividing line)
         // for (var i = 1; i < dataClassesCount; i++)

@@ -386,14 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Field: {fileID: 941685788}
-  ContourValues:
-  - -0.75
-  - -0.5
-  - -0.25
-  - 0
-  - 0.25
-  - 0.5
-  - 0.75
+  ContourValues: []
   LineMat: {fileID: 2100000, guid: 58c68f717c6622c4e9ac73ad113e9369, type: 2}
   ShowLinesInMesh: 1
   epsilon: 0.1

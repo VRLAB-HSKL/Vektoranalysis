@@ -11,8 +11,8 @@ public class TextureToRenderer : MonoBehaviour
         // If not explicitly set, try to get texture based on parsed init file values
         if (texture is null)
         {
-            var cmId = GlobalDataModel.InitFile.color_map_id;
-            var cmDataClassesCount = GlobalDataModel.InitFile.color_map_data_classes_count;
+            var cmId = GlobalDataModel.InitFile.Info.color_map_id;
+            var cmDataClassesCount = GlobalDataModel.InitFile.Info.color_map_data_classes_count;
             texture = TextureUtility.FetchColorMapTexture(cmId, cmDataClassesCount);    
         }
 

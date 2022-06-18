@@ -58,16 +58,17 @@ public class SimpleProceduralMesh : MonoBehaviour
 
         mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
         
+        mat.mainTexture = GlobalDataModel.CurrentField.meshTexture;
         
-        if (Texture is null)
-        {
-            mat.mainTexture = GlobalDataModel.CurrentField.meshTexture;
-        }
-        else
-        {
-            
-            mat.mainTexture = Texture;
-        }
+        // if (Texture is null)
+        // {
+        //     mat.mainTexture = GlobalDataModel.CurrentField.meshTexture;
+        // }
+        // else
+        // {
+        //     
+        //     mat.mainTexture = Texture;
+        // }
         
           
     }
