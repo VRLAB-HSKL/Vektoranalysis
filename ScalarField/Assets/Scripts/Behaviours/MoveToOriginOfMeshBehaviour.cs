@@ -13,6 +13,12 @@ namespace Behaviours
 
             var center = BoundingBox.bounds.center;
 
+            if (Physics.Raycast(new Ray(center, Vector3.down), out RaycastHit hit, BoundingBox.bounds.extents.y ))
+            {
+                center = hit.point;
+            }
+
+
             vrig.transform.position = center;
         }
     }

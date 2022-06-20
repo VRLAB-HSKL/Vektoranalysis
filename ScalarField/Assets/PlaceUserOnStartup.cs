@@ -106,8 +106,8 @@ public class PlaceUserOnStartup : MonoBehaviour
             Cockpit.transform.position = finalPoint; // + CockpitOffset;    
         }
         
-        DrawMainPoint();
-        DrawArrow(Vector3.up, 10f);
+        //DrawMainPoint();
+        //DrawArrow(Vector3.up, 10f);
         
     }
 

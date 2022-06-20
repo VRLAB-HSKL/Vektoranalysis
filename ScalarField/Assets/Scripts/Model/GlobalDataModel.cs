@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Calculation;
+using DefaultNamespace;
 using Model;
 using Model.InitFile;
 using Newtonsoft.Json;
@@ -40,6 +41,7 @@ public static class GlobalDataModel
     
     public static void InitializeData()
     {
+        //IronPythonTest.Foo();
         ParseInitFile();
     }
 
