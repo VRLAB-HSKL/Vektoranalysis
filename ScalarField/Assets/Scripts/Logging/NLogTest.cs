@@ -18,28 +18,18 @@ namespace Logging
         
         private void Start()
         {
-            // Generate default config
-            var config = new NLog.Config.LoggingConfiguration();
-
-            // Targets where to log to: File and Console
-            //var logfile = new NLog.Targets.FileTarget("logfile") { FileName = "file.txt" };
-            //var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
-
-            //var unityLogFile = new NLog.Targets.
-
-            NLog.LogManager.Setup().SetupExtensions(s =>
-                s.RegisterTarget<Logging.UnityConsoleTarget>("UnityConsole")
-            );
+            // Create custom target and get config instance
+            var unityConsoleTarget = new UnityConsoleTarget();
+            var cfg = new NLog.Config.LoggingConfiguration();
             
+            // Add target
+            cfg.AddTarget(nameof(UnityConsoleTarget), unityConsoleTarget);
             
-            //var logconsole = new NLog.Targets.ConsoleTarget();
+            // Add logging rule 
+            cfg.LoggingRules.Add(new NLog.Config.LoggingRule("*", LogLevel.Trace, unityConsoleTarget));
             
-            // Rules for mapping loggers to targets            
-            //config.AddRule(Info, Fatal, logconsole);
-            //config.AddRule(LogLevel.Debug, Fatal, logfile);
-            
-            // Apply config           
-            LogManager.Configuration = config;
+            // Assign configuration
+            LogManager.Configuration = cfg;
         }
 
 
@@ -91,18 +81,9 @@ namespace Logging
 
     public class UnityConsoleTarget : NLog.Targets.TargetWithLayout
     {
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        
         protected override void Write(LogEventInfo logEvent)
         {
-            var msg = logEvent.Message;
-            var level = logEvent.Level;
-
-            if (level == LogLevel.Debug)
-            {
-                Debug.Log(msg);    
-            }
-                
+            Debug.Log(logEvent.FormattedMessage);
         }
     }
 }
