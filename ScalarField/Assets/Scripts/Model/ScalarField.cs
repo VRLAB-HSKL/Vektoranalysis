@@ -16,7 +16,7 @@ namespace Model
         // Geometric data
         public Tuple<float, float> parameterRangeX;
         public Tuple<float, float> parameterRangeY;
-        public int sampleCount = GlobalDataModel.NumberOfSamples;
+        public int sampleCount;
 
         //public delegate float CalculatePoint(float x, float y);
 

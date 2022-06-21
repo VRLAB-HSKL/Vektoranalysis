@@ -23,18 +23,14 @@ public class SimpleProceduralMesh : MonoBehaviour
 
     private Vector3 initPos = Vector3.zero;
     private Vector3 targetOrigin = Vector3.zero;
-    private Vector3 parentOrigin;
+    private Vector3 parentOrigin = Vector3.zero;
     
     private void Start()
     {
         initPos = transform.position;
-
         targetOrigin = RenderingTarget.transform.TransformPoint(RenderingTarget.transform.position);
-
         parentOrigin = transform.parent.position;
 
-        //Debug.Log("parentOrigin: " + parentOrigin);
-        
         GenerateFieldMesh();
         
         if (PositionMeshAtOrigin)
@@ -43,40 +39,9 @@ public class SimpleProceduralMesh : MonoBehaviour
         }   
         
         var mat = GetComponent<MeshRenderer>().material;
-
-        // // Set material to transparent rendering mode
-        // // Source: https://answers.unity.com/questions/1004666/change-material-rendering-mode-in-runtime.html
-        // mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-        // mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        // mat.SetInt("_ZWrite", 0);
-        // mat.DisableKeyword("_ALPHATEST_ON");
-        // mat.DisableKeyword("_ALPHABLEND_ON");
-        // mat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-        // mat.renderQueue = 3000;
-
-        //mat = TextureUtility.ChangeMaterialRenderMode(mat, TextureUtility.BlendMode.Transparent);
-
         mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
-        
         mat.mainTexture = GlobalDataModel.CurrentField.meshTexture;
-        
-        // if (Texture is null)
-        // {
-        //     mat.mainTexture = GlobalDataModel.CurrentField.meshTexture;
-        // }
-        // else
-        // {
-        //     
-        //     mat.mainTexture = Texture;
-        // }
-        
-          
     }
-
-
-
-    
-    
     
     private void GenerateFieldMesh()
     {
@@ -88,6 +53,7 @@ public class SimpleProceduralMesh : MonoBehaviour
         var sf = GlobalDataModel.CurrentField;
 
         var dVertices = sf.displayPoints;
+        
         var displayVertices = new List<Vector3>();
 
         
@@ -105,11 +71,9 @@ public class SimpleProceduralMesh : MonoBehaviour
         {
             var displayVector = dVertices[i];
             
-            // Add table position offset
-            var translatedVector = displayVector + bbCenter; //parentOrigin;//PositionOffset; //new Vector3(0f, 1.25f, -2f);
+            // Add position offset
+            var translatedVector = displayVector + bbCenter;
 
-            //var translatedVector = new Vector3(displayVector.x, displayVector.y + bbCenter.y, displayVector.z);
-            
             var mappedVec = CalcUtility.MapVectorToRange(
                 translatedVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
                 -bb, bb
@@ -128,7 +92,6 @@ public class SimpleProceduralMesh : MonoBehaviour
 
             displayVertices.Add(mappedVec);
         }
-        
         
         // var log = false;
         // var sb = new StringBuilder();
@@ -151,11 +114,11 @@ public class SimpleProceduralMesh : MonoBehaviour
         {
             default:
             case MeshTopology.Triangles:
-                indices = GenerateTriangleIndices(displayVertices, true);
+                indices = GenerateTriangleIndices(displayVertices, false);
                 // Draw triangles twice to cover both sides
-                var backIndices = GenerateTriangleIndices(displayVertices, false);
-                displayVertices.AddRange(displayVertices);
-                indices.AddRange(backIndices);
+                // var backIndices = GenerateTriangleIndices(displayVertices, true);
+                // displayVertices.AddRange(displayVertices);
+                // indices.AddRange(backIndices);
                 break;
             
             case MeshTopology.Lines:
@@ -278,118 +241,142 @@ public class SimpleProceduralMesh : MonoBehaviour
         transform.parent.position = tmp;
     }
     
-    
-    private void OrderVerticesTriangle(List<Vector3> vertices)
-    {
-        int n = (int)math.floor(vertices.Count * 0.5); 
-        // Order vertices for triangles
-        var orderedVertices = new List<Vector3>();
-        for (int i = 0; i < vertices.Count; i++)
-        {
-            // Lower left triangle
-            bool isUpperBound = i % n == (n - 1);
-            bool isLastColumn = i >= (n * n - n);
-            bool drawLowerLeftTriangle = !isLastColumn && !isUpperBound;
-            if (drawLowerLeftTriangle) 
-            {
-                var firstIndex = i;
-                var secondIndex = i + 1;
-                var thirdIndex = i + n;
-        
-                // var str = "LowerFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
-                //           "LowerSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
-                //           "LowerThird: [" + thirdIndex + "/" + vertices.Count + "]";
-                //
-                // Debug.Log(str);
-                
-                orderedVertices.Add(vertices[firstIndex]);
-                orderedVertices.Add(vertices[secondIndex]);
-                orderedVertices.Add(vertices[thirdIndex]);
-            }
-            
-            // Upper right triangle
-            bool isLowerBound = i % n == 0;
-            bool isFirstColumn = i < n;
-            bool drawUpperRightTriangle = !isLowerBound && !isFirstColumn;
-        
-            if (i == (n * n - 1))
-            {
-                Debug.Log("isLower:" + isLowerBound);
-                Debug.Log("isFirstColumn:" + isFirstColumn);
-                Debug.Log("drawUpper:" + drawUpperRightTriangle);
-            }
-            
-            if (drawUpperRightTriangle)
-            {
-                var firstIndex = i - 1;
-                var secondIndex = i - n;
-                var thirdIndex = i;
-                
-                // var str =  "UpperFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
-                //                 "UpperSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
-                //                 "UpperThird: [" + thirdIndex + "/" + vertices.Count + "]";
-                //
-                // Debug.Log(str);
-                
-                orderedVertices.Add(vertices[firstIndex]);
-                orderedVertices.Add(vertices[secondIndex]);
-                orderedVertices.Add(vertices[thirdIndex]);
-            }
-        
-        }
-        
-    }
-    
+    //
+    // private void OrderVerticesTriangle(List<Vector3> vertices)
+    // {
+    //     int n = (int)math.floor(vertices.Count * 0.5); 
+    //     // Order vertices for triangles
+    //     var orderedVertices = new List<Vector3>();
+    //     for (int i = 0; i < vertices.Count; i++)
+    //     {
+    //         // Lower left triangle
+    //         bool isUpperBound = i % n == (n - 1);
+    //         bool isLastColumn = i >= (n * n - n);
+    //         bool drawLowerLeftTriangle = !isLastColumn && !isUpperBound;
+    //         if (drawLowerLeftTriangle) 
+    //         {
+    //             var firstIndex = i;
+    //             var secondIndex = i + 1;
+    //             var thirdIndex = i + n;
+    //     
+    //             // var str = "LowerFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
+    //             //           "LowerSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
+    //             //           "LowerThird: [" + thirdIndex + "/" + vertices.Count + "]";
+    //             //
+    //             // Debug.Log(str);
+    //             
+    //             orderedVertices.Add(vertices[firstIndex]);
+    //             orderedVertices.Add(vertices[secondIndex]);
+    //             orderedVertices.Add(vertices[thirdIndex]);
+    //         }
+    //         
+    //         // Upper right triangle
+    //         bool isLowerBound = i % n == 0;
+    //         bool isFirstColumn = i < n;
+    //         bool drawUpperRightTriangle = !isLowerBound && !isFirstColumn;
+    //     
+    //         if (i == (n * n - 1))
+    //         {
+    //             Debug.Log("isLower:" + isLowerBound);
+    //             Debug.Log("isFirstColumn:" + isFirstColumn);
+    //             Debug.Log("drawUpper:" + drawUpperRightTriangle);
+    //         }
+    //         
+    //         if (drawUpperRightTriangle)
+    //         {
+    //             var firstIndex = i - 1;
+    //             var secondIndex = i - n;
+    //             var thirdIndex = i;
+    //             
+    //             // var str =  "UpperFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
+    //             //                 "UpperSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
+    //             //                 "UpperThird: [" + thirdIndex + "/" + vertices.Count + "]";
+    //             //
+    //             // Debug.Log(str);
+    //             
+    //             orderedVertices.Add(vertices[firstIndex]);
+    //             orderedVertices.Add(vertices[secondIndex]);
+    //             orderedVertices.Add(vertices[thirdIndex]);
+    //         }
+    //     
+    //     }
+    //     
+    // }
+    //
     
 
-    private List<int> GenerateTriangleIndices(List<Vector3> vertices, bool windClockWise = true)
+    private List<int> GenerateTriangleIndices(List<Vector3> vertices, bool windClockWise)
     {
+        var sampleCount = GlobalDataModel.CurrentField.sampleCount;
         var indicesList = new List<int>();
 
         for (int i = 0; i < vertices.Count; i++)
         {
-            bool isUpperBound = i % GlobalDataModel.NumberOfSamples == (GlobalDataModel.NumberOfSamples - 1);
-            bool isLastColumn = i >= (GlobalDataModel.NumberOfSamples * GlobalDataModel.NumberOfSamples - GlobalDataModel.NumberOfSamples);
+            bool isUpperBound = i % sampleCount == (sampleCount - 1);
+            bool isLastColumn = 
+                i >= (GlobalDataModel.CurrentField.sampleCount * GlobalDataModel.CurrentField.sampleCount - GlobalDataModel.CurrentField.sampleCount);
+            
+            // If we are not in the last column, and not on the upper bound of the column, draw lower left triangle
+            // above the current position
             bool drawLowerLeftTriangle = !isLastColumn && !isUpperBound;
 
             if (drawLowerLeftTriangle)
             {
-                var firstIndex = i;
-                var secondIndex = i + 1;
-                var thirdIndex = i + GlobalDataModel.NumberOfSamples;
+                /*
+                        c
+                        -
+                        ----
+                        -------
+                        ----------
+                        -------------
+                        ----------------
+                       a                b
                 
-                // var str = "LowerFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
-                //           "LowerSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
-                //           "LowerThird: [" + thirdIndex + "/" + vertices.Count + "]";
-                //
-                // Debug.Log(str);
+                */
+                var a = i;
+                var b = i + GlobalDataModel.CurrentField.sampleCount;
+                var c = i + 1;
                 
                 // Bottom left triangle
-
                 if (windClockWise)
                 {
-                    indicesList.Add(firstIndex);
-                    indicesList.Add(secondIndex);
-                    indicesList.Add(thirdIndex);    
+                    indicesList.Add(a);
+                    indicesList.Add(c);
+                    indicesList.Add(b);    
                 }
                 else
                 {
-                    indicesList.Add(firstIndex);
-                    indicesList.Add(thirdIndex);
-                    indicesList.Add(secondIndex);
+                    indicesList.Add(a);
+                    indicesList.Add(b);
+                    indicesList.Add(c);
                 }
                     
             }
 
-            bool isLowerBound = i % GlobalDataModel.NumberOfSamples == 0;
-            bool isFirstColumn = i < GlobalDataModel.NumberOfSamples;
+            bool isLowerBound = i % GlobalDataModel.CurrentField.sampleCount == 0;
+            bool isFirstColumn = i < GlobalDataModel.CurrentField.sampleCount;
             bool drawUpperRightTriangle = !isLowerBound && !isFirstColumn;
 
+            // If we are not in the first column, and not on the lower bound of the column, draw upper right triangle
+            // below the current position
             if (drawUpperRightTriangle)
             {
-                var firstIndex = i - 1;
-                var secondIndex = i - GlobalDataModel.NumberOfSamples;
-                var thirdIndex = i;
+                
+                /*
+                       c                a
+                        ----------------
+                           -------------
+                              ----------
+                                 -------
+                                    ----                     
+                                       -
+                                       b              
+                */
+                
+                
+                var a = i;
+                var b = i - 1;
+                var c = i - GlobalDataModel.CurrentField.sampleCount;
                 
                 // var str =  "UpperFirst: [" + firstIndex + "/" + vertices.Count + "]\n" +
                 //                 "UpperSecond: [" + secondIndex + "/" + vertices.Count + "]\n" +
@@ -401,15 +388,15 @@ public class SimpleProceduralMesh : MonoBehaviour
 
                 if (windClockWise)
                 {    
-                    indicesList.Add(firstIndex);
-                    indicesList.Add(secondIndex);
-                    indicesList.Add(thirdIndex);    
+                    indicesList.Add(a);
+                    indicesList.Add(b);
+                    indicesList.Add(c);    
                 }
                 else
                 {
-                    indicesList.Add(firstIndex);
-                    indicesList.Add(thirdIndex);
-                    indicesList.Add(secondIndex);
+                    indicesList.Add(a);
+                    indicesList.Add(c);
+                    indicesList.Add(b);
                 }
                     
             }
@@ -433,14 +420,14 @@ public class SimpleProceduralMesh : MonoBehaviour
             
             // Up
             indices.Add(i + 1);
-            indices.Add(i + GlobalDataModel.NumberOfSamples + 1);
+            indices.Add(i + GlobalDataModel.CurrentField.sampleCount + 1);
             
             // Right
-            indices.Add(i + GlobalDataModel.NumberOfSamples + 1);
-            indices.Add(i + GlobalDataModel.NumberOfSamples);
+            indices.Add(i + GlobalDataModel.CurrentField.sampleCount + 1);
+            indices.Add(i + GlobalDataModel.CurrentField.sampleCount);
             
             // Down
-            indices.Add(i + GlobalDataModel.NumberOfSamples);
+            indices.Add(i + GlobalDataModel.CurrentField.sampleCount);
             indices.Add(i);
         }
 
@@ -486,8 +473,8 @@ public class SimpleProceduralMesh : MonoBehaviour
                     var normal = CalculateQuadNormal(
                         vertices[indices[i]],
                         vertices[indices[i + 1]],
-                        vertices[indices[i + GlobalDataModel.NumberOfSamples + 1]],
-                        vertices[indices[i + GlobalDataModel.NumberOfSamples]]
+                        vertices[indices[i + GlobalDataModel.CurrentField.sampleCount + 1]],
+                        vertices[indices[i + GlobalDataModel.CurrentField.sampleCount]]
                     );
                 }
 

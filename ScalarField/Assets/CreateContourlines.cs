@@ -5,6 +5,7 @@ using System.Text;
 using Calculation;
 using Model;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Color = UnityEngine.Color;
 using Vector3 = UnityEngine.Vector3;
 
@@ -17,7 +18,7 @@ public class CreateContourlines : MonoBehaviour
     public Material LineMat;
     
     //private bool _showLinesInMesh;
-
+    public bool LinesVisible = true;
     public bool ShowLinesInMesh;
     
     
@@ -35,7 +36,7 @@ public class CreateContourlines : MonoBehaviour
 
     private Vector3 bbExtents;
     
-    private bool ShowLines = true;
+    
 
     private List<GameObject> ContourLineObjects = new List<GameObject>();
     
@@ -56,12 +57,12 @@ public class CreateContourlines : MonoBehaviour
     }
 
 
-    private bool _linesVisible = true;
+    
     
     public void ToggleContourLines()
     {
-        _linesVisible = !_linesVisible;
-        ShowContourLines(_linesVisible);
+        LinesVisible = !LinesVisible;
+        ShowContourLines(LinesVisible);
     }
     
     public void MapVerticalLinePositionsToMesh(bool mapToVertical)
@@ -176,8 +177,8 @@ public class CreateContourlines : MonoBehaviour
         bbExtents = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
             
         CalculateContourLines();
-        ShowContourLines(_linesVisible);
-        var attenuation = _linesVisible ? 0.25f : 1f;
+        ShowContourLines(LinesVisible);
+        var attenuation = LinesVisible ? 0.25f : 1f;
         SetMeshTransparency(attenuation);
         
         MapVerticalLinePositionsToMesh(ShowLinesInMesh);

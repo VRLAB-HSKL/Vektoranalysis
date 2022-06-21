@@ -524,6 +524,7 @@ MonoBehaviour:
   Field: {fileID: 941685788}
   ContourValues: []
   LineMat: {fileID: 2100000, guid: 58c68f717c6622c4e9ac73ad113e9369, type: 2}
+  LinesVisible: 0
   ShowLinesInMesh: 1
   epsilon: 0.1
   positionOffset: {x: 0, y: 0.125, z: 0}
@@ -1036,6 +1037,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 107548, guid: cbfd31aaac017204885fcc03f0579a1a, type: 3}
   m_PrefabInstance: {fileID: 560502581}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &644732061 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 498762, guid: cbfd31aaac017204885fcc03f0579a1a, type: 3}
+  m_PrefabInstance: {fileID: 560502581}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &660962427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,6 +1435,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
   m_PrefabInstance: {fileID: 2130015370}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &913984964 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 431768, guid: cbfd31aaac017204885fcc03f0579a1a, type: 3}
+  m_PrefabInstance: {fileID: 560502581}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &941685788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,6 +1453,7 @@ GameObject:
   - component: {fileID: 941685790}
   - component: {fileID: 941685793}
   - component: {fileID: 941685792}
+  - component: {fileID: 941685794}
   m_Layer: 0
   m_Name: SimpleField
   m_TagString: Untagged
@@ -1545,6 +1557,35 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &941685794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941685788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f753025abc16bb45bbc83939f863bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 644732061}
+  pivot: {fileID: 913984964}
+  fadeDuration: 0.3
+  primaryTeleportButton: 0
+  secondaryTeleportButton: 2
+  _teleportButton: 1
+  triggeredType: 0
+  m_reticleMaterial: {fileID: 0}
+  rotateToHitObjectFront: 0
+  teleportToHitObjectPivot: 0
+  useSteamVRFade: 1
+  onBeforeTeleport:
+    m_PersistentCalls:
+      m_Calls: []
+  onAfterTeleport:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1033679750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1838,7 +1879,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95c64b0f0c348974d876cd508ca2a28e, type: 2}
+  - {fileID: 2100000, guid: 609a893baaff2734ea05f46abb0e98fc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1895,7 +1936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoundingBox: {fileID: 674071311}
-  ShowOnStartup: 1
+  ShowOnStartup: 0
 --- !u!1 &1291269485
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,11 +16,6 @@ using UnityEngine;
 public static class GlobalDataModel
 {
     public static int EstimatedIndex = 0;
-    
-    /// <summary>
-    /// Global sample count to make mesh indexing applicable to every mesh
-    /// </summary>
-    public static int NumberOfSamples = 200;
 
     public static Vector3 ClosestPointOnMesh = Vector3.zero;
 
@@ -81,8 +76,10 @@ public static class GlobalDataModel
             parameterRangeY = new Tuple<float, float>(InitFile.Info.y_param_range[0], InitFile.Info.y_param_range[1]),
             sampleCount = InitFile.Info.sample_count
         };
+        
 
         //var sb = new StringBuilder();
+        
         
         for (var i = 0; i < InitFile.Data.mesh.points.Count; i++)
         {
@@ -92,6 +89,29 @@ public static class GlobalDataModel
             sf.displayPoints.Add(new Vector3(point[0], point[2], point[1]));
         }
 
+        
+        // Debug.Log("-11: " + sf.rawPoints[sf.rawPoints.Count - 11].x.ToString("0.0000000000000"));
+        // Debug.Log("-10: " + sf.rawPoints[sf.rawPoints.Count - 10].x.ToString("0.0000000000000"));
+        // Debug.Log("-9: " + sf.rawPoints[sf.rawPoints.Count - 9].x.ToString("0.0000000000000"));
+        // Debug.Log("-8: " + sf.rawPoints[sf.rawPoints.Count - 8].x.ToString("0.0000000000000"));
+        
+        // for (var i = 0; i < sf.rawPoints.Count - 1; i++)
+        // {
+        //     var p1 = sf.rawPoints[i];
+        //     var p2 = sf.rawPoints[i+1];
+        //
+        //     if (Mathf.Abs(p2.x - p1.x) > 0.1f)
+        //     {
+        //         if (Math.Abs(p2.x - (-2f)) < 0.001f) continue;
+        //         
+        //         var str = "Harsh distance pivot at iteration " + i + " with p[i]: " + p1 + " and p[i+1]: " + p2;
+        //         Debug.Log(str);
+        //     }
+        // }
+        
+        
+        
+        
         sf.MinRawValues = new Vector3(
                 sf.rawPoints.Min(v => v.x),
                 sf.rawPoints.Min(v => v.y),
