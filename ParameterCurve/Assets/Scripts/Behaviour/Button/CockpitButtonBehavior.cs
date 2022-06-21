@@ -53,8 +53,15 @@ namespace Behaviour.Button
 
         IEnumerator WriteCoordsData()
         {
+            bool is3D = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve;
             using (StreamWriter writer = new StreamWriter(path))
             {
+                if(is3D) { 
+                    writer.WriteLine("3"); 
+                } else { 
+                    writer.WriteLine("2"); 
+                }
+
                 writer.WriteLine(line.positionCount);
 
                 //write points of current linerenderer to text file to be read by new line renderer
@@ -84,12 +91,14 @@ namespace Behaviour.Button
 
                     float coordsScaler = 2.5f;
 
-                    if (!GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve)
+                    if (!is3D)
                     {
                         //Debug.Log("not 3D");
                         writer.WriteLine(coordsScaler * tangentX + " " + coordsScaler * tangentZ + " " + coordsScaler * tangentY);
                         writer.WriteLine(coordsScaler * normalX + " " + coordsScaler * normalZ + " " + coordsScaler * normalY);
-                        writer.WriteLine(coordsScaler * binormalX + " " + coordsScaler * binormalZ + " " + coordsScaler * binormalY);
+                        
+                        //for 2D curves, binormal is in 3rd dimension
+                        //writer.WriteLine(coordsScaler * binormalX + " " + coordsScaler * binormalZ + " " + coordsScaler * binormalY);
                     } else
                     {
                         //Debug.Log("3D");

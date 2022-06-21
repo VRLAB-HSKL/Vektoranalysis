@@ -14,6 +14,7 @@ public class CockpitTravel : MonoBehaviour
     public LineRenderer TangentLine;
     public LineRenderer NormalLine;
     public LineRenderer BinormalLine;
+    public Transform CockpitRegulator;
 
     private float _updateTimer;
 
@@ -24,8 +25,12 @@ public class CockpitTravel : MonoBehaviour
     private List<Vector3> binormalPositions;
     private int index;
     private int size;
+    private bool is3D;
+    private float timeThreshold;
 
     private string path = "Assets/Resources/linecoords.txt";
+    private float minThreshold = 0.02f; //fastest travel
+    private float maxThreshold = 0.1f;  //slowest travel
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +40,17 @@ public class CockpitTravel : MonoBehaviour
         binormalPositions = new List<Vector3>();
         curvePoints = new List<Vector3>();
         index = 0;
+        timeThreshold = (minThreshold + maxThreshold) / 2;
 
         using (StreamReader reader = new StreamReader(path)) {
+            if(int.Parse(reader.ReadLine()) == 3) {
+                is3D = true;
+            } else
+            {
+                is3D = false;
+                BinormalLine.gameObject.SetActive(false);   //binormal is only in 3rd dimension
+            }
+
             string str = "";
             size = int.Parse(reader.ReadLine());
             CurveLine.positionCount = size;
@@ -61,11 +75,14 @@ public class CockpitTravel : MonoBehaviour
                 Vector3 normal = new Vector3(float.Parse(nXYZ[0]), float.Parse(nXYZ[1]), float.Parse(nXYZ[2]));
                 normalPositions.Add(normal);
 
-                //read in current binormal vector
-                str = reader.ReadLine();
-                string[] bXYZ = str.Split(' ');
-                Vector3 binormal = new Vector3(float.Parse(bXYZ[0]), float.Parse(bXYZ[1]), float.Parse(bXYZ[2]));
-                binormalPositions.Add(binormal);
+                //read in current binormal vector if 3D
+                if (is3D)
+                {
+                    str = reader.ReadLine();
+                    string[] bXYZ = str.Split(' ');
+                    Vector3 binormal = new Vector3(float.Parse(bXYZ[0]), float.Parse(bXYZ[1]), float.Parse(bXYZ[2]));
+                    binormalPositions.Add(binormal);
+                }
             }
         }
         wpm = new WaypointManager(curvePoints.ToArray(), 0.1f);
@@ -77,9 +94,11 @@ public class CockpitTravel : MonoBehaviour
     {
         // Update time since last point step
         _updateTimer += Time.deltaTime;
+
+        changeSpeed();
                 
         // If the time threshold has been reached, traverse to next point
-        if(_updateTimer >= 0.1f)
+        if(_updateTimer >= timeThreshold)
         {
             _updateTimer = 0f;
 
@@ -91,9 +110,12 @@ public class CockpitTravel : MonoBehaviour
             NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[wpm.Current]);
             //NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[index]);
 
-            BinormalLine.SetPosition(0, Cockpit.transform.position);
-            BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[wpm.Current]);
-            //BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[index]);
+            if (is3D)
+            {
+                BinormalLine.SetPosition(0, Cockpit.transform.position);
+                BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[wpm.Current]);
+                //BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[index]);
+            }
 
             var pos = wpm.GetWaypoint();
             var target = wpm.GetFollowupWaypoint();
@@ -109,5 +131,14 @@ public class CockpitTravel : MonoBehaviour
 
             if(index == size) { index = 0; }*/
         }
+    }
+
+    void changeSpeed()
+    {
+        float offset = CockpitRegulator.GetComponent<VRClampDirection>().OffsetX;
+        float regulatorPos = CockpitRegulator.localPosition.x;
+        //timeThreshold = (regulatorPos - (-1 * offset)) * (maxThreshold - minThreshold) / (offset - (-1 * offset)) + minThreshold;
+        //map regulator position to range of speeds for cockpit
+        timeThreshold = (regulatorPos - offset) * (maxThreshold - minThreshold) / ((-1 * offset) - offset) + minThreshold;
     }
 }
