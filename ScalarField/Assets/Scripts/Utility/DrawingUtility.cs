@@ -105,7 +105,7 @@ namespace Utility
         {
             var arrow = Object.Instantiate(ArrowPrefab, parent);
             arrow.name = "Arrow_" + start + "_to_" + target;
-            arrow.transform.position = start;
+            arrow.transform.position = start; //Vector3.Lerp(start, target, 0.5f);
             //arrow.GetComponent<ArrowController>().PointTowards(direction);
 
             // Scale arrow to about 10% the size of the bounding box
@@ -115,6 +115,11 @@ namespace Utility
             var maxVector = new Vector3(maxScale, maxScale, maxScale);
             var newScale = maxVector * 0.05f;
             arrow.transform.localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
+
+            var scale = arrow.transform.localScale;
+            var zScale = Vector3.Distance(start, target);
+
+            arrow.transform.localScale = new Vector3(scale.x, scale.y, zScale);
             
             //var direction = target - start;
             
