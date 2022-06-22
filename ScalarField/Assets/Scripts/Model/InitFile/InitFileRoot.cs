@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace Model.InitFile
 {
+    /// <summary>
+    /// Root class for parsing of the JSON initialization file
+    /// </summary>
     [Serializable]
     public class InitFileRoot
     {
@@ -107,7 +110,6 @@ namespace Model.InitFile
     {
         public float[] Origin;
         public float[] Direction;
-
     }
     
     

@@ -97,7 +97,7 @@ namespace VR.Scripts.Behaviours.Button
         /// <summary>
         /// 
         /// </summary>
-        public void Update()
+        protected void Update()
         {
             if (_buttonTriggered)
             {

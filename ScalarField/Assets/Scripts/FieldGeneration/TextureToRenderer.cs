@@ -1,6 +1,10 @@
 using Calculation;
+using Model;
 using UnityEngine;
 
+/// <summary>
+/// Sets the texture on the MeshRenderer of the game object this script is attached to
+/// </summary>
 [RequireComponent(typeof(MeshRenderer))]
 public class TextureToRenderer : MonoBehaviour
 {

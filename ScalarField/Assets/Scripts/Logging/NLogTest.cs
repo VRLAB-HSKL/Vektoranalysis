@@ -44,6 +44,7 @@ namespace Logging
         
         /// <summary>
         /// Static logging operations that are performed every frame, regardless of user interaction
+        /// ToDo: Duplicate of function in ParamCurve, in the future move to MBVR package
         /// </summary>
         private void StaticLogging()
         {

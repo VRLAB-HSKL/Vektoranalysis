@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Calculation
+namespace Utility
 {
+    /// <summary>
+    /// Static utility class containing frequently used functions related to drawing simple primitives
+    /// and gizmos in the unity scene
+    /// </summary>
     public static class DrawingUtility
     {
         public static GameObject DrawSphereOnLine(GameObject line, int pointIndex, Vector3 bbScale)
