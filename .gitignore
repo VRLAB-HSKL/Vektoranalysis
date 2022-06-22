@@ -38,6 +38,9 @@
 
 **/Assets/Plugins
 
+# Texture map resources in ScalarField
+**/texture_maps/*
+
 # FirstPerson von MVR und von Unity ignorieren
 **/Assets/MiddleVR_First*/*
 **/Assets/Standard Assets/*
