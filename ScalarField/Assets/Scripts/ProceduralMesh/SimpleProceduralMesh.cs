@@ -113,7 +113,9 @@ namespace ProceduralMesh
             
             mesh.vertices = displayVertices.ToArray();
             mesh.SetIndices(indices.ToArray(), topology, 0, true);
-        
+
+            GlobalDataModel.CurrentField.MeshPoints = displayVertices;
+            
             // var triangles = new List<int>();
             // for (int i = 0; i < vertices.Count; i+= 3)
             // {

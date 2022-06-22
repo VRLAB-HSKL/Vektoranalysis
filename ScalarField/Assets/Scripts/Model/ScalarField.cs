@@ -62,6 +62,10 @@ namespace Model
         public List<Vector3> RawPoints { get; } = new List<Vector3>();
         public List<Vector3> DisplayPoints { get; set; } = new List<Vector3>();
 
+        public List<Vector3> MeshPoints { get; set; } = new List<Vector3>();
+        
+        public List<Vector3> Gradients { get; set; } = new List<Vector3>();
+        
         /// <summary>
         /// Target values of the imported contour lines
         /// </summary>

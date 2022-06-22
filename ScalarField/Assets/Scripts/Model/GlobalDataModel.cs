@@ -96,7 +96,12 @@ namespace Model
                 sf.RawPoints.Add(new Vector3(point[0], point[1], point[2]));
                 sf.DisplayPoints.Add(new Vector3(point[0], point[2], point[1]));
             }
-        
+
+            foreach (var gradient in InitFile.Data.mesh.gradients)
+            {
+                sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));
+            }
+            
             sf.MinRawValues = new Vector3(
                 sf.RawPoints.Min(v => v.x),
                 sf.RawPoints.Min(v => v.y),
@@ -109,6 +114,7 @@ namespace Model
                 sf.RawPoints.Max(v => v.z)
             );
 
+            
             sf.ContourLineValues = jsr.Data.isolines.Values;
 
             var lst = new List<List<Vector3>>();

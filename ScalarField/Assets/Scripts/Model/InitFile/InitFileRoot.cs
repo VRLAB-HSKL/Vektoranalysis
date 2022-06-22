@@ -85,6 +85,9 @@ namespace Model.InitFile
     {
         [JsonProperty("points")]
         public List<float[]> points { get; set; }
+        
+        [JsonProperty("gradients")]
+        public List<float[]> gradients { get; set; }
     }
 
     public class InitFileIsoLines
