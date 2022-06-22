@@ -2,7 +2,6 @@
 using System.Text;
 using HTC.UnityPlugin.Vive;
 using NLog;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 namespace Logging
