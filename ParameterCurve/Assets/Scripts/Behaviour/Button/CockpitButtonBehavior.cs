@@ -115,6 +115,10 @@ namespace Behaviour.Button
                     float timeDistY = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeDistancePoints[i].y;
                     writer.WriteLine(timeDistX + " " + timeDistY);
 
+                    float timeVelX = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeVelocityPoints[i].x;
+                    float timeVelY = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeVelocityPoints[i].y;
+                    writer.WriteLine(timeVelX + " " + timeVelY);
+
                 }
             }
 

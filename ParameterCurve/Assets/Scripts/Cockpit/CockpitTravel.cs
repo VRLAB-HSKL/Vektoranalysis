@@ -21,6 +21,8 @@ public class CockpitTravel : MonoBehaviour
     public GameObject CockpitCompassPin;
     public GameObject TimeDistanceTravelObject;
     public GameObject TimeDistanceLineObject;
+    public GameObject TimeVelocityTravelObject;
+    public GameObject TimeVelocityLineObject;
 
     private float _updateTimer;
 
@@ -30,12 +32,15 @@ public class CockpitTravel : MonoBehaviour
     private List<Vector3> normalPositions;
     private List<Vector3> binormalPositions;
     private List<Vector2> timeDistPositions;
+    private List<Vector2> timeVelPositions;
+    private LineRenderer TimeVelocityLR;
     private LineRenderer TimeDistanceLR;
     private int index;
     private int size;
     private bool is3D;
     private float timeThreshold;
     private Vector3 _initTimeDistTravelPos;
+    private Vector3 _initTimeVelTravelPos;
 
     private string path = "Assets/Resources/linecoords.txt";
     private float minThreshold = 0.02f; //fastest travel
@@ -49,11 +54,14 @@ public class CockpitTravel : MonoBehaviour
         binormalPositions = new List<Vector3>();
         curvePoints = new List<Vector3>();
         timeDistPositions = new List<Vector2>();
+        timeVelPositions = new List<Vector2>();
         TimeDistanceLR = TimeDistanceLineObject.GetComponent<LineRenderer>();
+        TimeVelocityLR = TimeVelocityLineObject.GetComponent<LineRenderer>();
 
         index = 0;
         timeThreshold = (minThreshold + maxThreshold) / 2;
         _initTimeDistTravelPos = TimeDistanceTravelObject.transform.localPosition;
+        _initTimeVelTravelPos = TimeVelocityTravelObject.transform.localPosition;
 
         using (StreamReader reader = new StreamReader(path)) {
             if(int.Parse(reader.ReadLine()) == 3) {
@@ -72,6 +80,7 @@ public class CockpitTravel : MonoBehaviour
             size = int.Parse(reader.ReadLine());
             CurveLine.positionCount = size;
             TimeDistanceLR.positionCount = size;
+            TimeVelocityLR.positionCount = size;
 
             for(int i = 0; i < size; i++)
             {
@@ -115,6 +124,19 @@ public class CockpitTravel : MonoBehaviour
                 newPos.y += td[1];
                 newPos.z -= UnityEngine.Random.Range(0f, 0.005f);
                 TimeDistanceLR.SetPosition(i, newPos);
+
+                //read in current time velocity point
+                str = reader.ReadLine();
+                string[] tvXY = str.Split(' ');
+                Vector2 tv = new Vector2(float.Parse(tvXY[0]), float.Parse(tvXY[1]));
+                timeVelPositions.Add(tv);
+
+                //construct time velocity polyline
+                newPos = _initTimeVelTravelPos;
+                newPos.x += tv[0];
+                newPos.y += tv[1];
+                newPos.z -= UnityEngine.Random.Range(0f, 0.005f);
+                TimeVelocityLR.SetPosition(i, newPos);
             }
         }
         wpm = new WaypointManager(curvePoints.ToArray(), 0.1f);
@@ -176,8 +198,11 @@ public class CockpitTravel : MonoBehaviour
     {
         Vector2 tdPosVec = timeDistPositions[wpm.Current];
         Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
-        TimeDistanceTravelObject.transform.localPosition =
-            _initTimeDistTravelPos + tdVec;
+        TimeDistanceTravelObject.transform.localPosition = _initTimeDistTravelPos + tdVec;
+
+        Vector2 tvPosVec = timeVelPositions[wpm.Current];
+        Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
+        TimeVelocityTravelObject.transform.localPosition = _initTimeVelTravelPos + tvVec;
     }
 
     private void changeSpeed()
