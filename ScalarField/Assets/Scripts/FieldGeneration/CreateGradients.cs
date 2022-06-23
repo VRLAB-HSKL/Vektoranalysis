@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using log4net;
 using Model;
 using Model.InitFile;
@@ -12,14 +13,14 @@ namespace FieldGeneration
         public GameObject BoundingBox;
         public GameObject ArrowPrefab;
 
-        public bool ShowGradients;
+        public bool showGradientsOnStartup;
         public int stepsBetweenArrows;
         
         public void ToggleGradients()
         {
-            ShowGradients = !ShowGradients;
+            showGradientsOnStartup = !showGradientsOnStartup;
             
-            SetGradientsActive(ShowGradients);
+            SetGradientsActive(showGradientsOnStartup);
         }
 
         private void SetGradientsActive(bool isActive)
@@ -34,12 +35,14 @@ namespace FieldGeneration
         private void Start()
         {
             var startIndex = 0;
-            var lastIndexBefore = GlobalDataModel.CurrentField.Gradients.Count; 
+            var lastIndexBefore = GlobalDataModel.CurrentField.Gradients.Count;
+            var meshVectors = GlobalDataModel.CurrentField.MeshPoints;
             for(var i = startIndex; i < lastIndexBefore; i++)
             {
                 if (i % stepsBetweenArrows != 0) continue;
                 
                 var gradient = GlobalDataModel.CurrentField.Gradients[i];
+                // flip coordinates to match display vector ordering
                 gradient = new Vector3(gradient.x, gradient.z, gradient.y);
                 var start = GlobalDataModel.CurrentField.MeshPoints[i];
                 var end = start + gradient;
@@ -52,10 +55,30 @@ namespace FieldGeneration
                 //     "target: " + end
                 // );
 
+                // if (Physics.Raycast(end, Vector3.up, out RaycastHit upHit))
+                // {
+                //     end = new Vector3(end.x, upHit.point.y, end.z);
+                // }
+                // else if (Physics.Raycast(end, Vector3.down, out RaycastHit downHit))
+                // {
+                //     end = new Vector3(end.x, downHit.point.y, end.z);
+                // }
+
+                var tolerance = 0.25f;
+                var similiarPointsinMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
+                    .Where(p => Mathf.Abs(p.z - end.z) < tolerance).ToList();
+
+                if (similiarPointsinMesh.Any())
+                {
+                    //Debug.Log("Found points with approximately the same x and z coordinate");
+                    var index = meshVectors.IndexOf(similiarPointsinMesh[0]);
+                    end = new Vector3(end.x, meshVectors[index].y, end.z);
+                }
+                
                 DrawingUtility.DrawArrow(start, end, transform, ArrowPrefab, BoundingBox.transform.localScale);
             }
          
-            SetGradientsActive(ShowGradients);
+            SetGradientsActive(showGradientsOnStartup);
         }
     }
 }

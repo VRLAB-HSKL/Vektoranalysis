@@ -20,7 +20,27 @@ namespace ProceduralMesh
         public Vector3 ScalingVector = Vector3.one;
         public GameObject BoundingBox;
         public bool PositionMeshAtOrigin;
-    
+
+
+        private bool _isMeshTransparent;
+
+        public void ToogleMeshTransparency()
+        {
+            _isMeshTransparent = !_isMeshTransparent;
+            
+            var attenuation = _isMeshTransparent ? 0.25f : 1f;
+            SetMeshTransparency(attenuation);   
+        }
+        
+        private void SetMeshTransparency(float attenuation)
+        {
+            var mr = GetComponent<MeshRenderer>();
+            var mat = mr.material;
+            mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, attenuation);
+            mr.material = mat;
+        }
+        
+        
         private void Start()
         {
             GenerateFieldMesh();

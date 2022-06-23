@@ -51,8 +51,8 @@ namespace FieldGeneration
                 line.gameObject.SetActive(isVisible);
             }
         
-            var attenuation = isVisible ? 0.25f : 1f;
-            SetMeshTransparency(attenuation);
+            // var attenuation = isVisible ? 0.25f : 1f;
+            // SetMeshTransparency(attenuation);
         }
 
 
@@ -96,7 +96,7 @@ namespace FieldGeneration
                 
                     if (mapToVertical)
                     {
-                        scaledVector += parentOrigin + new Vector3(0f, 0.25f, 0f); //positionOffset;
+                        scaledVector += parentOrigin + new Vector3(0f, 0.25f, 0f);
                     }
                     else
                     {
@@ -119,7 +119,6 @@ namespace FieldGeneration
         
         }
 
-
         public void ToggleLineVerticalPositions()
         {
             ShowLinesInMesh = !ShowLinesInMesh;
@@ -131,13 +130,8 @@ namespace FieldGeneration
         
         }
 
-        private void SetMeshTransparency(float attenuation)
-        {
-            var mr = Field.GetComponent<MeshRenderer>();
-            var mat = mr.material;
-            mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, attenuation);
-            mr.material = mat;
-        }
+
+        
     
     
         // Start is called before the first frame update
@@ -177,8 +171,8 @@ namespace FieldGeneration
             
             CalculateContourLines();
             ShowContourLines(LinesVisible);
-            var attenuation = LinesVisible ? 0.25f : 1f;
-            SetMeshTransparency(attenuation);
+            // var attenuation = LinesVisible ? 0.25f : 1f;
+            // SetMeshTransparency(attenuation);
         
             MapVerticalLinePositionsToMesh(ShowLinesInMesh);
         
