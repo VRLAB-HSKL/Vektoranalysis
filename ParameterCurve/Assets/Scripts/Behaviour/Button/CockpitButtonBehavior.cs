@@ -62,6 +62,10 @@ namespace Behaviour.Button
                     writer.WriteLine("2"); 
                 }
 
+                //Texture2D img = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].MenuButtonImage;
+                string name = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Name;
+                writer.WriteLine("Assets/Resources/img/" + name + ".png");
+
                 writer.WriteLine(line.positionCount);
 
                 //write points of current linerenderer to text file to be read by new line renderer
@@ -76,7 +80,7 @@ namespace Behaviour.Button
                     //writer.WriteLine(x + " " + y + " " + z);
                     //table display is already flat, no need to rotate
                     //scale up size to match cockpit
-                    writer.WriteLine(20 * x + " " + 20 * y + " " + 20 * z);
+                    writer.WriteLine(35 * x + " " + 35 * y + " " + 35 * z);
 
                     FresnetSerretApparatus fsr = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].FresnetApparatuses[i];
                     float tangentX = fsr.Tangent.normalized.x;
@@ -106,6 +110,11 @@ namespace Behaviour.Button
                         writer.WriteLine(coordsScaler * normalX + " " + coordsScaler * normalY + " " + coordsScaler * normalZ);
                         writer.WriteLine(coordsScaler * binormalX + " " + coordsScaler * binormalY + " " + coordsScaler * binormalZ);
                     }
+
+                    float timeDistX = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeDistancePoints[i].x;
+                    float timeDistY = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeDistancePoints[i].y;
+                    writer.WriteLine(timeDistX + " " + timeDistY);
+
                 }
             }
 

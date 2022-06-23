@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEngine;
 using VRKL.MBU;
 using System.IO;
+using UnityEngine.UI;
+using UnityEditor;
 
 public class CockpitTravel : MonoBehaviour
 {
@@ -15,6 +17,10 @@ public class CockpitTravel : MonoBehaviour
     public LineRenderer NormalLine;
     public LineRenderer BinormalLine;
     public Transform CockpitRegulator;
+    public RawImage CockpitImageDisplay;
+    public GameObject CockpitCompassPin;
+    public GameObject TimeDistanceTravelObject;
+    public GameObject TimeDistanceLineObject;
 
     private float _updateTimer;
 
@@ -23,14 +29,17 @@ public class CockpitTravel : MonoBehaviour
     private List<Vector3> tangentPositions;
     private List<Vector3> normalPositions;
     private List<Vector3> binormalPositions;
+    private List<Vector2> timeDistPositions;
+    private LineRenderer TimeDistanceLR;
     private int index;
     private int size;
     private bool is3D;
     private float timeThreshold;
+    private Vector3 _initTimeDistTravelPos;
 
     private string path = "Assets/Resources/linecoords.txt";
     private float minThreshold = 0.02f; //fastest travel
-    private float maxThreshold = 0.1f;  //slowest travel
+    private float maxThreshold = 0.15f;  //slowest travel
 
     // Start is called before the first frame update
     void Start()
@@ -39,8 +48,12 @@ public class CockpitTravel : MonoBehaviour
         normalPositions = new List<Vector3>();
         binormalPositions = new List<Vector3>();
         curvePoints = new List<Vector3>();
+        timeDistPositions = new List<Vector2>();
+        TimeDistanceLR = TimeDistanceLineObject.GetComponent<LineRenderer>();
+
         index = 0;
         timeThreshold = (minThreshold + maxThreshold) / 2;
+        _initTimeDistTravelPos = TimeDistanceTravelObject.transform.localPosition;
 
         using (StreamReader reader = new StreamReader(path)) {
             if(int.Parse(reader.ReadLine()) == 3) {
@@ -51,9 +64,15 @@ public class CockpitTravel : MonoBehaviour
                 BinormalLine.gameObject.SetActive(false);   //binormal is only in 3rd dimension
             }
 
+            string imgPath = reader.ReadLine();
+            Texture2D img = (Texture2D)AssetDatabase.LoadAssetAtPath(imgPath, typeof(Texture2D));
+            CockpitImageDisplay.texture = img;
+
             string str = "";
             size = int.Parse(reader.ReadLine());
             CurveLine.positionCount = size;
+            TimeDistanceLR.positionCount = size;
+
             for(int i = 0; i < size; i++)
             {
                 //read in current point xyz coordinates
@@ -83,6 +102,19 @@ public class CockpitTravel : MonoBehaviour
                     Vector3 binormal = new Vector3(float.Parse(bXYZ[0]), float.Parse(bXYZ[1]), float.Parse(bXYZ[2]));
                     binormalPositions.Add(binormal);
                 }
+
+                //read in current time distance point
+                str = reader.ReadLine();
+                string[] tdXY = str.Split(' ');
+                Vector2 td = new Vector2(float.Parse(tdXY[0]), float.Parse(tdXY[1]));
+                timeDistPositions.Add(td);
+
+                //construct time distance polyline
+                Vector3 newPos = _initTimeDistTravelPos;
+                newPos.x += td[0];
+                newPos.y += td[1];
+                newPos.z -= UnityEngine.Random.Range(0f, 0.005f);
+                TimeDistanceLR.SetPosition(i, newPos);
             }
         }
         wpm = new WaypointManager(curvePoints.ToArray(), 0.1f);
@@ -102,25 +134,14 @@ public class CockpitTravel : MonoBehaviour
         {
             _updateTimer = 0f;
 
-            TangentLine.SetPosition(0, Cockpit.transform.position);
-            TangentLine.SetPosition(1, Cockpit.transform.position + tangentPositions[wpm.Current]);
-            //TangentLine.SetPosition(1, Cockpit.transform.position + tangentPositions[index]);
-
-            NormalLine.SetPosition(0, Cockpit.transform.position);
-            NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[wpm.Current]);
-            //NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[index]);
-
-            if (is3D)
-            {
-                BinormalLine.SetPosition(0, Cockpit.transform.position);
-                BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[wpm.Current]);
-                //BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[index]);
-            }
+            updateVectors();
+            updateTravelObjects();
 
             var pos = wpm.GetWaypoint();
             var target = wpm.GetFollowupWaypoint();
             var dist = Vector3.Distance(pos, target);
             TravelObjectParent.transform.LookAt(target);
+            //CockpitCompassPin.transform.LookAt(target);
             TravelObjectParent.transform.position = wpm.Move(pos, dist);
 
             //without waypoint manager
@@ -133,7 +154,33 @@ public class CockpitTravel : MonoBehaviour
         }
     }
 
-    void changeSpeed()
+    private void updateVectors()
+    {
+        TangentLine.SetPosition(0, Cockpit.transform.position);
+        TangentLine.SetPosition(1, Cockpit.transform.position + tangentPositions[wpm.Current]);
+        //TangentLine.SetPosition(1, Cockpit.transform.position + tangentPositions[index]);
+
+        NormalLine.SetPosition(0, Cockpit.transform.position);
+        NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[wpm.Current]);
+        //NormalLine.SetPosition(1, Cockpit.transform.position + normalPositions[index]);
+
+        if (is3D)
+        {
+            BinormalLine.SetPosition(0, Cockpit.transform.position);
+            BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[wpm.Current]);
+            //BinormalLine.SetPosition(1, Cockpit.transform.position + binormalPositions[index]);
+        }
+    }
+
+    private void updateTravelObjects()
+    {
+        Vector2 tdPosVec = timeDistPositions[wpm.Current];
+        Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
+        TimeDistanceTravelObject.transform.localPosition =
+            _initTimeDistTravelPos + tdVec;
+    }
+
+    private void changeSpeed()
     {
         float offset = CockpitRegulator.GetComponent<VRClampDirection>().OffsetX;
         float regulatorPos = CockpitRegulator.localPosition.x;
