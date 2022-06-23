@@ -13,12 +13,18 @@ public class CockpitTravel : MonoBehaviour
     public LineRenderer CurveLine;
     public GameObject TravelObjectParent;
     public GameObject Cockpit;
+
+    //Vectors
     public LineRenderer TangentLine;
     public LineRenderer NormalLine;
     public LineRenderer BinormalLine;
+
+    //Cockpit UI
     public Transform CockpitRegulator;
     public RawImage CockpitImageDisplay;
     public GameObject CockpitCompassPin;
+
+    //Time-Distance/Velocity Diagrams
     public GameObject TimeDistanceTravelObject;
     public GameObject TimeDistanceLineObject;
     public GameObject TimeVelocityTravelObject;
