@@ -64,7 +64,7 @@ namespace FieldGeneration
                 //     end = new Vector3(end.x, downHit.point.y, end.z);
                 // }
 
-                var tolerance = 0.25f;
+                var tolerance = 0.125f;
                 var similiarPointsinMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
                     .Where(p => Mathf.Abs(p.z - end.z) < tolerance).ToList();
 
