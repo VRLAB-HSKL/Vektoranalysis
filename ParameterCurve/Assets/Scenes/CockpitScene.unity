@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2498,7 +2498,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &566366537
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2507,7 +2507,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 566366536}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.31}
+  m_LocalPosition: {x: 0, y: 0, z: 2.5}
   m_LocalScale: {x: 0.64974, y: 1, z: 1}
   m_Children:
   - {fileID: 23128097}
@@ -4697,6 +4697,8 @@ GameObject:
   - component: {fileID: 1123500597}
   - component: {fileID: 1123500596}
   - component: {fileID: 1123500595}
+  - component: {fileID: 1123500599}
+  - component: {fileID: 1123500598}
   m_Layer: 5
   m_Name: YesButton
   m_TagString: Untagged
@@ -4806,6 +4808,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1123500593}
   m_CullTransparentMesh: 1
+--- !u!114 &1123500598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123500593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d518a00ceacb57f4d94b3cc806d60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+--- !u!223 &1123500599
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123500593}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1140005376
 GameObject:
   m_ObjectHideFlags: 0
@@ -6116,6 +6152,8 @@ GameObject:
   - component: {fileID: 1408014400}
   - component: {fileID: 1408014399}
   - component: {fileID: 1408014398}
+  - component: {fileID: 1408014402}
+  - component: {fileID: 1408014401}
   m_Layer: 5
   m_Name: CancelButton
   m_TagString: Untagged
@@ -6225,6 +6263,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408014396}
   m_CullTransparentMesh: 1
+--- !u!114 &1408014401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408014396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d518a00ceacb57f4d94b3cc806d60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+--- !u!223 &1408014402
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408014396}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1467037535
 GameObject:
   m_ObjectHideFlags: 0
@@ -8439,6 +8511,7 @@ GameObject:
   - component: {fileID: 1842699572}
   - component: {fileID: 1842699574}
   - component: {fileID: 1842699575}
+  - component: {fileID: 1842699576}
   m_Layer: 0
   m_Name: WorldStateController
   m_TagString: Untagged
@@ -8511,6 +8584,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TimeVelocityDiagramCanvas: {fileID: 2112814880}
   TimeDistanceDiagramCanvas: {fileID: 892451192}
+--- !u!114 &1842699576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842699571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b98fe01e6514d4ab3af9187bc4c9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExitConfirmationPanel: {fileID: 566366536}
+  YesButton: {fileID: 1123500595}
+  CancelButton: {fileID: 1408014398}
 --- !u!1 &1876341445
 GameObject:
   m_ObjectHideFlags: 0

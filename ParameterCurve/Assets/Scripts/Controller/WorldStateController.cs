@@ -6,6 +6,7 @@ using Model;
 using UI;
 using UnityEngine;
 using Views.Display;
+using System.IO;
 
 namespace Controller
 {
@@ -117,9 +118,14 @@ namespace Controller
         /// <see cref="GlobalDataModel.RunSpeedFactor"/>, the travel object moves to the next point on the curve
         /// </summary>
         private float _updateTimer;
-        
+
+        /// <summary>
+        /// Path to file containing point data for curve, sent to cockpit.
+        /// </summary>
+        private string pathToData = "Assets/Resources/linecoords.txt";
+
         #endregion Private members
-        
+
         #region Public functions
 
         /// <summary>
@@ -444,6 +450,8 @@ namespace Controller
 
             // Set plot line renderers
             infoWall.Update();
+
+            CheckForCurve();
         }
 
         /// <summary>
@@ -535,7 +543,22 @@ namespace Controller
                 selObjects.gameObject.transform, selObjects, pillarPrefab, AbstractCurveViewController.CurveControllerType.World);
             GlobalDataModel.ExerciseCurveController.SetViewVisibility(false);    
         }
-        
+
+        private void CheckForCurve()
+        {
+            using (StreamReader reader = new StreamReader(pathToData))
+            {
+                string name = reader.ReadLine();
+
+                //will be null if this is the first time the scene is being loaded
+                //will contain name of curve that was just run in the cockpit scene if not null
+                if (name != null)
+                {
+                    //if curve does not exist, function will just return and load regularly
+                    SwitchToSpecificDataset(name);  
+                }
+            }
+        }
     
         /// <summary>
         /// Static logging operations that are performed every frame, regardless of user interaction

@@ -48,7 +48,6 @@ namespace Behaviour.Button
         protected override void HandleButtonEvent()
         {
             StartCoroutine(WriteCoordsData());
-            SceneManager.LoadSceneAsync("CockpitScene");
         }
 
         IEnumerator WriteCoordsData()
@@ -56,15 +55,17 @@ namespace Behaviour.Button
             bool is3D = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve;
             using (StreamWriter writer = new StreamWriter(path))
             {
-                if(is3D) { 
-                    writer.WriteLine("3"); 
-                } else { 
-                    writer.WriteLine("2"); 
-                }
-
-                //Texture2D img = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].MenuButtonImage;
                 string name = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Name;
-                writer.WriteLine("Assets/Resources/img/" + name + ".png");
+                writer.WriteLine(name);
+
+                if (is3D)
+                {
+                    writer.WriteLine("3");
+                }
+                else
+                {
+                    writer.WriteLine("2");
+                }                
 
                 writer.WriteLine(line.positionCount);
 
@@ -100,10 +101,11 @@ namespace Behaviour.Button
                         //Debug.Log("not 3D");
                         writer.WriteLine(coordsScaler * tangentX + " " + coordsScaler * tangentZ + " " + coordsScaler * tangentY);
                         writer.WriteLine(coordsScaler * normalX + " " + coordsScaler * normalZ + " " + coordsScaler * normalY);
-                        
+
                         //for 2D curves, binormal is in 3rd dimension
                         //writer.WriteLine(coordsScaler * binormalX + " " + coordsScaler * binormalZ + " " + coordsScaler * binormalY);
-                    } else
+                    }
+                    else
                     {
                         //Debug.Log("3D");
                         writer.WriteLine(coordsScaler * tangentX + " " + coordsScaler * tangentY + " " + coordsScaler * tangentZ);
@@ -120,10 +122,24 @@ namespace Behaviour.Button
                     writer.WriteLine(timeVelX + " " + timeVelY);
 
                 }
+                //yield return null;
             }
 
             yield return null;
+
+            var asyncOp = SceneManager.LoadSceneAsync("CockpitScene");
+
+            while (!asyncOp.isDone)
+            {
+                yield return null;
+            }
         }
         #endregion
+
+
+        private void OnApplicationQuit()
+        {
+            File.WriteAllText(path, "");
+        }
     }
 }

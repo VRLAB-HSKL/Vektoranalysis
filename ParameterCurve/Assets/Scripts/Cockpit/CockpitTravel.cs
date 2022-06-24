@@ -69,18 +69,21 @@ public class CockpitTravel : MonoBehaviour
         _initTimeDistTravelPos = TimeDistanceTravelObject.transform.localPosition;
         _initTimeVelTravelPos = TimeVelocityTravelObject.transform.localPosition;
 
-        using (StreamReader reader = new StreamReader(path)) {
-            if(int.Parse(reader.ReadLine()) == 3) {
+        using (StreamReader reader = new StreamReader(path))
+        {
+            string imgName = reader.ReadLine();
+            Texture2D img = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Resources/img/" + imgName + ".png", typeof(Texture2D));
+            CockpitImageDisplay.texture = img;
+
+            if (int.Parse(reader.ReadLine()) == 3)
+            {
                 is3D = true;
-            } else
+            }
+            else
             {
                 is3D = false;
                 BinormalLine.gameObject.SetActive(false);   //binormal is only in 3rd dimension
             }
-
-            string imgPath = reader.ReadLine();
-            Texture2D img = (Texture2D)AssetDatabase.LoadAssetAtPath(imgPath, typeof(Texture2D));
-            CockpitImageDisplay.texture = img;
 
             string str = "";
             size = int.Parse(reader.ReadLine());
@@ -88,7 +91,7 @@ public class CockpitTravel : MonoBehaviour
             TimeDistanceLR.positionCount = size;
             TimeVelocityLR.positionCount = size;
 
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 //read in current point xyz coordinates
                 str = reader.ReadLine();
@@ -156,9 +159,9 @@ public class CockpitTravel : MonoBehaviour
         _updateTimer += Time.deltaTime;
 
         changeSpeed();
-                
+
         // If the time threshold has been reached, traverse to next point
-        if(_updateTimer >= timeThreshold)
+        if (_updateTimer >= timeThreshold)
         {
             _updateTimer = 0f;
 
@@ -218,5 +221,10 @@ public class CockpitTravel : MonoBehaviour
         //timeThreshold = (regulatorPos - (-1 * offset)) * (maxThreshold - minThreshold) / (offset - (-1 * offset)) + minThreshold;
         //map regulator position to range of speeds for cockpit
         timeThreshold = (regulatorPos - offset) * (maxThreshold - minThreshold) / ((-1 * offset) - offset) + minThreshold;
+    }
+
+    private void OnApplicationQuit()
+    {
+        File.WriteAllText(path, "");
     }
 }
