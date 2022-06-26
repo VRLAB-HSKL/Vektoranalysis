@@ -548,7 +548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1700838233827894145, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1700838233827894207, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
       propertyPath: m_RootOrder
@@ -2262,18 +2262,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1231528834}
-        m_TargetAssemblyTypeName: CreateHeatmap, Assembly-CSharp
-        m_MethodName: ToggleVisibility
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1001 &1060878702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2383,7 +2371,7 @@ MonoBehaviour:
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
   buttonObject: {fileID: 1060878704}
   holdButton: 0
-  boundingBox: {fileID: 0}
+  boundingBox: {fileID: 674071313}
   travelBackButton: 2
 --- !u!1 &1220453945
 GameObject:
