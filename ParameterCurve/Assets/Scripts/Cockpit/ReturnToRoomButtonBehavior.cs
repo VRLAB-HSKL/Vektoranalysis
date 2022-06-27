@@ -4,30 +4,29 @@ using UnityEngine;
 using HTC.UnityPlugin.Vive;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Controller;
 
-namespace Controller
+namespace Behaviour.Button
 {
-    public class ReturnToRoomControl : MonoBehaviour
+    public class ReturnToRoomButtonBehavior : AbstractButtonBehaviour
     {
+        public CockpitWorldStateController world;
 
         public GameObject ExitConfirmationPanel;
-        public Button YesButton;
-        public Button CancelButton;
+        public UnityEngine.UI.Button YesButton;
+        public UnityEngine.UI.Button CancelButton;
 
         // Start is called before the first frame update
-        void Start()
+        protected new void Start()
         {
+            base.Start();
             YesButton.onClick.AddListener(exit);
             CancelButton.onClick.AddListener(cancel);
         }
 
-        // Update is called once per frame
-        void Update()
+        protected override void HandleButtonEvent()
         {
-            if (ViveInput.GetPressDown(HandRole.RightHand, ControllerButton.DPadCenter))
-            {
-                ExitConfirmationPanel.SetActive(true); 
-            }
+            ExitConfirmationPanel.SetActive(true);
         }
 
         private void exit()

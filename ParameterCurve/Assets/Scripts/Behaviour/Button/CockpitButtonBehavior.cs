@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using HTC.UnityPlugin.Vive;
 
 namespace Behaviour.Button
 {
@@ -23,9 +24,22 @@ namespace Behaviour.Button
         public LineRenderer line;
 
         /// <summary>
+        /// Panel confirming that the user wants to enter cockpit mode, contains yes and cancel buttons
+        /// </summary>
+        public GameObject ExitConfirmationPanel;
+        public UnityEngine.UI.Button YesButton;
+        public UnityEngine.UI.Button CancelButton;
+
+        /// <summary>
+        /// World Curve Display, to be hidden when confirming travel to cockpit mode
+        /// </summary>
+        public GameObject DisplayViewParent;
+
+        /// <summary>
         /// Path to text file
         /// </summary>
         private string path = "Assets/Resources/linecoords.txt";
+
 
         /// <summary>
         /// Unity Start function
@@ -37,7 +51,8 @@ namespace Behaviour.Button
         {
             base.Start();
             gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
-
+            YesButton.onClick.AddListener(exit);
+            CancelButton.onClick.AddListener(cancel);
         }
 
         /// <summary>
@@ -47,7 +62,9 @@ namespace Behaviour.Button
         #region Clicked
         protected override void HandleButtonEvent()
         {
-            StartCoroutine(WriteCoordsData());
+            ExitConfirmationPanel.SetActive(true);
+            DisplayViewParent.SetActive(false);
+            //StartCoroutine(WriteCoordsData());
         }
 
         IEnumerator WriteCoordsData()
@@ -136,6 +153,16 @@ namespace Behaviour.Button
         }
         #endregion
 
+        private void exit()
+        {
+            StartCoroutine(WriteCoordsData());
+        }
+
+        private void cancel()
+        {
+            ExitConfirmationPanel.SetActive(false);
+            DisplayViewParent.SetActive(true);
+        }
 
         private void OnApplicationQuit()
         {
