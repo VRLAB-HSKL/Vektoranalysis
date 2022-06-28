@@ -18491,7 +18491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 278594279237947162, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 278594279237947163, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
       propertyPath: leftPillar
