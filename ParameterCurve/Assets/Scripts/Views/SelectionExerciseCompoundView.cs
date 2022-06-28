@@ -88,7 +88,10 @@ namespace Views
 
         public override void UpdateView()
         {
+            
             var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex]; 
+            
+            Debug.Log("SelExCompoundView - UpdateView() " + GlobalDataModel.CurrentSubExerciseIndex);
             
             curveViews[0].ScalingFactor = currentSubExercise.LeftDataset.SelectExercisePillarScalingFactor;
             curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;

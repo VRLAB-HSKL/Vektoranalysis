@@ -1,4 +1,5 @@
 using Model;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Behaviour.Pointer
@@ -25,8 +26,6 @@ namespace Behaviour.Pointer
         /// <param name="eventData">Event data</param>
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            //Debug.Log("SwitchExerciseEventHandler: HandlePointerClick()");
-            
             if (isIncrement)
             {
                 GlobalDataModel.ExerciseCurveController.NextSubExercise();
