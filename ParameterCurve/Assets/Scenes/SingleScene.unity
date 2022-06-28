@@ -1537,7 +1537,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 278594279237947163, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
   m_PrefabInstance: {fileID: 278594279103010522}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1262192112}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 462bcebf35c7e5145967e96f7069de2e, type: 3}
@@ -5415,13 +5415,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 786fcef9f3fd7bf4380920d26cf91888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 530589000}
-  useTriggerButton: 1
-  holdButton: 0
-  mActiveButton: 0
-  world: {fileID: 1842699572}
-  setsParent: {fileID: 2119097412}
 --- !u!114 &530589002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11904,13 +11897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcefbd3658ad1c24f90db521803d3fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 1084927160}
-  useTriggerButton: 1
-  holdButton: 0
-  mActiveButton: 0
-  world: {fileID: 1842699572}
-  setsParent: {fileID: 2119097412}
 --- !u!114 &1084927162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13358,6 +13344,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258748456}
   m_CullTransparentMesh: 1
+--- !u!1 &1262192112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 278594279237947162, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
+  m_PrefabInstance: {fileID: 278594279103010522}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1289210645
 GameObject:
   m_ObjectHideFlags: 0
@@ -21847,7 +21838,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf11405fe8357de45aedbd1904787ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentActiveIndex: 0
 --- !u!1 &2126450047
 GameObject:
   m_ObjectHideFlags: 0
@@ -22204,6 +22194,10 @@ PrefabInstance:
       propertyPath: ScalingFactor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 278594279237947163, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
+      propertyPath: SelectionRoot
+      value: 
+      objectReference: {fileID: 1262192112}
     - target: {fileID: 278594279412026948, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
       propertyPath: m_IsActive
       value: 1

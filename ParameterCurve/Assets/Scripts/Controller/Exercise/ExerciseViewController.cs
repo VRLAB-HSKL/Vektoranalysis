@@ -37,6 +37,8 @@ namespace Controller.Exercise
         /// Static log4net logger instance
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
+
+        private SelectionExerciseGameObjects _selObjects;
         
         #endregion Private members
         
@@ -55,6 +57,8 @@ namespace Controller.Exercise
             // Return if no exercises were imported
             if (CurrentExercise == null) return;
 
+            _selObjects = selObjs;
+            
             // Initialize all answers as 'none given'
             for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
             {
@@ -161,7 +165,9 @@ namespace Controller.Exercise
         public override void SetViewVisibility(bool value)
         {
             base.SetViewVisibility(value);
-
+            
+            _selObjects.SelectionRoot.SetActive(value);
+            
             if (value)
             {
                 CurrentView.UpdateView();

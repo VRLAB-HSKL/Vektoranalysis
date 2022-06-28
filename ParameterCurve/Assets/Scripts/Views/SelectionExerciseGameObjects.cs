@@ -7,10 +7,14 @@ using UnityEngine.PlayerLoop;
 
 public class SelectionExerciseGameObjects : MonoBehaviour
 {
+    public GameObject SelectionRoot;
+    
     public Vector3 PillarOffset { get; set; } = Vector3.right;
     public Vector3 CurveOffset { get; set; } = Vector3.zero;
     public float ScalingFactor { get; set; } = 1f;
 
+    
+    
     public TextMeshProUGUI ExerciseTitle;
     public TextMeshProUGUI SubExerciseIdentifier;
     public TextMeshProUGUI HeaderText;

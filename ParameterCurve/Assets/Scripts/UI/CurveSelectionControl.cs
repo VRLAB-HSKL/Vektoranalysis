@@ -90,8 +90,6 @@ namespace UI
         /// </summary>
         private void Start()
         {
-            
-
             _displayState = new DisplayCurvesState(curveMenuContent, curveMenuButtonPrefab, world);
             _exerciseState = new ExerciseCurvesState(curveMenuContent, curveMenuButtonPrefab, world);
             CurveSelectionFsm = new CurveSelectionStateContext(_displayState);
