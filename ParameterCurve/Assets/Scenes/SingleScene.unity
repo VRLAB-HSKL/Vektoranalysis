@@ -22199,6 +22199,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 688697091}
     - target: {fileID: 278594279237947163, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
+      propertyPath: CurveLineMat
+      value: 
+      objectReference: {fileID: 2100000, guid: b2ddc22e26eac854f9d86586b5c480a5, type: 2}
+    - target: {fileID: 278594279237947163, guid: 55a369c18c23cb0479cea22703bff0ea, type: 3}
       propertyPath: middlePillar
       value: 
       objectReference: {fileID: 124154639}
