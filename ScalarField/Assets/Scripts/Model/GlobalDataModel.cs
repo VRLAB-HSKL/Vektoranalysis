@@ -91,7 +91,11 @@ namespace Model
                 SampleCount = InitFile.Info.sample_count
             };
 
+            var importedPoints = InitFile.Data.mesh.points;
             var pointList = PythonUtility.CalculatePoints(); //InitFile.Data.mesh.points;
+            
+            Debug.Log("imported points count: " + importedPoints.Count + ", python point count: " + pointList.Count);
+            
             foreach (var point in pointList)
             {
                 sf.RawPoints.Add(new Vector3(point[0], point[1], point[2]));

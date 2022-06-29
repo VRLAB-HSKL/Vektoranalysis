@@ -148,7 +148,7 @@ namespace Utility
                 name = "Path_" + points[0]
             };
 
-            Debug.Log("Creating empty path parent");
+            //Debug.Log("Creating empty path parent");
             Object.Instantiate(path);
 
             if (points.Count == 1)

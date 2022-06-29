@@ -15,12 +15,11 @@ namespace ProceduralMesh
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class SimpleProceduralMesh : MonoBehaviour
     {
-        public Transform RenderingTarget;
-        public Vector3 PositionOffset;
-        public Vector3 ScalingVector = Vector3.one;
+        // public Transform RenderingTarget;
+        // public Vector3 PositionOffset;
+        // public Vector3 ScalingVector = Vector3.one;
         public GameObject BoundingBox;
         public bool PositionMeshAtOrigin;
-
 
         private bool _isMeshTransparent;
 
@@ -132,6 +131,9 @@ namespace ProceduralMesh
             }
             
             mesh.vertices = displayVertices.ToArray();
+            
+            //Debug.Log("Number of points: " + displayVertices.Count);
+            
             mesh.SetIndices(indices.ToArray(), topology, 0, true);
 
             GlobalDataModel.CurrentField.MeshPoints = displayVertices;

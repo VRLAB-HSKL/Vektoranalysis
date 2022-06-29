@@ -77,8 +77,7 @@ namespace Travel
         
         
 
-            var finalIndex = 0;
-        
+            // var finalIndex = 0;
         
             var closest = int.MaxValue;
             var minDifference = int.MaxValue;

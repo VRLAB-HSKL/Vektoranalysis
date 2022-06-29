@@ -174,6 +174,11 @@ MonoBehaviour:
   Cockpit: {fileID: 1943248078}
   CockpitOffset: {x: 0, y: -2, z: 0}
   SpawnAtEagle: 1
+--- !u!4 &87159294 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
+  m_PrefabInstance: {fileID: 2130015370}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &95519168
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +271,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -402,7 +407,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -491,12 +496,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Field: {fileID: 941685788}
   ContourValues: []
-  LineMat: {fileID: 2100000, guid: 58c68f717c6622c4e9ac73ad113e9369, type: 2}
-  LinesVisible: 0
-  ShowLinesInMesh: 1
-  epsilon: 0.1
+  LineMat: {fileID: 2100000, guid: 7612cb0962aa72043b2615df841620ab, type: 2}
+  LinesVisible: 1
+  ShowLinesInMesh: 0
+  epsilon: 0.01
   positionOffset: {x: 0, y: 0.125, z: 0}
-  lineThicknessMultiplier: 0.125
+  lineThicknessMultiplier: 0.0125
   PointScale: {x: 0.5, y: 0.5, z: 0.5}
   ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
   ArrowScale: {x: 1, y: 1, z: 1}
@@ -618,11 +623,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1700838233827894207, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
   m_PrefabInstance: {fileID: 188375976}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &188375978 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
-  m_PrefabInstance: {fileID: 188375976}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &188375979 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1700838233827894145, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
@@ -640,9 +640,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e6d00d270b46c8acb091954389651f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useTriggerButton: 1
+  useTriggerButton: 0
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 188375978}
+  buttonObject: {fileID: 0}
   holdButton: 0
   cockpit: {fileID: 0}
   user: {fileID: 0}
@@ -678,6 +678,11 @@ Transform:
   m_Father: {fileID: 1410431924}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &339507685 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
+  m_PrefabInstance: {fileID: 1979411443}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &390339632
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,7 +1193,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1251,7 +1256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &639729678
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1825,7 +1830,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1969,11 +1974,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!4 &882673550 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
-  m_PrefabInstance: {fileID: 2130015370}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &910890664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2061,11 +2061,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1700838233827894207, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
   m_PrefabInstance: {fileID: 910890664}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &910890666 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
-  m_PrefabInstance: {fileID: 910890664}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &910890667 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1700838233827894145, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
@@ -2085,7 +2080,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTriggerButton: 0
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 910890666}
+  buttonObject: {fileID: 1320668263}
   holdButton: 0
   invokeMethod:
     m_PersistentCalls:
@@ -2203,9 +2198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5e9bf186b73aa4eb2f99c4b97c2bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RenderingTarget: {fileID: 1906407972}
-  PositionOffset: {x: 0, y: 0, z: 0}
-  ScalingVector: {x: 10, y: 10, z: 10}
   BoundingBox: {fileID: 674071311}
   PositionMeshAtOrigin: 0
 --- !u!64 &941685793
@@ -2353,13 +2345,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTriggerButton: 0
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 1999570594}
+  buttonObject: {fileID: 0}
   holdButton: 0
   invokeMethod:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 155542746}
-        m_TargetAssemblyTypeName: CreateContourlines, Assembly-CSharp
+        m_TargetAssemblyTypeName: FieldGeneration.CreateContourlines, Assembly-CSharp
         m_MethodName: ToggleContourLines
         m_Mode: 1
         m_Arguments:
@@ -2736,6 +2728,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1320668263 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
+  m_PrefabInstance: {fileID: 910890664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1348331938
 GameObject:
   m_ObjectHideFlags: 0
@@ -2836,6 +2833,11 @@ Transform:
   m_Father: {fileID: 247660772}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1439738741 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
+  m_PrefabInstance: {fileID: 1678888212}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1462569669
 GameObject:
   m_ObjectHideFlags: 0
@@ -2926,7 +2928,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -3200,11 +3202,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1700838233827894207, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
   m_PrefabInstance: {fileID: 1678888212}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1678888214 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
-  m_PrefabInstance: {fileID: 1678888212}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1678888215 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1700838233827894145, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
@@ -3224,7 +3221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTriggerButton: 0
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 1678888214}
+  buttonObject: {fileID: 1439738741}
   holdButton: 0
   invokeMethod:
     m_PersistentCalls:
@@ -3488,13 +3485,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTriggerButton: 0
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 882673550}
+  buttonObject: {fileID: 87159294}
   holdButton: 0
   invokeMethod:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 155542746}
-        m_TargetAssemblyTypeName: CreateContourlines, Assembly-CSharp
+        m_TargetAssemblyTypeName: FieldGeneration.CreateContourlines, Assembly-CSharp
         m_MethodName: ToggleLineVerticalPositions
         m_Mode: 1
         m_Arguments:
@@ -3724,7 +3721,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -3855,11 +3852,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1700838233827894207, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
   m_PrefabInstance: {fileID: 1979411443}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1979411445 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
-  m_PrefabInstance: {fileID: 1979411443}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1979411446 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1700838233827894145, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
@@ -3879,7 +3871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTriggerButton: 0
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
-  buttonObject: {fileID: 1979411445}
+  buttonObject: {fileID: 339507685}
   holdButton: 0
   invokeMethod:
     m_PersistentCalls:
@@ -3896,11 +3888,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!4 &1999570594 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1700838233594184576, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
-  m_PrefabInstance: {fileID: 1033679750}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2124511390
 GameObject:
   m_ObjectHideFlags: 0

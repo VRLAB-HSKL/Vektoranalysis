@@ -8,6 +8,7 @@ using UnityEditor.Scripting.Python;
 using UnityEngine.SocialPlatforms;
 
 using System.Collections.Generic;
+using System.Globalization;
 
 public static class PythonUtility
 {
@@ -97,36 +98,40 @@ public static class PythonUtility
                 // {
                 //     Debug.Log("x: " + xValues[i] + ", y: " + yValues[i] + ", z: " + zValues[i]);
                 // }
+                
                 scope.Exec("import numpy as np");
                 scope.Exec("import sympy as sp");
                 scope.Exec("import sympy.abc");
-                scope.Exec("xvalues = np.linspace(-2.0, 2.0, 200)");
-                scope.Exec("yvalues = np.linspace(-2.0, 2.0, 200)");
+                scope.Exec("x_values = np.linspace(-2.0, 2.0, 200)");
+                scope.Exec("y_values = np.linspace(-2.0, 2.0, 200)");
+                scope.Exec("x_vales, y_values = np.meshgrid(x_values, y_values)");
                 scope.Exec("zExpr = -(sp.sin(sp.abc.x)) * sp.sin(sp.abc.y)");
                 scope.Exec("zFunc = sp.lambdify([sp.abc.x, sp.abc.y], zExpr, 'numpy')");
-                scope.Exec("z_values = zFunc(xvalues, yvalues)");
+                scope.Exec("z_values = zFunc(x_values, y_values)");
 
-                var x = scope.Get("xvalues");
-                var y = scope.Get("yvalues");
+                scope.Exec("x_vales = x_values.flatten()");
+                scope.Exec("y_vales = y_values.flatten()");
+                scope.Exec("z_vales = z_values.flatten()");
+                
+                var x = scope.Get("x_values");
+                var y = scope.Get("y_values");
                 var z = scope.Get("z_values");
 
-                for (var i = 0; i < numberOfSamples; i++)
+                var count = numberOfSamples * numberOfSamples;
+                for (var i = 0; i < count; i++)
                 {
-                    //Debug.Log("x: " + x[i] + ", y: " + y[i] + ", z: " + z[i]);
-                    var xVal = float.Parse(x[i].ToString());
-                    var yVal = float.Parse(y[i].ToString());
-                    var zVal = float.Parse(z[i].ToString());
-                    pointList.Add(new Vector3(xVal, yVal, zVal));
+                    float.TryParse(x[i].ToString(), out var xVal); //float.Parse(x[i].ToString());
+                    float.TryParse(y[i].ToString(), out var yVal); //float.Parse(x[i].ToString());
+                    float.TryParse(z[i].ToString(), out var zVal); //float.Parse(x[i].ToString());
+                    
+                    var pyVector = new Vector3(xVal, yVal, zVal);
+                    //Debug.Log("x: " + xVal + ", y: " + yVal + ", z: " + zVal);
+                        
+                    pointList.Add(pyVector);
                 }
-                
             }
-            
-
-            
         }
 
         return pointList;
-
-
     }
 }
