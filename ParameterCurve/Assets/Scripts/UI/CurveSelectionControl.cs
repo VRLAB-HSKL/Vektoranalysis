@@ -157,7 +157,7 @@ namespace UI
             SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
         }
 
-        private void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
+        public void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated) return;
         

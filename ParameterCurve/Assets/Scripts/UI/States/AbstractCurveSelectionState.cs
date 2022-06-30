@@ -56,7 +56,7 @@ namespace UI.States
                     GlobalDataModel.WorldCurveViewController?.SetViewVisibility(true);
                     break;
                 case GlobalDataModel.CurveDisplayGroup.Exercises:
-                    //GlobalData.ExerciseController.SetViewVisibility(true);
+                    GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
                     break;
             }
 
