@@ -105,6 +105,21 @@ namespace Views
                 selObjects.HeaderText.text = string.Empty;
                 
                 ShowMainDisplayView();
+            } else if (ShowConfirmationDisplay)
+            {
+                selObjects.MiddleDisplayText.text = CurrentDescription;
+                selObjects.ExerciseTitle.text = string.Empty;
+                selObjects.SubExerciseIdentifier.text = string.Empty;
+                selObjects.HeaderText.text = string.Empty;
+                ShowConfirmationView();
+            }
+            else if (ShowResultsDisplay)
+            {
+                selObjects.MiddleDisplayText.text = CurrentDescription;
+                selObjects.ExerciseTitle.text = string.Empty;
+                selObjects.SubExerciseIdentifier.text = string.Empty;
+                selObjects.HeaderText.text = string.Empty;
+                ShowResultsView();
             }
             else
             {
@@ -135,6 +150,8 @@ namespace Views
             //Debug.Log("ShowMainDisplayView()");
             selObjects.SelectionParent.SetActive(false);
             selObjects.MainDisplayParent.SetActive(true);
+            selObjects.ConfirmationDisplayParent.SetActive(false);
+            selObjects.ResultsDisplayParent.SetActive(false);
         }
 
         private void ShowSelectionView()
@@ -142,7 +159,24 @@ namespace Views
             //Debug.Log("ShowSelectionView()");
             selObjects.MainDisplayParent.SetActive(false);
             selObjects.SelectionParent.SetActive(true);
+            selObjects.ConfirmationDisplayParent.SetActive(false);
+            selObjects.ResultsDisplayParent.SetActive(false);
         }
-        
+        private void ShowConfirmationView()
+        {
+            selObjects.MainDisplayParent.SetActive(false);
+            selObjects.SelectionParent.SetActive(false);
+            selObjects.ConfirmationDisplayParent.SetActive(true);
+            selObjects.ResultsDisplayParent.SetActive(false);
+        }
+
+        private void ShowResultsView()
+        {
+            selObjects.MainDisplayParent.SetActive(false);
+            selObjects.SelectionParent.SetActive(false);
+            selObjects.ConfirmationDisplayParent.SetActive(false);
+            selObjects.ResultsDisplayParent.SetActive(true);
+        }
+
     }
 }

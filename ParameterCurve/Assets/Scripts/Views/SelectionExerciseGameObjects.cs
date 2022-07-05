@@ -19,9 +19,12 @@ public class SelectionExerciseGameObjects : MonoBehaviour
     public TextMeshProUGUI SubExerciseIdentifier;
     public TextMeshProUGUI HeaderText;
     public TextMeshProUGUI MiddleDisplayText;
+    public TextMeshProUGUI ResultsDisplayText;
 
     public GameObject SelectionParent;
     public GameObject MainDisplayParent;
+    public GameObject ConfirmationDisplayParent;
+    public GameObject ResultsDisplayParent;
         
     public Material CurveLineMat;
 

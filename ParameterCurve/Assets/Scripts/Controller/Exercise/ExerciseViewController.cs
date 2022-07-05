@@ -22,6 +22,8 @@ namespace Controller.Exercise
         /// </summary>
         public readonly List<int> SelectionIndices = new List<int>();
 
+        public bool confirmedAnswers { get; set; } = false;
+
         #endregion Public members
         
         #region Private members
@@ -101,10 +103,11 @@ namespace Controller.Exercise
                 CurrentView.UpdateView();
                 return;
             }
-   
-            // Calculate results if navigating to next on last sub exercise
-            if (GlobalDataModel.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
+
+            // Once user navigates right past the confirmation display, show results
+            if (CurrentView.ShowConfirmationDisplay)
             {
+                
                 // Print result summary
                 var sb = new StringBuilder("Exercise results:\n");
                 var correctCount = 0;
@@ -119,15 +122,31 @@ namespace Controller.Exercise
                 }
                 
                 sb.Append("Result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
-            
-                //Log.Debug(sb.ToString());
-                Debug.Log(sb.ToString());
-                
+
+                _selObjects.ResultsDisplayText.text = sb.ToString();
+
+                confirmedAnswers = true;
+                CurrentView.ShowConfirmationDisplay = false;
+                CurrentView.ShowResultsDisplay = true;
+                CurrentView.UpdateView();
                 return;
             }
-            
-            ++GlobalDataModel.CurrentSubExerciseIndex;
-            CurrentView.UpdateView();
+
+            // If user is trying to submit answers for the first time, go to confirmation display
+            if (!confirmedAnswers && GlobalDataModel.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
+            {
+                CurrentView.ShowConfirmationDisplay = true;
+                CurrentView.UpdateView();
+                return;
+            }
+
+            //cannot go further after getting results
+            if (!confirmedAnswers)
+            {
+                ++GlobalDataModel.CurrentSubExerciseIndex;
+                CurrentView.UpdateView();
+            }
+
         }
 
         
@@ -142,9 +161,22 @@ namespace Controller.Exercise
                 CurrentView.UpdateView();
                 return;
             }
-            
-            --GlobalDataModel.CurrentSubExerciseIndex;
-            CurrentView.UpdateView();
+
+            //if going backwards from confirmation page to change answers
+            if(CurrentView.ShowConfirmationDisplay)
+            {
+                CurrentView.ShowConfirmationDisplay = false;
+                CurrentView.UpdateView();
+                return;
+            }
+
+            //can go backwards from any of the exercises or on the confirmation, but cannot once results are displayed
+            if (!confirmedAnswers)
+            {
+                --GlobalDataModel.CurrentSubExerciseIndex;
+                CurrentView.UpdateView();
+            }
+
         }
 
         /// <summary>
