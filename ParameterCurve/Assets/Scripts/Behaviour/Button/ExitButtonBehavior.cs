@@ -45,6 +45,7 @@ namespace Behaviour.Button
             //new room is +20 units in x direction from main room
             VR.transform.position = VR.transform.position + new Vector3(-20, 0, 0);
             curveControl.SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
+            GlobalDataModel.ExerciseCurveController.ResetExercise();
         }
         #endregion Clicked
     }

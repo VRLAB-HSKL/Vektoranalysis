@@ -205,7 +205,28 @@ namespace Controller.Exercise
                 CurrentView.UpdateView();
             }
         }
-        
+
+        /// <summary>
+        /// Undo all selections, start again from beginning
+        /// </summary>
+        public void ResetExercise()
+        {
+            // set all answers as 'none given'
+            for (int i = 0; i < CurrentExercise.NumberOfSubExercises; i++)
+            {
+                SelectionIndices[i] = -1;
+                CurrentExercise.ChosenAnswers[i] = -1;
+            }
+
+            //start at main display again
+            GlobalDataModel.CurrentSubExerciseIndex = 0;
+            confirmedAnswers = false;
+            CurrentView.ShowMainDisplay = true;
+            CurrentView.ShowResultsDisplay = false;
+            CurrentView.ShowConfirmationDisplay = false;
+            CurrentView.UpdateView();
+        }
+
         #endregion Public functions
     }
 }
