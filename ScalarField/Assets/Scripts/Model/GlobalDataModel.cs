@@ -92,16 +92,47 @@ namespace Model
             };
 
             var importedPoints = InitFile.Data.mesh.points;
-            var pointList = PythonUtility.CalculatePoints(); //InitFile.Data.mesh.points;
+            //var pointList = PythonUtility.CalculatePoints(); //InitFile.Data.mesh.points;
             
-            Debug.Log("imported points count: " + importedPoints.Count + ", python point count: " + pointList.Count);
+            //Debug.Log("imported points count: " + importedPoints.Count + ", python point count: " + pointList.Count);
             
-            foreach (var point in pointList)
+            foreach (var point in importedPoints)
             {
                 sf.RawPoints.Add(new Vector3(point[0], point[1], point[2]));
                 sf.DisplayPoints.Add(new Vector3(point[0], point[2], point[1]));
             }
 
+            foreach (var critPoint in InitFile.Data.mesh.CriticalPoints)
+            {
+                var cp = new CriticalPointData()
+                {
+                    PointIndex = int.Parse(critPoint[0])
+                };
+                
+                var type = critPoint[1];
+                switch (type)
+                {
+                    //case "CriticalPointType.CRITICAL_POINT":
+                    default:
+                        cp.Type = CriticalPointType.CRITICAL_POINT;
+                        break;
+                    
+                    case "CriticalPointType.LOCAL_MINIMUM":
+                        cp.Type = CriticalPointType.LOCAL_MINIMUM;
+                        break;
+                    
+                    case "CriticalPointType.LOCAL_MAXIMUM":
+                        cp.Type = CriticalPointType.LOCAL_MAXIMUM;
+                        break;
+                    
+                    case "CriticalPointType.SADDLE_POINT":
+                        cp.Type = CriticalPointType.SADDLE_POINT;
+                        break;
+                }
+                
+                sf.CriticalPoints.Add(cp);
+            }
+            
             foreach (var gradient in InitFile.Data.mesh.gradients)
             {
                 sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));

@@ -63,7 +63,9 @@ namespace Model
         public List<Vector3> DisplayPoints { get; set; } = new List<Vector3>();
 
         public List<Vector3> MeshPoints { get; set; } = new List<Vector3>();
-        
+
+
+        public List<CriticalPointData> CriticalPoints { get; set; } = new List<CriticalPointData>();
         public List<Vector3> Gradients { get; set; } = new List<Vector3>();
         
         /// <summary>
