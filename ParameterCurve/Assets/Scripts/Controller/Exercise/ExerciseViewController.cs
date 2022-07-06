@@ -7,6 +7,7 @@ using Model;
 using UnityEngine;
 using Views;
 using Views.Exercise;
+using System.IO;
 
 namespace Controller.Exercise
 {
@@ -41,11 +42,17 @@ namespace Controller.Exercise
         private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
 
         private SelectionExerciseGameObjects _selObjects;
-        
+
+        //path to text file storing chosen answers for each attempt
+        private string path = "Assets/Resources/exerciseresults.txt";
+
+        //number of correct answers in current run
+        private int correctCount;
+
         #endregion Private members
-        
+
         #region Constructors
-        
+
         /// <summary>
         /// Argument constructor
         /// </summary>
@@ -85,6 +92,9 @@ namespace Controller.Exercise
             InitViews();
             
             CurrentView.UpdateView();
+
+            //reset recorded answers on each new world state load
+            File.WriteAllText(path, "");
         }
        
         #endregion Constructors
@@ -107,23 +117,57 @@ namespace Controller.Exercise
             // Once user navigates right past the confirmation display, show results
             if (CurrentView.ShowConfirmationDisplay)
             {
-                
-                // Print result summary
-                var sb = new StringBuilder("Exercise results:\n");
-                var correctCount = 0;
-                for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
+                CurrentExercise.numAttempts++;
+
+                // Print result summary and log it
+                using (StreamWriter writer = new StreamWriter(path, append: true))
                 {
-                    var chosenAnswer = CurrentExercise.ChosenAnswers[i];
-                    var correctAnswer = CurrentExercise.CorrectAnswers[i];
-                    
-                    sb.Append("Chosen: " + chosenAnswer + ", Correct: " + correctAnswer + "\n");
+                    var sb = new StringBuilder("Exercise results:\n");
+                    correctCount = 0;
 
-                    if (chosenAnswer == correctAnswer) ++correctCount;
+                    writer.WriteLine(CurrentExercise.Title);
+                    writer.WriteLine("attempt" + CurrentExercise.numAttempts);
+
+                    for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
+                    {
+                        var previousAnswer = CurrentExercise.PreviousAnswers[i];
+                        var chosenAnswer = CurrentExercise.ChosenAnswers[i];
+                        var correctAnswer = CurrentExercise.CorrectAnswers[i];
+
+                        string str = "";
+                        //if first attempt, no previous to compare to
+                        if (CurrentExercise.numAttempts == 1)
+                        {
+                            if (chosenAnswer == correctAnswer) str = "Correct";
+                            else str = "Incorrect";
+
+                            sb.Append("Answer: " + chosenAnswer + "\t" + str + "\n");
+                        } else
+                        {
+                            if (previousAnswer != correctAnswer && chosenAnswer != correctAnswer) str = "Incorrect still";
+                            else if (previousAnswer != correctAnswer && chosenAnswer == correctAnswer) str = "Correct now";
+                            else if (previousAnswer == correctAnswer && chosenAnswer != correctAnswer) str = "Incorrect now";
+                            else str = "Correct still";
+
+                            sb.Append("Previous: " + previousAnswer + ", Current: " + chosenAnswer + "\t" + str + "\n");
+                        }
+
+                        writer.WriteLine(previousAnswer + " " + chosenAnswer + " " + correctAnswer);
+
+                        if (chosenAnswer == correctAnswer) ++correctCount;
+                    }
+
+                    //for any run after the first, print out result
+                    if(CurrentExercise.numAttempts != 1)
+                    {
+                        sb.Append("\nPrevious result: [" + CurrentExercise.previousScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct\n");
+                    }
+
+                    sb.Append("Current result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
+                    writer.WriteLine(correctCount + "/" + CurrentExercise.CorrectAnswers.Count);
+
+                    _selObjects.ResultsDisplayText.text = sb.ToString();
                 }
-                
-                sb.Append("Result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
-
-                _selObjects.ResultsDisplayText.text = sb.ToString();
 
                 confirmedAnswers = true;
                 CurrentView.ShowConfirmationDisplay = false;
@@ -214,6 +258,8 @@ namespace Controller.Exercise
             // set all answers as 'none given'
             for (int i = 0; i < CurrentExercise.NumberOfSubExercises; i++)
             {
+                CurrentExercise.PreviousAnswers[i] = CurrentExercise.ChosenAnswers[i];
+                CurrentExercise.previousScore = correctCount;
                 SelectionIndices[i] = -1;
                 CurrentExercise.ChosenAnswers[i] = -1;
             }

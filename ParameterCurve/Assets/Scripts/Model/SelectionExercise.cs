@@ -39,8 +39,23 @@ namespace Model
         /// </summary>
         public List<int> ChosenAnswers { get; }
 
+        /// <summary>
+        /// Answers chosen by the user in directly previous attempt
+        /// </summary>
+        public List<int> PreviousAnswers { get; }
+
+        /// <summary>
+        /// Number of correct answers in directly previous attempt
+        /// </summary>
+        public int previousScore { get; set; }
+
+        /// <summary>
+        /// Number of times the exercise has been attempted
+        /// </summary>
+        public int numAttempts { get; set; }
+
         #endregion Public members
-        
+
         #region Constructors
 
         /// <summary>
@@ -61,9 +76,12 @@ namespace Model
             Datasets = exercisePointDatasets;
             CorrectAnswers = correctAnswers;
             ChosenAnswers = new List<int>();
+            PreviousAnswers = new List<int>();
+            previousScore = -1;
             for(int i = 0; i < NumberOfSubExercises; i++)
             {
                 ChosenAnswers.Add(-1);
+                PreviousAnswers.Add(-1);
             }        
         }
         
