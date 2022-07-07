@@ -123,7 +123,7 @@ namespace Controller.Exercise
                 using (StreamWriter writer = new StreamWriter(path, append: true))
                 {
                     var previousText = new StringBuilder("Previous Answer:\n");
-                    var chosenText = new StringBuilder("Chosen Answer\n");
+                    var chosenText = new StringBuilder("Chosen Answer:\n");
                     var correctText = new StringBuilder("\n");
                     var resultText = new StringBuilder("");
 

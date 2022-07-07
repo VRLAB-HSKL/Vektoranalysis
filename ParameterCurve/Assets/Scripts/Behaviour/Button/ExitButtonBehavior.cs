@@ -43,7 +43,7 @@ namespace Behaviour.Button
         protected override void HandleButtonEvent()
         {
             //new room is +20 units in x direction from main room
-            VR.transform.position = VR.transform.position + new Vector3(-20, 0, 0);
+            VR.transform.position = VR.transform.position + new Vector3(0, 0, -20);
             curveControl.SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
             GlobalDataModel.ExerciseCurveController.ResetExercise();
         }

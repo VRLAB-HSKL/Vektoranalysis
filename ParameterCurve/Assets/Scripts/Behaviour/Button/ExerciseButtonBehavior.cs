@@ -41,8 +41,8 @@ namespace Behaviour.Button
         #region Clicked
         protected override void HandleButtonEvent()
         {
-            //new room is +20 units in x direction from main room
-            VR.transform.position = VR.transform.position + new Vector3(20, 0, 0);
+            //new room is +20 units in z direction from main room
+            VR.transform.position = VR.transform.position + new Vector3(0, 0, 20);
             curveControl.SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Exercises);
         }
         #endregion Clicked
