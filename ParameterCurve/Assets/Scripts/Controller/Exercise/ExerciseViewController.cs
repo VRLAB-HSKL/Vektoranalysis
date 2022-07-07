@@ -122,9 +122,14 @@ namespace Controller.Exercise
                 // Print result summary and log it
                 using (StreamWriter writer = new StreamWriter(path, append: true))
                 {
-                    var sb = new StringBuilder("Exercise results:\n");
-                    correctCount = 0;
+                    var previousText = new StringBuilder("Previous Answer:\n");
+                    var chosenText = new StringBuilder("Chosen Answer\n");
+                    var correctText = new StringBuilder("\n");
+                    var resultText = new StringBuilder("");
 
+                    correctCount = 0;
+                    
+                    //logging name and attempt number into text file
                     writer.WriteLine(CurrentExercise.Title);
                     writer.WriteLine("attempt" + CurrentExercise.numAttempts);
 
@@ -141,7 +146,7 @@ namespace Controller.Exercise
                             if (chosenAnswer == correctAnswer) str = "Correct";
                             else str = "Incorrect";
 
-                            sb.Append("Answer: " + chosenAnswer + "\t" + str + "\n");
+                            previousText.Append("none\n");
                         } else
                         {
                             if (previousAnswer != correctAnswer && chosenAnswer != correctAnswer) str = "Incorrect still";
@@ -149,24 +154,48 @@ namespace Controller.Exercise
                             else if (previousAnswer == correctAnswer && chosenAnswer != correctAnswer) str = "Incorrect now";
                             else str = "Correct still";
 
-                            sb.Append("Previous: " + previousAnswer + ", Current: " + chosenAnswer + "\t" + str + "\n");
+                            if(previousAnswer != -1)
+                            {
+                                previousText.Append(previousAnswer + "\n");
+                            } else
+                            {
+                                previousText.Append("none\n");
+                            }
+                            
                         }
 
+                        if(chosenAnswer != -1)
+                        {
+                            chosenText.Append(chosenAnswer + "\n");
+                        } else
+                        {
+                            chosenText.Append("none\n");
+                        }
+                        
+                        correctText.Append(str + "\n");
+
+                        //log previous, chosen, and correct answers into text file
                         writer.WriteLine(previousAnswer + " " + chosenAnswer + " " + correctAnswer);
 
                         if (chosenAnswer == correctAnswer) ++correctCount;
                     }
 
-                    //for any run after the first, print out result
-                    if(CurrentExercise.numAttempts != 1)
+                    //if anything past first attempt, there is a previous score to show
+                    if (CurrentExercise.numAttempts != 1)
                     {
-                        sb.Append("\nPrevious result: [" + CurrentExercise.previousScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct\n");
+                        resultText.Append("Previous result: [" + CurrentExercise.previousScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!\n");
+                    } else
+                    {
+                        resultText.Append("Previous result: none\n");
                     }
 
-                    sb.Append("Current result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
+                    resultText.Append("Current result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
                     writer.WriteLine(correctCount + "/" + CurrentExercise.CorrectAnswers.Count);
 
-                    _selObjects.ResultsDisplayText.text = sb.ToString();
+                    _selObjects.PreviousAnswerText.text = previousText.ToString();
+                    _selObjects.ChosenAnswerText.text = chosenText.ToString();
+                    _selObjects.CorrectIncorrectText.text = correctText.ToString();
+                    _selObjects.OverallResultText.text = resultText.ToString();
                 }
 
                 confirmedAnswers = true;

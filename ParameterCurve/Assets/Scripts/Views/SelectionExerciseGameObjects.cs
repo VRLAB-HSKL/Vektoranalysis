@@ -19,7 +19,12 @@ public class SelectionExerciseGameObjects : MonoBehaviour
     public TextMeshProUGUI SubExerciseIdentifier;
     public TextMeshProUGUI HeaderText;
     public TextMeshProUGUI MiddleDisplayText;
-    public TextMeshProUGUI ResultsDisplayText;
+
+    //results panel
+    public TextMeshProUGUI PreviousAnswerText;
+    public TextMeshProUGUI ChosenAnswerText;
+    public TextMeshProUGUI CorrectIncorrectText;
+    public TextMeshProUGUI OverallResultText;
 
     public GameObject SelectionParent;
     public GameObject MainDisplayParent;
