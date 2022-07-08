@@ -153,7 +153,7 @@ namespace Utility
 
             if (points.Count == 1)
             {
-                DrawSphere(points[0], path.transform, Color.gray, bbScale);
+                DrawSphere(points[0], path.transform, Color.red, bbScale);
             }
             else
             {
@@ -161,7 +161,7 @@ namespace Utility
                 
                 for (var i = 0; i < points.Count; i++)
                 {
-                    DrawSphere(points[i], path.transform, Color.gray, bbScale);
+                    DrawSphere(points[i], path.transform, i == 0 ? Color.red : Color.gray, bbScale);
                     
                     // Draw arrow for every element except for the last one, because there is no next point to connect to
                     if(i < points.Count - 1)

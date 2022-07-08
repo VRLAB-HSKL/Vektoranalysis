@@ -91,8 +91,17 @@ namespace Model.InitFile
         
         [JsonProperty("gradients")]
         public List<float[]> gradients { get; set; }
+        
+        [JsonProperty("paths")]
+        public InitFilePaths Paths { get; set; }
     }
 
+    public class InitFilePaths
+    {
+        [JsonProperty("nelder_mead")]
+        public List<List<float[]>> NelderMead { get; set; }
+    }
+    
     public class InitFileIsoLines
     {
         [JsonProperty("values")]

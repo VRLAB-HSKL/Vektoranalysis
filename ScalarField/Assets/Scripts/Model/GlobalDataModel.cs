@@ -137,6 +137,30 @@ namespace Model
             {
                 sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));
             }
+
+            for (var i = 0; i < InitFile.Data.mesh.Paths.NelderMead.Count; i++)
+            {
+                var nmPath = InitFile.Data.mesh.Paths.NelderMead[i];
+                var vecList = new List<Vector3>();
+                //Debug.Log(i + " - Count: " + nmPath.Count);
+                for (var j = 0; j < nmPath.Count; j++)
+                {
+                    var pathPoint = nmPath[j];
+                    var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
+                    vecList.Add(vec);
+                    //Debug.Log(i + " - pathVector: " + vec + ", vecListCount: " + vecList.Count);
+                }
+
+                //Debug.Log(i + " - vecListCount: " + vecList.Count);
+                
+                sf.NelderMeadPaths.Add(vecList);
+            }
+
+            // for (var i = 0; i < sf.NelderMeadPaths.Count; i++)
+            // {
+            //     Debug.Log(i + " - Count: " + sf.NelderMeadPaths[i].Count);
+            // }
+            
             
             sf.MinRawValues = new Vector3(
                 sf.RawPoints.Min(v => v.x),

@@ -55,9 +55,6 @@ namespace FieldGeneration
             // SetMeshTransparency(attenuation);
         }
 
-
-    
-    
         public void ToggleContourLines()
         {
             LinesVisible = !LinesVisible;
@@ -178,13 +175,13 @@ namespace FieldGeneration
         
 
             var bbLocalScale = BoundingBox.transform.localScale;
-            for (var i = 0; i < ContourLineObjects.Count; i++)
-            {
-                // Draw example points on contour lines
-                var line = ContourLineObjects[i];
-                DrawingUtility.DrawSphereOnLine(line, 1, bbLocalScale);
-                DrawingUtility.DrawArrowOnLine(line, 1, ArrowPrefab, Vector3.up, bbLocalScale);
-            }
+            // for (var i = 0; i < ContourLineObjects.Count; i++)
+            // {
+            //     // Draw example points on contour lines
+            //     var line = ContourLineObjects[i];
+            //     DrawingUtility.DrawSphereOnLine(line, 1, bbLocalScale);
+            //     DrawingUtility.DrawArrowOnLine(line, 1, ArrowPrefab, Vector3.up, bbLocalScale);
+            // }
 
             var scalingFactor = 10f;
             var yOffset = 15f;
