@@ -143,16 +143,15 @@ namespace Controller.Exercise
                         //if first attempt, no previous to compare to
                         if (CurrentExercise.numAttempts == 1)
                         {
-                            if (chosenAnswer == correctAnswer) str = "Correct";
-                            else str = "Incorrect";
-
+                            if (chosenAnswer == correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct</mark></font>";
+                            else str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect</mark></font>";
                             previousText.Append("none\n");
                         } else
                         {
-                            if (previousAnswer != correctAnswer && chosenAnswer != correctAnswer) str = "Incorrect still";
-                            else if (previousAnswer != correctAnswer && chosenAnswer == correctAnswer) str = "Correct now";
-                            else if (previousAnswer == correctAnswer && chosenAnswer != correctAnswer) str = "Incorrect now";
-                            else str = "Correct still";
+                            if (previousAnswer != correctAnswer && chosenAnswer != correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect still</mark></font>";
+                            else if (previousAnswer != correctAnswer && chosenAnswer == correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#46d53aFF>Correct now</mark></font>";
+                            else if (previousAnswer == correctAnswer && chosenAnswer != correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#fa4141FF>Incorrect now</mark></font>";
+                            else str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct still</mark></font>";
 
                             if(previousAnswer != -1)
                             {
