@@ -68,7 +68,13 @@ namespace Model
         public List<CriticalPointData> CriticalPoints { get; set; } = new List<CriticalPointData>();
         public List<Vector3> Gradients { get; set; } = new List<Vector3>();
 
+        
+        public List<List<Vector3>> SteepestDescentPaths { get; set; } = new List<List<Vector3>>();
         public List<List<Vector3>> NelderMeadPaths { get; set; } = new List<List<Vector3>>();
+        public List<List<Vector3>> NewtonPaths { get; set; } = new List<List<Vector3>>();
+        public List<List<Vector3>> NewtonDiscretePaths { get; set; } = new List<List<Vector3>>();
+        public List<List<Vector3>> NewtonTrustedPaths { get; set; } = new List<List<Vector3>>();
+        public List<List<Vector3>> BFGSPaths { get; set; } = new List<List<Vector3>>();
         
         /// <summary>
         /// Target values of the imported contour lines

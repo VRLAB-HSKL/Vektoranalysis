@@ -98,8 +98,23 @@ namespace Model.InitFile
 
     public class InitFilePaths
     {
+        [JsonProperty("steepest_descent")]
+        public List<List<float[]>> SteepestDescent { get; set; }
+        
         [JsonProperty("nelder_mead")]
         public List<List<float[]>> NelderMead { get; set; }
+        
+        [JsonProperty("newton")]
+        public List<List<float[]>> Newton { get; set; }
+        
+        [JsonProperty("newton_discrete")]
+        public List<List<float[]>> NewtonDiscrete { get; set; }
+        
+        [JsonProperty("newton_trusted")]
+        public List<List<float[]>> NewtonTrusted { get; set; }
+        
+        [JsonProperty("bfgs")]
+        public List<List<float[]>> BFGS { get; set; }
     }
     
     public class InitFileIsoLines

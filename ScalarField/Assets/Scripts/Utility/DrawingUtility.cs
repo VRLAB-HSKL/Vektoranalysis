@@ -166,7 +166,7 @@ namespace Utility
                     var currStep = i * stepSize;
                     var color = new Color(1f - (currStep), currStep, 0f);
                         
-                    Debug.Log(i + " - " + color);
+                    // Debug.Log(i + " - " + color);
                     
                     DrawSphere(points[i], path.transform, color, bbScale);
                     

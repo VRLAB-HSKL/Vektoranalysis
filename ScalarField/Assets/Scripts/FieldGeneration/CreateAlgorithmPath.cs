@@ -5,13 +5,17 @@ using Utility;
 
 namespace FieldGeneration
 {
-    public class CreatePath : MonoBehaviour
+    public class CreateAlgorithmPath : MonoBehaviour
     {
         public GameObject BoundingBox;
         public GameObject ArrowPrefab;
-        
+
+
+        public GlobalDataModel.OptimizationAlgorithm AlgorithmPath = GlobalDataModel.OptimizationAlgorithm.NELDER_MEAD ;
         public int PathIndex;
         public bool showPathOnStartup;
+        
+        
         
         public void TogglePath()
         {
@@ -35,9 +39,36 @@ namespace FieldGeneration
             //var cps = GlobalDataModel.CurrentField.CriticalPoints;
 
 
+            var path = new List<Vector3>();
+            switch (AlgorithmPath)
+            {
+                case GlobalDataModel.OptimizationAlgorithm.STEEPEST_DESCENT:
+                    path = GlobalDataModel.CurrentField.SteepestDescentPaths[PathIndex];
+                    break;
+                
+                case GlobalDataModel.OptimizationAlgorithm.NELDER_MEAD:
+                    path = GlobalDataModel.CurrentField.NelderMeadPaths[PathIndex];
+                    break;
+                
+                case GlobalDataModel.OptimizationAlgorithm.NEWTON:
+                    path = GlobalDataModel.CurrentField.NewtonPaths[PathIndex];
+                    break;
+                
+                case GlobalDataModel.OptimizationAlgorithm.NEWTON_DISCRETE:
+                    path = GlobalDataModel.CurrentField.NewtonDiscretePaths[PathIndex];
+                    break;
+                
+                case GlobalDataModel.OptimizationAlgorithm.NEWTON_TRUSTED:
+                    path = GlobalDataModel.CurrentField.NewtonTrustedPaths[PathIndex];
+                    break;
+                
+                case GlobalDataModel.OptimizationAlgorithm.BFGS:
+                    path = GlobalDataModel.CurrentField.BFGSPaths[PathIndex];
+                    break;
+            }
 
 
-            var path = GlobalDataModel.CurrentField.NelderMeadPaths[PathIndex];
+            
             // foreach(List<Vector3> path in GlobalDataModel.CurrentField.NelderMeadPaths[PathIndex])
             // {
             //     Debug.Log("pathCount: " + path.Count);
@@ -78,4 +109,6 @@ namespace FieldGeneration
             DrawingUtility.DrawPath(meshPointList, this.transform, ArrowPrefab, bbScale);
         }
     }
+    
+    
 }

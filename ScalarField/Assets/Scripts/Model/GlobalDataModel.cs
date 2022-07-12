@@ -5,6 +5,7 @@ using Model.InitFile;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Model
 {
@@ -13,6 +14,16 @@ namespace Model
     /// </summary>
     public static class GlobalDataModel
     {
+        public enum OptimizationAlgorithm
+        {
+            STEEPEST_DESCENT = 0,
+            NELDER_MEAD = 1,
+            NEWTON = 2,
+            NEWTON_DISCRETE = 3,
+            NEWTON_TRUSTED = 4,
+            BFGS = 5
+        }
+        
         public static int EstimatedIndex = 0;
 
         public static Vector3 ClosestPointOnMesh = Vector3.zero;
@@ -138,23 +149,27 @@ namespace Model
                 sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));
             }
 
-            for (var i = 0; i < InitFile.Data.mesh.Paths.NelderMead.Count; i++)
-            {
-                var nmPath = InitFile.Data.mesh.Paths.NelderMead[i];
-                var vecList = new List<Vector3>();
-                //Debug.Log(i + " - Count: " + nmPath.Count);
-                for (var j = 0; j < nmPath.Count; j++)
-                {
-                    var pathPoint = nmPath[j];
-                    var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
-                    vecList.Add(vec);
-                    //Debug.Log(i + " - pathVector: " + vec + ", vecListCount: " + vecList.Count);
-                }
 
-                //Debug.Log(i + " - vecListCount: " + vecList.Count);
-                
-                sf.NelderMeadPaths.Add(vecList);
-            }
+            sf.SteepestDescentPaths = ParsePath(InitFile.Data.mesh.Paths.SteepestDescent);
+            sf.NelderMeadPaths = ParsePath(InitFile.Data.mesh.Paths.NelderMead);
+            sf.NewtonPaths = ParsePath(InitFile.Data.mesh.Paths.Newton);
+            sf.NewtonDiscretePaths = ParsePath(InitFile.Data.mesh.Paths.NewtonDiscrete);
+            sf.NewtonTrustedPaths = ParsePath(InitFile.Data.mesh.Paths.NewtonTrusted);
+            sf.BFGSPaths = ParsePath(InitFile.Data.mesh.Paths.BFGS);
+            
+            // for (var i = 0; i < InitFile.Data.mesh.Paths.NelderMead.Count; i++)
+            // {
+            //     var nmPath = InitFile.Data.mesh.Paths.NelderMead[i];
+            //     var vecList = new List<Vector3>();
+            //     for (var j = 0; j < nmPath.Count; j++)
+            //     {
+            //         var pathPoint = nmPath[j];
+            //         var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
+            //         vecList.Add(vec);
+            //     }
+            //
+            //     sf.NelderMeadPaths.Add(vecList);
+            // }
 
             // for (var i = 0; i < sf.NelderMeadPaths.Count; i++)
             // {
@@ -206,6 +221,26 @@ namespace Model
 
             CurrentField = sf;
 
+        }
+        
+        private static List<List<Vector3>> ParsePath(List<List<float[]>> paths)
+        {
+            var retList = new List<List<Vector3>>();
+            for (var i = 0; i < paths.Count; i++)
+            {
+                var currPath = paths[i];
+                var vecList = new List<Vector3>();
+                for (var j = 0; j < currPath.Count; j++)
+                {
+                    var pathPoint = currPath[j];
+                    var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
+                    vecList.Add(vec);
+                }
+
+                retList.Add(vecList);
+            }
+
+            return retList;
         }
     }
 }
