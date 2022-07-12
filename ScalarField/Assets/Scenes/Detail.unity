@@ -2856,6 +2856,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1105147085}
+  - component: {fileID: 1105147086}
   m_Layer: 0
   m_Name: Paths
   m_TagString: Untagged
@@ -2877,6 +2878,23 @@ Transform:
   m_Father: {fileID: 45892916}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1105147086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105147084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6789adb7c4064019b89035e0ac5f880b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoundingBox: {fileID: 674071311}
+  ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
+  AlgorithmPath: 1
+  PathIndex: 0
+  showPathOnStartup: 1
 --- !u!1 &1117859747
 GameObject:
   m_ObjectHideFlags: 0

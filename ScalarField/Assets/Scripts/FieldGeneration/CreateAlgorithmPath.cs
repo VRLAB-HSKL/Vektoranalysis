@@ -10,12 +10,9 @@ namespace FieldGeneration
         public GameObject BoundingBox;
         public GameObject ArrowPrefab;
 
-
         public GlobalDataModel.OptimizationAlgorithm AlgorithmPath = GlobalDataModel.OptimizationAlgorithm.NELDER_MEAD ;
         public int PathIndex;
         public bool showPathOnStartup;
-        
-        
         
         public void TogglePath()
         {
