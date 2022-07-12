@@ -518,7 +518,13 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("showViewButtons")]
         public bool ShowViewButtons { get; set; }
-        
+
+        /// <summary>
+        /// Signals whether quiz button is shown
+        /// </summary>
+        [JsonProperty("showQuizButton")]
+        public bool ShowQuizButton { get; set; }
+
         /// <summary>
         /// Signals whether slider is shown
         /// </summary>

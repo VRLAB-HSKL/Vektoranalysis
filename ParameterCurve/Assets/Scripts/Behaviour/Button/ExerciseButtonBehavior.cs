@@ -35,7 +35,7 @@ namespace Behaviour.Button
         protected new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
+            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowQuizButton);
         }
 
         #region Clicked
@@ -44,7 +44,7 @@ namespace Behaviour.Button
             //new room is +20 units in z direction from main room
             VR.transform.position = VR.transform.position + new Vector3(0, 0, 20);
             //move menu parent object as well (so you can select another exercise)
-            curveControl.curveMenuParent.transform.parent.gameObject.transform.position = curveControl.curveMenuParent.transform.parent.gameObject.transform.position + new Vector3(0, 0, 20);
+            curveControl.curveMenuParent.transform.parent.position += new Vector3(0, 0, 20);
             curveControl.SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Exercises);
         }
         #endregion Clicked

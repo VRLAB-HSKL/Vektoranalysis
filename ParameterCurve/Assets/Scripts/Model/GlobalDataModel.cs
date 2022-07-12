@@ -200,6 +200,9 @@ namespace Model
                 DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
             }
 
+            if (jsr.Exercises.Count == 0) jsr.ApplicationSettings.TableSettings.ShowQuizButton = false;
+            else jsr.ApplicationSettings.TableSettings.ShowQuizButton = true;
+
             for (var i = 0; i < jsr.Exercises.Count; i++)
             {
                 var ex = jsr.Exercises[i];
