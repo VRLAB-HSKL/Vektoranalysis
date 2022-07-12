@@ -158,10 +158,17 @@ namespace Utility
             else
             {
                 path.name += "_to_" + points[points.Count - 1];
+
+                var stepSize = 1f / points.Count;
                 
                 for (var i = 0; i < points.Count; i++)
                 {
-                    DrawSphere(points[i], path.transform, i == 0 ? Color.red : Color.gray, bbScale);
+                    var currStep = i * stepSize;
+                    var color = new Color(1f - (currStep), currStep, 0f);
+                        
+                    Debug.Log(i + " - " + color);
+                    
+                    DrawSphere(points[i], path.transform, color, bbScale);
                     
                     // Draw arrow for every element except for the last one, because there is no next point to connect to
                     if(i < points.Count - 1)

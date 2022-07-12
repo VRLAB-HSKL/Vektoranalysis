@@ -67,35 +67,38 @@ namespace ProceduralMesh
             var sf = GlobalDataModel.CurrentField;
 
             var dVertices = sf.DisplayPoints;
-            var displayVertices = new List<Vector3>();
-
+            // var displayVertices = new List<Vector3>();
+            //
             var x_min = dVertices.Min(v => v.x);
             var x_max = dVertices.Max(v => v.x);
             var y_min = dVertices.Min(v => v.y);
             var y_max = dVertices.Max(v => v.y);
             var z_min = dVertices.Min(v => v.z);
             var z_max = dVertices.Max(v => v.z);    
-        
-            var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
-            var bbCenter = BoundingBox.GetComponent<MeshRenderer>().bounds.center;
-        
-            // Calculate mesh vertices
-            for (var i = 0; i < dVertices.Count; i++)
-            {
-                var displayVector = dVertices[i];
-            
-                // Add position offset
-                var translatedVector = displayVector + bbCenter;
+            //
+            // var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
+            // var bbCenter = BoundingBox.GetComponent<MeshRenderer>().bounds.center;
+            //
+            // // Calculate mesh vertices
+            // for (var i = 0; i < dVertices.Count; i++)
+            // {
+            //     var displayVector = dVertices[i];
+            //
+            //     // Add position offset
+            //     var translatedVector = displayVector + bbCenter;
+            //
+            //     // Map point values to bounding box size
+            //     var mappedVec = CalcUtility.MapVectorToRange(
+            //         translatedVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
+            //         -bb, bb
+            //     );
+            //     
+            //     displayVertices.Add(mappedVec);
+            // }
 
-                // Map point values to bounding box size
-                var mappedVec = CalcUtility.MapVectorToRange(
-                    translatedVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
-                    -bb, bb
-                );
-                
-                displayVertices.Add(mappedVec);
-            }
-        
+            var bounds = BoundingBox.GetComponent<MeshRenderer>().bounds;
+            var displayVertices = CalcUtility.MapDisplayVectors(dVertices, bounds);
+            
             // var log = false;
             // var sb = new StringBuilder();
             // for (int i = 0; i < displayVertices.Count; i++)

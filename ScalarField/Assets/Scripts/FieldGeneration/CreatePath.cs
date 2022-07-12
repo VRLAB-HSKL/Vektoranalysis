@@ -48,25 +48,32 @@ namespace FieldGeneration
             // }
 
             var meshPointList = new List<Vector3>();
+            var min = GlobalDataModel.CurrentField.MinRawValues;
+            var max = GlobalDataModel.CurrentField.MaxRawValues;
             foreach (var vec in path)
             {
-                float smallesDist = float.MaxValue;
-                var index = -1;
-                for(var i = 0; i < GlobalDataModel.CurrentField.RawPoints.Count; i++)
+                // Skip points outside of the bounds of the scalar field
+                if (vec.x < min.x || vec.x > max.x ||
+                    vec.y < min.y || vec.y > max.y ||
+                    vec.z < min.z || vec.z > max.z)
                 {
-                    var point = GlobalDataModel.CurrentField.RawPoints[i];
-                    var dist = Mathf.Sqrt(Mathf.Pow(vec.x - point.x, 2) + Mathf.Pow(vec.y - point.y, 2));
-                    if (dist < smallesDist)
-                    {
-                        smallesDist = dist;
-                        index = i;
-                    }
+                    continue;
                 }
+                    
+                var index = CalcUtility.NeareastNeighborIndexXY(GlobalDataModel.CurrentField.RawPoints, vec);
                 
                 //var idx = GlobalDataModel.CurrentField.RawPoints.FindIndex(p => p.x == vec.x && p.y == vec.y);
-                if(index != -1)
+                if (index != -1)
+                {
+                    // var z = GlobalDataModel.CurrentField.RawPoints[index].z;
+                    // var v = new Vector3(vec.x, vec.y, z);
+                    // Debug.Log("vec: " + vec + ", finalVec: " + v);
+                    // meshPointList.Add(v);
                     meshPointList.Add(GlobalDataModel.CurrentField.MeshPoints[index]);
+                }
             }
+            
+            //var finalList = CalcUtility.MapDisplayVectors(meshPointList, BoundingBox.GetComponent<MeshRenderer>().bounds);
             
             DrawingUtility.DrawPath(meshPointList, this.transform, ArrowPrefab, bbScale);
         }

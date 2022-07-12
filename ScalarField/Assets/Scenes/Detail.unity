@@ -2892,7 +2892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoundingBox: {fileID: 674071311}
   ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
-  PathIndex: 3399
+  PathIndex: 0
   showPathOnStartup: 1
 --- !u!1 &1117859747
 GameObject:

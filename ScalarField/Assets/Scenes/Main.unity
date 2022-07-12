@@ -317,6 +317,7 @@ MonoBehaviour:
   Field: {fileID: 1976931700}
   ContourValues: []
   LineMat: {fileID: 2100000, guid: 58c68f717c6622c4e9ac73ad113e9369, type: 2}
+  LinesVisible: 1
   ShowLinesInMesh: 1
   epsilon: 0.01
   positionOffset: {x: 0, y: 0.05, z: 0}
@@ -1183,7 +1184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 559462895}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.23, y: 1.85, z: 0.13}
+  m_LocalPosition: {x: -8.23, y: 1.4, z: 0.13}
   m_LocalScale: {x: 5, y: 6, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2376,8 +2377,6 @@ MonoBehaviour:
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
   buttonObject: {fileID: 1601351472}
   holdButton: 0
-  field: {fileID: 1976931704}
-  distanceEpsilon: 0.01
 --- !u!1 &1139574033
 GameObject:
   m_ObjectHideFlags: 0
@@ -3387,13 +3386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5e9bf186b73aa4eb2f99c4b97c2bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RenderingTarget: {fileID: 348883636}
-  PositionOffset: {x: 0, y: 0.25, z: 0}
-  ScalingVector: {x: 0.2, y: 0.2, z: 0.2}
   BoundingBox: {fileID: 851291624}
   PositionMeshAtOrigin: 0
-  Texture: {fileID: 2800000, guid: e17a81f26eb9393468d2dbf7273cc653, type: 3}
-  Collider: {fileID: 0}
 --- !u!23 &1976931703
 MeshRenderer:
   m_ObjectHideFlags: 0

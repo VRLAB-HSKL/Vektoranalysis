@@ -223,8 +223,62 @@ namespace Utility
 
             return H.Take(k - 1).ToList();
         }
-        
-        
+
+
+        public static int NeareastNeighborIndexXY(List<Vector3> points, Vector3 point)
+        {
+            if (points.Count == 0) return -1;
+            if (points.Count == 1) return 0;
+
+            var smallestDist = float.MaxValue;
+            var index = -1;
+            for (var i = 0; i < points.Count; i++)
+            {
+                var p = points[i];
+                var dist = Mathf.Sqrt(Mathf.Pow(p.x - point.x, 2) + Mathf.Pow(p.y - point.y, 2));
+                if (dist < smallestDist)
+                {
+                    smallestDist = dist;
+                    index = i;
+                }
+            }
+
+            return index;
+        }
+
+        public static List<Vector3> MapDisplayVectors(List<Vector3> dVertices, Bounds bounds)
+        {
+            var x_min = dVertices.Min(v => v.x);
+            var x_max = dVertices.Max(v => v.x);
+            var y_min = dVertices.Min(v => v.y);
+            var y_max = dVertices.Max(v => v.y);
+            var z_min = dVertices.Min(v => v.z);
+            var z_max = dVertices.Max(v => v.z);   
+            
+            var bb = bounds.extents;
+            var bbCenter = bounds.center;
+
+            var displayVertices = new List<Vector3>();
+            
+            // Calculate mesh vertices
+            for (var i = 0; i < dVertices.Count; i++)
+            {
+                var displayVector = dVertices[i];
+            
+                // Add position offset
+                var translatedVector = displayVector + bbCenter;
+
+                // Map point values to bounding box size
+                var mappedVec = CalcUtility.MapVectorToRange(
+                    translatedVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
+                    -bb, bb
+                );
+                
+                displayVertices.Add(mappedVec);
+            }
+
+            return displayVertices;
+        }
     }
     
     
