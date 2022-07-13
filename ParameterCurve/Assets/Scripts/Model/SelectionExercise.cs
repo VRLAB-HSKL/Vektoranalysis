@@ -50,6 +50,11 @@ namespace Model
         public int previousScore { get; set; }
 
         /// <summary>
+        /// Number of correct answers in current attempt
+        /// </summary>
+        public int currentScore { get; set; }
+
+        /// <summary>
         /// Number of times the exercise has been attempted
         /// </summary>
         public int numAttempts { get; set; }

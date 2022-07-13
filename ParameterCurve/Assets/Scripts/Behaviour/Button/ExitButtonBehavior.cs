@@ -48,7 +48,7 @@ namespace Behaviour.Button
             curveControl.curveMenuParent.transform.parent.gameObject.transform.position = curveControl.curveMenuParent.transform.parent.gameObject.transform.position + new Vector3(0, 0, -20);
 
             curveControl.SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
-            GlobalDataModel.ExerciseCurveController.ResetExercise();
+            GlobalDataModel.ExerciseCurveController.ResetCurrentExercise();
         }
         #endregion Clicked
     }

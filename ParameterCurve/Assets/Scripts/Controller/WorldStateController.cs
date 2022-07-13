@@ -417,9 +417,37 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
         }
-        
+
+        /// <summary>
+        /// Switch to a specific exercise in the current exercise dataset based on given identifier
+        /// </summary>
+        public void SwitchToSpecificExercise(string exerciseIdentifier)
+        {
+            // Stop driving
+            if (GlobalDataModel.IsRunning)
+            {
+                GlobalDataModel.IsRunning = false;
+            }
+
+            if (GlobalDataModel.CurrentDisplayGroup == GlobalDataModel.CurveDisplayGroup.Exercises)
+                GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
+
+            var index = GlobalDataModel.SelectionExercises.FindIndex(
+                x => x.Title.Equals(exerciseIdentifier));
+
+            if (index == -1) return;
+            else if(GlobalDataModel.CurrentExerciseIndex == index) GlobalDataModel.ExerciseCurveController.ResetCurrentExercise();
+            else
+            {
+                GlobalDataModel.CurrentExerciseIndex = index;
+                GlobalDataModel.ExerciseCurveController.NewExercise();
+            }
+            
+            GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
+        }
+
         #endregion Public functions
-        
+
         #region Private functions
 
         /// <summary>

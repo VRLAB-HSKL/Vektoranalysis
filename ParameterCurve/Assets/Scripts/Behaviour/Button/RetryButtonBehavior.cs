@@ -31,7 +31,7 @@ namespace Behaviour.Button
         #region Clicked
         protected override void HandleButtonEvent()
         {
-            GlobalDataModel.ExerciseCurveController.ResetExercise();
+            GlobalDataModel.ExerciseCurveController.ResetCurrentExercise();
         }
         #endregion Clicked
     }

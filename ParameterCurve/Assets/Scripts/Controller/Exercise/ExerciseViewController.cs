@@ -21,7 +21,7 @@ namespace Controller.Exercise
         /// <summary>
         /// Chosen selections in selection exercise, all -1 per default to represent non-choice
         /// </summary>
-        public readonly List<int> SelectionIndices = new List<int>();
+        public List<int> SelectionIndices = new List<int>();
 
         public bool confirmedAnswers { get; set; } = false;
 
@@ -45,9 +45,6 @@ namespace Controller.Exercise
 
         //path to text file storing chosen answers for each attempt
         private string path = "Assets/Resources/exerciseresults.txt";
-
-        //number of correct answers in current run
-        private int correctCount;
 
         #endregion Private members
 
@@ -127,7 +124,7 @@ namespace Controller.Exercise
                     var correctText = new StringBuilder("\n");
                     var resultText = new StringBuilder("");
 
-                    correctCount = 0;
+                    CurrentExercise.currentScore = 0;
                     
                     //logging name and attempt number into text file
                     writer.WriteLine(CurrentExercise.Title);
@@ -176,7 +173,7 @@ namespace Controller.Exercise
                         //log previous, chosen, and correct answers into text file
                         writer.WriteLine(previousAnswer + " " + chosenAnswer + " " + correctAnswer);
 
-                        if (chosenAnswer == correctAnswer) ++correctCount;
+                        if (chosenAnswer == correctAnswer) ++CurrentExercise.currentScore;
                     }
 
                     //if anything past first attempt, there is a previous score to show
@@ -188,8 +185,8 @@ namespace Controller.Exercise
                         resultText.Append("Previous result: none\n");
                     }
 
-                    resultText.Append("Current result: [" + correctCount + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
-                    writer.WriteLine(correctCount + "/" + CurrentExercise.CorrectAnswers.Count);
+                    resultText.Append("Current result: [" + CurrentExercise.currentScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
+                    writer.WriteLine(CurrentExercise.currentScore + "/" + CurrentExercise.CorrectAnswers.Count);
 
                     _selObjects.PreviousAnswerText.text = previousText.ToString();
                     _selObjects.ChosenAnswerText.text = chosenText.ToString();
@@ -220,7 +217,6 @@ namespace Controller.Exercise
             }
 
         }
-
         
         /// <summary>
         /// Switch to previous sub-exercise in current parent exercise
@@ -270,7 +266,7 @@ namespace Controller.Exercise
         {
             base.SetViewVisibility(value);
             
-            _selObjects.SelectionRoot.SetActive(value);
+            //_selObjects.SelectionRoot.SetActive(value);
             
             if (value)
             {
@@ -279,15 +275,16 @@ namespace Controller.Exercise
         }
 
         /// <summary>
-        /// Undo all selections, start again from beginning
+        /// Called with retry button, exit button, or selecting current same exercise on menu wall
+        /// Resets all selections, starts again from main display
         /// </summary>
-        public void ResetExercise()
+        public void ResetCurrentExercise()
         {
             // set all answers as 'none given'
             for (int i = 0; i < CurrentExercise.NumberOfSubExercises; i++)
             {
                 CurrentExercise.PreviousAnswers[i] = CurrentExercise.ChosenAnswers[i];
-                CurrentExercise.previousScore = correctCount;
+                CurrentExercise.previousScore = CurrentExercise.currentScore;
                 SelectionIndices[i] = -1;
                 CurrentExercise.ChosenAnswers[i] = -1;
             }
@@ -299,6 +296,23 @@ namespace Controller.Exercise
             CurrentView.ShowResultsDisplay = false;
             CurrentView.ShowConfirmationDisplay = false;
             CurrentView.UpdateView();
+        }
+
+        /// <summary>
+        /// Called when a different exercise is selected on the wall
+        /// Resets all selections, starts again from main display
+        /// </summary>
+        public void NewExercise()
+        {
+            //reset selections
+            //necessary because not every exercise is the same size, so selectionIndices list should be re-initialized
+            SelectionIndices = new List<int>();
+            for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
+            {
+                SelectionIndices.Add(-1);
+            }
+
+            ResetCurrentExercise();
         }
 
         #endregion Public functions
