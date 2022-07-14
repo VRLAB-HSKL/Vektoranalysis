@@ -143,7 +143,7 @@ namespace FieldGeneration
 
             //Debug.Log("Min: " + minZ + ", Max: " + maxZ + ", step: " + step);
 
-            ContourValues = GlobalDataModel.InitFile.Data.isolines.Values; //new List<float>();
+            ContourValues = GlobalDataModel.CurrentField.ContourLineValues; //new List<float>();
         
             // // Draw line for all steps except the first and the last (min and max value has no dividing line)
             // for (var i = 1; i < dataClassesCount; i++)
@@ -206,7 +206,7 @@ namespace FieldGeneration
             //     pathPoints.Add(point);
             // }
         
-            DrawingUtility.DrawPath(pathPoints, transform, ArrowPrefab, BoundingBox.transform.localScale);
+            //DrawingUtility.DrawPath(pathPoints, transform, ArrowPrefab, BoundingBox.transform.localScale);
         }
 
     

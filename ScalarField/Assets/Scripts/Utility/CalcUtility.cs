@@ -246,7 +246,7 @@ namespace Utility
             return index;
         }
 
-        public static List<Vector3> MapDisplayVectors(List<Vector3> dVertices, Bounds bounds)
+        public static List<Vector3> MapDisplayVectors(List<Vector3> dVertices, Bounds bounds, Transform tf)
         {
             var x_min = dVertices.Min(v => v.x);
             var x_max = dVertices.Max(v => v.x);
@@ -256,23 +256,32 @@ namespace Utility
             var z_max = dVertices.Max(v => v.z);   
             
             var bb = bounds.extents;
-            var bbCenter = bounds.center;
+            var bbCenter = bounds.center; //tf.TransformPoint(bounds.center);
 
             var displayVertices = new List<Vector3>();
+
             
             // Calculate mesh vertices
             for (var i = 0; i < dVertices.Count; i++)
             {
                 var displayVector = dVertices[i];
             
-                // Add position offset
-                var translatedVector = displayVector + bbCenter;
+                
 
                 // Map point values to bounding box size
                 var mappedVec = CalcUtility.MapVectorToRange(
-                    translatedVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
+                    displayVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
                     -bb, bb
                 );
+            
+                // Move coordinate system origin to the center of the bounding box
+                //var translatedVec = mappedVec + bbCenter;
+                
+                
+                // Debug.Log("init: " + displayVector + 
+                //         ", mappedVec: " + mappedVec +
+                //         ", translatedVector: " + translatedVec 
+                //           );
                 
                 displayVertices.Add(mappedVec);
             }

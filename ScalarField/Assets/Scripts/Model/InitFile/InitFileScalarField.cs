@@ -13,6 +13,13 @@ namespace Model.InitFile
     [Serializable]
     public class InitFileRoot
     {
+        [JsonProperty("display_fields")] 
+        public List<InitFileScalarField> DisplayFields;
+    }
+    
+    [Serializable]
+    public class InitFileScalarField
+    {
         [JsonProperty("info")]
         public InitFileInfo Info;
 

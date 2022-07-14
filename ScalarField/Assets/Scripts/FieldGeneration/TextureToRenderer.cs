@@ -12,13 +12,20 @@ public class TextureToRenderer : MonoBehaviour
     
     private void Start()
     {
-        // If not explicitly set, try to get texture based on parsed init file values
-        if (texture is null)
-        {
-            var cmId = GlobalDataModel.InitFile.Info.color_map_id;
-            var cmDataClassesCount = GlobalDataModel.InitFile.Info.color_map_data_classes_count;
-            texture = TextureUtility.FetchColorMapTexture(cmId, cmDataClassesCount);    
-        }
+        var cmId = GlobalDataModel.CurrentField.ColorMapId;
+        var cmDataClassesCount = GlobalDataModel.CurrentField.ColorMapDataClassesCount;
+        texture = TextureUtility.FetchColorMapTexture(cmId, cmDataClassesCount);    
+        // Debug.Log("cmId: " + cmId + ", cmDcCount: " + cmDataClassesCount + ", textureIsNull: " + (texture is null));
+        //
+        // // If not explicitly set, try to get texture based on parsed init file values
+        // if (texture is null)
+        // {
+        //     
+        // }
+        // else
+        // {
+        //     Debug.Log("textureIsNull: " + (texture is null));
+        // }
 
         GetComponent<MeshRenderer>().material.mainTexture = texture;
     }

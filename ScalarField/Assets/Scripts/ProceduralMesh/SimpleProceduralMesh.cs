@@ -97,7 +97,7 @@ namespace ProceduralMesh
             // }
 
             var bounds = BoundingBox.GetComponent<MeshRenderer>().bounds;
-            var displayVertices = CalcUtility.MapDisplayVectors(dVertices, bounds);
+            var displayVertices = CalcUtility.MapDisplayVectors(dVertices, bounds, BoundingBox.transform);
             
             // var log = false;
             // var sb = new StringBuilder();
@@ -202,9 +202,12 @@ namespace ProceduralMesh
             var lineIndices = new List<int>();
             //mesh.SetIndices(new int[] {0,1, 2,3, 4,5 }, MeshTopology.Lines, 0, true); 
         
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            
             // Set mesh
             GetComponent<MeshFilter>().mesh = mesh;
-        
+            
             // Assign mesh to collider
             var meshCollider = GetComponent<MeshCollider>();
             //collider.convex = true;

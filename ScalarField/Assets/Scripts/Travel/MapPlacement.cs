@@ -15,8 +15,8 @@ namespace Travel
         {
             var mr = GetComponent<MeshRenderer>();
 
-            var cm = GlobalDataModel.InitFile.Info.color_map_id;
-            var dataClassesCount = GlobalDataModel.InitFile.Info.color_map_data_classes_count;
+            var cm = GlobalDataModel.CurrentField.ColorMapId;
+            var dataClassesCount = GlobalDataModel.CurrentField.ColorMapDataClassesCount;
             var texture = Resources.Load(
                 "texture_maps/" + cm + "/" + dataClassesCount + "/" +
                 cm + "_" + dataClassesCount + "_texture.png"
@@ -56,11 +56,11 @@ namespace Travel
             var horizontalCoordinate = contact.point.z;
             var verticalCoordinate = contact.point.x;
 
-            var xRangeMin = GlobalDataModel.InitFile.Info.x_param_range[0]; //GlobalDataModel.InitFile.points.Min(p => p[0]);
-            var xRangeMax = GlobalDataModel.InitFile.Info.x_param_range[1]; //GlobalDataModel.InitFile.points.Max(p => p[0]);
+            var xRangeMin = GlobalDataModel.CurrentField.ParameterRangeX.Item1; //GlobalDataModel.InitFile.points.Min(p => p[0]);
+            var xRangeMax = GlobalDataModel.CurrentField.ParameterRangeX.Item2; //GlobalDataModel.InitFile.points.Max(p => p[0]);
 
-            var yRangeMin = GlobalDataModel.InitFile.Info.y_param_range[0];
-            var yRangeMax = GlobalDataModel.InitFile.Info.y_param_range[1];
+            var yRangeMin = GlobalDataModel.CurrentField.ParameterRangeY.Item1;
+            var yRangeMax = GlobalDataModel.CurrentField.ParameterRangeY.Item2;
 
             var mappedX = CalcUtility.MapValueToRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
         
@@ -81,9 +81,9 @@ namespace Travel
         
             var closest = int.MaxValue;
             var minDifference = int.MaxValue;
-            for(var i = 0; i < GlobalDataModel.InitFile.Data.mesh.points.Count; i++)
+            for(var i = 0; i < GlobalDataModel.CurrentField.MeshPoints.Count; i++)
             {
-                var point = GlobalDataModel.InitFile.Data.mesh.points[i];
+                var point = GlobalDataModel.CurrentField.MeshPoints[i];
                 var differenceX = Mathf.Abs(point[0] - mappedX);
                 var differenceY = Mathf.Abs(point[1] - mappedY);
 
