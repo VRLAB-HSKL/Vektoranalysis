@@ -46,7 +46,12 @@ namespace Controller
         /// Game object transform used to visualize arc length parametrization based runs along the world curve display
         /// </summary>
         public Transform worldArcLengthTravelObject;
-        
+
+        /// <summary>
+        /// Display for drawing tangent and normal lines
+        /// </summary>
+        public DrawTangentNormal drawDisplay;
+
         /// <summary>
         /// Root element containing the table prefab and all other related game objects. This differs from
         /// <see cref="tableRootElement"/> by containing all elements, not just the ones related to simple curve
@@ -245,7 +250,7 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
-        
+            drawDisplay.generateCurve();
         }
 
         /// <summary>
@@ -359,6 +364,7 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
+            drawDisplay.generateCurve();
         }
 
         /// <summary>
