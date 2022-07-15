@@ -89,6 +89,13 @@ public class DrawTangentNormal : MonoBehaviour
 
         Debug.Log("angle b/t tangents: " + tanAngle);
         Debug.Log("angle b/t normals: " + normAngle);
+
+        //also allow wrong direction tangent
+        if (tanAngle < 20 || (tanAngle > 160 && tanAngle < 200)) Debug.Log("tangent: correct");
+        else Debug.Log("tangent: incorrect");
+
+        if (normAngle < 20) Debug.Log("normal: correct");
+        else Debug.Log("normal: incorrect");
     }
 
     private void generateSpheres(int pointIndex)
@@ -144,5 +151,25 @@ public class DrawTangentNormal : MonoBehaviour
         //get line renderers to give them lines to connect to pointSphere
         tangentSphereLR = tangentSphereParent.GetComponent<LineRenderer>();
         normalSphereLR = normalSphereParent.GetComponent<LineRenderer>();
+
+        //if 2d curve, restrict curve movement in z direction
+        if (!GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve)
+        {
+            ConstraintSource cs = new ConstraintSource();
+            cs.sourceTransform = pointSphere.transform;
+            cs.weight = 1;
+
+            PositionConstraint tanPC = tangentSphere.AddComponent<PositionConstraint>();
+            tanPC.translationAxis = Axis.Z;
+            tanPC.AddSource(cs);
+            tanPC.locked = true;
+            tanPC.constraintActive = true;
+
+            PositionConstraint normPC = normalSphere.AddComponent<PositionConstraint>();            
+            normPC.translationAxis = Axis.Z;
+            normPC.AddSource(cs);
+            normPC.locked = true;
+            normPC.constraintActive = true;
+        }
     }
 }
