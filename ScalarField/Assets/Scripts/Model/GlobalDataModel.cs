@@ -33,6 +33,8 @@ namespace Model
         /// </summary>
         private const string InitFileResourcePath = "json/init/sf_initFile";
 
+        public const string FormulaImageResourcePath = "img/latex/";
+        
         /// <summary>
         /// Tree data structure the init file is parsed into
         /// </summary>
@@ -43,7 +45,7 @@ namespace Model
         /// </summary>
         public static ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        public static int CurrentFieldIndex { get; set; }
+        public static int CurrentFieldIndex { get; set; } = 0;
 
         public static List<ScalarField> ScalarFields { get; set; } = new List<ScalarField>();
         
