@@ -8,8 +8,6 @@ namespace Controller
     {
         public FieldViewController(GameObject mesh, GameObject boundingBox) : base()
         {
-            Debug.Log("FieldViewController Constructor");
-            
             Views = new List<AbstractFieldView>()
             {
                new SimpleView(mesh, boundingBox) 
@@ -18,6 +16,14 @@ namespace Controller
             SwitchView(0);
             
             CurrentView.UpdateView();
+        }
+
+        public void UpdateViews()
+        {
+            foreach (var view in Views)
+            {
+                view.UpdateView();
+            }
         }
     }
 }

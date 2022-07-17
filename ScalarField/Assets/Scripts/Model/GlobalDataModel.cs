@@ -46,7 +46,7 @@ namespace Model
         /// </summary>
         public static ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        public static int CurrentFieldIndex { get; set; } = 1;
+        public static int CurrentFieldIndex { get; set; };
 
         public static List<ScalarField> ScalarFields { get; set; } = new List<ScalarField>();
 
@@ -63,6 +63,8 @@ namespace Model
             ParseInitFile();
         }
 
+        
+        
         /// <summary>
         /// Parses the JSON init file and creates the tree data structure in <see cref="InitFile"/>
         /// </summary>

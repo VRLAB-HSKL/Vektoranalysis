@@ -32,7 +32,7 @@ namespace Views
         
         public virtual void UpdateView()
         {
-            Debug.Log("Generating field mesh...");
+            //Debug.Log("Generating field mesh...");
             GenerateFieldMesh();
             
             if (PositionMeshAtOrigin)
@@ -42,6 +42,7 @@ namespace Views
         
             var mat = _mr.material;
             mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
+            
             mat.mainTexture = GlobalDataModel.CurrentField.MeshTexture;
         }
         

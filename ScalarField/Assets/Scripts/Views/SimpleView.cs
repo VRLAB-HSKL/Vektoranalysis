@@ -8,7 +8,7 @@ namespace Views
 
         public override void UpdateView()
         {
-            Debug.Log("SimpleView - UpdateView()");
+            //Debug.Log("SimpleView - UpdateView()");
             base.UpdateView();
         }
     }

@@ -28,5 +28,50 @@ public class WorldStateController : MonoBehaviour
     {
         GlobalDataModel.FieldViewController = new FieldViewController(FieldMesh, FieldBoundingBox);
     }
+
+    public void NextDataset()
+    {
+        SetNextValidIndex(true);
+
+        GlobalDataModel.FieldViewController.UpdateViews(); //UpdateViewsDelegate();
+    }
+
+    public void PreviousDataset()
+    {
+        SetNextValidIndex(false);
+
+        // if (GlobalDataModel.FieldViewController is null)
+        // {
+        //     Debug.Log("FieldViewController is null");
+        // }
+        //
+        // if (GlobalDataModel.FieldViewController.UpdateViewsDelegate is null)
+        // {
+        //     Debug.Log("FieldViewController.UpdateViewsDelegate is null");
+        // }
+        //
+        GlobalDataModel.FieldViewController.UpdateViews();
+    }
+
+
+    private void SetNextValidIndex(bool isIncrement)
+    {
+        var oldIndex = GlobalDataModel.CurrentFieldIndex;
+        if (oldIndex == 0)
+        {
+            GlobalDataModel.CurrentFieldIndex = GlobalDataModel.ScalarFields.Count - 1;
+        }
+        else if (oldIndex == GlobalDataModel.ScalarFields.Count - 1)
+        {
+            GlobalDataModel.CurrentFieldIndex = 0;
+        }
+        else
+        {
+            if (isIncrement) 
+                ++GlobalDataModel.CurrentFieldIndex;
+            else 
+                --GlobalDataModel.CurrentFieldIndex;
+        }
+    }
     
 }

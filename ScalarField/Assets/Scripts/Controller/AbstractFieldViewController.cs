@@ -59,7 +59,7 @@ namespace Controller
         {
             if (index < 0 || index >= Views.Count) return;
             
-            Debug.Log("Switching to view with index: " + index);
+            //Debug.Log("Switching to view with index: " + index);
             
             CurrentView = Views[index];
         }
@@ -76,6 +76,12 @@ namespace Controller
 
             if(Views.Count > 0)
                 UpdateViewsDelegate();
+
+            if (UpdateViewsDelegate is null)
+            {
+                Debug.Log("delegate is null");    
+            }
+            
             
             SwitchView(0);
         }
