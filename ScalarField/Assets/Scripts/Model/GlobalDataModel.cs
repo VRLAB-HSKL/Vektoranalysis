@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Controller;
 using Model.InitFile;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -45,9 +46,13 @@ namespace Model
         /// </summary>
         public static ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        public static int CurrentFieldIndex { get; set; } = 0;
+        public static int CurrentFieldIndex { get; set; } = 1;
 
         public static List<ScalarField> ScalarFields { get; set; } = new List<ScalarField>();
+
+
+        public static FieldViewController FieldViewController { get; set; }
+        
         
         /// <summary>
         /// Initializes static global data class

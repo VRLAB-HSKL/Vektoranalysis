@@ -29,7 +29,7 @@ namespace Model
         /// Currently being retrieved from local resources based on
         /// <see cref="ColorMapId"/> and <see cref="ColorMapDataClassesCount"/>
         /// </summary>
-        public Texture2D MeshTexture;
+        public Texture2D MeshTexture { get; set; }
         
         /// <summary>
         /// Lower and upper bound of the parameter interval of the x parameter

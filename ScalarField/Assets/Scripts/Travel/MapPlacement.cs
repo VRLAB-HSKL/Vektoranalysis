@@ -17,12 +17,12 @@ namespace Travel
 
             var cm = GlobalDataModel.CurrentField.ColorMapId;
             var dataClassesCount = GlobalDataModel.CurrentField.ColorMapDataClassesCount;
-            var texture = Resources.Load(
-                "texture_maps/" + cm + "/" + dataClassesCount + "/" +
-                cm + "_" + dataClassesCount + "_texture.png"
-            ) as Texture2D;
-        
-            mr.material.mainTexture = texture;
+            // var texture = Resources.Load(
+            //     "texture_maps/" + cm + "/" + dataClassesCount + "/" +
+            //     cm + "_" + dataClassesCount + "_texture.png"
+            // ) as Texture2D;
+
+            mr.material.mainTexture = GlobalDataModel.CurrentField.MeshTexture; //texture;
         }
     
         private void OnCollisionEnter(Collision collision)
