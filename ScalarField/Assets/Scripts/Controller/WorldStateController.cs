@@ -1,11 +1,15 @@
 ﻿using Controller;
 using Model;
+using Travel;
 using UnityEngine;
 
 public class WorldStateController : MonoBehaviour
 {
     public GameObject FieldMesh;
     public GameObject FieldBoundingBox;
+
+    public MapPlacement TableMap;
+    public InformationControl InfoWall;
     
     /// <summary>
     /// Single awake in application to ensure init file was parsed
@@ -34,6 +38,9 @@ public class WorldStateController : MonoBehaviour
         SetNextValidIndex(true);
 
         GlobalDataModel.FieldViewController.UpdateViews(); //UpdateViewsDelegate();
+        
+        InfoWall.UpdateInformation();
+        TableMap.SetTexture();
     }
 
     public void PreviousDataset()
@@ -51,6 +58,9 @@ public class WorldStateController : MonoBehaviour
         // }
         //
         GlobalDataModel.FieldViewController.UpdateViews();
+        
+        InfoWall.UpdateInformation();
+        TableMap.SetTexture();
     }
 
 

@@ -13,6 +13,11 @@ public class InformationControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UpdateInformation();
+    }
+
+    public void UpdateInformation()
+    {
         var initFieldId = GlobalDataModel.CurrentField.ID;
         NameValueText.text = initFieldId;
         
@@ -23,7 +28,7 @@ public class InformationControl : MonoBehaviour
             FormulaImage.sprite = formulaSprite;
         }
     }
-
+    
     // Update is called once per frame
     void Update()
     {

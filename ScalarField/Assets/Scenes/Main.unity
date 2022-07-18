@@ -1887,6 +1887,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FieldMesh: {fileID: 1976931700}
   FieldBoundingBox: {fileID: 851291624}
+  TableMap: {fileID: 915135855}
+  InfoWall: {fileID: 1648046800}
 --- !u!4 &493761309
 Transform:
   m_ObjectHideFlags: 0
@@ -2938,7 +2940,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: placholder
+  m_text: placeholder
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

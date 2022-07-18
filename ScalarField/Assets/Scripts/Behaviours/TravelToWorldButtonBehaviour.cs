@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VR.Scripts.Behaviours.Button;
@@ -34,16 +35,19 @@ namespace Behaviours
         /// </summary>
         /// <param name="sceneName">Name of the scene asset</param>
         /// <returns>Enumerator for the coroutine</returns>
-        private static IEnumerator LoadSceneAsync(string sceneName)
+        private IEnumerator LoadSceneAsync(string sceneName)
         {
+            DontDestroyOnLoad(this);
+            
             // Load next scene asynchronously
             var asyncOp = SceneManager.LoadSceneAsync(sceneName);
-        
+
             // Give control back to the unity game loop until the next scene is loaded and can be traveled to
             while (!asyncOp.isDone)
             {
                 yield return null;
             }
+
         }
 
     }

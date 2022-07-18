@@ -1,4 +1,5 @@
 using Model;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using Utility;
 
@@ -11,18 +12,17 @@ namespace Travel
 
         private GameObject sphere;
 
+        private MeshRenderer _mr;
+        
         private void Start()
         {
-            var mr = GetComponent<MeshRenderer>();
+            _mr = GetComponent<MeshRenderer>();
+            SetTexture();
+        }
 
-            var cm = GlobalDataModel.CurrentField.ColorMapId;
-            var dataClassesCount = GlobalDataModel.CurrentField.ColorMapDataClassesCount;
-            // var texture = Resources.Load(
-            //     "texture_maps/" + cm + "/" + dataClassesCount + "/" +
-            //     cm + "_" + dataClassesCount + "_texture.png"
-            // ) as Texture2D;
-
-            mr.material.mainTexture = GlobalDataModel.CurrentField.MeshTexture; //texture;
+        public void SetTexture()
+        {
+            _mr.material.mainTexture = GlobalDataModel.CurrentField.MeshTexture; //texture;
         }
     
         private void OnCollisionEnter(Collision collision)

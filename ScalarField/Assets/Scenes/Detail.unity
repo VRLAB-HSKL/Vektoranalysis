@@ -3573,6 +3573,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b442a486285d45139fcef2bafb0c0db7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FieldMesh: {fileID: 941685788}
+  FieldBoundingBox: {fileID: 674071311}
+  InfoWall: {fileID: 0}
 --- !u!4 &1676658719
 Transform:
   m_ObjectHideFlags: 0
@@ -3748,7 +3751,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688433629}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7fd655e16b44342a21386dae4a3b58d, type: 3}
   m_Name: 

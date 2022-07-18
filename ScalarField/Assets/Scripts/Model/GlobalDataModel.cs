@@ -46,7 +46,7 @@ namespace Model
         /// </summary>
         public static ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        public static int CurrentFieldIndex { get; set; };
+        public static int CurrentFieldIndex { get; set; }
 
         public static List<ScalarField> ScalarFields { get; set; } = new List<ScalarField>();
 
@@ -223,8 +223,11 @@ namespace Model
                 // Load texture based on chosen identifiers in init file
                 var colorMapId = sf.ColorMapId;
                 var colorMapDataClassesCount = sf.ColorMapDataClassesCount;
-                var textureResourcePath = "texture_maps/" + colorMapId + "/" + colorMapDataClassesCount + "/" +
-                               colorMapId + "_" + colorMapDataClassesCount + "_texture";
+                var textureResourcePath = "texture_maps/" 
+                                          + sf.ID + "/"
+                                          + colorMapId + "/" 
+                                          + colorMapDataClassesCount + "/" 
+                                          + colorMapId + "_" + colorMapDataClassesCount + "_texture";
             
                 var texture = Resources.Load(textureResourcePath) as Texture2D;
                 if (texture is null)
