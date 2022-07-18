@@ -48,8 +48,8 @@ public class DrawTangentNormal : MonoBehaviour
 
         if (tangentDistance < thresholdDistance)
         {
-            tangentSphereLR.SetPosition(0, pointSphere.transform.position);
-            tangentSphereLR.SetPosition(1, tangentSphere.transform.position);
+            tangentSphereLR.SetPosition(0, pointSphere.transform.position + new Vector3(0, 0, -0.005f));
+            tangentSphereLR.SetPosition(1, tangentSphere.transform.position + new Vector3(0, 0, -0.005f));
             tangentDrawn = true;
         } else
         {
@@ -59,8 +59,8 @@ public class DrawTangentNormal : MonoBehaviour
 
         if (normalDistance < thresholdDistance)
         {
-            normalSphereLR.SetPosition(0, pointSphere.transform.position);
-            normalSphereLR.SetPosition(1, normalSphere.transform.position);
+            normalSphereLR.SetPosition(0, pointSphere.transform.position + new Vector3(0, 0, 0.005f));
+            normalSphereLR.SetPosition(1, normalSphere.transform.position + new Vector3(0, 0, 0.005f));
             normalDrawn = true;
         } else
         {
@@ -105,7 +105,7 @@ public class DrawTangentNormal : MonoBehaviour
         else Debug.Log("tangent: incorrect");
 
         if (!normalDrawn) Debug.Log("normal not drawn");
-        else if (normAngle < 20) Debug.Log("normal: correct");
+        else if (normAngle < 20 || (normAngle > 160 && normAngle < 200)) Debug.Log("normal: correct");
         else Debug.Log("normal: incorrect");
 
         showSolution(tangent, normal);
@@ -125,6 +125,8 @@ public class DrawTangentNormal : MonoBehaviour
 
         //generate sphere on curve
         pointSphere = Utility.DrawingUtility.DrawSphereOnLine(drawCurveDisplay, pointIndex, bbDimensions);
+        //make sure sphere cannot be grabbed with tangent/normal spheres
+        pointSphere.GetComponent<SphereCollider>().enabled = false;
 
         //generate tangent and normal spheres
         float pointSphereX = pointSphere.transform.position.x - 4.5f;   //account for x offset
