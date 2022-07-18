@@ -422,6 +422,7 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
+            drawDisplay.generateCurve();
         }
 
         /// <summary>

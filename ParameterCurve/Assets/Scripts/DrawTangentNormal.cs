@@ -11,6 +11,8 @@ public class DrawTangentNormal : MonoBehaviour
     public LineRenderer worldCurve;
     public GameObject tangentSphereParent;
     public GameObject normalSphereParent;
+    public LineRenderer tangentSolutionLine;
+    public LineRenderer normalSolutionLine;
 
     private GameObject pointSphere;
     private GameObject tangentSphere;
@@ -20,12 +22,15 @@ public class DrawTangentNormal : MonoBehaviour
     private LineRenderer tangentSphereLR;
     private LineRenderer normalSphereLR;
 
+    private bool tangentDrawn, normalDrawn;
     private int pointIndex = 200;
 
     // Start is called before the first frame update
     void Start()
     {
         drawCurveLR = drawCurveDisplay.GetComponent<LineRenderer>();
+        tangentDrawn = false;
+        normalDrawn = false;
         generateCurve();
     }
 
@@ -45,18 +50,22 @@ public class DrawTangentNormal : MonoBehaviour
         {
             tangentSphereLR.SetPosition(0, pointSphere.transform.position);
             tangentSphereLR.SetPosition(1, tangentSphere.transform.position);
+            tangentDrawn = true;
         } else
         {
             tangentSphereLR.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
+            tangentDrawn = false;
         }
 
         if (normalDistance < thresholdDistance)
         {
             normalSphereLR.SetPosition(0, pointSphere.transform.position);
             normalSphereLR.SetPosition(1, normalSphere.transform.position);
+            normalDrawn = true;
         } else
         {
             normalSphereLR.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
+            normalDrawn = false;
         }
     }
 
@@ -77,8 +86,8 @@ public class DrawTangentNormal : MonoBehaviour
     private void compareVectors()
     {
         FresnetSerretApparatus fsr = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].FresnetApparatuses[pointIndex];
-        Vector3 tangent = fsr.Tangent;
-        Vector3 normal = fsr.Normal;
+        Vector3 tangent = fsr.Tangent.normalized;
+        Vector3 normal = fsr.Normal.normalized;
         //Vector3 binormal = fsr.Binormal;
 
         Vector3 userTangent = tangentSphereLR.GetPosition(1) - tangentSphereLR.GetPosition(0);
@@ -91,11 +100,15 @@ public class DrawTangentNormal : MonoBehaviour
         Debug.Log("angle b/t normals: " + normAngle);
 
         //also allow wrong direction tangent
-        if (tanAngle < 20 || (tanAngle > 160 && tanAngle < 200)) Debug.Log("tangent: correct");
+        if (!tangentDrawn) Debug.Log("tangent not drawn");
+        else if (tanAngle < 20 || (tanAngle > 160 && tanAngle < 200)) Debug.Log("tangent: correct");
         else Debug.Log("tangent: incorrect");
 
-        if (normAngle < 20) Debug.Log("normal: correct");
+        if (!normalDrawn) Debug.Log("normal not drawn");
+        else if (normAngle < 20) Debug.Log("normal: correct");
         else Debug.Log("normal: incorrect");
+
+        showSolution(tangent, normal);
     }
 
     private void generateSpheres(int pointIndex)
@@ -103,6 +116,10 @@ public class DrawTangentNormal : MonoBehaviour
         if(pointSphere != null) Destroy(pointSphere);
         if (tangentSphere != null) Destroy(tangentSphere);
         if (normalSphere != null) Destroy(normalSphere);
+
+        //reset solution lines
+        tangentSolutionLine.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
+        normalSolutionLine.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
 
         Vector3 bbDimensions = new Vector3(2.5f, 2.5f, 2.5f);
 
@@ -171,5 +188,14 @@ public class DrawTangentNormal : MonoBehaviour
             normPC.locked = true;
             normPC.constraintActive = true;
         }
+    }
+
+    private void showSolution(Vector3 tangent, Vector3 normal)
+    {
+        tangentSolutionLine.SetPosition(0, pointSphere.transform.position);
+        tangentSolutionLine.SetPosition(1, pointSphere.transform.position + new Vector3(tangent.x, tangent.y, tangent.z));
+
+        normalSolutionLine.SetPosition(0, pointSphere.transform.position);
+        normalSolutionLine.SetPosition(1, pointSphere.transform.position + new Vector3(normal.x, normal.y, normal.z));
     }
 }
