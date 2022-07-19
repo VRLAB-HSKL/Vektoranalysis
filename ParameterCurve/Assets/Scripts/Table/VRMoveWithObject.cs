@@ -1,170 +1,187 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 
-
-/// <summary>
-/// Move an GameObject in relation to another GameObject , similar to VRRotateWithObject
-/// </summary>
-/// 
-
-/// <seealso>
-/// <ul>
-/// <li>VRRotateWithObject</li>
-/// </ul>
-/// </seealso>
-
-
-public class VRMoveWithObject : MonoBehaviour
+namespace ImmersiveVolumeGraphics
 {
-    /// <summary>
-    /// First GameObject
-    /// </summary>
-    public GameObject SourceObject;
-    
-    /// <summary>
-    /// Second GameObject
-    /// </summary>
-    public GameObject TargetObject;
-
-    /// <summary>
-    /// Name of the first GameObject
-    /// </summary>
-    public string SourceObjectName = string.Empty;
-    
-    /// <summary>
-    /// Name of the second GameObject
-    /// </summary>
-    public string TargetObjectName = string.Empty;
-
-    ///// <summary>
-    ///// Displacementvalue
-    ///// </summary>
-    //public float Origin = 0;
-
-    ///// <summary>
-    ///// Check if the movement is in x-Direction
-    ///// </summary>
-    //public bool XDirection;
-    ///// <summary>
-    ///// Check if the movement is in y-Direction
-    ///// </summary>
-    //public bool YDirection;
-    ///// <summary>
-    ///// Check if the movement is in z-Direction
-    ///// </summary>
-    //public bool ZDirection;
-
-
-    public Vector3 DisplacementVector = Vector3.zero;
-
-
-    // Start is called before the first frame update
-
-
-    /// <summary>
-    /// Find both Objects in the Scene
-    /// </summary>
-    /// <remarks>
-    /// </remarks>
-    /// <param name="void"></param>
-    /// <returns>void</returns>
-    void Start()
+    namespace ModelEdit
     {
-        //
-        SourceObject = GameObject.Find(SourceObjectName);
-        TargetObject = GameObject.Find(TargetObjectName);
-
-    }
-
-    // Update is called once per frame
-
-
-
-    /// <summary>
-    /// Change the localPosition of the first GameObject in relation of the second GameObject
-    /// </summary>
-    /// <remarks>
-    /// <ul>
-    /// <li>Check whether the first Object exists or not</li>
-    /// <li>Check in which direction the translation happens</li>
-    /// <li>Set the first Object´s localPosition to the position of the second Object (in the correct direction) </li>
-    /// <li>Find  the Objects when the first Object doesnt exist (updating Objectreference)  </li>
-    /// </ul> 
-    /// </remarks>
-    /// <param name="void"></param>
-    /// <returns>void</returns>
-    void Update()
-    {
-        // obj.transform.position = this.transform.position;
-        if (SourceObject != null)
+        /// <summary>
+        /// Move an GameObject in relation to another GameObject , similar to VRRotateWithObject
+        /// </summary>
+        /// <seealso>
+        /// <ul>
+        /// <li>VRRotateWithObject</li>
+        /// </ul>
+        /// </seealso>
+        public class VRMoveWithObject : MonoBehaviour
         {
-            //if (ZDirection)
-            //{
-            //    SourceObject.transform.localPosition = new Vector3(0, -(TargetObject.transform.position.z - Origin), 0);
-            //}
+            /// <summary>
+            /// First GameObject: object being affected
+            /// </summary>
+            public GameObject targetObject;
 
-            //if (XDirection)
-            //{
-            //    SourceObject.transform.localPosition = new Vector3((TargetObject.transform.position.x - Origin), 0, 0);
-            //}
+            /// <summary>
+            /// Second GameObject: object whose movement affects targetObject
+            /// </summary>
+            public GameObject controlObject;
 
-            //if (YDirection)
-            //{
-            //    SourceObject.transform.localPosition = new Vector3(0, 0, -(TargetObject.transform.position.z - Origin));
-            //}
+            ///// <summary>
+            ///// Name of the first GameObject
+            ///// </summary>
+            //public string targetObjectName = "";
 
-            TargetObject.transform.localPosition = (TargetObject.transform.position - DisplacementVector);
-        }
-        else
-        {
-            SourceObject = GameObject.Find(SourceObjectName);
-            TargetObject = GameObject.Find(TargetObjectName);
+            ///// <summary>
+            ///// Name of the second GameObject
+            ///// </summary>
+            //public string ObjectName2 = "";
+
+            /// <summary>
+            /// Displacement value
+            /// </summary>
+            public Vector3 controlObjectOrigin;
+
+            /// <summary>
+            /// Displacement value
+            /// </summary>
+            public Vector3 targetObjectOrigin;
+
+            /// <summary>
+            /// Check if the movement is in x-Direction
+            /// </summary>
+            public bool XDirection;
+
+            /// <summary>
+            /// Check if the movement is in y-Direction
+            /// </summary>
+            public bool YDirection;
+
+            /// <summary>
+            /// Check if the movement is in z-Direction
+            /// </summary>
+            public bool ZDirection;
+
+            /// <summary>
+            /// Line renderer of target object (if it contains one)
+            /// </summary>
+            private LineRenderer lr;
+
+            /// <summary>
+            /// Original point positions in line renderer of target object (if it contains one)
+            /// </summary>
+            private List<Vector3> lrPositions;
+
+            /// <summary>
+            /// Find both Objects in the Scene
+            /// </summary>
+            /// <remarks>
+            /// </remarks>
+            /// <returns>void</returns>
+            private void Start()
+            {
+                //targetObject = GameObject.Find(targetObjectName);
+                //controlObject = GameObject.Find(ObjectName2);
+                controlObjectOrigin = controlObject.transform.position;
+                targetObjectOrigin = targetObject.transform.localPosition;
+
+                lr = targetObject.GetComponent<LineRenderer>();
+                if(lr != null)
+                {
+                    lrPositions = new List<Vector3>();
+                    for(int i = 0; i < lr.positionCount; i++)
+                    {
+                        lrPositions.Add(lr.GetPosition(i));
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Change the localPosition of the first GameObject in relation of the second GameObject
+            /// </summary>
+            /// <remarks>
+            /// <ul>
+            /// <li>Check whether the first Object exists or not</li>
+            /// <li>Check in which direction the translation happens</li>
+            /// <li>Set the first Object´s localPosition to the position of the second Object (in the correct direction) </li>
+            /// <li>Find  the Objects when the first Object doesnt exist (updating Objectreference)  </li>
+            /// </ul> 
+            /// </remarks>
+            /// <returns>void</returns>
+            private void Update()
+            {
+                if (targetObject != null)
+                {
+                    if (ZDirection)
+                    {
+                        targetObject.transform.localPosition = targetObjectOrigin +
+                            new Vector3(0f, 0f, (controlObject.transform.position.z - controlObjectOrigin.z));
+                    }
+
+                    if (XDirection)
+                    {
+                        targetObject.transform.localPosition = targetObjectOrigin +
+                            new Vector3((controlObject.transform.position.x - controlObjectOrigin.x), 0f, 0f);
+                    }
+
+                    if (YDirection)
+                    {
+                        float changeY = (controlObject.transform.position.y - controlObjectOrigin.y);
+                        targetObject.transform.localPosition = targetObjectOrigin +
+                            new Vector3(0, changeY, 0);
+
+                        if (lr != null)
+                        {
+                            for(int i = 0; i < lr.positionCount; i++)
+                            {
+                                lr.SetPosition(i, lrPositions[i] + new Vector3(0, changeY, 0));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //targetObject = GameObject.Find(targetObjectName);
+                    //controlObject = GameObject.Find(ObjectName2);
+                }
+            }
+
+            /// <summary>
+            /// Initialize the Variables and Objects
+            /// </summary>
+            /// <remarks>
+            /// This Method is used in the ImportRAWModel-Script to initialize this class
+            /// <ul>
+            /// <li>Hand over the Object names</li>
+            /// <li>Set the Direction-Booleans</li>
+            /// </ul> 
+            /// </remarks>
+            /// <param name="name1"></param>
+            /// <param name="name2"></param>
+            /// <param name="dir"></param>
+            /// <returns>void</returns>
+            public void InitObj(string name1, string name2, string dir)
+            {
+                // ToDo: Maybe use enum for direction values instead of raw strings
+
+                //targetObjectName = name1;
+                //ObjectName2 = name2;
+
+                if (dir.Equals("x"))
+                {
+                    XDirection = true;
+                }
+
+                if (dir.Equals("y"))
+                {
+                    YDirection = true;
+                }
+
+                if (dir.Equals("z"))
+                {
+                    ZDirection = true;
+                }
+            }
+
+
         }
     }
-
-
-
-    /// <summary>
-    /// Initialize the Variables and Objects
-    /// </summary>
-    /// <remarks>
-    /// This Method is used in the ImportRAWModel-Script to initialize this class
-    /// <ul>
-    /// <li>Hand over the Objectnames</li>
-    /// <li>Set the Direction-Booleans</li>
-    /// </ul> 
-    /// </remarks>
-    /// <param name="name1"></param>
-    /// <param name="name2"></param>
-    /// <param name="dir"></param>
-    /// <returns>void</returns>
-    //public void initObj(string name1, string name2, string dir)
-    //{
-    //    SourceObjectName = name1;
-    //    TargetObjectName = name2;
-
-
-    //    if (dir.Equals("x"))
-    //    {
-    //        XDirection = true;
-
-    //    }
-
-    //    if (dir.Equals("y"))
-    //    {
-    //        YDirection = true;
-
-    //    }
-
-    //    if (dir.Equals("z"))
-    //    {
-    //        ZDirection = true;
-
-    //    }
-
-    //}
-
-
 }
