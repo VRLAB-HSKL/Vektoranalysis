@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
@@ -11,6 +12,7 @@ namespace Travel
     public class PlaceUserOnStartup : MonoBehaviour
     {
         public ScalarFieldManager ScalarFieldManager;
+        public TravelManager TravelManager;
         
         public MeshFilter field;
         public GameObject Cockpit;
@@ -32,7 +34,7 @@ namespace Travel
 
             if (user is null) return;
 
-            var estimatedIndex = GlobalDataModel.EstimatedIndex;
+            var estimatedIndex = TravelManager.EstimatedIndex;
             var initValues = ScalarFieldManager.CurrentField.MeshPoints[estimatedIndex];
 
             var initVector = new Vector3(initValues[0], initValues[1], initValues[2]);

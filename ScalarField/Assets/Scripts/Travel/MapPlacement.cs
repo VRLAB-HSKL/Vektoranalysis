@@ -1,4 +1,5 @@
 using Model;
+using Model.ScriptableObjects;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using Utility;
@@ -8,6 +9,7 @@ namespace Travel
     public class MapPlacement : MonoBehaviour
     {
         public ScalarFieldManager ScalarFieldManager;
+        public TravelManager TravelManager;
         
         public GameObject PointerObject;
         public Material SpawnPointMat;
@@ -98,11 +100,11 @@ namespace Travel
                 }
             }
 
-            GlobalDataModel.EstimatedIndex = closest;
+            TravelManager.EstimatedIndex = closest;
         
             Debug.Log("contact point: " + contact.point + ", transformed point: " + transformedPoint +
                       ", mapped values: (" + mappedX + ", " + mappedY + ")" + 
-                      ", estimated index: " + GlobalDataModel.EstimatedIndex);
+                      ", estimated index: " + TravelManager.EstimatedIndex);
         
             //Debug.Log();
 

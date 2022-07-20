@@ -11,9 +11,10 @@ public class WorldStateController : MonoBehaviour
     
     public GameObject FieldMesh;
     public GameObject FieldBoundingBox;
-
+    
     public MapPlacement TableMap;
     public InformationControl InfoWall;
+    public CreateColorScale ColorScale;
     
     /// <summary>
     /// Single awake in application to ensure init file was parsed
@@ -21,13 +22,12 @@ public class WorldStateController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        //Debug.Log("count: " + ScalarFieldManager.ScalarFields.Count);
         InitializeModel();
     }
 
     private void InitializeModel()
     {
-        // Initialize global model
+        // Parse scalar fields data
         ScalarFieldManager.ParseInitFile();
         
         InitializeViewControllers();
@@ -39,34 +39,29 @@ public class WorldStateController : MonoBehaviour
             new FieldViewController(ScalarFieldManager, FieldMesh, FieldBoundingBox);
     }
 
+    private void UpdateRoom()
+    {
+        InfoWall.UpdateInformation();
+        TableMap.SetTexture();
+        ColorScale.UpdateScale();
+    }
+
     public void NextDataset()
     {
         SetNextValidIndex(true);
 
         ViewControllerManager.FieldViewController.UpdateViews(); //UpdateViewsDelegate();
         
-        InfoWall.UpdateInformation();
-        TableMap.SetTexture();
+        UpdateRoom();
     }
 
     public void PreviousDataset()
     {
         SetNextValidIndex(false);
 
-        // if (ScalarFieldManager.FieldViewController is null)
-        // {
-        //     Debug.Log("FieldViewController is null");
-        // }
-        //
-        // if (ScalarFieldManager.FieldViewController.UpdateViewsDelegate is null)
-        // {
-        //     Debug.Log("FieldViewController.UpdateViewsDelegate is null");
-        // }
-        //
         ViewControllerManager.FieldViewController.UpdateViews();
         
-        InfoWall.UpdateInformation();
-        TableMap.SetTexture();
+        UpdateRoom();
     }
 
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model;
+using Model.Enums;
 using UnityEngine;
 using Utility;
 
@@ -12,7 +13,7 @@ namespace FieldGeneration
         public GameObject BoundingBox;
         public GameObject ArrowPrefab;
 
-        public GlobalDataModel.OptimizationAlgorithm AlgorithmPath = GlobalDataModel.OptimizationAlgorithm.NELDER_MEAD ;
+        public OptimizationAlgorithm AlgorithmPath = OptimizationAlgorithm.NELDER_MEAD ;
         public int PathIndex;
         public bool showPathOnStartup;
         
@@ -37,36 +38,33 @@ namespace FieldGeneration
             var points = ScalarFieldManager.CurrentField.MeshPoints;
             //var cps = ScalarFieldManager.CurrentField.CriticalPoints;
 
-
             var path = new List<Vector3>();
             switch (AlgorithmPath)
             {
-                case GlobalDataModel.OptimizationAlgorithm.STEEPEST_DESCENT:
+                case OptimizationAlgorithm.STEEPEST_DESCENT:
                     path = ScalarFieldManager.CurrentField.SteepestDescentPaths[PathIndex];
                     break;
                 
-                case GlobalDataModel.OptimizationAlgorithm.NELDER_MEAD:
+                case OptimizationAlgorithm.NELDER_MEAD:
                     path = ScalarFieldManager.CurrentField.NelderMeadPaths[PathIndex];
                     break;
                 
-                case GlobalDataModel.OptimizationAlgorithm.NEWTON:
+                case OptimizationAlgorithm.NEWTON:
                     path = ScalarFieldManager.CurrentField.NewtonPaths[PathIndex];
                     break;
                 
-                case GlobalDataModel.OptimizationAlgorithm.NEWTON_DISCRETE:
+                case OptimizationAlgorithm.NEWTON_DISCRETE:
                     path = ScalarFieldManager.CurrentField.NewtonDiscretePaths[PathIndex];
                     break;
                 
-                case GlobalDataModel.OptimizationAlgorithm.NEWTON_TRUSTED:
+                case OptimizationAlgorithm.NEWTON_TRUSTED:
                     path = ScalarFieldManager.CurrentField.NewtonTrustedPaths[PathIndex];
                     break;
                 
-                case GlobalDataModel.OptimizationAlgorithm.BFGS:
+                case OptimizationAlgorithm.BFGS:
                     path = ScalarFieldManager.CurrentField.BFGSPaths[PathIndex];
                     break;
             }
-
-
             
             // foreach(List<Vector3> path in ScalarFieldManager.CurrentField.NelderMeadPaths[PathIndex])
             // {

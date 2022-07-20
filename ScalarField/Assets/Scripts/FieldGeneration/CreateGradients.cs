@@ -22,8 +22,6 @@ namespace FieldGeneration
         {
             showGradientsOnStartup = !showGradientsOnStartup;
             
-            Debug.Log("showGrads: " + showGradientsOnStartup);
-            
             SetGradientsActive(showGradientsOnStartup);
         }
 
@@ -37,7 +35,7 @@ namespace FieldGeneration
         
         
         private void Start()
-        {
+        {   
             var startIndex = 0;
             var lastIndexBefore = ScalarFieldManager.CurrentField.Gradients.Count;
             var meshVectors = ScalarFieldManager.CurrentField.MeshPoints;

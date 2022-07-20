@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
+  TravelManager: {fileID: 11400000, guid: 3f401e3ab9d71d647b29ff144586bb13, type: 2}
   field: {fileID: 941685791}
   Cockpit: {fileID: 1943248078}
   CockpitOffset: {x: 0, y: -2, z: 0}
@@ -3760,7 +3761,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688433629}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7fd655e16b44342a21386dae4a3b58d, type: 3}
   m_Name: 

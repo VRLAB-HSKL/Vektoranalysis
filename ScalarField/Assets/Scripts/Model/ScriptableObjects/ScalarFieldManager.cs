@@ -206,8 +206,9 @@ public class ScalarFieldManager : ScriptableObject
 
             ScalarFields.Add(sf);
         }
-
         
+        // Set index to 0 on application start
+        CurrentFieldIndex = 0;
     }
     
     private List<List<Vector3>> ParsePath(List<List<float[]>> paths)
