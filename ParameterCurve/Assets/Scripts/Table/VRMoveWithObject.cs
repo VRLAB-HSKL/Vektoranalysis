@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Events;
+using HTC.UnityPlugin.Vive;
 
 namespace ImmersiveVolumeGraphics
 {
@@ -61,14 +63,14 @@ namespace ImmersiveVolumeGraphics
             public bool ZDirection;
 
             /// <summary>
-            /// Line renderer of target object (if it contains one)
+            /// Line renderers of target object and children (if it contains one)
             /// </summary>
-            private LineRenderer lr;
+            private LineRenderer[] lrs;
 
             /// <summary>
-            /// Original point positions in line renderer of target object (if it contains one)
+            /// Original point positions in line renderers of target object (if it contains one)
             /// </summary>
-            private List<Vector3> lrPositions;
+            private List<List<Vector3>> lrsPositions;
 
             /// <summary>
             /// Find both Objects in the Scene
@@ -83,13 +85,18 @@ namespace ImmersiveVolumeGraphics
                 controlObjectOrigin = controlObject.transform.position;
                 targetObjectOrigin = targetObject.transform.localPosition;
 
-                lr = targetObject.GetComponent<LineRenderer>();
-                if(lr != null)
+                lrs = targetObject.GetComponentsInChildren<LineRenderer>();
+                if (lrs != null)
                 {
-                    lrPositions = new List<Vector3>();
-                    for(int i = 0; i < lr.positionCount; i++)
+                    lrsPositions = new List<List<Vector3>>();
+                    for(int i = 0; i < lrs.Length; i++)  //for each LR in target
                     {
-                        lrPositions.Add(lr.GetPosition(i));
+                        List<Vector3> positions = new List<Vector3>();
+                        for(int j = 0; j < lrs[i].positionCount; j++)    //for each point in each LR
+                        {
+                            positions.Add(lrs[i].GetPosition(j));
+                        }
+                        lrsPositions.Add(positions);
                     }
                 }
             }
@@ -108,31 +115,35 @@ namespace ImmersiveVolumeGraphics
             /// <returns>void</returns>
             private void Update()
             {
+                if (controlObject.GetComponent<BasicGrabbable>().isGrabbed)
+                {
+                    updatePosition();
+                }
+            }
+
+            private void updatePosition()
+            {
                 if (targetObject != null)
                 {
-                    if (ZDirection)
-                    {
-                        targetObject.transform.localPosition = targetObjectOrigin +
-                            new Vector3(0f, 0f, (controlObject.transform.position.z - controlObjectOrigin.z));
-                    }
+                    float changeX, changeY, changeZ;
 
-                    if (XDirection)
-                    {
-                        targetObject.transform.localPosition = targetObjectOrigin +
-                            new Vector3((controlObject.transform.position.x - controlObjectOrigin.x), 0f, 0f);
-                    }
+                    if (ZDirection) changeZ = (controlObject.transform.position.z - controlObjectOrigin.z);
+                    else changeZ = 0;
 
-                    if (YDirection)
-                    {
-                        float changeY = (controlObject.transform.position.y - controlObjectOrigin.y);
-                        targetObject.transform.localPosition = targetObjectOrigin +
-                            new Vector3(0, changeY, 0);
+                    if (XDirection) changeX = (controlObject.transform.position.x - controlObjectOrigin.x);
+                    else changeX = 0;
 
-                        if (lr != null)
+                    if (YDirection) changeY = (controlObject.transform.position.y - controlObjectOrigin.y);
+                    else changeY = 0;
+
+                    targetObject.transform.localPosition = targetObjectOrigin + new Vector3(changeX, changeY, changeZ);
+                    if (lrs != null)
+                    {
+                        for (int i = 0; i < lrs.Length; i++)
                         {
-                            for(int i = 0; i < lr.positionCount; i++)
+                            for (int j = 0; j < lrs[i].positionCount; j++)
                             {
-                                lr.SetPosition(i, lrPositions[i] + new Vector3(0, changeY, 0));
+                                lrs[i].SetPosition(j, lrsPositions[i][j] + new Vector3(changeX, changeY, changeZ));
                             }
                         }
                     }
@@ -181,6 +192,26 @@ namespace ImmersiveVolumeGraphics
                 }
             }
 
+            public void updateLR(string lrToUpdate)
+            {
+                if (lrs != null)
+                {
+                    for (int i = 0; i < lrs.Length; i++)
+                    {
+                        if (lrs[i].gameObject.name.Equals(lrToUpdate))
+                        {
+                            for (int j = 0; j < lrs[i].positionCount; j++)
+                            {
+                                lrsPositions[i][j] = lrs[i].GetPosition(j);
+                            }
+                        }
+                    }
+                }
+
+                //after updating line, reset object positions
+                controlObject.transform.position = controlObjectOrigin;
+                updatePosition();
+            }
 
         }
     }

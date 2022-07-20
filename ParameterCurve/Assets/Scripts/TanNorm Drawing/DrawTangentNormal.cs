@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using HTC.UnityPlugin.Vive;
 using Model;
+using ImmersiveVolumeGraphics.ModelEdit;
 
 public class DrawTangentNormal : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class DrawTangentNormal : MonoBehaviour
     public GameObject normalSphereParent;
     public LineRenderer tangentSolutionLine;
     public LineRenderer normalSolutionLine;
+    public GameObject heightAdjustment;
 
     private GameObject pointSphere;
     private GameObject tangentSphere;
@@ -80,6 +82,7 @@ public class DrawTangentNormal : MonoBehaviour
             drawCurveLR.SetPosition(i, new Vector3(x, y, z));
         }
 
+        heightAdjustment.GetComponent<VRMoveWithObject>().updateLR(drawCurveDisplay.name);
         generateSpheres(pointIndex);
     }
 

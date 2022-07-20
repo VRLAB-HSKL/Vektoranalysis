@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10446,6 +10446,7 @@ MonoBehaviour:
   normalSphereParent: {fileID: 1456707370}
   tangentSolutionLine: {fileID: 1187235190}
   normalSolutionLine: {fileID: 13329186}
+  heightAdjustment: {fileID: 1580619615}
 --- !u!4 &759389254
 Transform:
   m_ObjectHideFlags: 0
@@ -20855,7 +20856,7 @@ GameObject:
   - component: {fileID: 1580619618}
   - component: {fileID: 1580619617}
   m_Layer: 0
-  m_Name: HeightAdjustment
+  m_Name: DrawDisplayHeightAdjustment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20924,7 +20925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b857e661718c5d44b81ea7f0e3e1d541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 559467379}
+  targetObject: {fileID: 759389252}
   controlObject: {fileID: 1580619615}
   controlObjectOrigin: {x: 0, y: 0, z: 0}
   targetObjectOrigin: {x: 0, y: 0, z: 0}
@@ -20944,12 +20945,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   XDirection: 0
-  YDirection: 0
+  YDirection: 1
   ZDirection: 0
   OffsetX: 0
-  OffsetY: 0
+  OffsetY: 0.645
   OffsetZ: 0
-  StartPosition: {x: 0, y: 0, z: 0}
+  StartPosition: {x: -1.68, y: -0.75, z: 0}
 --- !u!65 &1580619620
 BoxCollider:
   m_ObjectHideFlags: 0
