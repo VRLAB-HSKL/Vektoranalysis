@@ -9,6 +9,8 @@ namespace Views
 {
     public abstract class AbstractFieldView
     {
+        private ScalarFieldManager _data;
+        
         private MeshRenderer _mr;
         private MeshFilter _mf;
         private MeshCollider _mc;
@@ -18,8 +20,10 @@ namespace Views
 
         private readonly GameObject _boundingBox;
         
-        protected AbstractFieldView(GameObject mesh, GameObject boundingBox)
+        protected AbstractFieldView(ScalarFieldManager data, GameObject mesh, GameObject boundingBox)
         {
+            _data = data;
+            
             _mr = mesh.GetComponent<MeshRenderer>();
             _mf = mesh.GetComponent<MeshFilter>();
             _mc = mesh.GetComponent<MeshCollider>();
@@ -43,7 +47,7 @@ namespace Views
             var mat = _mr.material;
             mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
             
-            mat.mainTexture = GlobalDataModel.CurrentField.MeshTexture;
+            mat.mainTexture = _data.CurrentField.MeshTexture;
         }
         
         public bool PositionMeshAtOrigin;
@@ -77,7 +81,7 @@ namespace Views
                 name="Scalar field mesh",
             };
         
-            var sf = GlobalDataModel.CurrentField;
+            var sf = _data.CurrentField;
 
             var dVertices = sf.DisplayPoints;
             // var displayVertices = new List<Vector3>();
@@ -132,7 +136,7 @@ namespace Views
             
             mesh.SetIndices(indices.ToArray(), topology, 0, true);
 
-            GlobalDataModel.CurrentField.MeshPoints = displayVertices;
+            _data.CurrentField.MeshPoints = displayVertices;
             
             // Calculate normals
             var normals = CalculateNormals(displayVertices, indices, MeshTopology.Triangles);
@@ -198,7 +202,7 @@ namespace Views
         /// <returns></returns>
         private List<int> GenerateTriangleIndices(ICollection vertices, bool windClockWise)
         {
-            var sampleCount = GlobalDataModel.CurrentField.SampleCount;
+            var sampleCount = _data.CurrentField.SampleCount;
             var indicesList = new List<int>();
 
             for (var i = 0; i < vertices.Count; i++)
@@ -224,7 +228,7 @@ namespace Views
                        a (i)            b                
                     */
                     var a = i;
-                    var b = i + GlobalDataModel.CurrentField.SampleCount;
+                    var b = i + _data.CurrentField.SampleCount;
                     var c = i + 1;
                 
                     // Choose index order based on winding direction
@@ -243,8 +247,8 @@ namespace Views
                 }
 
                 // Determine if we have to draw a upper right triangle below the current point
-                var isLowerBound = i % GlobalDataModel.CurrentField.SampleCount == 0;
-                var isFirstColumn = i < GlobalDataModel.CurrentField.SampleCount;
+                var isLowerBound = i % _data.CurrentField.SampleCount == 0;
+                var isFirstColumn = i < _data.CurrentField.SampleCount;
                 var drawUpperRightTriangle = !isLowerBound && !isFirstColumn;
 
                 // If we are not in the first column, and not on the lower bound of the column, draw upper right triangle
@@ -263,7 +267,7 @@ namespace Views
                     */
                     var a = i;
                     var b = i - 1;
-                    var c = i - GlobalDataModel.CurrentField.SampleCount;
+                    var c = i - _data.CurrentField.SampleCount;
                 
                     // Choose index order based on winding direction
                     if (windClockWise)
@@ -301,14 +305,14 @@ namespace Views
             
                 // Up
                 indices.Add(i + 1);
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount + 1);
+                indices.Add(i + _data.CurrentField.SampleCount + 1);
             
                 // Right
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount + 1);
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount);
+                indices.Add(i + _data.CurrentField.SampleCount + 1);
+                indices.Add(i + _data.CurrentField.SampleCount);
             
                 // Down
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount);
+                indices.Add(i + _data.CurrentField.SampleCount);
                 indices.Add(i);
             }
 
@@ -362,8 +366,8 @@ namespace Views
                         var normal = CalculateQuadNormal(
                             vertices[indices[i]],
                             vertices[indices[i + 1]],
-                            vertices[indices[i + GlobalDataModel.CurrentField.SampleCount + 1]],
-                            vertices[indices[i + GlobalDataModel.CurrentField.SampleCount]]
+                            vertices[indices[i + _data.CurrentField.SampleCount + 1]],
+                            vertices[indices[i + _data.CurrentField.SampleCount]]
                         );
                     }
 

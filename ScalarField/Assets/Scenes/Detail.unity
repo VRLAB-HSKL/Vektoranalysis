@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ebff12db10fdb6459a9e0967203abb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   field: {fileID: 941685791}
   Cockpit: {fileID: 1943248078}
   CockpitOffset: {x: 0, y: -2, z: 0}
@@ -596,6 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed77ef1c35f10b8489f3b11ea6bb60e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   Field: {fileID: 941685788}
   ContourValues: []
   LineMat: {fileID: 2100000, guid: 7612cb0962aa72043b2615df841620ab, type: 2}
@@ -2568,6 +2570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5e9bf186b73aa4eb2f99c4b97c2bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 674071311}
   PositionMeshAtOrigin: 0
 --- !u!64 &941685793
@@ -2894,6 +2897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6789adb7c4064019b89035e0ac5f880b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 674071311}
   ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
   AlgorithmPath: 1
@@ -2942,6 +2946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f851385a071e1904fa580ec157e175ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 674071311}
   showCriticalPointsOnStartup: 1
 --- !u!1 &1220453945
@@ -3153,6 +3158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03899f1f5d9e2484b9c040a5d95535f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scalarField: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 674071311}
   ShowOnStartup: 0
 --- !u!1 &1291269485
@@ -3573,8 +3579,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b442a486285d45139fcef2bafb0c0db7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ViewControllerManager: {fileID: 11400000, guid: 54b79b8994c28e746a018e2a140e8515, type: 2}
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   FieldMesh: {fileID: 941685788}
   FieldBoundingBox: {fileID: 674071311}
+  TableMap: {fileID: 0}
   InfoWall: {fileID: 0}
 --- !u!4 &1676658719
 Transform:
@@ -3756,6 +3765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7fd655e16b44342a21386dae4a3b58d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 674071311}
   ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
   showGradientsOnStartup: 0

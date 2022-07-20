@@ -11,6 +11,8 @@ namespace FieldGeneration
 {
     public class CreateContourlines : MonoBehaviour
     {
+        public ScalarFieldManager ScalarFieldManager;
+        
         public GameObject Field;
     
         public List<float> ContourValues = new List<float>();
@@ -75,8 +77,8 @@ namespace FieldGeneration
                     // Flip coordinates to rotate it to the vertical xz plane
                     var flippedVector = new Vector3(p.Raw.x, p.Raw.z, p.Raw.y);
 
-                    var inMinVec = GlobalDataModel.CurrentField.MinRawValues;
-                    var inMaxVec = GlobalDataModel.CurrentField.MaxRawValues;
+                    var inMinVec = ScalarFieldManager.CurrentField.MinRawValues;
+                    var inMaxVec = ScalarFieldManager.CurrentField.MaxRawValues;
                 
                     var scaledX = CalcUtility.MapValueToRange(flippedVector.x, inMinVec.x, inMaxVec.x, 
                         -bbExtents.x, bbExtents.x);
@@ -134,21 +136,21 @@ namespace FieldGeneration
         // Start is called before the first frame update
         private void Start()
         {
-            // var dataClassesCount = float.Parse(GlobalDataModel.InitFile.Info.color_map_data_classes_count);
+            // var dataClassesCount = float.Parse(ScalarFieldManager.InitFile.Info.color_map_data_classes_count);
             // //var numberOfDividingLines = dataClassesCount - 1;
-            // var minZ = GlobalDataModel.CurrentField.MinRawValues.z;
-            // var maxZ = GlobalDataModel.CurrentField.MaxRawValues.z;
+            // var minZ = ScalarFieldManager.CurrentField.MinRawValues.z;
+            // var maxZ = ScalarFieldManager.CurrentField.MaxRawValues.z;
             // var step = Mathf.Abs(maxZ - minZ); 
             // step /= dataClassesCount;
 
             //Debug.Log("Min: " + minZ + ", Max: " + maxZ + ", step: " + step);
 
-            ContourValues = GlobalDataModel.CurrentField.ContourLineValues; //new List<float>();
+            ContourValues = ScalarFieldManager.CurrentField.ContourLineValues; //new List<float>();
         
             // // Draw line for all steps except the first and the last (min and max value has no dividing line)
             // for (var i = 1; i < dataClassesCount; i++)
             // {
-            //     var value = GlobalDataModel.CurrentField.MinRawValues.z + i * step;
+            //     var value = ScalarFieldManager.CurrentField.MinRawValues.z + i * step;
             //     //Debug.Log("Contour value " + i + " : " + value);
             //     ContourValues.Add(value);
             // }
@@ -219,12 +221,12 @@ namespace FieldGeneration
 
             //var bb = BoundingBox.GetComponent<MeshRenderer>().bounds.extents;
         
-            // var x_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.x);
-            // var x_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.x);
-            // var y_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.y);
-            // var y_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.y);
-            // var z_min = GlobalDataModel.CurrentField.displayPoints.Min(v => v.z);
-            // var z_max = GlobalDataModel.CurrentField.displayPoints.Max(v => v.z);    
+            // var x_min = ScalarFieldManager.CurrentField.displayPoints.Min(v => v.x);
+            // var x_max = ScalarFieldManager.CurrentField.displayPoints.Max(v => v.x);
+            // var y_min = ScalarFieldManager.CurrentField.displayPoints.Min(v => v.y);
+            // var y_max = ScalarFieldManager.CurrentField.displayPoints.Max(v => v.y);
+            // var z_min = ScalarFieldManager.CurrentField.displayPoints.Min(v => v.z);
+            // var z_max = ScalarFieldManager.CurrentField.displayPoints.Max(v => v.z);    
             //;
         
             for (var i = 0; i < ContourValues.Count; i++)
@@ -233,26 +235,26 @@ namespace FieldGeneration
                 //
                 // var rawPointList = new List<Vector3>();
                 // var displayPointList = new List<Vector3>();
-                // for(var j = 0; j < GlobalDataModel.CurrentField.rawPoints.Count; ++j)
+                // for(var j = 0; j < ScalarFieldManager.CurrentField.rawPoints.Count; ++j)
                 // {
-                //     var point = GlobalDataModel.CurrentField.rawPoints[j];
+                //     var point = ScalarFieldManager.CurrentField.rawPoints[j];
                 //     
                 //     if (Mathf.Abs(point.z - isoValue) <= epsilon)
                 //     {
                 //         // Debug.Log("Isoline hit !\n" +
                 //         //           "iso value: " + isoValue + "\n" +
                 //         //           "point z: " + point.z + "\n" + 
-                //         //           "display point: " + GlobalDataModel.CurrentField.displayPoints[j]
+                //         //           "display point: " + ScalarFieldManager.CurrentField.displayPoints[j]
                 //         //      s     );
                 //         rawPointList.Add(point);
-                //         displayPointList.Add(GlobalDataModel.CurrentField.displayPoints[j]);
+                //         displayPointList.Add(ScalarFieldManager.CurrentField.displayPoints[j]);
                 //     }
                 // }
                 //
                 // Debug.Log("contour value: " + isoValue + ", found points: " + displayPointList.Count);
 
                 var isoValue = ContourValues[i];
-                var importedPointList = GlobalDataModel.CurrentField.ContourLinePoints[i];
+                var importedPointList = ScalarFieldManager.CurrentField.ContourLinePoints[i];
             
                 // Skip convex hull algorithm and the rest on empty point list
                 if (!importedPointList.Any())
@@ -270,7 +272,7 @@ namespace FieldGeneration
                     var pd = new PointData
                     {
                         Raw = importedPointList[index],
-                        Display = GlobalDataModel.CurrentField.DisplayPoints.Find(p => p == point)  
+                        Display = ScalarFieldManager.CurrentField.DisplayPoints.Find(p => p == point)  
                     };
                     finalPointList.Add(pd);
                 }
@@ -308,8 +310,8 @@ namespace FieldGeneration
                 //     // var y = CalcUtility.MapValueToRange(p.y, y_min, y_max, -bb.y, bb.y);
                 //     // var z = CalcUtility.MapValueToRange(p.z, z_min, z_max, -bb.z, bb.z);
                 //
-                //     var newp = CalcUtility.MapVectorToRange(p, GlobalDataModel.CurrentField.MinValues,
-                //         GlobalDataModel.CurrentField.MaxValues, -bb, bb);
+                //     var newp = CalcUtility.MapVectorToRange(p, ScalarFieldManager.CurrentField.MinValues,
+                //         ScalarFieldManager.CurrentField.MaxValues, -bb, bb);
                 //     
                 //     //new Vector3(x, y, z); 
                 //     

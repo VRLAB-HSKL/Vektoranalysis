@@ -7,6 +7,8 @@ namespace FieldGeneration
 {
     public class CreateAlgorithmPath : MonoBehaviour
     {
+        public ScalarFieldManager ScalarFieldManager;
+        
         public GameObject BoundingBox;
         public GameObject ArrowPrefab;
 
@@ -32,41 +34,41 @@ namespace FieldGeneration
         private void Start()
         {
             var bbScale = BoundingBox.transform.lossyScale;
-            var points = GlobalDataModel.CurrentField.MeshPoints;
-            //var cps = GlobalDataModel.CurrentField.CriticalPoints;
+            var points = ScalarFieldManager.CurrentField.MeshPoints;
+            //var cps = ScalarFieldManager.CurrentField.CriticalPoints;
 
 
             var path = new List<Vector3>();
             switch (AlgorithmPath)
             {
                 case GlobalDataModel.OptimizationAlgorithm.STEEPEST_DESCENT:
-                    path = GlobalDataModel.CurrentField.SteepestDescentPaths[PathIndex];
+                    path = ScalarFieldManager.CurrentField.SteepestDescentPaths[PathIndex];
                     break;
                 
                 case GlobalDataModel.OptimizationAlgorithm.NELDER_MEAD:
-                    path = GlobalDataModel.CurrentField.NelderMeadPaths[PathIndex];
+                    path = ScalarFieldManager.CurrentField.NelderMeadPaths[PathIndex];
                     break;
                 
                 case GlobalDataModel.OptimizationAlgorithm.NEWTON:
-                    path = GlobalDataModel.CurrentField.NewtonPaths[PathIndex];
+                    path = ScalarFieldManager.CurrentField.NewtonPaths[PathIndex];
                     break;
                 
                 case GlobalDataModel.OptimizationAlgorithm.NEWTON_DISCRETE:
-                    path = GlobalDataModel.CurrentField.NewtonDiscretePaths[PathIndex];
+                    path = ScalarFieldManager.CurrentField.NewtonDiscretePaths[PathIndex];
                     break;
                 
                 case GlobalDataModel.OptimizationAlgorithm.NEWTON_TRUSTED:
-                    path = GlobalDataModel.CurrentField.NewtonTrustedPaths[PathIndex];
+                    path = ScalarFieldManager.CurrentField.NewtonTrustedPaths[PathIndex];
                     break;
                 
                 case GlobalDataModel.OptimizationAlgorithm.BFGS:
-                    path = GlobalDataModel.CurrentField.BFGSPaths[PathIndex];
+                    path = ScalarFieldManager.CurrentField.BFGSPaths[PathIndex];
                     break;
             }
 
 
             
-            // foreach(List<Vector3> path in GlobalDataModel.CurrentField.NelderMeadPaths[PathIndex])
+            // foreach(List<Vector3> path in ScalarFieldManager.CurrentField.NelderMeadPaths[PathIndex])
             // {
             //     Debug.Log("pathCount: " + path.Count);
             //     for (var i = 0; i < path.Count; i++)
@@ -76,8 +78,8 @@ namespace FieldGeneration
             // }
 
             var meshPointList = new List<Vector3>();
-            var min = GlobalDataModel.CurrentField.MinRawValues;
-            var max = GlobalDataModel.CurrentField.MaxRawValues;
+            var min = ScalarFieldManager.CurrentField.MinRawValues;
+            var max = ScalarFieldManager.CurrentField.MaxRawValues;
             foreach (var vec in path)
             {
                 // Skip points outside of the bounds of the scalar field
@@ -88,16 +90,16 @@ namespace FieldGeneration
                     continue;
                 }
                     
-                var index = CalcUtility.NeareastNeighborIndexXY(GlobalDataModel.CurrentField.RawPoints, vec);
+                var index = CalcUtility.NeareastNeighborIndexXY(ScalarFieldManager.CurrentField.RawPoints, vec);
                 
-                //var idx = GlobalDataModel.CurrentField.RawPoints.FindIndex(p => p.x == vec.x && p.y == vec.y);
+                //var idx = ScalarFieldManager.CurrentField.RawPoints.FindIndex(p => p.x == vec.x && p.y == vec.y);
                 if (index != -1)
                 {
-                    // var z = GlobalDataModel.CurrentField.RawPoints[index].z;
+                    // var z = ScalarFieldManager.CurrentField.RawPoints[index].z;
                     // var v = new Vector3(vec.x, vec.y, z);
                     // Debug.Log("vec: " + vec + ", finalVec: " + v);
                     // meshPointList.Add(v);
-                    meshPointList.Add(GlobalDataModel.CurrentField.MeshPoints[index]);
+                    meshPointList.Add(ScalarFieldManager.CurrentField.MeshPoints[index]);
                 }
             }
             

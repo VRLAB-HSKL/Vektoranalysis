@@ -10,6 +10,8 @@ namespace FieldGeneration
 {
     public class CreateGradients : MonoBehaviour
     {
+        public ScalarFieldManager ScalarFieldManager;
+        
         public GameObject BoundingBox;
         public GameObject ArrowPrefab;
 
@@ -19,6 +21,8 @@ namespace FieldGeneration
         public void ToggleGradients()
         {
             showGradientsOnStartup = !showGradientsOnStartup;
+            
+            Debug.Log("showGrads: " + showGradientsOnStartup);
             
             SetGradientsActive(showGradientsOnStartup);
         }
@@ -35,16 +39,16 @@ namespace FieldGeneration
         private void Start()
         {
             var startIndex = 0;
-            var lastIndexBefore = GlobalDataModel.CurrentField.Gradients.Count;
-            var meshVectors = GlobalDataModel.CurrentField.MeshPoints;
+            var lastIndexBefore = ScalarFieldManager.CurrentField.Gradients.Count;
+            var meshVectors = ScalarFieldManager.CurrentField.MeshPoints;
             for(var i = startIndex; i < lastIndexBefore; i++)
             {
                 if (i % stepsBetweenArrows != 0) continue;
                 
-                var gradient = GlobalDataModel.CurrentField.Gradients[i];
+                var gradient = ScalarFieldManager.CurrentField.Gradients[i];
                 // flip coordinates to match display vector ordering
                 gradient = new Vector3(gradient.x, gradient.z, gradient.y);
-                var start = GlobalDataModel.CurrentField.MeshPoints[i];
+                var start = ScalarFieldManager.CurrentField.MeshPoints[i];
                 var end = start + gradient;
 
                 // Debug.Log(

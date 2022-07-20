@@ -8,6 +8,8 @@ using Utility;
 
 public class CreateCriticalPoints : MonoBehaviour
 {
+    public ScalarFieldManager ScalarFieldManager;
+    
     public GameObject BoundingBox;
     
     public bool showCriticalPointsOnStartup;
@@ -30,8 +32,8 @@ public class CreateCriticalPoints : MonoBehaviour
     private void Start()
     {
         var bbScale = BoundingBox.transform.lossyScale;
-        var points = GlobalDataModel.CurrentField.MeshPoints;
-        var cps = GlobalDataModel.CurrentField.CriticalPoints;
+        var points = ScalarFieldManager.CurrentField.MeshPoints;
+        var cps = ScalarFieldManager.CurrentField.CriticalPoints;
         for(var i = 0; i < cps.Count; i++)
         {
             var cp = cps[i];

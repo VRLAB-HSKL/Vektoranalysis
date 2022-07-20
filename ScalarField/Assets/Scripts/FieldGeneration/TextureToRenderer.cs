@@ -8,12 +8,14 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class TextureToRenderer : MonoBehaviour
 {
+    public ScalarFieldManager ScalarFieldManager;
+    
     public Texture2D texture;
     
     private void Start()
     {
-        var cmId = GlobalDataModel.CurrentField.ColorMapId;
-        var cmDataClassesCount = GlobalDataModel.CurrentField.ColorMapDataClassesCount;
+        var cmId = ScalarFieldManager.CurrentField.ColorMapId;
+        var cmDataClassesCount = ScalarFieldManager.CurrentField.ColorMapDataClassesCount;
         texture = TextureUtility.FetchColorMapTexture(cmId, cmDataClassesCount);    
         // Debug.Log("cmId: " + cmId + ", cmDcCount: " + cmDataClassesCount + ", textureIsNull: " + (texture is null));
         //

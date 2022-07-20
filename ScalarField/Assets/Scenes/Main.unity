@@ -409,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed77ef1c35f10b8489f3b11ea6bb60e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 0}
   Field: {fileID: 1976931700}
   ContourValues: []
   LineMat: {fileID: 2100000, guid: 58c68f717c6622c4e9ac73ad113e9369, type: 2}
@@ -1885,6 +1886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b442a486285d45139fcef2bafb0c0db7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ViewControllerManager: {fileID: 11400000, guid: 54b79b8994c28e746a018e2a140e8515, type: 2}
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   FieldMesh: {fileID: 1976931700}
   FieldBoundingBox: {fileID: 851291624}
   TableMap: {fileID: 915135855}
@@ -2156,6 +2159,37 @@ Transform:
   - {fileID: 915135854}
   m_Father: {fileID: 685364353}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &583271139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 583271140}
+  m_Layer: 0
+  m_Name: ScriptableObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &583271140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583271139}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1125034309}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &595636297
 GameObject:
@@ -3485,6 +3519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebb96bb487916945842f4474a44fb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   PointerObject: {fileID: 1081113138}
   SpawnPointMat: {fileID: 2100000, guid: 7612cb0962aa72043b2615df841620ab, type: 2}
 --- !u!65 &915135856
@@ -3776,6 +3811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c439fd294cba91b4e9b76fe2e9b3352d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   texture: {fileID: 0}
 --- !u!1 &1081113138
 GameObject:
@@ -4085,6 +4121,36 @@ MonoBehaviour:
   buttonDownDisplacement: {x: 0, y: -0.02, z: 0}
   buttonObject: {fileID: 1601351472}
   holdButton: 0
+--- !u!1 &1125034308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1125034309}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1125034309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125034308}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 583271140}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1139325284
 GameObject:
   m_ObjectHideFlags: 0
@@ -5696,6 +5762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 889aeda52476fd5499e922b8ac4cac33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
+  PathManager: {fileID: 11400000, guid: 2de09bbe439fc5648b87adefcd6ee082, type: 2}
   FormulaImage: {fileID: 1753497074}
   NameValueText: {fileID: 789287064}
 --- !u!1 &1653750229
@@ -6245,11 +6313,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976931700}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a5e9bf186b73aa4eb2f99c4b97c2bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 851291624}
   PositionMeshAtOrigin: 0
 --- !u!23 &1976931703

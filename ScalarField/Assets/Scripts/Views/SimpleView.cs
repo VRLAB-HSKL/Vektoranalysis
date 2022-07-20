@@ -4,7 +4,8 @@ namespace Views
 {
     public class SimpleView : AbstractFieldView
     {
-        public SimpleView(GameObject mesh, GameObject boundingBox) : base(mesh, boundingBox) {}
+        public SimpleView(ScalarFieldManager data, GameObject mesh, GameObject boundingBox) 
+            : base(data, mesh, boundingBox) {}
 
         public override void UpdateView()
         {

@@ -15,6 +15,8 @@ namespace ProceduralMesh
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class SimpleProceduralMesh : MonoBehaviour
     {
+        public ScalarFieldManager ScalarFieldManager;
+        
         // public Transform RenderingTarget;
         // public Vector3 PositionOffset;
         // public Vector3 ScalingVector = Vector3.one;
@@ -51,7 +53,7 @@ namespace ProceduralMesh
         
             var mat = GetComponent<MeshRenderer>().material;
             mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
-            mat.mainTexture = GlobalDataModel.CurrentField.MeshTexture;
+            mat.mainTexture = ScalarFieldManager.CurrentField.MeshTexture;
         }
     
         /// <summary>
@@ -64,7 +66,7 @@ namespace ProceduralMesh
                 name="Scalar field mesh",
             };
         
-            var sf = GlobalDataModel.CurrentField;
+            var sf = ScalarFieldManager.CurrentField;
 
             var dVertices = sf.DisplayPoints;
             // var displayVertices = new List<Vector3>();
@@ -139,7 +141,7 @@ namespace ProceduralMesh
             
             mesh.SetIndices(indices.ToArray(), topology, 0, true);
 
-            GlobalDataModel.CurrentField.MeshPoints = displayVertices;
+            ScalarFieldManager.CurrentField.MeshPoints = displayVertices;
             
             // var triangles = new List<int>();
             // for (int i = 0; i < vertices.Count; i+= 3)
@@ -238,7 +240,7 @@ namespace ProceduralMesh
         /// <returns></returns>
         private List<int> GenerateTriangleIndices(ICollection vertices, bool windClockWise)
         {
-            var sampleCount = GlobalDataModel.CurrentField.SampleCount;
+            var sampleCount = ScalarFieldManager.CurrentField.SampleCount;
             var indicesList = new List<int>();
 
             for (var i = 0; i < vertices.Count; i++)
@@ -264,7 +266,7 @@ namespace ProceduralMesh
                        a (i)            b                
                     */
                     var a = i;
-                    var b = i + GlobalDataModel.CurrentField.SampleCount;
+                    var b = i + ScalarFieldManager.CurrentField.SampleCount;
                     var c = i + 1;
                 
                     // Choose index order based on winding direction
@@ -283,8 +285,8 @@ namespace ProceduralMesh
                 }
 
                 // Determine if we have to draw a upper right triangle below the current point
-                var isLowerBound = i % GlobalDataModel.CurrentField.SampleCount == 0;
-                var isFirstColumn = i < GlobalDataModel.CurrentField.SampleCount;
+                var isLowerBound = i % ScalarFieldManager.CurrentField.SampleCount == 0;
+                var isFirstColumn = i < ScalarFieldManager.CurrentField.SampleCount;
                 var drawUpperRightTriangle = !isLowerBound && !isFirstColumn;
 
                 // If we are not in the first column, and not on the lower bound of the column, draw upper right triangle
@@ -303,7 +305,7 @@ namespace ProceduralMesh
                     */
                     var a = i;
                     var b = i - 1;
-                    var c = i - GlobalDataModel.CurrentField.SampleCount;
+                    var c = i - ScalarFieldManager.CurrentField.SampleCount;
                 
                     // Choose index order based on winding direction
                     if (windClockWise)
@@ -341,14 +343,14 @@ namespace ProceduralMesh
             
                 // Up
                 indices.Add(i + 1);
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount + 1);
+                indices.Add(i + ScalarFieldManager.CurrentField.SampleCount + 1);
             
                 // Right
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount + 1);
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount);
+                indices.Add(i + ScalarFieldManager.CurrentField.SampleCount + 1);
+                indices.Add(i + ScalarFieldManager.CurrentField.SampleCount);
             
                 // Down
-                indices.Add(i + GlobalDataModel.CurrentField.SampleCount);
+                indices.Add(i + ScalarFieldManager.CurrentField.SampleCount);
                 indices.Add(i);
             }
 
@@ -402,8 +404,8 @@ namespace ProceduralMesh
                         var normal = CalculateQuadNormal(
                             vertices[indices[i]],
                             vertices[indices[i + 1]],
-                            vertices[indices[i + GlobalDataModel.CurrentField.SampleCount + 1]],
-                            vertices[indices[i + GlobalDataModel.CurrentField.SampleCount]]
+                            vertices[indices[i + ScalarFieldManager.CurrentField.SampleCount + 1]],
+                            vertices[indices[i + ScalarFieldManager.CurrentField.SampleCount]]
                         );
                     }
 

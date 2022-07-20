@@ -9,6 +9,7 @@ namespace FieldGeneration
     [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
     public class CreateHeatmap : MonoBehaviour
     {
+        public ScalarFieldManager scalarField;
         public GameObject BoundingBox;
         public bool ShowOnStartup;
     
@@ -24,7 +25,7 @@ namespace FieldGeneration
         private void Start()
         {
             _mr = GetComponent<MeshRenderer>();
-            _mr.material.mainTexture = GlobalDataModel.CurrentField.MeshTexture;
+            _mr.material.mainTexture = scalarField.CurrentField.MeshTexture;
             _bb = BoundingBox.GetComponent<MeshRenderer>().bounds;
 
             var cubePointList = new List<Vector3>();

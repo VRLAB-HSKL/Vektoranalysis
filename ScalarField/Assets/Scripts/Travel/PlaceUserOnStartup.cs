@@ -10,6 +10,8 @@ namespace Travel
     /// </summary>
     public class PlaceUserOnStartup : MonoBehaviour
     {
+        public ScalarFieldManager ScalarFieldManager;
+        
         public MeshFilter field;
         public GameObject Cockpit;
     
@@ -31,18 +33,18 @@ namespace Travel
             if (user is null) return;
 
             var estimatedIndex = GlobalDataModel.EstimatedIndex;
-            var initValues = GlobalDataModel.CurrentField.MeshPoints[estimatedIndex];
+            var initValues = ScalarFieldManager.CurrentField.MeshPoints[estimatedIndex];
 
             var initVector = new Vector3(initValues[0], initValues[1], initValues[2]);
 
-            var xMin = GlobalDataModel.CurrentField.ParameterRangeX.Item1;// InitFile.Info.x_param_range[0];
-            var xMax = GlobalDataModel.CurrentField.ParameterRangeX.Item2; // InitFile.Info.x_param_range[1];
+            var xMin = ScalarFieldManager.CurrentField.ParameterRangeX.Item1;// InitFile.Info.x_param_range[0];
+            var xMax = ScalarFieldManager.CurrentField.ParameterRangeX.Item2; // InitFile.Info.x_param_range[1];
 
-            var yMin = GlobalDataModel.CurrentField.ParameterRangeY.Item1; // InitFile.Info.y_param_range[0];
-            var yMax = GlobalDataModel.CurrentField.ParameterRangeY.Item2; // InitFile.Info.y_param_range[1];
+            var yMin = ScalarFieldManager.CurrentField.ParameterRangeY.Item1; // InitFile.Info.y_param_range[0];
+            var yMax = ScalarFieldManager.CurrentField.ParameterRangeY.Item2; // InitFile.Info.y_param_range[1];
         
-            var zMin = GlobalDataModel.CurrentField.MeshPoints.Min(p => p[2]);
-            var zMax = GlobalDataModel.CurrentField.MeshPoints.Max(p => p[2]);
+            var zMin = ScalarFieldManager.CurrentField.MeshPoints.Min(p => p[2]);
+            var zMax = ScalarFieldManager.CurrentField.MeshPoints.Max(p => p[2]);
         
             var mappedX = CalcUtility.MapValueToRange(initValues[0], xMin, xMax, 0f, 1f);
             var mappedY = CalcUtility.MapValueToRange(initValues[1], yMin, yMax, 0f, 1f);

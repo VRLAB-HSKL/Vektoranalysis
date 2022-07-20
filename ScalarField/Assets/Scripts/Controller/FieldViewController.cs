@@ -6,11 +6,11 @@ namespace Controller
 {
     public class FieldViewController : AbstractFieldViewController
     {
-        public FieldViewController(GameObject mesh, GameObject boundingBox) : base()
+        public FieldViewController(ScalarFieldManager data, GameObject mesh, GameObject boundingBox) : base()
         {
             Views = new List<AbstractFieldView>()
             {
-               new SimpleView(mesh, boundingBox) 
+               new SimpleView(data, mesh, boundingBox) 
             };
             
             SwitchView(0);

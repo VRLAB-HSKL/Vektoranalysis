@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using Model;
+using Model.ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InformationControl : MonoBehaviour
 {
+    public ScalarFieldManager ScalarFieldManager;
+    public PathManager PathManager;
+    
     public Image FormulaImage;
     public TextMeshProUGUI NameValueText;
     
@@ -18,10 +22,10 @@ public class InformationControl : MonoBehaviour
 
     public void UpdateInformation()
     {
-        var initFieldId = GlobalDataModel.CurrentField.ID;
+        var initFieldId = ScalarFieldManager.CurrentField.ID;
         NameValueText.text = initFieldId;
         
-        var path = GlobalDataModel.FormulaImageResourcePath + initFieldId;
+        var path = PathManager.FormulaImageResourcePath + initFieldId;
         var formulaSprite = Resources.Load<Sprite>(path);
         if (formulaSprite != null)
         {

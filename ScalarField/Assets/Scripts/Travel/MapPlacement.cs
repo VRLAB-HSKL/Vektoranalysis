@@ -7,6 +7,8 @@ namespace Travel
 {
     public class MapPlacement : MonoBehaviour
     {
+        public ScalarFieldManager ScalarFieldManager;
+        
         public GameObject PointerObject;
         public Material SpawnPointMat;
 
@@ -22,7 +24,7 @@ namespace Travel
 
         public void SetTexture()
         {
-            _mr.material.mainTexture = GlobalDataModel.CurrentField.MeshTexture; //texture;
+            _mr.material.mainTexture = ScalarFieldManager.CurrentField.MeshTexture; //texture;
         }
     
         private void OnCollisionEnter(Collision collision)
@@ -56,11 +58,11 @@ namespace Travel
             var horizontalCoordinate = contact.point.z;
             var verticalCoordinate = contact.point.x;
 
-            var xRangeMin = GlobalDataModel.CurrentField.ParameterRangeX.Item1; //GlobalDataModel.InitFile.points.Min(p => p[0]);
-            var xRangeMax = GlobalDataModel.CurrentField.ParameterRangeX.Item2; //GlobalDataModel.InitFile.points.Max(p => p[0]);
+            var xRangeMin = ScalarFieldManager.CurrentField.ParameterRangeX.Item1; //ScalarFieldManager.InitFile.points.Min(p => p[0]);
+            var xRangeMax = ScalarFieldManager.CurrentField.ParameterRangeX.Item2; //ScalarFieldManager.InitFile.points.Max(p => p[0]);
 
-            var yRangeMin = GlobalDataModel.CurrentField.ParameterRangeY.Item1;
-            var yRangeMax = GlobalDataModel.CurrentField.ParameterRangeY.Item2;
+            var yRangeMin = ScalarFieldManager.CurrentField.ParameterRangeY.Item1;
+            var yRangeMax = ScalarFieldManager.CurrentField.ParameterRangeY.Item2;
 
             var mappedX = CalcUtility.MapValueToRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
         
@@ -81,9 +83,9 @@ namespace Travel
         
             var closest = int.MaxValue;
             var minDifference = int.MaxValue;
-            for(var i = 0; i < GlobalDataModel.CurrentField.MeshPoints.Count; i++)
+            for(var i = 0; i < ScalarFieldManager.CurrentField.MeshPoints.Count; i++)
             {
-                var point = GlobalDataModel.CurrentField.MeshPoints[i];
+                var point = ScalarFieldManager.CurrentField.MeshPoints[i];
                 var differenceX = Mathf.Abs(point[0] - mappedX);
                 var differenceY = Mathf.Abs(point[1] - mappedY);
 
@@ -120,7 +122,7 @@ namespace Travel
             //var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
             //    collision.collider.transform.rotation);
 
-            //GlobalDataModel.ClosestPointOnMesh = transformedPoint; //closestPoint;
+            //ScalarFieldManager.ClosestPointOnMesh = transformedPoint; //closestPoint;
 
             // if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
             // {
@@ -138,8 +140,8 @@ namespace Travel
             //         var p = p0.y > p1.y ? p0 : p1;
             //         p = p2.y > p.y ? p2 : p;
             //             
-            //         //GlobalDataModel.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
-            //         GlobalDataModel.EstimatedIndex = mesh.triangles[hit.triangleIndex];
+            //         //ScalarFieldManager.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
+            //         ScalarFieldManager.EstimatedIndex = mesh.triangles[hit.triangleIndex];
             //     }
             // }
 
