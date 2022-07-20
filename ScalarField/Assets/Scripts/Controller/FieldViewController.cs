@@ -4,6 +4,9 @@ using Views;
 
 namespace Controller
 {
+    /// <summary>
+    /// View controller for scalar field visualizations 
+    /// </summary>
     public class FieldViewController : AbstractFieldViewController
     {
         public FieldViewController(ScalarFieldManager data, GameObject mesh, GameObject boundingBox) : base()

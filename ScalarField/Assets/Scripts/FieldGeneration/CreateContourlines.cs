@@ -4,11 +4,15 @@ using System.Text;
 using Model;
 using UnityEngine;
 using Utility;
-using Color = UnityEngine.Color;
 using Vector3 = UnityEngine.Vector3;
 
 namespace FieldGeneration
 {
+    /// <summary>
+    /// Creates a visual representation of contour lines based on imported contour values.
+    /// This visualization is created in relation to the scalar field representation (mesh) in the scene and its
+    /// corresponding bounding box
+    /// </summary>
     public class CreateContourlines : MonoBehaviour
     {
         public ScalarFieldManager ScalarFieldManager;
@@ -38,8 +42,6 @@ namespace FieldGeneration
 
         private Vector3 bbExtents;
     
-    
-
         private List<GameObject> ContourLineObjects = new List<GameObject>();
     
         private List<List<PointData>> isolineDisplayPointLists;

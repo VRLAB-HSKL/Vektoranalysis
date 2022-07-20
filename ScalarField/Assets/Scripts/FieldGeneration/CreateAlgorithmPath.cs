@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
-using Model;
 using Model.Enums;
 using UnityEngine;
 using Utility;
 
 namespace FieldGeneration
 {
+    /// <summary>
+    /// Creates a visual representation of the steps of the minimization algorithm of the scipy library.
+    /// This visualization is created in relation to the scalar field representation (mesh) in the scene and its
+    /// corresponding bounding box
+    /// </summary>
     public class CreateAlgorithmPath : MonoBehaviour
     {
         public ScalarFieldManager ScalarFieldManager;

@@ -4,6 +4,10 @@ using Views;
 
 namespace Controller
 {
+    /// <summary>
+    /// Abstract class for view controllers that manage views on scalar field visualizations
+    /// <see cref="AbstractFieldView"/>
+    /// </summary>
     public abstract class AbstractFieldViewController
     {
         /// <summary>

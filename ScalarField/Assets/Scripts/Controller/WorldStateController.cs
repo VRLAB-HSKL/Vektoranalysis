@@ -4,8 +4,12 @@ using Model.ScriptableObjects;
 using Travel;
 using UnityEngine;
 
+/// <summary>
+/// Global world state controller to initialize the scene correctly and handle global operations triggered by the user
+/// </summary>
 public class WorldStateController : MonoBehaviour
 {
+    
     public ViewControllerManager ViewControllerManager;
     public ScalarFieldManager ScalarFieldManager;
     
@@ -25,9 +29,12 @@ public class WorldStateController : MonoBehaviour
         InitializeModel();
     }
 
+    /// <summary>
+    /// Initializes the data model of the application 
+    /// </summary>
     private void InitializeModel()
     {
-        // Parse scalar fields data
+        // Parse scalar fields data into scriptable object
         ScalarFieldManager.ParseInitFile();
         
         InitializeViewControllers();
@@ -50,7 +57,7 @@ public class WorldStateController : MonoBehaviour
     {
         SetNextValidIndex(true);
 
-        ViewControllerManager.FieldViewController.UpdateViews(); //UpdateViewsDelegate();
+        ViewControllerManager.FieldViewController.UpdateViews();
         
         UpdateRoom();
     }
@@ -63,8 +70,11 @@ public class WorldStateController : MonoBehaviour
         
         UpdateRoom();
     }
-
-
+    
+    /// <summary>
+    /// Move to the next valid field index in the imported dataset
+    /// </summary>
+    /// <param name="isIncrement">Signals whether field index is in-/decremented when applicable</param>
     private void SetNextValidIndex(bool isIncrement)
     {
         var oldIndex = ScalarFieldManager.CurrentFieldIndex;

@@ -48,24 +48,6 @@ namespace Behaviours
         {
             _vrRig = GameObject.Find("ViveRig");
             _boundsCenter = boundingBox.bounds.center;
-
-            // var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            // cube.GetComponent<MeshRenderer>().material.color = Color.red;
-            //
-            // cube.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            //
-            // var pose = VivePose.GetPoseEx(HandRole.RightHand);
-            // cube.transform.position = pose.pos;
-            //
-            // cube.SetActive(false);
-            //
-            // cube.transform.parent = _vrRig.transform;
-            //
-            // HintCube = cube;
-
-            // HintText = GameObject.Find("HintText");
-            // HintText.transform.parent = _vrRig.transform;
-
         }
 
         private GameObject HintText;
@@ -112,9 +94,8 @@ namespace Behaviours
             
             // Try to adjust vertical position of the user if the scalar field is positioned lower than the vertical
             // origin (y = 0.0) at the center of the bounding box
-            if (Physics.Raycast(
-                    new Ray(_boundsCenter, Vector3.down), out RaycastHit hit, boundingBox.bounds.extents.y )
-                )
+            var ray = new Ray(_boundsCenter, Vector3.down);
+            if (Physics.Raycast(ray, out RaycastHit hit, boundingBox.bounds.extents.y))
             {
                 newPos = hit.point;
             }

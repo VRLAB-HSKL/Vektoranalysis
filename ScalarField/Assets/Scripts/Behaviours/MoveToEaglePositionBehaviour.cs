@@ -8,7 +8,6 @@ namespace Behaviours
     /// </summary>
     public class MoveToEaglePositionBehaviour : AbstractButtonBehaviour
     {
-
         /// <summary>
         /// Cockpit root game object
         /// </summary>
