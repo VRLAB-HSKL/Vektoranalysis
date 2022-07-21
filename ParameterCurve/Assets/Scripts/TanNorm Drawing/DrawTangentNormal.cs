@@ -14,7 +14,7 @@ public class DrawTangentNormal : MonoBehaviour
     public GameObject normalSphereParent;
     public LineRenderer tangentSolutionLine;
     public LineRenderer normalSolutionLine;
-    public GameObject heightAdjustment;
+    public GameObject heightAdjustmentObject;
 
     private GameObject pointSphere;
     private GameObject tangentSphere;
@@ -26,11 +26,13 @@ public class DrawTangentNormal : MonoBehaviour
 
     private bool tangentDrawn, normalDrawn;
     private int pointIndex = 200;
+    private VRMoveWithObject heightAdjustment;
 
     // Start is called before the first frame update
     void Start()
     {
         drawCurveLR = drawCurveDisplay.GetComponent<LineRenderer>();
+        heightAdjustment = heightAdjustmentObject.GetComponent<VRMoveWithObject>();
         tangentDrawn = false;
         normalDrawn = false;
         generateCurve();
@@ -82,7 +84,8 @@ public class DrawTangentNormal : MonoBehaviour
             drawCurveLR.SetPosition(i, new Vector3(x, y, z));
         }
 
-        heightAdjustment.GetComponent<VRMoveWithObject>().updateLR(drawCurveDisplay.name);
+        heightAdjustment.updateLR(drawCurveDisplay.name);
+        heightAdjustment.resetPositions();
         generateSpheres(pointIndex);
     }
 
@@ -111,6 +114,7 @@ public class DrawTangentNormal : MonoBehaviour
         else if (normAngle < 20 || (normAngle > 160 && normAngle < 200)) Debug.Log("normal: correct");
         else Debug.Log("normal: incorrect");
 
+        heightAdjustment.resetPositions();
         showSolution(tangent, normal);
     }
 
@@ -202,5 +206,8 @@ public class DrawTangentNormal : MonoBehaviour
 
         normalSolutionLine.SetPosition(0, pointSphere.transform.position);
         normalSolutionLine.SetPosition(1, pointSphere.transform.position + new Vector3(normal.x, normal.y, normal.z));
+
+        heightAdjustment.updateLR(tangentSolutionLine.name);
+        heightAdjustment.updateLR(normalSolutionLine.name);
     }
 }

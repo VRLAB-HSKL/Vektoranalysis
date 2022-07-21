@@ -27,6 +27,16 @@ namespace ImmersiveVolumeGraphics
             /// </summary>
             public GameObject controlObject;
 
+            /// <summary>
+            /// gameobject providing upper bound for y movement
+            /// </summary>
+            public GameObject yUpperBoundObject;
+
+            /// <summary>
+            /// gameobject providing lower bound for y movement
+            /// </summary>
+            public GameObject yLowerBoundObject;
+
             ///// <summary>
             ///// Name of the first GameObject
             ///// </summary>
@@ -73,6 +83,16 @@ namespace ImmersiveVolumeGraphics
             private List<List<Vector3>> lrsPositions;
 
             /// <summary>
+            /// Y position of y upper bound object
+            /// </summary>
+            private float yUpperBound;
+
+            /// <summary>
+            /// Y position of y lower bound object
+            /// </summary>
+            private float yLowerBound;
+
+            /// <summary>
             /// Find both Objects in the Scene
             /// </summary>
             /// <remarks>
@@ -84,6 +104,8 @@ namespace ImmersiveVolumeGraphics
                 //controlObject = GameObject.Find(ObjectName2);
                 controlObjectOrigin = controlObject.transform.position;
                 targetObjectOrigin = targetObject.transform.localPosition;
+                yLowerBound = yLowerBoundObject.transform.position.y;
+                yUpperBound = yUpperBoundObject.transform.position.y;
 
                 lrs = targetObject.GetComponentsInChildren<LineRenderer>();
                 if (lrs != null)
@@ -115,6 +137,20 @@ namespace ImmersiveVolumeGraphics
             /// <returns>void</returns>
             private void Update()
             {
+                //if bound is reached, do not move target object and keep control object at bound
+
+                if (controlObject.transform.position.y > yUpperBound)
+                {
+                    YDirection = false;
+                    controlObject.transform.position = new Vector3(controlObject.transform.position.x, yUpperBound, controlObject.transform.position.z);
+                } else if (controlObject.transform.position.y < yLowerBound)
+                {
+                    YDirection = false;
+                    controlObject.transform.position = new Vector3(controlObject.transform.position.x, yLowerBound, controlObject.transform.position.z);
+                }
+                else YDirection = true;
+
+                //only need to update target when control object is being moved by grabbing
                 if (controlObject.GetComponent<BasicGrabbable>().isGrabbed)
                 {
                     updatePosition();
@@ -136,14 +172,19 @@ namespace ImmersiveVolumeGraphics
                     if (YDirection) changeY = (controlObject.transform.position.y - controlObjectOrigin.y);
                     else changeY = 0;
 
-                    targetObject.transform.localPosition = targetObjectOrigin + new Vector3(changeX, changeY, changeZ);
-                    if (lrs != null)
+                    //only move if direction is enabled
+                    if (XDirection || YDirection || ZDirection)
                     {
-                        for (int i = 0; i < lrs.Length; i++)
+                        targetObject.transform.localPosition = targetObjectOrigin + new Vector3(changeX, changeY, changeZ);
+
+                        if (lrs != null)
                         {
-                            for (int j = 0; j < lrs[i].positionCount; j++)
+                            for (int i = 0; i < lrs.Length; i++)
                             {
-                                lrs[i].SetPosition(j, lrsPositions[i][j] + new Vector3(changeX, changeY, changeZ));
+                                for (int j = 0; j < lrs[i].positionCount; j++)
+                                {
+                                    lrs[i].SetPosition(j, lrsPositions[i][j] + new Vector3(changeX, changeY, changeZ));
+                                }
                             }
                         }
                     }
@@ -192,6 +233,10 @@ namespace ImmersiveVolumeGraphics
                 }
             }
 
+
+            /// <summary>
+            /// if the points on the LR change, need to update reference origin positions
+            /// </summary>
             public void updateLR(string lrToUpdate)
             {
                 if (lrs != null)
@@ -206,9 +251,11 @@ namespace ImmersiveVolumeGraphics
                             }
                         }
                     }
-                }
+                }                
+            }
 
-                //after updating line, reset object positions
+            public void resetPositions()
+            {
                 controlObject.transform.position = controlObjectOrigin;
                 updatePosition();
             }
