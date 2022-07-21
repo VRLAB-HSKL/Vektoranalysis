@@ -103,24 +103,24 @@ public class ScalarFieldManager : ScriptableObject
                 var type = critPoint[1];
                 switch (type)
                 {
-                    //case "CriticalPointType.CRITICAL_POINT":
+                    case "CRITICAL_POINT":
                     default:
                         cp.Type = CriticalPointType.CRITICAL_POINT;
                         break;
                     
-                    case "CriticalPointType.LOCAL_MINIMUM":
+                    case "LOCAL_MINIMUM":
                         cp.Type = CriticalPointType.LOCAL_MINIMUM;
                         break;
                     
-                    case "CriticalPointType.LOCAL_MAXIMUM":
+                    case "LOCAL_MAXIMUM":
                         cp.Type = CriticalPointType.LOCAL_MAXIMUM;
                         break;
                     
-                    case "CriticalPointType.SADDLE_POINT":
+                    case "SADDLE_POINT":
                         cp.Type = CriticalPointType.SADDLE_POINT;
                         break;
                 }
-                
+
                 sf.CriticalPoints.Add(cp);
             }
             
@@ -206,9 +206,6 @@ public class ScalarFieldManager : ScriptableObject
 
             ScalarFields.Add(sf);
         }
-        
-        // Set index to 0 on application start
-        CurrentFieldIndex = 0;
     }
     
     private List<List<Vector3>> ParsePath(List<List<float[]>> paths)

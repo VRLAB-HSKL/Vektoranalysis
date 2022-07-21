@@ -29,6 +29,14 @@ public class WorldStateController : MonoBehaviour
         InitializeModel();
     }
 
+    [RuntimeInitializeOnLoadMethod]
+    private void OnRuntimeMethodLoad()
+    {
+        // Set index to 0 on application start
+        ScalarFieldManager.CurrentFieldIndex = 0;
+    }
+    
+    
     /// <summary>
     /// Initializes the data model of the application 
     /// </summary>
@@ -40,6 +48,8 @@ public class WorldStateController : MonoBehaviour
         InitializeViewControllers();
     }
 
+    
+    
     private void InitializeViewControllers()
     {
         ViewControllerManager.FieldViewController = 

@@ -39,7 +39,7 @@ public class CreateCriticalPoints : MonoBehaviour
             var cp = cps[i];
             var index = cp.PointIndex;
             
-            // Debug.Log("it " + i + ", index: " + index + "/" + points.Count);
+            //Debug.Log("it " + i + ", index: " + index + "/" + points.Count);
             
             var pos = points[index];
 
@@ -50,10 +50,13 @@ public class CreateCriticalPoints : MonoBehaviour
                     break;
                 
                 case CriticalPointType.LOCAL_MINIMUM:
+                    DrawingUtility.DrawSphere(pos, this.transform, Color.black, bbScale);
                     break;
                 case CriticalPointType.LOCAL_MAXIMUM:
+                    DrawingUtility.DrawSphere(pos, this.transform, Color.white, bbScale);
                     break;
                 case CriticalPointType.SADDLE_POINT:
+                    DrawingUtility.DrawSphere(pos, this.transform, Color.gray, bbScale);
                     break;
             }
             

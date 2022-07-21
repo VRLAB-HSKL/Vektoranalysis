@@ -24,7 +24,7 @@ namespace FieldGeneration
         public Material LineMat;
     
         //private bool _showLinesInMesh;
-        public bool LinesVisible = true;
+        public bool LinesVisible;
         public bool ShowLinesInMesh;
     
     

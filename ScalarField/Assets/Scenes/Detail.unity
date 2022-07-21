@@ -602,7 +602,7 @@ MonoBehaviour:
   Field: {fileID: 941685788}
   ContourValues: []
   LineMat: {fileID: 2100000, guid: 7612cb0962aa72043b2615df841620ab, type: 2}
-  LinesVisible: 1
+  LinesVisible: 0
   ShowLinesInMesh: 0
   epsilon: 0.01
   positionOffset: {x: 0, y: 0.125, z: 0}
@@ -2949,7 +2949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
   BoundingBox: {fileID: 674071311}
-  showCriticalPointsOnStartup: 1
+  showCriticalPointsOnStartup: 0
 --- !u!1 &1220453945
 GameObject:
   m_ObjectHideFlags: 0
@@ -3586,6 +3586,7 @@ MonoBehaviour:
   FieldBoundingBox: {fileID: 674071311}
   TableMap: {fileID: 0}
   InfoWall: {fileID: 0}
+  ColorScale: {fileID: 0}
 --- !u!4 &1676658719
 Transform:
   m_ObjectHideFlags: 0

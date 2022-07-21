@@ -67,7 +67,10 @@ public class CreateColorScale : MonoBehaviour
             mf.mesh.SetVertices(mappedVertices);
             
             cube.transform.parent = transform;
-            cube.transform.localScale = new Vector3(1f, verticalScaleVector, 1f);
+            
+            // Scale cube in y direction to fit all cubes inside the scale
+            // and slightly in x and z direction to prevent buffer fighting
+            cube.transform.localScale = new Vector3(0.98f, verticalScaleVector, 0.98f);
             
             var y = floor + (i * verticalStep) + verticalStep * 0.5f;
             cube.transform.position = new Vector3(_bounds.center.x, y, _bounds.center.z);

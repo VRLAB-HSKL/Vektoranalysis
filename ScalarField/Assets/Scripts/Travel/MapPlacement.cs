@@ -49,7 +49,7 @@ namespace Travel
             sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.position = new Vector3(contact.point.x, transform.position.y + 0.025f, contact.point.z);
         
-            sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             //Instantiate(new SphereCollider)
             sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
 
