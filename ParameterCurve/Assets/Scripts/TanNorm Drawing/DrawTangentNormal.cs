@@ -24,6 +24,9 @@ public class DrawTangentNormal : MonoBehaviour
     private LineRenderer tangentSphereLR;
     private LineRenderer normalSphereLR;
 
+    private BasicGrabbable tangentGrab;
+    private BasicGrabbable normalGrab;
+
     private bool tangentDrawn, normalDrawn;
     private int pointIndex = 200;
     private VRMoveWithObject heightAdjustment;
@@ -50,8 +53,14 @@ public class DrawTangentNormal : MonoBehaviour
         float normalDistance = Vector3.Distance(pointSphere.transform.position, normalSphere.transform.position);
         float thresholdDistance = 0.55f;
 
+        
+
         if (tangentDistance < thresholdDistance)
         {
+            //override position from controller to make sure line connects to sphere instead for 2D curves
+            if (tangentGrab.isGrabbed && !GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve)
+                tangentSphere.transform.position = new Vector3(tangentSphere.transform.position.x, tangentSphere.transform.position.y, 0);
+            
             tangentSphereLR.SetPosition(0, pointSphere.transform.position + new Vector3(0, 0, -0.005f));
             tangentSphereLR.SetPosition(1, tangentSphere.transform.position + new Vector3(0, 0, -0.005f));
             tangentDrawn = true;
@@ -63,6 +72,10 @@ public class DrawTangentNormal : MonoBehaviour
 
         if (normalDistance < thresholdDistance)
         {
+            //override position from controller to make sure line connects to sphere instead for 2D curves
+            if (normalGrab.isGrabbed && !GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve)
+                normalSphere.transform.position = new Vector3(normalSphere.transform.position.x, normalSphere.transform.position.y, 0);
+
             normalSphereLR.SetPosition(0, pointSphere.transform.position + new Vector3(0, 0, 0.005f));
             normalSphereLR.SetPosition(1, normalSphere.transform.position + new Vector3(0, 0, 0.005f));
             normalDrawn = true;
@@ -87,6 +100,8 @@ public class DrawTangentNormal : MonoBehaviour
         heightAdjustment.updateLR(drawCurveDisplay.name);
         heightAdjustment.resetPositions();
         generateSpheres(pointIndex);
+        heightAdjustment.updateLR(tangentSolutionLine.name);
+        heightAdjustment.updateLR(normalSolutionLine.name);
     }
 
     private void compareVectors()
@@ -171,8 +186,9 @@ public class DrawTangentNormal : MonoBehaviour
         
 
         //make the new spheres grabbable
-        tangentSphere.AddComponent<HTC.UnityPlugin.Vive.BasicGrabbable>();
-        normalSphere.AddComponent<HTC.UnityPlugin.Vive.BasicGrabbable>();
+        tangentGrab = tangentSphere.AddComponent<BasicGrabbable>();
+        normalGrab = normalSphere.AddComponent<BasicGrabbable>();
+
 
         //get line renderers to give them lines to connect to pointSphere
         tangentSphereLR = tangentSphereParent.GetComponent<LineRenderer>();
