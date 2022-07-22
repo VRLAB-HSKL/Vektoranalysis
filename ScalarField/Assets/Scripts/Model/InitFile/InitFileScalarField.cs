@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-//using Valve.Newtonsoft.Json;
-
 namespace Model.InitFile
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace Model.InitFile
     public class InitFileRoot
     {
         [JsonProperty("display_fields")] 
-        public List<InitFileScalarField> DisplayFields;
+        public List<InitFileScalarField> displayFields;
     }
     
     [Serializable]
@@ -33,14 +31,14 @@ namespace Model.InitFile
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("id: " + Info.id);
-            sb.AppendLine("color_map_id: " + Info.color_map_id);
-            sb.AppendLine("color_map_data_classes_count: " + Info.color_map_data_classes_count);
-            sb.AppendLine("x_param_range: " + Info.x_param_range);
-            sb.AppendLine("y_param_range: " + Info.y_param_range);
-            sb.AppendLine("z_expr: " + Info.z_expression);
-            sb.AppendLine("sample_count: " + Info.sample_count);
-            sb.AppendLine("points: " + Data.mesh.points);
+            sb.AppendLine("id: " + Info.ID);
+            sb.AppendLine("color_map_id: " + Info.ColorMapID);
+            sb.AppendLine("color_map_data_classes_count: " + Info.ColorMapDataClassesCount);
+            sb.AppendLine("x_param_range: " + Info.XParamRange);
+            sb.AppendLine("y_param_range: " + Info.YParamRange);
+            sb.AppendLine("z_expr: " + Info.ZExpression);
+            sb.AppendLine("sample_count: " + Info.SampleCount);
+            sb.AppendLine("points: " + Data.mesh.Points);
             sb.AppendLine("isoline_values: " + Data.isolines.Values);
             sb.AppendLine("isoline_line_points: " + Data.isolines.ConvexHulls);
             
@@ -52,28 +50,28 @@ namespace Model.InitFile
     public class InitFileInfo
     {
         [JsonProperty("id")] 
-        public string id { get; set; }
+        public string ID { get; set; }
         
         [JsonProperty("color_map_id")] 
-        public string color_map_id { get; set; }
+        public string ColorMapID { get; set; }
         
         [JsonProperty("color_map_data_classes_count")] 
-        public string color_map_data_classes_count { get; set; }
+        public string ColorMapDataClassesCount { get; set; }
         
         [JsonProperty("colors")]
         public List<float[]> Colors { get; set; }
         
         [JsonProperty("x_param_range")] 
-        public List<float> x_param_range { get; set; }
+        public List<float> XParamRange { get; set; }
         
         [JsonProperty("y_param_range")] 
-        public List<float> y_param_range { get; set; }
+        public List<float> YParamRange { get; set; }
         
         [JsonProperty("z_expr")] 
-        public string z_expression { get; set; }
+        public string ZExpression { get; set; }
         
         [JsonProperty("sample_count")] 
-        public int sample_count { get; set; }
+        public int SampleCount { get; set; }
     }
 
     public class InitFileData
@@ -91,13 +89,13 @@ namespace Model.InitFile
     public class InitFileMesh
     {
         [JsonProperty("points")]
-        public List<float[]> points { get; set; }
+        public List<float[]> Points { get; set; }
         
         [JsonProperty("critical_points")]
         public List<string[]> CriticalPoints { get; set; }
         
         [JsonProperty("gradients")]
-        public List<float[]> gradients { get; set; }
+        public List<float[]> Gradients { get; set; }
         
         [JsonProperty("paths")]
         public InitFilePaths Paths { get; set; }
@@ -143,16 +141,7 @@ namespace Model.InitFile
         public List<InitFileArrow> Arrows;
     }
 
-    public class InitFileArrow
-    {
-        public float[] Origin;
-        public float[] Direction;
-    }
+    public class InitFileArrow {}
     
-    
-    public class InitFileSettings
-    {
-        
-    }
-
+    public class InitFileSettings {}
 }

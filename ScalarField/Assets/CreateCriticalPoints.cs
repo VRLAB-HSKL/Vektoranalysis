@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Model;
-using Model.InitFile;
+using Model.Enums;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
@@ -38,25 +35,22 @@ public class CreateCriticalPoints : MonoBehaviour
         {
             var cp = cps[i];
             var index = cp.PointIndex;
-            
-            //Debug.Log("it " + i + ", index: " + index + "/" + points.Count);
-            
             var pos = points[index];
 
             switch (cp.Type)
             {
                 case CriticalPointType.CRITICAL_POINT:
-                    DrawingUtility.DrawSphere(pos, this.transform, Color.blue, bbScale);
+                    DrawingUtility.DrawSphere(pos, transform, Color.blue, bbScale);
                     break;
                 
                 case CriticalPointType.LOCAL_MINIMUM:
-                    DrawingUtility.DrawSphere(pos, this.transform, Color.black, bbScale);
+                    DrawingUtility.DrawSphere(pos, transform, Color.black, bbScale);
                     break;
                 case CriticalPointType.LOCAL_MAXIMUM:
-                    DrawingUtility.DrawSphere(pos, this.transform, Color.white, bbScale);
+                    DrawingUtility.DrawSphere(pos, transform, Color.white, bbScale);
                     break;
                 case CriticalPointType.SADDLE_POINT:
-                    DrawingUtility.DrawSphere(pos, this.transform, Color.gray, bbScale);
+                    DrawingUtility.DrawSphere(pos, transform, Color.gray, bbScale);
                     break;
             }
             

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
@@ -23,7 +24,7 @@ public class CreateColorScale : MonoBehaviour
 
     public void UpdateScale()
     {
-        var colors = ScalarFieldManager.InitFile.DisplayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
+        var colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
         if (colors.Count == _cubes.Count)
         {
             for(var i = 0; i < _cubes.Count; i++)
@@ -43,7 +44,7 @@ public class CreateColorScale : MonoBehaviour
     
     private void SetCubes()
     {
-        var colors = ScalarFieldManager.InitFile.DisplayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
+        var colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
         var verticalLength = _bounds.size;
         var floor = _bounds.min.y;
         var verticalStep = verticalLength.y / (float)colors.Count;

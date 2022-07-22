@@ -1,12 +1,15 @@
 ﻿namespace Model.Enums
 {
+    /// <summary>
+    /// Enum containing all currently visualized strategies used in the scipy minimization function
+    /// </summary>
     public enum OptimizationAlgorithm
     {
-        STEEPEST_DESCENT = 0,
-        NELDER_MEAD = 1,
-        NEWTON = 2,
-        NEWTON_DISCRETE = 3,
-        NEWTON_TRUSTED = 4,
-        BFGS = 5
+        SteepestDescent = 0,
+        NelderMead = 1,
+        Newton = 2,
+        NewtonDiscrete = 3,
+        NewtonTrusted = 4,
+        Bfgs = 5
     }
 }

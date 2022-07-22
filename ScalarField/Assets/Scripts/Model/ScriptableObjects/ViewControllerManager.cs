@@ -3,7 +3,9 @@ using UnityEngine;
 
 namespace Model.ScriptableObjects
 {
-    //[CreateAssetMenu(fileName = "FILENAME", menuName = "MENUNAME", order = 0)]
+    /// <summary>
+    /// Data container for all MVC-based view controllers in the application
+    /// </summary>
     [CreateAssetMenu(fileName = "ViewController", menuName = "ScriptableObjects/ViewControllerManager", order = 2)]
     public class ViewControllerManager : ScriptableObject
     {

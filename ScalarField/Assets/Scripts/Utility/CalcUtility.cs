@@ -10,71 +10,6 @@ namespace Utility
     /// </summary>
     public static class CalcUtility
     {
-        // public static Tuple<List<Vector3>, List<Vector3>> CalculateField01(Vector3 scalingVector)
-        // {
-        //     var x_lower = 0f;//-5f * math.PI;
-        //     var x_upper = 1f * math.PI;
-        //     
-        //     // var x_range = x_upper - x_lower;
-        //     // var x_step = x_range / GlobalDataModel.NumberOfSamples;
-        //
-        //     var x_values = LinSpace(x_lower, x_upper, GlobalDataModel.NumberOfSamples).ToArray();
-        //         //CreateRange(x_lower, x_upper, GlobalDataModel.NumberOfSamples);
-        //
-        //     var y_lower = 0f;//-5f * math.PI;
-        //     var y_upper = 2f * math.PI;
-        //     // var y_range = y_upper - y_lower;
-        //     // var y_step = y_range / GlobalDataModel.NumberOfSamples;
-        //
-        //     var y_values = LinSpace(y_lower, y_upper, GlobalDataModel.NumberOfSamples).ToArray(); 
-        //         //CreateRange(y_lower, y_upper, GlobalDataModel.NumberOfSamples);
-        //
-        //     var raw_vertices = new List<Vector3>();
-        //     var display_vertices = new List<Vector3>();
-        //
-        //     var zmin = float.MaxValue;
-        //     var zmax = float.MinValue;
-        //
-        //     
-        //     
-        //     for(int i = 0; i < GlobalDataModel.NumberOfSamples; i++)
-        //     {
-        //         var x = x_values[i];//i * x_step;
-        //         float y;
-        //         for (int j = 0; j < GlobalDataModel.NumberOfSamples; j++)
-        //         {
-        //             y = y_values[j]; //j * y_step;    
-        //             var z = -math.sin(x) * math.sin(y);
-        //             
-        //             if (z < zmin) zmin = z;
-        //             if (z > zmax) zmax = z;
-        //
-        //             var calculatedVector = new Vector3(x, y, z);
-        //         
-        //             raw_vertices.Add(calculatedVector);
-        //             
-        //             // Switch axis to create horizontal mesh
-        //             var displayVector = new Vector3(x, z, y);
-        //
-        //             //var displayVector = new Vector3(y, z, x);
-        //             
-        //             // Scale points to 1/10th
-        //             //displayVector *= ScalingVector;
-        //             displayVector = Vector3.Scale(displayVector, scalingVector);
-        //         
-        //             
-        //             display_vertices.Add(displayVector);
-        //         }
-        //
-        //     }
-        //
-        //     //Debug.Log("zmin: " + zmin + ", zmax: " + zmax);
-        //     
-        //     return new Tuple<List<Vector3>, List<Vector3>>(raw_vertices, display_vertices);
-        // }
-
-        //private static float e = 2.71828182845904523536028747135266249775724709369995f;
-
         private static List<float> CreateRange(float start, float end, int sampleCount)
         {
             if (start > end) return null;
@@ -93,7 +28,7 @@ namespace Utility
         }
         
         /// <summary>
-        /// Creates collection of flat values, based on the initialization function for numpy arrays in python
+        /// Creates collection of float values, based on the initialization function for numpy arrays in python
         /// Source: https://gist.github.com/wcharczuk/3948606
         /// </summary>
         /// <param name="start"></param>
@@ -180,6 +115,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// ToDo: Probably do this in python also
         /// Custom convex hull algorithm, used to create polygon line around the point cloud
         /// of a specific z value in the scalar field
         /// Source: https://stackoverflow.com/questions/14671206/how-to-compute-convex-hull-in-c-sharp
@@ -225,10 +161,22 @@ namespace Utility
         }
 
 
-        public static int NeareastNeighborIndexXY(List<Vector3> points, Vector3 point)
+        /// <summary>
+        /// Simple nearest neighbour algorithm to find the closest point to a given point in a collection of points.
+        /// This function only takes the x and y dimension into account (2D points)
+        /// </summary>
+        /// <param name="points">List of points (possible neighbours)</param>
+        /// <param name="point">Source point</param>
+        /// <returns>Index of nearest neighbour in point collection</returns>
+        public static int NearestNeighborIndexXY(List<Vector3> points, Vector3 point)
         {
-            if (points.Count == 0) return -1;
-            if (points.Count == 1) return 0;
+            switch (points.Count)
+            {
+                case 0:
+                    return -1;
+                case 1:
+                    return 0;
+            }
 
             var smallestDist = float.MaxValue;
             var index = -1;
@@ -246,6 +194,14 @@ namespace Utility
             return index;
         }
 
+        /// <summary>
+        /// Maps a collection of display vectors to an encapsulation bounding box. The values are linearly interpolated
+        /// in each dimension between the minimum and maximum value the bounding box has in each of these dimensions
+        /// </summary>
+        /// <param name="dVertices"></param>
+        /// <param name="bounds"></param>
+        /// <param name="tf"></param>
+        /// <returns></returns>
         public static List<Vector3> MapDisplayVectors(List<Vector3> dVertices, Bounds bounds, Transform tf)
         {
             var x_min = dVertices.Min(v => v.x);
@@ -256,32 +212,22 @@ namespace Utility
             var z_max = dVertices.Max(v => v.z);   
             
             var bb = bounds.extents;
-            var bbCenter = bounds.center; //tf.TransformPoint(bounds.center);
-
             var displayVertices = new List<Vector3>();
-
             
             // Calculate mesh vertices
             for (var i = 0; i < dVertices.Count; i++)
             {
+                // Get display vector
                 var displayVector = dVertices[i];
             
-                
-
                 // Map point values to bounding box size
-                var mappedVec = CalcUtility.MapVectorToRange(
+                var mappedVec = MapVectorToRange(
                     displayVector, new Vector3(x_min, y_min, z_min), new Vector3(x_max, y_max, z_max),
                     -bb, bb
                 );
             
                 // Move coordinate system origin to the center of the bounding box
                 //var translatedVec = mappedVec + bbCenter;
-                
-                
-                // Debug.Log("init: " + displayVector + 
-                //         ", mappedVec: " + mappedVec +
-                //         ", translatedVector: " + translatedVec 
-                //           );
                 
                 displayVertices.Add(mappedVec);
             }

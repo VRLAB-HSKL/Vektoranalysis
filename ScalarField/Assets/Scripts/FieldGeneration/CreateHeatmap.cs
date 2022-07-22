@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
@@ -9,10 +10,15 @@ namespace FieldGeneration
     [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
     public class CreateHeatmap : MonoBehaviour
     {
+        [Header("Data")]
         public ScalarFieldManager scalarField;
+        
+        [Header("Dependencies")]
         public GameObject BoundingBox;
+        
+        [Header("Settings")]
         public bool ShowOnStartup;
-    
+        
         private MeshRenderer _mr;
         private Bounds _bb;
     
@@ -21,7 +27,13 @@ namespace FieldGeneration
             gameObject.SetActive(!gameObject.activeSelf);
         }
     
-        // Start is called before the first frame update
+        
+        /// <summary>
+        /// Unity Start function
+        /// ====================
+        /// 
+        /// This function is called before the first frame update, after Awake
+        /// </summary>
         private void Start()
         {
             _mr = GetComponent<MeshRenderer>();
@@ -51,12 +63,10 @@ namespace FieldGeneration
                     -_bb.extents, _bb.extents);
                 var finalPoint = new Vector3(scaledPoint.x, oldY, scaledPoint.z);
                 scaledPointList.Add(finalPoint);
-                //Debug.Log("initPoint: " + point + ", finalPoint: " + finalPoint);
             }
 
             mf.mesh.SetVertices(scaledPointList);
         
-            // Hide heatmap initially
             gameObject.SetActive(ShowOnStartup);
         }
 

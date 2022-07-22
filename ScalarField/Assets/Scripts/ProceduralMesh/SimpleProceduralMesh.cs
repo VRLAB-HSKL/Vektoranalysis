@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Calculation;
 using Model;
+using Model.ScriptableObjects;
 using Unity.Mathematics;
 using UnityEngine;
 using Utility;

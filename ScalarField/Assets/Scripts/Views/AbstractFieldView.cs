@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Model;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
@@ -9,14 +9,14 @@ namespace Views
 {
     public abstract class AbstractFieldView
     {
-        private ScalarFieldManager _data;
+        private readonly ScalarFieldManager _data;
         
-        private MeshRenderer _mr;
-        private MeshFilter _mf;
-        private MeshCollider _mc;
+        private readonly MeshRenderer _mr;
+        private readonly MeshFilter _mf;
+        private readonly MeshCollider _mc;
 
-        private Transform _tf;
-        private Bounds _bounds;
+        private readonly Transform _tf;
+        private readonly Bounds _bounds;
 
         private readonly GameObject _boundingBox;
         
@@ -425,80 +425,5 @@ namespace Views
 
             return Vector3.Cross(p3 - p2, p1 - p2).normalized;
         }
-
-        /// <summary>
-        /// Generates colors for a given value range of a collection of vertices
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <returns></returns>
-        // private List<Color> GenerateColors(List<Vector3> vertices)
-        // {
-        //     var maxz = vertices.Max(v => v.z);
-        //     var minz = vertices.Min(v => v.z);
-        //     var rangeZ = math.abs(maxz - minz);
-        //     //var step = rangeZ / 255f;
-        //     var colorList = new List<Color>();
-        //
-        //     for (int i = 0; i < vertices.Count; i++)
-        //     {
-        //         var z = vertices[i].z;
-        //
-        //         if (z > 0)
-        //         {
-        //             var redVal = z / maxz; //rangeZ;
-        //             colorList.Add(new Color(redVal, 0f, 0f));    
-        //         }
-        //         else
-        //         {
-        //             var blueVal = z / minz;
-        //             colorList.Add(new Color(0f, 0f, blueVal));
-        //         }
-        //     
-        //     }
-        //
-        //     return colorList;
-        // }
-
-
-        // private Color[] colors = new[]
-        // {
-        //     Color.black,
-        //     Color.blue,
-        //     Color.magenta,
-        //     Color.red,
-        //     Color.white
-        // };
-
-        /// <summary>
-        /// Implementation of a color transfer function that maps a value in a given range
-        /// to a discrete index value by rounding down float values (floor())
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <returns></returns>
-        // private List<Color> ColorTransferFunction(List<Vector3> vertices)
-        // {
-        //     var maxz = vertices.Max(v => v.z);
-        //     var minz = vertices.Min(v => v.z);
-        //
-        //     //Debug.Log("min: " + minz + ", max: " + maxz);
-        //
-        //     var rangeZ = math.abs(maxz - minz);
-        //     //var step = rangeZ / 255f;
-        //     var colorList = new List<Color>();
-        //
-        //     var n = colors.Length;
-        //
-        //     for (int i = 0; i < vertices.Count; i++)
-        //     {
-        //         var z = vertices[i].z;
-        //         float raw_ts = ((z - minz) / (maxz - minz)) * (n - 1);
-        //         int ts = (int) raw_ts;
-        //         colorList.Add(colors[ts]);
-        //     }
-        //
-        //     return colorList;
-        // }
-        
-        
     }
 }

@@ -1,20 +1,25 @@
-﻿using System;
-using System.Linq;
-using log4net;
-using Model;
-using Model.InitFile;
+﻿using System.Linq;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
 namespace FieldGeneration
 {
+    /// <summary>
+    /// Creates a visual representation of gradient direction vectors in specific points.
+    /// This visualization is created in relation to the scalar field representation (mesh) in the scene and its
+    /// corresponding bounding box
+    /// </summary>
     public class CreateGradients : MonoBehaviour
     {
-        public ScalarFieldManager ScalarFieldManager;
+        [Header("Data")]
+        public ScalarFieldManager scalarFieldManager;
         
-        public GameObject BoundingBox;
-        public GameObject ArrowPrefab;
+        [Header("Dependencies")]
+        public GameObject boundingBox;
+        public GameObject arrowPrefab;
 
+        [Header("Settings")]
         public bool showGradientsOnStartup;
         public int stepsBetweenArrows;
         
@@ -33,20 +38,19 @@ namespace FieldGeneration
             }
         }
         
-        
         private void Start()
         {   
             var startIndex = 0;
-            var lastIndexBefore = ScalarFieldManager.CurrentField.Gradients.Count;
-            var meshVectors = ScalarFieldManager.CurrentField.MeshPoints;
+            var lastIndexBefore = scalarFieldManager.CurrentField.Gradients.Count;
+            var meshVectors = scalarFieldManager.CurrentField.MeshPoints;
             for(var i = startIndex; i < lastIndexBefore; i++)
             {
                 if (i % stepsBetweenArrows != 0) continue;
                 
-                var gradient = ScalarFieldManager.CurrentField.Gradients[i];
+                var gradient = scalarFieldManager.CurrentField.Gradients[i];
                 // flip coordinates to match display vector ordering
                 gradient = new Vector3(gradient.x, gradient.z, gradient.y);
-                var start = ScalarFieldManager.CurrentField.MeshPoints[i];
+                var start = scalarFieldManager.CurrentField.MeshPoints[i];
                 var end = start + gradient;
 
                 // Debug.Log(
@@ -66,18 +70,18 @@ namespace FieldGeneration
                 //     end = new Vector3(end.x, downHit.point.y, end.z);
                 // }
 
-                var tolerance = 0.125f;
-                var similiarPointsinMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
+                const float tolerance = 0.125f;
+                var similarPointsInMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
                     .Where(p => Mathf.Abs(p.z - end.z) < tolerance).ToList();
 
-                if (similiarPointsinMesh.Any())
+                if (similarPointsInMesh.Any())
                 {
                     //Debug.Log("Found points with approximately the same x and z coordinate");
-                    var index = meshVectors.IndexOf(similiarPointsinMesh[0]);
+                    var index = meshVectors.IndexOf(similarPointsInMesh[0]);
                     end = new Vector3(end.x, meshVectors[index].y, end.z);
                 }
                 
-                DrawingUtility.DrawArrow(start, end, transform, ArrowPrefab, BoundingBox.transform.localScale);
+                DrawingUtility.DrawArrow(start, end, transform, arrowPrefab, boundingBox.transform.localScale);
             }
          
             SetGradientsActive(showGradientsOnStartup);

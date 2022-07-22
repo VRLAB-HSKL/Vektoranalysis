@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Enums;
+using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
 
@@ -12,15 +13,30 @@ namespace FieldGeneration
     /// </summary>
     public class CreateAlgorithmPath : MonoBehaviour
     {
-        public ScalarFieldManager ScalarFieldManager;
+        [Header("Data")]
+        [SerializeField]
+        public ScalarFieldManager scalarFieldManager;
         
-        public GameObject BoundingBox;
-        public GameObject ArrowPrefab;
+        [Header("Path Elements")]
+        [SerializeField]
+        public GameObject boundingBox;
+        
+        [SerializeField]
+        public GameObject arrowPrefab;
 
-        public OptimizationAlgorithm AlgorithmPath = OptimizationAlgorithm.NELDER_MEAD ;
-        public int PathIndex;
+        [Header("Settings")]
+        [SerializeField]
+        public OptimizationAlgorithm minimizationStrategy = OptimizationAlgorithm.NelderMead ;
+        
+        [SerializeField]
+        public int pathIndex;
+        
+        [SerializeField]
         public bool showPathOnStartup;
         
+        /// <summary>
+        /// Toggle path visibility in field
+        /// </summary>
         public void TogglePath()
         {
             showPathOnStartup = !showPathOnStartup;
@@ -28,86 +44,81 @@ namespace FieldGeneration
             SetPathActive(showPathOnStartup);
         }
 
-        private void SetPathActive(bool isActive)
+        /// <summary>
+        /// De-/activates the algorithm path and its components
+        /// </summary>
+        /// <param name="setActive"></param>
+        private void SetPathActive(bool setActive)
         {
             for (var i = 0; i < transform.childCount; i++)
             {
-                transform.GetChild(i).gameObject.SetActive(isActive);
+                transform.GetChild(i).gameObject.SetActive(setActive);
             }
         }
 
+        /// <summary>
+        /// Unity Start function
+        /// ====================
+        /// 
+        /// This function is called before the first frame update, after Awake
+        /// </summary>
         private void Start()
         {
-            var bbScale = BoundingBox.transform.lossyScale;
-            var points = ScalarFieldManager.CurrentField.MeshPoints;
-            //var cps = ScalarFieldManager.CurrentField.CriticalPoints;
-
+            // Get imported path based on chosen strategy
             var path = new List<Vector3>();
-            switch (AlgorithmPath)
+            switch (minimizationStrategy)
             {
-                case OptimizationAlgorithm.STEEPEST_DESCENT:
-                    path = ScalarFieldManager.CurrentField.SteepestDescentPaths[PathIndex];
+                case OptimizationAlgorithm.SteepestDescent:
+                    path = scalarFieldManager.CurrentField.SteepestDescentPaths[pathIndex];
                     break;
                 
-                case OptimizationAlgorithm.NELDER_MEAD:
-                    path = ScalarFieldManager.CurrentField.NelderMeadPaths[PathIndex];
+                case OptimizationAlgorithm.NelderMead:
+                    path = scalarFieldManager.CurrentField.NelderMeadPaths[pathIndex];
                     break;
                 
-                case OptimizationAlgorithm.NEWTON:
-                    path = ScalarFieldManager.CurrentField.NewtonPaths[PathIndex];
+                case OptimizationAlgorithm.Newton:
+                    path = scalarFieldManager.CurrentField.NewtonPaths[pathIndex];
                     break;
                 
-                case OptimizationAlgorithm.NEWTON_DISCRETE:
-                    path = ScalarFieldManager.CurrentField.NewtonDiscretePaths[PathIndex];
+                case OptimizationAlgorithm.NewtonDiscrete:
+                    path = scalarFieldManager.CurrentField.NewtonDiscretePaths[pathIndex];
                     break;
                 
-                case OptimizationAlgorithm.NEWTON_TRUSTED:
-                    path = ScalarFieldManager.CurrentField.NewtonTrustedPaths[PathIndex];
+                case OptimizationAlgorithm.NewtonTrusted:
+                    path = scalarFieldManager.CurrentField.NewtonTrustedPaths[pathIndex];
                     break;
                 
-                case OptimizationAlgorithm.BFGS:
-                    path = ScalarFieldManager.CurrentField.BFGSPaths[PathIndex];
+                case OptimizationAlgorithm.Bfgs:
+                    path = scalarFieldManager.CurrentField.BFGSPaths[pathIndex];
                     break;
             }
             
-            // foreach(List<Vector3> path in ScalarFieldManager.CurrentField.NelderMeadPaths[PathIndex])
-            // {
-            //     Debug.Log("pathCount: " + path.Count);
-            //     for (var i = 0; i < path.Count; i++)
-            //     {
-            //         Debug.Log(i + " - " + path[i]);
-            //     }
-            // }
-
             var meshPointList = new List<Vector3>();
-            var min = ScalarFieldManager.CurrentField.MinRawValues;
-            var max = ScalarFieldManager.CurrentField.MaxRawValues;
+            var min = scalarFieldManager.CurrentField.MinRawValues;
+            var max = scalarFieldManager.CurrentField.MaxRawValues;
             foreach (var vec in path)
             {
-                // Skip points outside of the bounds of the scalar field
+                // Skip points outside of the bounds of the scalar field (observable universe)
                 if (vec.x < min.x || vec.x > max.x ||
                     vec.y < min.y || vec.y > max.y ||
                     vec.z < min.z || vec.z > max.z)
                 {
                     continue;
                 }
-                    
-                var index = CalcUtility.NeareastNeighborIndexXY(ScalarFieldManager.CurrentField.RawPoints, vec);
                 
-                //var idx = ScalarFieldManager.CurrentField.RawPoints.FindIndex(p => p.x == vec.x && p.y == vec.y);
+                // Add point to path if nearest XY neighbour was found in raw point collection
+                var index = CalcUtility.NearestNeighborIndexXY(scalarFieldManager.CurrentField.RawPoints, vec);
                 if (index != -1)
                 {
-                    // var z = ScalarFieldManager.CurrentField.RawPoints[index].z;
-                    // var v = new Vector3(vec.x, vec.y, z);
-                    // Debug.Log("vec: " + vec + ", finalVec: " + v);
-                    // meshPointList.Add(v);
-                    meshPointList.Add(ScalarFieldManager.CurrentField.MeshPoints[index]);
+                    meshPointList.Add(scalarFieldManager.CurrentField.MeshPoints[index]);
                 }
             }
             
-            //var finalList = CalcUtility.MapDisplayVectors(meshPointList, BoundingBox.GetComponent<MeshRenderer>().bounds);
+            // Create path
+            var bbScale = boundingBox.transform.lossyScale;
+            DrawingUtility.DrawPath(meshPointList, transform, arrowPrefab, bbScale);
             
-            DrawingUtility.DrawPath(meshPointList, this.transform, ArrowPrefab, bbScale);
+            SetPathActive(showPathOnStartup);
         }
     }
     

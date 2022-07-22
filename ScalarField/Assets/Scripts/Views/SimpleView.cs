@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Model.ScriptableObjects;
+using UnityEngine;
 
 namespace Views
 {
@@ -6,11 +7,5 @@ namespace Views
     {
         public SimpleView(ScalarFieldManager data, GameObject mesh, GameObject boundingBox) 
             : base(data, mesh, boundingBox) {}
-
-        public override void UpdateView()
-        {
-            //Debug.Log("SimpleView - UpdateView()");
-            base.UpdateView();
-        }
     }
 }

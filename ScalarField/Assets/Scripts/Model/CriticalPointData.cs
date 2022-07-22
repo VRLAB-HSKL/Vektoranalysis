@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Model.Enums;
 
 namespace Model
 {

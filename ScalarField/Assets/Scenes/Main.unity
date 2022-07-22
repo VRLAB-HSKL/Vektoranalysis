@@ -409,19 +409,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed77ef1c35f10b8489f3b11ea6bb60e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScalarFieldManager: {fileID: 0}
+  scalarFieldManager: {fileID: 0}
   Field: {fileID: 1976931700}
-  ContourValues: []
-  LineMat: {fileID: 2100000, guid: 58c68f717c6622c4e9ac73ad113e9369, type: 2}
-  LinesVisible: 1
-  ShowLinesInMesh: 1
-  epsilon: 0.01
+  boundingBox: {fileID: 0}
+  contourValues: []
+  lineMat: {fileID: 0}
+  linesVisible: 0
+  showLinesVerticallyInMesh: 0
   positionOffset: {x: 0, y: 0.05, z: 0}
   lineThicknessMultiplier: 0.0125
-  PointScale: {x: 0.5, y: 0.5, z: 0.5}
-  ArrowPrefab: {fileID: 8976127498621790747, guid: a70c41fb8e71bb849825a7e826d129a1, type: 3}
-  ArrowScale: {x: 1, y: 1, z: 1}
-  BoundingBox: {fileID: 851291624}
 --- !u!1 &63513415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3701,7 +3697,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95c64b0f0c348974d876cd508ca2a28e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3958,8 +3954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c439fd294cba91b4e9b76fe2e9b3352d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScalarFieldManager: {fileID: 11400000, guid: e89023fd06a851f41a718166c55e1c65, type: 2}
-  texture: {fileID: 0}
+  scalarFieldManager: {fileID: 0}
 --- !u!1 &1081113138
 GameObject:
   m_ObjectHideFlags: 0

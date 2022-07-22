@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using Model;
 using Model.ScriptableObjects;
 using TMPro;
@@ -8,13 +9,15 @@ using UnityEngine.UI;
 
 public class InformationControl : MonoBehaviour
 {
+    [Header("Data")]
     public ScalarFieldManager ScalarFieldManager;
     public PathManager PathManager;
     
+    [Header("Dependencies")]
     public Image FormulaImage;
     public TextMeshProUGUI NameValueText;
     
-    // Start is called before the first frame update
+    
     void Start()
     {
         UpdateInformation();
@@ -31,11 +34,5 @@ public class InformationControl : MonoBehaviour
         {
             FormulaImage.sprite = formulaSprite;
         }
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

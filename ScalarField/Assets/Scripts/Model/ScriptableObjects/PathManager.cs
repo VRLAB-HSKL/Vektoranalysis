@@ -2,6 +2,9 @@
 
 namespace Model.ScriptableObjects
 {
+    /// <summary>
+    /// Data container for file paths used in the application
+    /// </summary>
     [CreateAssetMenu(fileName = "Path", menuName = "ScriptableObjects/PathManager", order = 1)]
     public class PathManager : ScriptableObject
     {

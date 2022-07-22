@@ -1,230 +1,207 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Model;
+using Model.Enums;
 using Model.InitFile;
-using Model.ScriptableObjects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ScalarField", menuName = "ScriptableObjects/ScalarFieldManager", order = 0)]
-public class ScalarFieldManager : ScriptableObject
+namespace Model.ScriptableObjects
 {
-    public PathManager PathManager;
-    
     /// <summary>
-    /// Currently selected scalar field that is being visualized in the application
+    /// Data container for all data related to the imported scalar field dataset. This includes geometric data as well as
+    /// additional information for dataset navigation
     /// </summary>
-    public ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
-
-    public int CurrentFieldIndex { get; set; }
-
-    public List<ScalarField> ScalarFields { get; set; } = new List<ScalarField>();
-
-    
-    /// <summary>
-    /// Tree data structure the init file is parsed into
-    /// </summary>
-    public InitFileRoot InitFile { get; private set; }
-    
-    
-    /// <summary>
-    /// Parses the JSON init file and creates the tree data structure in <see cref="InitFile"/>
-    /// </summary>
-    public void ParseInitFile()
+    [CreateAssetMenu(fileName = "ScalarField", menuName = "ScriptableObjects/ScalarFieldManager", order = 0)]
+    public class ScalarFieldManager : ScriptableObject
     {
-        // Load resource
-        var json = Resources.Load(PathManager.InitFileResourcePath) as TextAsset;
+        /// <summary>
+        /// Currently selected scalar field that is being visualized in the application
+        /// </summary>
+        public ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        if (json is null)
-        {
-            Debug.LogError("JSON init file resource not found!");
-            return;
-        }
-        
-        // Catch errors that occur during parsing
-        var errors = new List<string>();
-        ITraceWriter tr = new MemoryTraceWriter();
-        var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
-            new JsonSerializerSettings()
-            {
-                Error = delegate(object sender, ErrorEventArgs args)
-                {
-                    errors.Add(args.ErrorContext.Error.Message);
-                    Debug.Log("ErrorOccuredJSON");
-                    args.ErrorContext.Handled = true;
-                },
-                TraceWriter = tr
-            }
-        );
+        public int CurrentFieldIndex { get; set; }
 
-        // Log error if init file was not parsed correctly
-        if (jsr is null)
-        {
-            Debug.LogError("Failed to deserialize json!\n");
-            return;
-        }
+        public List<ScalarField> ScalarFields { get; } = new List<ScalarField>();
+
     
-        InitFile = jsr;
-
-        foreach (var field in InitFile.DisplayFields)
+        /// <summary>
+        /// Tree data structure the init file is parsed into
+        /// </summary>
+        public InitFileRoot InitFile { get; private set; }
+    
+    
+        /// <summary>
+        /// Parses the JSON init file and creates the tree data structure in <see cref="InitFile"/>
+        /// </summary>
+        public void ParseInitFile()
         {
-            // Create scalar field based on init file
-            var sf = new ScalarField
-            {
-                ID = field.Info.id,
-                ColorMapId = field.Info.color_map_id,
-                ColorMapDataClassesCount = field.Info.color_map_data_classes_count,
-                ParameterRangeX = new Tuple<float, float>(field.Info.x_param_range[0], field.Info.x_param_range[1]),
-                ParameterRangeY = new Tuple<float, float>(field.Info.y_param_range[0], field.Info.y_param_range[1]),
-                SampleCount = field.Info.sample_count
-            };
+            // Load resource
+            var json = Resources.Load(PathManager.InitFileResourcePath) as TextAsset;
 
-            var importedPoints = field.Data.mesh.points;
-            //var pointList = PythonUtility.CalculatePoints(); //field.Data.mesh.points;
-            
-            //Debug.Log("imported points count: " + importedPoints.Count + ", python point count: " + pointList.Count);
-            
-            foreach (var point in importedPoints)
+            if (json is null)
             {
-                sf.RawPoints.Add(new Vector3(point[0], point[1], point[2]));
-                sf.DisplayPoints.Add(new Vector3(point[0], point[2], point[1]));
+                Debug.LogError("JSON init file resource not found!");
+                return;
             }
-
-            foreach (var critPoint in field.Data.mesh.CriticalPoints)
-            {
-                var cp = new CriticalPointData()
+        
+            // Catch errors that occur during parsing
+            var errors = new List<string>();
+            ITraceWriter tr = new MemoryTraceWriter();
+            var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
+                new JsonSerializerSettings()
                 {
-                    PointIndex = int.Parse(critPoint[0])
+                    Error = delegate(object sender, ErrorEventArgs args)
+                    {
+                        errors.Add(args.ErrorContext.Error.Message);
+                        Debug.Log("ErrorOccuredJSON");
+                        args.ErrorContext.Handled = true;
+                    },
+                    TraceWriter = tr
+                }
+            );
+
+            // Log error if init file was not parsed correctly
+            if (jsr is null)
+            {
+                Debug.LogError("Failed to deserialize json!\n");
+                return;
+            }
+    
+            InitFile = jsr;
+
+            foreach (var field in InitFile.displayFields)
+            {
+                // Create scalar field based on init file
+                var sf = new ScalarField
+                {
+                    ID = field.Info.ID,
+                    ColorMapId = field.Info.ColorMapID,
+                    ColorMapDataClassesCount = field.Info.ColorMapDataClassesCount,
+                    ParameterRangeX = new Tuple<float, float>(field.Info.XParamRange[0], field.Info.XParamRange[1]),
+                    ParameterRangeY = new Tuple<float, float>(field.Info.YParamRange[0], field.Info.YParamRange[1]),
+                    SampleCount = field.Info.SampleCount
                 };
+
+                var importedPoints = field.Data.mesh.Points;
+                foreach (var point in importedPoints)
+                {
+                    sf.RawPoints.Add(new Vector3(point[0], point[1], point[2]));
+                    sf.DisplayPoints.Add(new Vector3(point[0], point[2], point[1]));
+                }
+
+                foreach (var criticalPoint in field.Data.mesh.CriticalPoints)
+                {
+                    var cp = new CriticalPointData()
+                    {
+                        PointIndex = int.Parse(criticalPoint[0])
+                    };
                 
-                var type = critPoint[1];
-                switch (type)
+                    var type = criticalPoint[1];
+                    switch (type)
+                    {
+                        default:
+                            cp.Type = CriticalPointType.CRITICAL_POINT;
+                            break;
+                    
+                        case "LOCAL_MINIMUM":
+                            cp.Type = CriticalPointType.LOCAL_MINIMUM;
+                            break;
+                    
+                        case "LOCAL_MAXIMUM":
+                            cp.Type = CriticalPointType.LOCAL_MAXIMUM;
+                            break;
+                    
+                        case "SADDLE_POINT":
+                            cp.Type = CriticalPointType.SADDLE_POINT;
+                            break;
+                    }
+
+                    sf.CriticalPoints.Add(cp);
+                }
+            
+                foreach (var gradient in field.Data.mesh.Gradients)
                 {
-                    case "CRITICAL_POINT":
-                    default:
-                        cp.Type = CriticalPointType.CRITICAL_POINT;
-                        break;
-                    
-                    case "LOCAL_MINIMUM":
-                        cp.Type = CriticalPointType.LOCAL_MINIMUM;
-                        break;
-                    
-                    case "LOCAL_MAXIMUM":
-                        cp.Type = CriticalPointType.LOCAL_MAXIMUM;
-                        break;
-                    
-                    case "SADDLE_POINT":
-                        cp.Type = CriticalPointType.SADDLE_POINT;
-                        break;
+                    sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));
                 }
 
-                sf.CriticalPoints.Add(cp);
-            }
+                sf.SteepestDescentPaths = ParsePath(field.Data.mesh.Paths.SteepestDescent);
+                sf.NelderMeadPaths = ParsePath(field.Data.mesh.Paths.NelderMead);
+                sf.NewtonPaths = ParsePath(field.Data.mesh.Paths.Newton);
+                sf.NewtonDiscretePaths = ParsePath(field.Data.mesh.Paths.NewtonDiscrete);
+                sf.NewtonTrustedPaths = ParsePath(field.Data.mesh.Paths.NewtonTrusted);
+                sf.BFGSPaths = ParsePath(field.Data.mesh.Paths.BFGS);
             
-            foreach (var gradient in field.Data.mesh.gradients)
-            {
-                sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));
-            }
-
-
-            sf.SteepestDescentPaths = ParsePath(field.Data.mesh.Paths.SteepestDescent);
-            sf.NelderMeadPaths = ParsePath(field.Data.mesh.Paths.NelderMead);
-            sf.NewtonPaths = ParsePath(field.Data.mesh.Paths.Newton);
-            sf.NewtonDiscretePaths = ParsePath(field.Data.mesh.Paths.NewtonDiscrete);
-            sf.NewtonTrustedPaths = ParsePath(field.Data.mesh.Paths.NewtonTrusted);
-            sf.BFGSPaths = ParsePath(field.Data.mesh.Paths.BFGS);
-            
-            // for (var i = 0; i < field.Data.mesh.Paths.NelderMead.Count; i++)
-            // {
-            //     var nmPath = field.Data.mesh.Paths.NelderMead[i];
-            //     var vecList = new List<Vector3>();
-            //     for (var j = 0; j < nmPath.Count; j++)
-            //     {
-            //         var pathPoint = nmPath[j];
-            //         var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
-            //         vecList.Add(vec);
-            //     }
-            //
-            //     sf.NelderMeadPaths.Add(vecList);
-            // }
-
-            // for (var i = 0; i < sf.NelderMeadPaths.Count; i++)
-            // {
-            //     Debug.Log(i + " - Count: " + sf.NelderMeadPaths[i].Count);
-            // }
-            
-            
-            sf.MinRawValues = new Vector3(
-                sf.RawPoints.Min(v => v.x),
-                sf.RawPoints.Min(v => v.y),
-                sf.RawPoints.Min(v => v.z)
-            );
+                sf.MinRawValues = new Vector3(
+                    sf.RawPoints.Min(v => v.x),
+                    sf.RawPoints.Min(v => v.y),
+                    sf.RawPoints.Min(v => v.z)
+                );
         
-            sf.MaxRawValues = new Vector3(
-                sf.RawPoints.Max(v => v.x),
-                sf.RawPoints.Max(v => v.y),
-                sf.RawPoints.Max(v => v.z)
-            );
+                sf.MaxRawValues = new Vector3(
+                    sf.RawPoints.Max(v => v.x),
+                    sf.RawPoints.Max(v => v.y),
+                    sf.RawPoints.Max(v => v.z)
+                );
 
             
-            sf.ContourLineValues = field.Data.isolines.Values;
+                sf.ContourLineValues = field.Data.isolines.Values;
 
-            var lst = new List<List<Vector3>>();
-            foreach (var line in field.Data.isolines.ConvexHulls)
-            {
-                var vecList = new List<Vector3>();
-                foreach (var point in line)
+                var lst = new List<List<Vector3>>();
+                foreach (var line in field.Data.isolines.ConvexHulls)
                 {
-                    vecList.Add(new Vector3(point[0], point[1], point[2]));
+                    var vecList = new List<Vector3>();
+                    foreach (var point in line)
+                    {
+                        vecList.Add(new Vector3(point[0], point[1], point[2]));
+                    }
+                    lst.Add(vecList);
                 }
-                lst.Add(vecList);
-            }
 
-            sf.ContourLinePoints = lst;
+                sf.ContourLinePoints = lst;
 
-            // Load texture based on chosen identifiers in init file
-            var colorMapId = sf.ColorMapId;
-            var colorMapDataClassesCount = sf.ColorMapDataClassesCount;
-            var textureResourcePath = "texture_maps/" 
-                                      + sf.ID + "/"
-                                      + colorMapId + "/" 
-                                      + colorMapDataClassesCount + "/" 
-                                      + colorMapId + "_" + colorMapDataClassesCount + "_texture";
+                // Load texture based on chosen identifiers in init file
+                var colorMapId = sf.ColorMapId;
+                var colorMapDataClassesCount = sf.ColorMapDataClassesCount;
+                var textureResourcePath = "texture_maps/" 
+                                          + sf.ID + "/"
+                                          + colorMapId + "/" 
+                                          + colorMapDataClassesCount + "/" 
+                                          + colorMapId + "_" + colorMapDataClassesCount + "_texture";
         
-            var texture = Resources.Load(textureResourcePath) as Texture2D;
-            if (texture is null)
-            {
-                Debug.LogWarning("Unable to find texture map in local resources!");
-            }
+                var texture = Resources.Load(textureResourcePath) as Texture2D;
+                if (texture is null)
+                {
+                    Debug.LogWarning("Unable to find texture map in local resources!");
+                }
         
-            sf.MeshTexture = texture;
+                sf.MeshTexture = texture;
 
-            //CurrentField = sf;
+                //CurrentField = sf;
 
-            ScalarFields.Add(sf);
+                ScalarFields.Add(sf);
+            }
         }
-    }
     
-    private List<List<Vector3>> ParsePath(List<List<float[]>> paths)
-    {
-        var retList = new List<List<Vector3>>();
-        for (var i = 0; i < paths.Count; i++)
+        private List<List<Vector3>> ParsePath(List<List<float[]>> paths)
         {
-            var currPath = paths[i];
-            var vecList = new List<Vector3>();
-            for (var j = 0; j < currPath.Count; j++)
+            var retList = new List<List<Vector3>>();
+            for (var i = 0; i < paths.Count; i++)
             {
-                var pathPoint = currPath[j];
-                var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
-                vecList.Add(vec);
+                var currPath = paths[i];
+                var vecList = new List<Vector3>();
+                for (var j = 0; j < currPath.Count; j++)
+                {
+                    var pathPoint = currPath[j];
+                    var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
+                    vecList.Add(vec);
+                }
+
+                retList.Add(vecList);
             }
 
-            retList.Add(vecList);
+            return retList;
         }
-
-        return retList;
     }
 }
