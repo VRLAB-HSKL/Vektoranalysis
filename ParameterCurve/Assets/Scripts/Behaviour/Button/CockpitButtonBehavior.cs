@@ -55,16 +55,11 @@ namespace Behaviour.Button
             CancelButton.onClick.AddListener(cancel);
         }
 
-        /// <summary>
-        /// changes appearance of button when pressed
-        /// </summary>
-
         #region Clicked
         protected override void HandleButtonEvent()
         {
             ExitConfirmationPanel.SetActive(true);
             DisplayViewParent.SetActive(false);
-            //StartCoroutine(WriteCoordsData());
         }
 
         IEnumerator WriteCoordsData()
@@ -113,13 +108,14 @@ namespace Behaviour.Button
 
                     float coordsScaler = 2.5f;
 
+                    //write tan/norm/binorm data
                     if (!is3D)
                     {
                         //Debug.Log("not 3D");
                         writer.WriteLine(coordsScaler * tangentX + " " + coordsScaler * tangentZ + " " + coordsScaler * tangentY);
                         writer.WriteLine(coordsScaler * normalX + " " + coordsScaler * normalZ + " " + coordsScaler * normalY);
 
-                        //for 2D curves, binormal is in 3rd dimension
+                        //for 2D curves, binormal is in 3rd dimension so do not write it 
                         //writer.WriteLine(coordsScaler * binormalX + " " + coordsScaler * binormalZ + " " + coordsScaler * binormalY);
                     }
                     else
@@ -130,6 +126,7 @@ namespace Behaviour.Button
                         writer.WriteLine(coordsScaler * binormalX + " " + coordsScaler * binormalY + " " + coordsScaler * binormalZ);
                     }
 
+                    //write data for time and veclocity graphs
                     float timeDistX = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeDistancePoints[i].x;
                     float timeDistY = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TimeDistancePoints[i].y;
                     writer.WriteLine(timeDistX + " " + timeDistY);
@@ -166,6 +163,7 @@ namespace Behaviour.Button
 
         private void OnApplicationQuit()
         {
+            //clear curve data when application stops running
             File.WriteAllText(path, "");
         }
     }

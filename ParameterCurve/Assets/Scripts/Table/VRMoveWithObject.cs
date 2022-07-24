@@ -48,16 +48,6 @@ namespace ImmersiveVolumeGraphics
             //public string ObjectName2 = "";
 
             /// <summary>
-            /// Displacement value
-            /// </summary>
-            public Vector3 controlObjectOrigin;
-
-            /// <summary>
-            /// Displacement value
-            /// </summary>
-            public Vector3 targetObjectOrigin;
-
-            /// <summary>
             /// Check if the movement is in x-Direction
             /// </summary>
             public bool XDirection;
@@ -93,6 +83,16 @@ namespace ImmersiveVolumeGraphics
             private float yLowerBound;
 
             /// <summary>
+            /// Original point position (reference) for control object 
+            /// </summary>
+            private Vector3 controlObjectOrigin;
+
+            /// <summary>
+            /// Original point position (reference) for target object 
+            /// </summary>
+            private Vector3 targetObjectOrigin;
+
+            /// <summary>
             /// Find both Objects in the Scene
             /// </summary>
             /// <remarks>
@@ -102,11 +102,14 @@ namespace ImmersiveVolumeGraphics
             {
                 //targetObject = GameObject.Find(targetObjectName);
                 //controlObject = GameObject.Find(ObjectName2);
+
+                //gather initial positions
                 controlObjectOrigin = controlObject.transform.position;
                 targetObjectOrigin = targetObject.transform.localPosition;
                 yLowerBound = yLowerBoundObject.transform.position.y;
                 yUpperBound = yUpperBoundObject.transform.position.y;
 
+                //gather initial point positions for line renderer(s) in target (if it has one)
                 lrs = targetObject.GetComponentsInChildren<LineRenderer>();
                 if (lrs != null)
                 {
@@ -175,6 +178,8 @@ namespace ImmersiveVolumeGraphics
                     //only move if direction is enabled
                     if (XDirection || YDirection || ZDirection)
                     {
+                        //new position = origin + change in control object position
+
                         targetObject.transform.localPosition = targetObjectOrigin + new Vector3(changeX, changeY, changeZ);
 
                         if (lrs != null)

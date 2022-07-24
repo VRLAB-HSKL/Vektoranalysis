@@ -33,15 +33,21 @@ public class CockpitTravel : MonoBehaviour
     private float _updateTimer;
 
     private WaypointManager wpm;
+
+    //lists to hold curve data and time/velocity graph data
     private List<Vector3> curvePoints;
     private List<Vector3> tangentPositions;
     private List<Vector3> normalPositions;
     private List<Vector3> binormalPositions;
     private List<Vector2> timeDistPositions;
     private List<Vector2> timeVelPositions;
+
     private LineRenderer TimeVelocityLR;
     private LineRenderer TimeDistanceLR;
-    private int index;
+
+    //use index if not using waypoint manager
+    //private int index;
+
     private int size;
     private bool is3D;
     private float timeThreshold;
@@ -64,13 +70,14 @@ public class CockpitTravel : MonoBehaviour
         TimeDistanceLR = TimeDistanceLineObject.GetComponent<LineRenderer>();
         TimeVelocityLR = TimeVelocityLineObject.GetComponent<LineRenderer>();
 
-        index = 0;
+        //index = 0;
         timeThreshold = (minThreshold + maxThreshold) / 2;
         _initTimeDistTravelPos = TimeDistanceTravelObject.transform.localPosition;
         _initTimeVelTravelPos = TimeVelocityTravelObject.transform.localPosition;
 
         using (StreamReader reader = new StreamReader(path))
         {
+            //change center display image on cockpit to current curve
             string imgName = reader.ReadLine();
             Texture2D img = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Resources/img/" + imgName + ".png", typeof(Texture2D));
             CockpitImageDisplay.texture = img;
@@ -158,6 +165,7 @@ public class CockpitTravel : MonoBehaviour
         // Update time since last point step
         _updateTimer += Time.deltaTime;
 
+        //update speed based on regulator position
         changeSpeed();
 
         // If the time threshold has been reached, traverse to next point
@@ -185,6 +193,9 @@ public class CockpitTravel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draw tan/norm/binorm lines out from cockpit using imported data
+    /// </summary>
     private void updateVectors()
     {
         TangentLine.SetPosition(0, Cockpit.transform.position);
@@ -203,6 +214,9 @@ public class CockpitTravel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Move point on time/velocity diagrams
+    /// </summary>
     private void updateTravelObjects()
     {
         Vector2 tdPosVec = timeDistPositions[wpm.Current];
@@ -214,6 +228,9 @@ public class CockpitTravel : MonoBehaviour
         TimeVelocityTravelObject.transform.localPosition = _initTimeVelTravelPos + tvVec;
     }
 
+    /// <summary>
+    /// Change travel speed based on regulator position
+    /// </summary>
     private void changeSpeed()
     {
         float offset = CockpitRegulator.GetComponent<VRClampDirection>().OffsetX;

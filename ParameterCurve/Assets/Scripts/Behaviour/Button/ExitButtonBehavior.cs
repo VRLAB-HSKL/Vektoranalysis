@@ -42,7 +42,7 @@ namespace Behaviour.Button
         #region Clicked
         protected override void HandleButtonEvent()
         {
-            //new room is +20 units in x direction from main room
+            //new room is +20 units in z direction from main room
             VR.transform.position = VR.transform.position + new Vector3(0, 0, -20);
             //move menu parent object back as well
             curveControl.curveMenuParent.transform.parent.gameObject.transform.position = curveControl.curveMenuParent.transform.parent.gameObject.transform.position + new Vector3(0, 0, -20);

@@ -44,17 +44,18 @@ public class DrawTangentNormal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //show solution on grip press
         if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Grip))
         {
             compareVectors();
         }
 
+        //calculate distance from tan/norm spheres to point sphere
         float tangentDistance = Vector3.Distance(pointSphere.transform.position, tangentSphere.transform.position);
         float normalDistance = Vector3.Distance(pointSphere.transform.position, normalSphere.transform.position);
         float thresholdDistance = 0.55f;
 
-        
-
+        //if calculated distance is below threshold, draw the line from the point sphere to the tan/norm sphere
         if (tangentDistance < thresholdDistance)
         {
             //override position from controller to make sure line connects to sphere instead for 2D curves
@@ -86,24 +87,35 @@ public class DrawTangentNormal : MonoBehaviour
         }
     }
 
-    //called when the curve changes. will update the drawing curve display and generate new spheres for new curve
+    /// <summary>
+    /// called when the curve changes. will update the drawing curve display and generate new spheres for new curve
+    /// </summary>
     public void generateCurve()
     {
         for (int i = 0; i < worldCurve.positionCount; i++)
         {
-            float x = worldCurve.GetPosition(i).x / 2f + 4.5f;
-            float y = worldCurve.GetPosition(i).y / 2f + 0.25f;
+            //half the size of the world curve
+            float x = worldCurve.GetPosition(i).x / 2f + 4.5f;  //x offset from world curve
+            float y = worldCurve.GetPosition(i).y / 2f + 0.25f; //y offset for axes height
             float z = worldCurve.GetPosition(i).z / 2f;
             drawCurveLR.SetPosition(i, new Vector3(x, y, z));
         }
 
+        //update reference positions for new curve
         heightAdjustment.updateLR(drawCurveDisplay.name);
         heightAdjustment.resetPositions();
+        
+        //create spheres for new curve
         generateSpheres(pointIndex);
+
+        //update reference positions for new tan/normal line solutions
         heightAdjustment.updateLR(tangentSolutionLine.name);
         heightAdjustment.updateLR(normalSolutionLine.name);
     }
 
+    /// <summary>
+    /// Calculate difference between user and data tan/norm lines then show solution
+    /// </summary>
     private void compareVectors()
     {
         FresnetSerretApparatus fsr = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].FresnetApparatuses[pointIndex];
@@ -114,6 +126,7 @@ public class DrawTangentNormal : MonoBehaviour
         Vector3 userTangent = tangentSphereLR.GetPosition(1) - tangentSphereLR.GetPosition(0);
         Vector3 userNormal = normalSphereLR.GetPosition(1) - normalSphereLR.GetPosition(0);
 
+        //calculate angle difference between user generated line and the tan/norm lines from the data model
         float tanAngle = Vector3.Angle(userTangent, tangent);
         float normAngle = Vector3.Angle(userNormal, normal);
 
@@ -125,16 +138,23 @@ public class DrawTangentNormal : MonoBehaviour
         else if (tanAngle < 20 || (tanAngle > 160 && tanAngle < 200)) Debug.Log("tangent: correct");
         else Debug.Log("tangent: incorrect");
 
+        //allow wrong direction normal also
         if (!normalDrawn) Debug.Log("normal not drawn");
         else if (normAngle < 20 || (normAngle > 160 && normAngle < 200)) Debug.Log("normal: correct");
         else Debug.Log("normal: incorrect");
 
+        //before solution is shown, reset height adjustment
         heightAdjustment.resetPositions();
         showSolution(tangent, normal);
     }
 
+    /// <summary>
+    /// Create point sphere and tan/norm spheres for that point
+    /// </summary>
+    /// <param name="pointIndex">position on line renderer to render point sphere</param>
     private void generateSpheres(int pointIndex)
     {
+        //destroy spheres for old curve if there are any
         if(pointSphere != null) Destroy(pointSphere);
         if (tangentSphere != null) Destroy(tangentSphere);
         if (normalSphere != null) Destroy(normalSphere);
@@ -143,6 +163,7 @@ public class DrawTangentNormal : MonoBehaviour
         tangentSolutionLine.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
         normalSolutionLine.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
 
+        //bounding box dimensions
         Vector3 bbDimensions = new Vector3(2.5f, 2.5f, 2.5f);
 
         //generate sphere on curve
@@ -156,6 +177,8 @@ public class DrawTangentNormal : MonoBehaviour
         float spawnOffset = 0.6f;
         Vector3 tangentSpherePos, normalSpherePos;
 
+        //sphere positions spawn depending on which XY quadrant they are in
+        //1st quadrant: up and right, 2nd quadrant: up and left, 3rd quadrant: down and left, 4th quadrant: down and right
         if (pointSphereX >= 0 && pointSphereY >= 0)
         {
             //Debug.Log(pointSphereX + ", " + pointSphereY + ": both pos");
@@ -181,14 +204,13 @@ public class DrawTangentNormal : MonoBehaviour
             normalSpherePos = pointSphere.transform.position + new Vector3(0, -spawnOffset, 0);
         }
 
+        //create spheres at parent object positions
         tangentSphere = Utility.DrawingUtility.DrawSphere(tangentSpherePos, tangentSphereParent.transform, Color.red, bbDimensions);
         normalSphere = Utility.DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.blue, bbDimensions);
-        
 
         //make the new spheres grabbable
         tangentGrab = tangentSphere.AddComponent<BasicGrabbable>();
         normalGrab = normalSphere.AddComponent<BasicGrabbable>();
-
 
         //get line renderers to give them lines to connect to pointSphere
         tangentSphereLR = tangentSphereParent.GetComponent<LineRenderer>();
@@ -215,6 +237,11 @@ public class DrawTangentNormal : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Show tan/norm line solution
+    /// </summary>
+    /// <param name="tangent">Normalized tangent vector for current point sphere location from global data model</param>
+    /// <param name="normal">Normalized normal vector for current point sphere location from global data model</param>
     private void showSolution(Vector3 tangent, Vector3 normal)
     {
         tangentSolutionLine.SetPosition(0, pointSphere.transform.position);

@@ -21,6 +21,7 @@ namespace Controller
         // Update is called once per frame
         void Update()
         {
+            //toggle on/off time and velocity diagrams when bottom of touch pad is pressed
             if (ViveInput.GetPressDown(HandRole.RightHand, ControllerButton.DPadDown))
             {
                 //Debug.Log("right dpad down");
