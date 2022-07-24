@@ -29,12 +29,12 @@ public class WorldStateController : MonoBehaviour
         InitializeModel();
     }
 
-    [RuntimeInitializeOnLoadMethod]
-    private void OnRuntimeMethodLoad()
-    {
-        // Set index to 0 on application start
-        ScalarFieldManager.CurrentFieldIndex = 0;
-    }
+    // [RuntimeInitializeOnLoadMethod]
+    // private void OnRuntimeMethodLoad()
+    // {
+    //     // Set index to 0 on application start
+    //     ScalarFieldManager.CurrentFieldIndex = 0;
+    // }
     
     
     /// <summary>
@@ -43,7 +43,7 @@ public class WorldStateController : MonoBehaviour
     private void InitializeModel()
     {
         // Parse scalar fields data into scriptable object
-        ScalarFieldManager.ParseInitFile();
+        //ScalarFieldManager.ParseInitFile();
         
         InitializeViewControllers();
     }
@@ -87,22 +87,36 @@ public class WorldStateController : MonoBehaviour
     /// <param name="isIncrement">Signals whether field index is in-/decremented when applicable</param>
     private void SetNextValidIndex(bool isIncrement)
     {
+        var newIndex = -1;
         var oldIndex = ScalarFieldManager.CurrentFieldIndex;
-        if (oldIndex == 0)
+        if (oldIndex == 0 && !isIncrement)
         {
-            ScalarFieldManager.CurrentFieldIndex = ScalarFieldManager.ScalarFields.Count - 1;
+            // Debug.Log("reset to count - 1");
+            newIndex = ScalarFieldManager.ScalarFields.Count - 1;
         }
-        else if (oldIndex == ScalarFieldManager.ScalarFields.Count - 1)
+        else if (oldIndex == ScalarFieldManager.ScalarFields.Count - 1 && isIncrement)
         {
-            ScalarFieldManager.CurrentFieldIndex = 0;
+            // Debug.Log("reset to 0");
+            newIndex = 0;
         }
         else
         {
-            if (isIncrement) 
-                ++ScalarFieldManager.CurrentFieldIndex;
-            else 
-                --ScalarFieldManager.CurrentFieldIndex;
+            if (isIncrement)
+            {
+                //Debug.Log("increment");
+                newIndex = ScalarFieldManager.CurrentFieldIndex + 1;
+            }
+            else
+            {
+                //Debug.Log("decrement");
+                newIndex = ScalarFieldManager.CurrentFieldIndex - 1;
+            }
         }
+
+        //Debug.Log("oldIndex: " + oldIndex + ", newIndex: " + newIndex + ", isIncrement:" + isIncrement);
+        
+        ScalarFieldManager.CurrentFieldIndex = newIndex;
+        //Debug.Log("sf_index: " + ScalarFieldManager.CurrentFieldIndex);
     }
     
 }

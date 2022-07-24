@@ -29,7 +29,7 @@ namespace FieldGeneration
         public bool linesVisible;
         public bool showLinesVerticallyInMesh;
         public Vector3 positionOffset = new Vector3(0f, 0.125f, 0f);
-        public float lineThicknessMultiplier = 0.0125f;
+        public float lineThicknessMultiplier = 0.05f;
 
         #region Private members
         

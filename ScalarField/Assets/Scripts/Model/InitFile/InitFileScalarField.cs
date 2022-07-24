@@ -95,12 +95,21 @@ namespace Model.InitFile
         public List<string[]> CriticalPoints { get; set; }
         
         [JsonProperty("gradients")]
-        public List<float[]> Gradients { get; set; }
+        public List<InitFileGradient> Gradients { get; set; }
         
         [JsonProperty("paths")]
         public InitFilePaths Paths { get; set; }
     }
 
+    public class InitFileGradient
+    {
+        [JsonProperty("index")]
+        public int Index;
+
+        [JsonProperty("direction")]
+        public float[] Direction;
+    }
+    
     public class InitFilePaths
     {
         [JsonProperty("steepest_descent")]

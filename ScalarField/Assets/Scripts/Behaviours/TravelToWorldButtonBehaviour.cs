@@ -37,7 +37,7 @@ namespace Behaviours
         /// <returns>Enumerator for the coroutine</returns>
         private IEnumerator LoadSceneAsync(string sceneName)
         {
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
             
             // Load next scene asynchronously
             var asyncOp = SceneManager.LoadSceneAsync(sceneName);

@@ -42,10 +42,25 @@ namespace FieldGeneration
         {   
             var startIndex = 0;
             var lastIndexBefore = scalarFieldManager.CurrentField.Gradients.Count;
-            var meshVectors = scalarFieldManager.CurrentField.MeshPoints;
+            var halfMeshCount = scalarFieldManager.CurrentField.MeshPoints.Count / 2;
+            var halfMeshVectors = scalarFieldManager.CurrentField.MeshPoints;
+            var gradCount = 0;
             for(var i = startIndex; i < lastIndexBefore; i++)
             {
-                if (i % stepsBetweenArrows != 0) continue;
+                //if (i % stepsBetweenArrows != 0) continue;
+
+                var id = scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Info.ID;
+                var dir = scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Data.mesh
+                    .Gradients[i].Direction;
+                
+                
+                // Debug.Log(
+                //     id +
+                //     " index: " +
+                //           scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Data.mesh
+                //               .Gradients[i].Index
+                //           + ", direction: " + dir[0] + " " + dir[1] + " " + dir[2] 
+                //           );
                 
                 var gradient = scalarFieldManager.CurrentField.Gradients[i];
                 // flip coordinates to match display vector ordering
@@ -71,19 +86,22 @@ namespace FieldGeneration
                 // }
 
                 const float tolerance = 0.125f;
-                var similarPointsInMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
+                var similarPointsInMesh = halfMeshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
                     .Where(p => Mathf.Abs(p.z - end.z) < tolerance).ToList();
 
                 if (similarPointsInMesh.Any())
                 {
                     //Debug.Log("Found points with approximately the same x and z coordinate");
-                    var index = meshVectors.IndexOf(similarPointsInMesh[0]);
-                    end = new Vector3(end.x, meshVectors[index].y, end.z);
+                    var index = halfMeshVectors.IndexOf(similarPointsInMesh[0]);
+                    end = new Vector3(end.x, halfMeshVectors[index].y, end.z);
+                    
+                    
                 }
                 
                 DrawingUtility.DrawArrow(start, end, transform, arrowPrefab, boundingBox.transform.localScale);
+                ++gradCount;
             }
-         
+            
             SetGradientsActive(showGradientsOnStartup);
         }
     }

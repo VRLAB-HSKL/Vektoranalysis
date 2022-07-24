@@ -126,9 +126,9 @@ namespace ProceduralMesh
                 case MeshTopology.Triangles:
                     indices = GenerateTriangleIndices(displayVertices, false);
                     // Draw triangles twice to cover both sides
-                    // var backIndices = GenerateTriangleIndices(displayVertices, true);
-                    // displayVertices.AddRange(displayVertices);
-                    // indices.AddRange(backIndices);
+                    var backIndices = GenerateTriangleIndices(displayVertices, true);
+                    displayVertices.AddRange(displayVertices);
+                    indices.AddRange(backIndices);
                     break;
             
                 case MeshTopology.Lines:
@@ -205,8 +205,8 @@ namespace ProceduralMesh
             var lineIndices = new List<int>();
             //mesh.SetIndices(new int[] {0,1, 2,3, 4,5 }, MeshTopology.Lines, 0, true); 
         
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
+            // mesh.RecalculateNormals();
+            // mesh.RecalculateBounds();
             
             // Set mesh
             GetComponent<MeshFilter>().mesh = mesh;

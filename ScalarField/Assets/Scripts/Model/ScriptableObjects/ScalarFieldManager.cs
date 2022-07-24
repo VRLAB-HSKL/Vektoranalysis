@@ -6,6 +6,7 @@ using Model.InitFile;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Model.ScriptableObjects
 {
@@ -21,8 +22,25 @@ namespace Model.ScriptableObjects
         /// </summary>
         public ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        public int CurrentFieldIndex { get; set; }
+        private int fIds;
 
+        public int CurrentFieldIndex
+        {
+            get
+            {
+                return fIds;
+            }
+            set
+            {
+                fIds = value;
+                Debug.Log("fIds: " + value);
+            }
+            
+        }
+
+        // Make this scriptable object persistent between scenes
+        //private void OnEnable() => hideFlags = HideFlags.DontUnloadUnusedAsset;
+        
         public List<ScalarField> ScalarFields { get; } = new List<ScalarField>();
 
     
@@ -30,12 +48,17 @@ namespace Model.ScriptableObjects
         /// Tree data structure the init file is parsed into
         /// </summary>
         public InitFileRoot InitFile { get; private set; }
-    
-    
+
+
+        public void OnEnable()
+        {
+            ParseInitFile();
+        }
+
         /// <summary>
         /// Parses the JSON init file and creates the tree data structure in <see cref="InitFile"/>
         /// </summary>
-        public void ParseInitFile()
+        private void ParseInitFile()
         {
             // Load resource
             var json = Resources.Load(PathManager.InitFileResourcePath) as TextAsset;
@@ -83,7 +106,7 @@ namespace Model.ScriptableObjects
                     ParameterRangeY = new Tuple<float, float>(field.Info.YParamRange[0], field.Info.YParamRange[1]),
                     SampleCount = field.Info.SampleCount
                 };
-
+                
                 var importedPoints = field.Data.mesh.Points;
                 foreach (var point in importedPoints)
                 {
@@ -121,9 +144,16 @@ namespace Model.ScriptableObjects
                     sf.CriticalPoints.Add(cp);
                 }
             
-                foreach (var gradient in field.Data.mesh.Gradients)
+                var grads = field.Data.mesh.Gradients.OrderBy(x => x.Index).ToList();
+                
+                for(var i = 0; i < grads.Count; i++)
                 {
-                    sf.Gradients.Add(new Vector3(gradient[0], gradient[1], gradient[2]));
+                    if (i % 27 != 0)
+                        continue;
+                    
+                    var gradient = grads[i];
+                    var vec = gradient.Direction;
+                    sf.Gradients.Add(new Vector3(vec[0], vec[1], vec[2]));
                 }
 
                 sf.SteepestDescentPaths = ParsePath(field.Data.mesh.Paths.SteepestDescent);
@@ -181,6 +211,15 @@ namespace Model.ScriptableObjects
                 //CurrentField = sf;
 
                 ScalarFields.Add(sf);
+            }
+            
+            //Debug.Log("idx: " + CurrentFieldIndex + ", sf count: " + ScalarFields.Count);
+            // Set index to 0 on application start
+            //CurrentFieldIndex = 0;
+
+            if (CurrentFieldIndex >= ScalarFields.Count)
+            {
+                CurrentFieldIndex = 0;
             }
         }
     
