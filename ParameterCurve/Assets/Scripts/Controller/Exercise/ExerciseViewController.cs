@@ -32,7 +32,7 @@ namespace Controller.Exercise
         /// <summary>
         /// Data model of the controller, representing a selection exercise
         /// </summary>
-        private static SelectionExercise CurrentExercise => 
+        private static AbstractExercise CurrentExercise => 
             GlobalDataModel.SelectionExercises.Any() 
                 ? GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex] : null;
         

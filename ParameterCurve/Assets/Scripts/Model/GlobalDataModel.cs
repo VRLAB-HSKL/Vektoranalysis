@@ -101,7 +101,7 @@ namespace Model
         /// <summary>
         /// Collection of imported selection exercises
         /// </summary>
-        public static readonly List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+        public static readonly List<AbstractExercise> SelectionExercises = new List<AbstractExercise>();
 
         /// <summary>
         /// Index used to access the current selection exercise. This value is modified to switch between main
@@ -230,6 +230,29 @@ namespace Model
                     );
                 
                     SelectionExercises.Add(selExercise);
+                }
+
+                // tanNormSelect exercise
+                if (ex.Type.Equals("tanNormSelect"))
+                {
+                    var subExerciseData = new List<TangentNormalExerciseDataset>();
+                    var correctAnswers = new List<TangentNormalExerciseAnswer>();
+
+                    for (var j = 0; j < ex.SubExercises.Count; j++)
+                    {
+                        var subExercise = ex.SubExercises[j];
+                        subExerciseData.Add(DataImport.CreateTangentNormalDataFromSubExercise(subExercise));
+                        correctAnswers.Add(new TangentNormalExerciseAnswer(subExercise.CorrectTangents, subExercise.CorrectNormals));
+                    }
+
+                    var tanNormExercise = new TangentNormalExercise(
+                        ex.Title,
+                        ex.Description,
+                        subExerciseData,
+                        correctAnswers
+                    );
+
+                    SelectionExercises.Add(tanNormExercise);
                 }
 
                 ExerciseCurveDatasets.Add(new CurveInformationDataset()

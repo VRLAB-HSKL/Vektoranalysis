@@ -19,7 +19,7 @@ namespace Views
         
         private SelectionExerciseGameObjects selObjects { get; set; }
 
-        private SelectionExercise CurrentSelectionExercise => 
+        private AbstractExercise CurrentSelectionExercise => 
             GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
 
         public string CurrentTitle { get; set; }
@@ -88,12 +88,13 @@ namespace Views
 
         public override void UpdateView()
         {
-            var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex]; 
-            
+            //Debug.Log(CurrentSelectionExercise.Datasets.Count);
+            var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex];
+
             //Debug.Log("SelExCompoundView - UpdateView() " + GlobalDataModel.CurrentSubExerciseIndex);
 
             var curveData = currentSubExercise.GetCurveData();
-
+            
             if (curveData.Count != 3) return;
 
             for (var i = 0; i < curveData.Count; i++)

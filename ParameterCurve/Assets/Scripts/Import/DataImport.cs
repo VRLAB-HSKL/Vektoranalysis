@@ -169,10 +169,25 @@ namespace Import
             );
         }
 
+        /// <summary>
+        /// Generate a local exercise dataset from a <see cref="SubExercise"/> node that was generated during initial
+        /// parsing of the init file.
+        /// </summary>
+        /// <param name="sub">Sub exercise node</param>
+        /// <returns>Generated exercise dataset</returns>
+        public static TangentNormalExerciseDataset CreateTangentNormalDataFromSubExercise(SubExercise sub)
+        {
+            return new TangentNormalExerciseDataset(
+                sub.Description,
+                CreatePointDatasetFromCurve(sub.TangentNormalCurve),
+                sub.HighlightPoints
+            );
+        }
+
         #endregion Public functions
-        
+
         #region Private functions
-        
+
         /// <summary>
         /// Calculate in game time distance plot points based on imported curve polyline
         /// </summary>

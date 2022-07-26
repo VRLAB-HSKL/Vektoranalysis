@@ -340,7 +340,7 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
-        
+
         /// <summary>
         /// Correct answer of sub-exercise
         /// </summary>
@@ -364,6 +364,30 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("rightCurve")]
         public Curve RightCurve { get; set; }
+
+        /// <summary>
+        /// Curve data for tangent normal drawing curve
+        /// </summary>
+        [JsonProperty("curve")]
+        public Curve TangentNormalCurve { get; set; }
+
+        /// <summary>
+        /// Index collection of points on the tangent normal drawing curve
+        /// </summary>
+        [JsonProperty("highlight_points")]
+        public List<int> HighlightPoints { get; set; }
+
+        /// <summary>
+        /// Collection of correct tangents as float arrays (float[2])
+        /// </summary>
+        [JsonProperty("correct_tangents")]
+        public List<float[]> CorrectTangents { get; set; }
+
+        /// <summary>
+        /// Collection of correct normals as float arrays (float[2])
+        /// </summary>
+        [JsonProperty("correct_normals")]
+        public List<float[]> CorrectNormals { get; set; }
     }
     
     #endregion

@@ -71,7 +71,7 @@ namespace Model
         {
             Title = title;
             Description = description;
-            NumberOfSubExercises = CorrectAnswers.Count;
+            //NumberOfSubExercises = CorrectAnswers.Count;
 
             // Datasets = exercisePointDatasets;
             // CorrectAnswers = correctAnswers;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Model
 {
@@ -30,14 +31,14 @@ namespace Model
 
             Datasets = new List<AbstractExerciseDataset>();
             foreach (var exp in exercisePointDatasets)
-                Datasets.Append(exp);
+                Datasets.Add(exp);
             
             CorrectAnswers = new List<AbstractExerciseAnswer>();
             foreach (var ca in correctAnswers)
-                CorrectAnswers.Append(ca);
+                CorrectAnswers.Add(ca);
+            
             ChosenAnswers = new List<AbstractExerciseAnswer>();
             PreviousAnswers = new List<AbstractExerciseAnswer>();
-            
             for(var i = 0; i < NumberOfSubExercises; i++)
             {
                 ChosenAnswers.Add(new SelectionExerciseAnswer(-1));
