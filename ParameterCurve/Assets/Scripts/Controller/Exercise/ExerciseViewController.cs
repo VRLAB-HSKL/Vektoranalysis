@@ -72,7 +72,7 @@ namespace Controller.Exercise
             }
             
             var selView = new SelectionExerciseCompoundView(selObjs, pillarPrefab, root, 
-                CurrentExercise.Datasets[0], type)
+                 type)
             {
                 CurrentTitle = CurrentExercise.Title,
                 CurrentDescription = CurrentExercise.Description
@@ -145,12 +145,14 @@ namespace Controller.Exercise
                             previousText.Append("none\n");
                         } else
                         {
+                            
+                            
                             if (previousAnswer != correctAnswer && chosenAnswer != correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect still</mark></font>";
                             else if (previousAnswer != correctAnswer && chosenAnswer == correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#46d53aFF>Correct now</mark></font>";
                             else if (previousAnswer == correctAnswer && chosenAnswer != correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#fa4141FF>Incorrect now</mark></font>";
                             else str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct still</mark></font>";
 
-                            if(previousAnswer != -1)
+                            if(previousAnswer.IsValid())
                             {
                                 previousText.Append(previousAnswer + "\n");
                             } else
@@ -160,7 +162,7 @@ namespace Controller.Exercise
                             
                         }
 
-                        if(chosenAnswer != -1)
+                        if(chosenAnswer.IsValid())
                         {
                             chosenText.Append(chosenAnswer + "\n");
                         } else
@@ -255,7 +257,7 @@ namespace Controller.Exercise
         {
             //Debug.Log("choice set: " + choice);
             SelectionIndices[GlobalDataModel.CurrentSubExerciseIndex] = choice;
-            CurrentExercise.ChosenAnswers[GlobalDataModel.CurrentSubExerciseIndex] = choice;
+            CurrentExercise.ChosenAnswers[GlobalDataModel.CurrentSubExerciseIndex].SetValues(new List<float> {choice});
         }
 
         /// <summary>
@@ -286,7 +288,7 @@ namespace Controller.Exercise
                 CurrentExercise.PreviousAnswers[i] = CurrentExercise.ChosenAnswers[i];
                 CurrentExercise.previousScore = CurrentExercise.currentScore;
                 SelectionIndices[i] = -1;
-                CurrentExercise.ChosenAnswers[i] = -1;
+                CurrentExercise.ChosenAnswers[i].SetValues(new List<float>(-1));
             }
 
             //start at main display again

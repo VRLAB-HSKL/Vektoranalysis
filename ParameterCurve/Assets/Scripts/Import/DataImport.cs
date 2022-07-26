@@ -159,9 +159,9 @@ namespace Import
         /// </summary>
         /// <param name="sub">Sub exercise node</param>
         /// <returns>Generated exercise dataset</returns>
-        public static ExercisePointDataset CreateExercisePointDatasetFromSubExercise(SubExercise sub)
+        public static SelectionExerciseDataset CreateExercisePointDatasetFromSubExercise(SubExercise sub)
         {
-            return new ExercisePointDataset(
+            return new SelectionExerciseDataset(
                 sub.Description,
                 CreatePointDatasetFromCurve(sub.LeftCurve),
                 CreatePointDatasetFromCurve(sub.MiddleCurve),

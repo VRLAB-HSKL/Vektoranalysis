@@ -213,13 +213,13 @@ namespace Model
                 // Select3 exercise
                 if (ex.Type.Equals("select3"))
                 {
-                    var subExercises = new List<ExercisePointDataset>();
-                    var correctAnswers = new List<int>();
+                    var subExercises = new List<SelectionExerciseDataset>();
+                    var correctAnswers = new List<SelectionExerciseAnswer>();
                     for (var j = 0; j < ex.SubExercises.Count; j++)
                     {
                         var subExercise = ex.SubExercises[j];
                         subExercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
-                        correctAnswers.Add(subExercise.CorrectAnswer);
+                        correctAnswers.Add(new SelectionExerciseAnswer(subExercise.CorrectAnswer));
                     }
                 
                     var selExercise = new SelectionExercise(

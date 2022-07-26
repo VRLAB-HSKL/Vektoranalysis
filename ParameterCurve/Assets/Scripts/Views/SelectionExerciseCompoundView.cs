@@ -28,7 +28,7 @@ namespace Views
         
         public SelectionExerciseCompoundView(
             SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, 
-            ExercisePointDataset initData, AbstractCurveViewController.CurveControllerType type)
+            /* SelectionExerciseDataset initData,*/ AbstractCurveViewController.CurveControllerType type)
             // : base(selObjects, pillarPrefab, origin, initData, type)
         {
             Type = type;
@@ -88,14 +88,22 @@ namespace Views
 
         public override void UpdateView()
         {
-            
             var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex]; 
             
             //Debug.Log("SelExCompoundView - UpdateView() " + GlobalDataModel.CurrentSubExerciseIndex);
-            
-            curveViews[0].ScalingFactor = currentSubExercise.LeftDataset.SelectExercisePillarScalingFactor;
-            curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;
-            curveViews[2].ScalingFactor = currentSubExercise.RightDataset.SelectExercisePillarScalingFactor;
+
+            var curveData = currentSubExercise.GetCurveData();
+
+            if (curveData.Count != 3) return;
+
+            for (var i = 0; i < curveData.Count; i++)
+            {
+                var ds = curveData[i];
+                curveViews[i].ScalingFactor = ds.SelectExercisePillarScalingFactor;    
+            }
+            // curveViews[0].ScalingFactor = currentSubExercise.LeftDataset.SelectExercisePillarScalingFactor;
+            // curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;
+            // curveViews[2].ScalingFactor = currentSubExercise.RightDataset.SelectExercisePillarScalingFactor;
             
             if (ShowMainDisplay)
             {
