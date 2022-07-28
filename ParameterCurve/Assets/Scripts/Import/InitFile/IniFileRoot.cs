@@ -315,26 +315,38 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
-        
+
+        ///// <summary>
+        ///// Collection of sub-exercises
+        ///// </summary>
+        //[JsonProperty("sub_exercises")]
+        //public List<SubExercise> SubExercises { get; set; }
+
         /// <summary>
-        /// Collection of sub-exercises
+        /// Collection of select3 exercises for this exercise
         /// </summary>
-        [JsonProperty("sub_exercises")]
-        public List<SubExercise> SubExercises { get; set; }
+        [JsonProperty("select_three_exercises")]
+        public List<SelectThree> selectThreeExercises { get; set; }
+
+        /// <summary>
+        /// Collection of select3 exercises for this exercise
+        /// </summary>
+        [JsonProperty("tangent_normal_exercises")]
+        public List<TangentNormal> tangentNormalExercises { get; set; }
     }
-    
+
     /// <summary>
-    /// Node class representing a sub-exercise of a given exercise
+    /// Node class representing the type of exercise "Select 3"
     /// </summary>
     [Serializable]
-    public class SubExercise
+    public class SelectThree
     {
         /// <summary>
         /// Sub-exercise title
         /// </summary>
         [JsonProperty("title")]
         public string Title { get; set; }
-        
+
         /// <summary>
         /// Sub-exercise description
         /// </summary>
@@ -346,24 +358,43 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("correctAnswer")]
         public int CorrectAnswer { get; set; }
-        
+
         /// <summary>
         /// Curve designated to the left pillar
         /// </summary>
         [JsonProperty("leftCurve")]
         public Curve LeftCurve { get; set; }
-        
+
         /// <summary>
         /// Curve designated to the middle pillar
         /// </summary>
         [JsonProperty("middleCurve")]
         public Curve MiddleCurve { get; set; }
-        
+
         /// <summary>
         /// Curve designated to the right pillar
         /// </summary>
         [JsonProperty("rightCurve")]
         public Curve RightCurve { get; set; }
+    }
+
+    /// <summary>
+    /// Node class representing the type of exercise "Tangent Normal"
+    /// </summary>
+    [Serializable]
+    public class TangentNormal
+    {
+        /// <summary>
+        /// Sub-exercise title
+        /// </summary>
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Sub-exercise description
+        /// </summary>
+        [JsonProperty("description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// Curve data for tangent normal drawing curve
@@ -389,11 +420,78 @@ namespace Import.InitFile
         [JsonProperty("correct_normals")]
         public List<float[]> CorrectNormals { get; set; }
     }
-    
+
+    ///// <summary>
+    ///// Node class representing a sub-exercise of a given exercise
+    ///// </summary>
+    //[Serializable]
+    //public class SubExercise
+    //{
+    //    /// <summary>
+    //    /// Sub-exercise title
+    //    /// </summary>
+    //    [JsonProperty("title")]
+    //    public string Title { get; set; }
+
+    //    /// <summary>
+    //    /// Sub-exercise description
+    //    /// </summary>
+    //    [JsonProperty("description")]
+    //    public string Description { get; set; }
+
+    //    /// <summary>
+    //    /// Correct answer of sub-exercise
+    //    /// </summary>
+    //    [JsonProperty("correctAnswer")]
+    //    public int CorrectAnswer { get; set; }
+
+    //    /// <summary>
+    //    /// Curve designated to the left pillar
+    //    /// </summary>
+    //    [JsonProperty("leftCurve")]
+    //    public Curve LeftCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Curve designated to the middle pillar
+    //    /// </summary>
+    //    [JsonProperty("middleCurve")]
+    //    public Curve MiddleCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Curve designated to the right pillar
+    //    /// </summary>
+    //    [JsonProperty("rightCurve")]
+    //    public Curve RightCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Curve data for tangent normal drawing curve
+    //    /// </summary>
+    //    [JsonProperty("curve")]
+    //    public Curve TangentNormalCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Index collection of points on the tangent normal drawing curve
+    //    /// </summary>
+    //    [JsonProperty("highlight_points")]
+    //    public List<int> HighlightPoints { get; set; }
+
+    //    /// <summary>
+    //    /// Collection of correct tangents as float arrays (float[2])
+    //    /// </summary>
+    //    [JsonProperty("correct_tangents")]
+    //    public List<float[]> CorrectTangents { get; set; }
+
+    //    /// <summary>
+    //    /// Collection of correct normals as float arrays (float[2])
+    //    /// </summary>
+    //    [JsonProperty("correct_normals")]
+    //    public List<float[]> CorrectNormals { get; set; }
+    //}
+
     #endregion
 
     #region ApplicationSettings
-    
+
     /// <summary>
     /// Node class for general, curve-independent application settings
     /// </summary>

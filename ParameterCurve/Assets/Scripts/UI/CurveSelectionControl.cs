@@ -160,21 +160,26 @@ namespace UI
         public void SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup cdg)
         {
             if (!GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.Activated) return;
-        
+
             // Update current display group
             GlobalDataModel.CurrentDisplayGroup = cdg;
-        
-            switch(cdg)
+
+            switch (cdg)
             {
                 default:
                 case GlobalDataModel.CurveDisplayGroup.Display:
                     if (GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowDisplayCurves)
+                    {
                         CurveSelectionFsm.State = _displayState;
+                    }
                     break;
 
                 case GlobalDataModel.CurveDisplayGroup.Exercises:
-                    if(GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises)
+                    CurveSelectionFsm.State = _exerciseState;
+                    if (GlobalDataModel.InitFile.ApplicationSettings.SelectMenuSettings.ShowExercises)
+                    {
                         CurveSelectionFsm.State = _exerciseState;
+                    }
                     break;
             }
         
@@ -182,7 +187,6 @@ namespace UI
             GlobalDataModel.CurrentCurveIndex = 0;
 
             CurveSelectionFsm.State.OnStateUpdate();
-
             if (world.browserWall is null)
             {
                 Debug.Log("Browser Wall not initialized!");

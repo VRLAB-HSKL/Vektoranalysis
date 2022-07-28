@@ -215,9 +215,9 @@ namespace Model
                 {
                     var subExercises = new List<SelectionExerciseDataset>();
                     var correctAnswers = new List<SelectionExerciseAnswer>();
-                    for (var j = 0; j < ex.SubExercises.Count; j++)
+                    for (var j = 0; j < ex.selectThreeExercises.Count; j++)
                     {
-                        var subExercise = ex.SubExercises[j];
+                        var subExercise = ex.selectThreeExercises[j];
                         subExercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
                         correctAnswers.Add(new SelectionExerciseAnswer(subExercise.CorrectAnswer));
                     }
@@ -238,9 +238,9 @@ namespace Model
                     var subExerciseData = new List<TangentNormalExerciseDataset>();
                     var correctAnswers = new List<TangentNormalExerciseAnswer>();
 
-                    for (var j = 0; j < ex.SubExercises.Count; j++)
+                    for (var j = 0; j < ex.tangentNormalExercises.Count; j++)
                     {
-                        var subExercise = ex.SubExercises[j];
+                        var subExercise = ex.tangentNormalExercises[j];
                         subExerciseData.Add(DataImport.CreateTangentNormalDataFromSubExercise(subExercise));
                         correctAnswers.Add(new TangentNormalExerciseAnswer(subExercise.CorrectTangents, subExercise.CorrectNormals));
                     }
@@ -261,6 +261,13 @@ namespace Model
                     DisplayString = ex.Title,
                 });
             }
+
+            //foreach (var ex in SelectionExercises)
+            //{
+            //    Debug.Log("exercise: " + ex.Title);
+            //    foreach (var sub in ex.Datasets)
+            //        Debug.Log("sub ex: " + sub.HeaderText);
+            //}
         }
         
         #endregion Private functions

@@ -159,7 +159,7 @@ namespace Import
         /// </summary>
         /// <param name="sub">Sub exercise node</param>
         /// <returns>Generated exercise dataset</returns>
-        public static SelectionExerciseDataset CreateExercisePointDatasetFromSubExercise(SubExercise sub)
+        public static SelectionExerciseDataset CreateExercisePointDatasetFromSubExercise(SelectThree sub)
         {
             return new SelectionExerciseDataset(
                 sub.Description,
@@ -175,7 +175,7 @@ namespace Import
         /// </summary>
         /// <param name="sub">Sub exercise node</param>
         /// <returns>Generated exercise dataset</returns>
-        public static TangentNormalExerciseDataset CreateTangentNormalDataFromSubExercise(SubExercise sub)
+        public static TangentNormalExerciseDataset CreateTangentNormalDataFromSubExercise(TangentNormal sub)
         {
             return new TangentNormalExerciseDataset(
                 sub.Description,

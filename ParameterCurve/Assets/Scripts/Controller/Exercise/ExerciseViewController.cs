@@ -288,7 +288,7 @@ namespace Controller.Exercise
                 CurrentExercise.PreviousAnswers[i] = CurrentExercise.ChosenAnswers[i];
                 CurrentExercise.previousScore = CurrentExercise.currentScore;
                 SelectionIndices[i] = -1;
-                CurrentExercise.ChosenAnswers[i].SetValues(new List<float>(-1));
+                CurrentExercise.ChosenAnswers[i].SetValues(new List<float> { -1 });
             }
 
             //start at main display again
