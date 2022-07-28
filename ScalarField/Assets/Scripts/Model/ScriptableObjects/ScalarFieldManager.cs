@@ -5,6 +5,7 @@ using Model.Enums;
 using Model.InitFile;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -70,15 +71,28 @@ namespace Model.ScriptableObjects
             }
         
             // Catch errors that occur during parsing
-            var errors = new List<string>();
+            var errors = new List<ErrorEventArgs>();
             ITraceWriter tr = new MemoryTraceWriter();
             var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
                 new JsonSerializerSettings()
                 {
                     Error = delegate(object sender, ErrorEventArgs args)
                     {
-                        errors.Add(args.ErrorContext.Error.Message);
-                        Debug.Log("ErrorOccuredJSON");
+                        errors.Add(args);
+                        
+                        
+                        var obj = args.CurrentObject != null ? args.CurrentObject.ToString() : "empty";
+                        var ogObj = args.ErrorContext.OriginalObject;
+                        var member = args.ErrorContext.Member;
+                        var path = args.ErrorContext.Path;
+                        var errorMsg = args.ErrorContext.Error.Message;
+
+                        Debug.Log("obj: " + obj + "\n"
+                                  + "ogObj: " + ogObj + "\n"
+                                  + "member: " + member + "\n"
+                                  + "path: " + path + "\n"
+                                  + "errorMsg: " + errorMsg);
+                        
                         args.ErrorContext.Handled = true;
                     },
                     TraceWriter = tr
