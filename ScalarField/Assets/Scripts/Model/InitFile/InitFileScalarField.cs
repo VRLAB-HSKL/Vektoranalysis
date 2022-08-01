@@ -107,7 +107,7 @@ namespace Model.InitFile
         public int Index;
 
         [JsonProperty("direction")]
-        public float[] Direction;
+        public List<float> Direction;
     }
     
     public class InitFilePaths

@@ -162,12 +162,16 @@ namespace Model.ScriptableObjects
                 
                 for(var i = 0; i < grads.Count; i++)
                 {
-                    if (i % 27 != 0)
-                        continue;
+                    // if (i % 27 != 0)
+                    //     continue;
                     
                     var gradient = grads[i];
-                    var vec = gradient.Direction;
-                    sf.Gradients.Add(new Vector3(vec[0], vec[1], vec[2]));
+                    var grad = new Gradient()
+                    {
+                        Index = gradient.Index,
+                        Direction = new Vector3(gradient.Direction[0], gradient.Direction[1])
+                    };
+                    sf.Gradients.Add(grad);
                 }
 
                 sf.SteepestDescentPaths = ParsePath(field.Data.mesh.Paths.SteepestDescent);

@@ -41,17 +41,18 @@ namespace FieldGeneration
         private void Start()
         {   
             var startIndex = 0;
-            var lastIndexBefore = scalarFieldManager.CurrentField.Gradients.Count;
+            var lastIndexBefore = scalarFieldManager.CurrentField.MeshPoints.Count;
             var halfMeshCount = scalarFieldManager.CurrentField.MeshPoints.Count / 2;
-            var halfMeshVectors = scalarFieldManager.CurrentField.MeshPoints;
+            var meshVectors = scalarFieldManager.CurrentField.MeshPoints;
             var gradCount = 0;
-            for(var i = startIndex; i < lastIndexBefore; i++)
+            for(var i = 0; i < scalarFieldManager.CurrentField.Gradients.Count; i++)
             {
                 //if (i % stepsBetweenArrows != 0) continue;
 
-                var id = scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Info.ID;
-                var dir = scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Data.mesh
-                    .Gradients[i].Direction;
+                // var id = scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Info.ID;
+                // var grad = scalarFieldManager.InitFile.displayFields[scalarFieldManager.CurrentFieldIndex].Data.mesh
+                //     .Gradients[i];
+                // var dir = grad.Direction;
                 
                 
                 // Debug.Log(
@@ -64,9 +65,9 @@ namespace FieldGeneration
                 
                 var gradient = scalarFieldManager.CurrentField.Gradients[i];
                 // flip coordinates to match display vector ordering
-                gradient = new Vector3(gradient.x, gradient.z, gradient.y);
-                var start = scalarFieldManager.CurrentField.MeshPoints[i];
-                var end = start + gradient;
+                var gradientDirection = new Vector3(gradient.Direction.x, gradient.Direction.z, gradient.Direction.y);
+                var start = scalarFieldManager.CurrentField.MeshPoints[gradient.Index];
+                var end = start + gradientDirection;
 
                 // Debug.Log(
                 //     "index: " + i + "\n" +
@@ -86,14 +87,14 @@ namespace FieldGeneration
                 // }
 
                 const float tolerance = 0.125f;
-                var similarPointsInMesh = halfMeshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
+                var similarPointsInMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
                     .Where(p => Mathf.Abs(p.z - end.z) < tolerance).ToList();
 
                 if (similarPointsInMesh.Any())
                 {
                     //Debug.Log("Found points with approximately the same x and z coordinate");
-                    var index = halfMeshVectors.IndexOf(similarPointsInMesh[0]);
-                    end = new Vector3(end.x, halfMeshVectors[index].y, end.z);
+                    var index = meshVectors.IndexOf(similarPointsInMesh[0]);
+                    end = new Vector3(end.x, meshVectors[index].y, end.z);
                     
                     
                 }
@@ -102,6 +103,7 @@ namespace FieldGeneration
                 ++gradCount;
             }
             
+            Debug.Log(gradCount + " gradient vectors created");
             SetGradientsActive(showGradientsOnStartup);
         }
     }

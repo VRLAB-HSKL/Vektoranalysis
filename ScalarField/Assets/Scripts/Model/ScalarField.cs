@@ -66,7 +66,7 @@ namespace Model
 
 
         public List<CriticalPointData> CriticalPoints { get; set; } = new List<CriticalPointData>();
-        public List<Vector3> Gradients { get; set; } = new List<Vector3>();
+        public List<Gradient> Gradients { get; set; } = new List<Gradient>();
 
         
         public List<List<Vector3>> SteepestDescentPaths { get; set; } = new List<List<Vector3>>();
@@ -86,5 +86,11 @@ namespace Model
         /// </summary>
         public List<List<Vector3>> ContourLinePoints { get; set; } = new List<List<Vector3>>();
         
+    }
+
+    public class Gradient
+    {
+        public int Index;
+        public Vector3 Direction;
     }
 }
