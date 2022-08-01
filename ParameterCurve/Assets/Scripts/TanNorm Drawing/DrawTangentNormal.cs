@@ -236,7 +236,7 @@ public class DrawTangentNormal : MonoBehaviour
 
         //create spheres at parent object positions
         tangentSphere = Utility.DrawingUtility.DrawSphere(tangentSpherePos, tangentSphereParent.transform, Color.red, bbDimensions);
-        normalSphere = Utility.DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.blue, bbDimensions);
+        normalSphere = Utility.DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.green, bbDimensions);
 
         //make the new spheres grabbable
         tangentGrab = tangentSphere.AddComponent<BasicGrabbable>();

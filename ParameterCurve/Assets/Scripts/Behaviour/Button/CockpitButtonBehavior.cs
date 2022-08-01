@@ -9,7 +9,7 @@ using HTC.UnityPlugin.Vive;
 namespace Behaviour.Button
 {
     /// <summary>
-    /// Button Behaviour used to switch to the previous curve in the current dataset
+    /// Button Behaviour used to move from main display room to cockpit view
     /// </summary>
     public class CockpitButtonBehavior : AbstractButtonBehaviour
     {
@@ -50,7 +50,7 @@ namespace Behaviour.Button
         protected new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
+            //gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
             YesButton.onClick.AddListener(exit);
             CancelButton.onClick.AddListener(cancel);
         }

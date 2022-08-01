@@ -10,7 +10,7 @@ using UI;
 namespace Behaviour.Button
 {
     /// <summary>
-    /// Button Behaviour used to switch to the previous curve in the current dataset
+    /// Button Behaviour used to travel from main display room to exercise room
     /// </summary>
     public class ExerciseButtonBehavior : AbstractButtonBehaviour
     {

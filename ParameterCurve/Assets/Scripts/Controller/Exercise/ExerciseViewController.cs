@@ -133,28 +133,41 @@ namespace Controller.Exercise
                     for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
                     {
                         var previousAnswer = CurrentExercise.PreviousAnswers[i];
+                        string previousAnsText = "";
                         var chosenAnswer = CurrentExercise.ChosenAnswers[i];
+                        string chosenAnsText = "";
                         var correctAnswer = CurrentExercise.CorrectAnswers[i];
+                        string correctAnsText = "";
+
+                        if (CurrentExercise is SelectionExercise)
+                        {
+                            previousAnsText = ((SelectionExerciseAnswer)previousAnswer).PillarIndex.ToString();
+                            chosenAnsText = ((SelectionExerciseAnswer)chosenAnswer).PillarIndex.ToString();
+                            correctAnsText = ((SelectionExerciseAnswer)correctAnswer).PillarIndex.ToString();
+                        } else if (CurrentExercise is TangentNormalExercise)
+                        {
+                            //Undecided what will be displayed for TangentNormal
+                        }
 
                         string str = "";
                         //if first attempt, no previous to compare to
                         if (CurrentExercise.numAttempts == 1)
                         {
-                            if (chosenAnswer == correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct</mark></font>";
+                            if (chosenAnswer.Equals(correctAnswer)) str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct</mark></font>";
                             else str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect</mark></font>";
                             previousText.Append("none\n");
                         } else
                         {
                             
                             
-                            if (previousAnswer != correctAnswer && chosenAnswer != correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect still</mark></font>";
-                            else if (previousAnswer != correctAnswer && chosenAnswer == correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#46d53aFF>Correct now</mark></font>";
-                            else if (previousAnswer == correctAnswer && chosenAnswer != correctAnswer) str = "<font=\"LiberationSans SDF\"><mark=#fa4141FF>Incorrect now</mark></font>";
+                            if (!previousAnswer.Equals(correctAnswer) && !chosenAnswer.Equals(correctAnswer)) str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect still</mark></font>";
+                            else if (!previousAnswer.Equals(correctAnswer) && chosenAnswer.Equals(correctAnswer)) str = "<font=\"LiberationSans SDF\"><mark=#46d53aFF>Correct now</mark></font>";
+                            else if (previousAnswer.Equals(correctAnswer) && !chosenAnswer.Equals(correctAnswer)) str = "<font=\"LiberationSans SDF\"><mark=#fa4141FF>Incorrect now</mark></font>";
                             else str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct still</mark></font>";
 
                             if(previousAnswer.IsValid())
                             {
-                                previousText.Append(previousAnswer + "\n");
+                                previousText.Append(previousAnsText + "\n");
                             } else
                             {
                                 previousText.Append("none\n");
@@ -164,7 +177,7 @@ namespace Controller.Exercise
 
                         if(chosenAnswer.IsValid())
                         {
-                            chosenText.Append(chosenAnswer + "\n");
+                            chosenText.Append(chosenAnsText + "\n");
                         } else
                         {
                             chosenText.Append("none\n");
@@ -173,9 +186,9 @@ namespace Controller.Exercise
                         correctText.Append(str + "\n");
 
                         //log previous, chosen, and correct answers into text file
-                        writer.WriteLine(previousAnswer + " " + chosenAnswer + " " + correctAnswer);
+                        writer.WriteLine(previousAnsText + " " + chosenAnsText + " " + correctAnsText);
 
-                        if (chosenAnswer == correctAnswer) ++CurrentExercise.currentScore;
+                        if (chosenAnswer.Equals(correctAnswer)) ++CurrentExercise.currentScore;
                     }
 
                     //if anything past first attempt, there is a previous score to show

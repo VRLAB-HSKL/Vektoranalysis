@@ -10,8 +10,7 @@ using UI;
 namespace Behaviour.Button
 {
     /// <summary>
-    /// ***If exercises are converted to a separate scene, this class should 
-    /// not be used and instead use the ReturnToRoomButtonBehavior.cs script***
+    /// Button that will start over current exercise
     /// </summary>
     public class RetryButtonBehavior : AbstractButtonBehaviour
     {
@@ -25,7 +24,6 @@ namespace Behaviour.Button
         protected new void Start()
         {
             base.Start();
-            gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
         }
 
         #region Clicked

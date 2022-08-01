@@ -8,6 +8,9 @@ using Controller;
 
 namespace Behaviour.Button
 {
+    /// <summary>
+    /// Button that will return to main display room from cockpit view
+    /// </summary>
     public class ReturnToRoomButtonBehavior : AbstractButtonBehaviour
     {
         public CockpitWorldStateController world;

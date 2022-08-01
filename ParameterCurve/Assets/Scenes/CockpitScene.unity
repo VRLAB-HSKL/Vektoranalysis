@@ -4291,16 +4291,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7233204441263343995}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b857e661718c5d44b81ea7f0e3e1d541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SourceObject: {fileID: 0}
-  TargetObject: {fileID: 0}
-  SourceObjectName: 
-  TargetObjectName: 
-  DisplacementVector: {x: 0, y: 0, z: 0}
+  targetObject: {fileID: 0}
+  controlObject: {fileID: 0}
+  yUpperBoundObject: {fileID: 0}
+  yLowerBoundObject: {fileID: 0}
+  XDirection: 0
+  YDirection: 0
+  ZDirection: 0
 --- !u!114 &944093135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4776,7 +4778,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 396501320970400409d488274317c844, type: 2}
+  - {fileID: 2100000, guid: 4241a5aee4da0f24fad78619bee0d97b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4905,7 +4907,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4241a5aee4da0f24fad78619bee0d97b, type: 2}
+  - {fileID: 2100000, guid: 396501320970400409d488274317c844, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

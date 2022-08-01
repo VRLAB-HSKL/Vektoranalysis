@@ -100,7 +100,7 @@ namespace Model
 
     public class TangentNormalExerciseAnswer : AbstractExerciseAnswer
     {
-        //list of correct tangent/normal positions for each highlight point in sub exercise
+        //list of tangent/normal positions for each highlight point in sub exercise
         public List<float[]> TangentPos;
         public List<float[]> NormalPos;
 
