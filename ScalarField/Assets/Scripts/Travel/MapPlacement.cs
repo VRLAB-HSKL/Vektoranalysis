@@ -46,17 +46,17 @@ namespace Travel
 
             sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.position = new Vector3(contact.point.x, transform.position.y + 0.025f, contact.point.z);
-        
             sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             //Instantiate(new SphereCollider)
             sphere.GetComponent<MeshRenderer>().sharedMaterial = SpawnPointMat;
-
-        
             sphere.name = "TravelTarget";
-        
+            //sphere.transform.parent = transform;
 
-            var horizontalCoordinate = contact.point.z;
-            var verticalCoordinate = contact.point.x;
+            var transformedPoint = transform.InverseTransformPoint(contact.point);
+            
+            
+            var horizontalCoordinate = transformedPoint.z;
+            var verticalCoordinate = transformedPoint.x;
 
             var xRangeMin = ScalarFieldManager.CurrentField.ParameterRangeX.Item1; //ScalarFieldManager.InitFile.points.Min(p => p[0]);
             var xRangeMax = ScalarFieldManager.CurrentField.ParameterRangeX.Item2; //ScalarFieldManager.InitFile.points.Max(p => p[0]);
@@ -65,7 +65,6 @@ namespace Travel
             var yRangeMax = ScalarFieldManager.CurrentField.ParameterRangeY.Item2;
 
             var mappedX = CalcUtility.MapValueToRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
-        
             var mappedY = CalcUtility.MapValueToRange(verticalCoordinate, -0.5f, 0.5f, yRangeMin, yRangeMax);
         
             // var mappedX = CalcUtility.MapRange(x, )
@@ -74,34 +73,38 @@ namespace Travel
 
         
         
-            var transformedPoint = transform.InverseTransformPoint(contact.point);
+            
         
         
         
 
             // var finalIndex = 0;
         
-            var closest = int.MaxValue;
-            var minDifference = int.MaxValue;
-            for(var i = 0; i < ScalarFieldManager.CurrentField.MeshPoints.Count; i++)
+            var closestPointIndex = int.MaxValue;
+            var minDist = float.MaxValue;
+            for(var i = 0; i < ScalarFieldManager.CurrentField.RawPoints.Count; i++)
             {
-                var point = ScalarFieldManager.CurrentField.MeshPoints[i];
-                var differenceX = Mathf.Abs(point[0] - mappedX);
-                var differenceY = Mathf.Abs(point[1] - mappedY);
+                var point = ScalarFieldManager.CurrentField.RawPoints[i];
+                // var differenceX = Mathf.Abs(point[0] - mappedX);
+                // var differenceY = Mathf.Abs(point[1] - mappedY);
+                //
+                // var difference = differenceX + differenceY;
 
-                var difference = differenceX + differenceY;
-            
-                if (minDifference > difference)
+                var dist = Vector3.Distance(point, new Vector3(mappedX, mappedY));
+                
+                if (minDist > dist)
                 {
-                    minDifference = (int)difference;
-                    closest = i;
+                    minDist = dist;
+                    closestPointIndex = i;
                 }
             }
 
-            TravelManager.EstimatedIndex = closest;
+            TravelManager.EstimatedIndex = closestPointIndex;
         
-            Debug.Log("contact point: " + contact.point + ", transformed point: " + transformedPoint +
+            Debug.Log("contact point: " + contact.point + // ", transformed point: " + transformedPoint +
                       ", mapped values: (" + mappedX + ", " + mappedY + ")" + 
+                      ", ParamX(" + xRangeMin + ", " + xRangeMax + ")" +
+                      ", ParamY(" + yRangeMin + ", " + yRangeMax + ")" +
                       ", estimated index: " + TravelManager.EstimatedIndex);
         
             //Debug.Log();

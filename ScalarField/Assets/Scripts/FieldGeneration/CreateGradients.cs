@@ -49,12 +49,10 @@ namespace FieldGeneration
         private IEnumerator CreateGradientsRoutine()
         {
             var startIndex = 0;
-            var lastIndexBefore = scalarFieldManager.CurrentField.MeshPoints.Count;
-            var halfMeshCount = scalarFieldManager.CurrentField.MeshPoints.Count / 2;
             var meshVectors = scalarFieldManager.CurrentField.MeshPoints;
             var gradCount = 0;
 
-            var yieldStep = Mathf.FloorToInt(scalarFieldManager.CurrentField.Gradients.Count * 0.0005f);
+            var yieldStep = Mathf.FloorToInt(scalarFieldManager.CurrentField.Gradients.Count * 0.001f);
             for(var i = 0; i < scalarFieldManager.CurrentField.Gradients.Count; i++)
             {
                 //if (i % stepsBetweenArrows != 0) continue;
@@ -117,7 +115,7 @@ namespace FieldGeneration
                 
                 if(i % yieldStep == 0) yield return null;
             }
-            Debug.Log(gradCount + " gradient vectors created");
+            //Debug.Log(gradCount + " gradient vectors created");
             //SetGradientsActive(showGradientsOnStartup);
         }
         

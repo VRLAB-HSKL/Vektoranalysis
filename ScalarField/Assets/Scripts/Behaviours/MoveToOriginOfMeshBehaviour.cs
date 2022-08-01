@@ -33,7 +33,7 @@ namespace Behaviours
         /// <summary>
         /// Signals whether user is currently in the scalar field or not
         /// </summary>
-        private bool _isInMesh;
+        private bool _isInMesh = true;
 
         /// <summary>
         /// Unity Start function

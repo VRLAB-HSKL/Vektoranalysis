@@ -177,7 +177,7 @@ MonoBehaviour:
   field: {fileID: 941685791}
   Cockpit: {fileID: 1943248078}
   CockpitOffset: {x: 0, y: -2, z: 0}
-  SpawnAtEagle: 1
+  SpawnAtEagle: 0
 --- !u!1 &78725883
 GameObject:
   m_ObjectHideFlags: 0
