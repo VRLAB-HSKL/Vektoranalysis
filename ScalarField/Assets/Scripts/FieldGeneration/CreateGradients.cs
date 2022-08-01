@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
@@ -39,12 +41,20 @@ namespace FieldGeneration
         }
         
         private void Start()
-        {   
+        {
+            StartCoroutine(CreateGradientsRoutine());
+        }
+
+
+        private IEnumerator CreateGradientsRoutine()
+        {
             var startIndex = 0;
             var lastIndexBefore = scalarFieldManager.CurrentField.MeshPoints.Count;
             var halfMeshCount = scalarFieldManager.CurrentField.MeshPoints.Count / 2;
             var meshVectors = scalarFieldManager.CurrentField.MeshPoints;
             var gradCount = 0;
+
+            var yieldStep = Mathf.FloorToInt(scalarFieldManager.CurrentField.Gradients.Count * 0.0005f);
             for(var i = 0; i < scalarFieldManager.CurrentField.Gradients.Count; i++)
             {
                 //if (i % stepsBetweenArrows != 0) continue;
@@ -67,7 +77,7 @@ namespace FieldGeneration
                 // flip coordinates to match display vector ordering
                 var gradientDirection = new Vector3(gradient.Direction.x, gradient.Direction.z, gradient.Direction.y);
                 var start = scalarFieldManager.CurrentField.MeshPoints[gradient.Index];
-                var end = start + gradientDirection;
+                var end = start + gradientDirection.normalized;
 
                 // Debug.Log(
                 //     "index: " + i + "\n" +
@@ -99,12 +109,17 @@ namespace FieldGeneration
                     
                 }
                 
-                DrawingUtility.DrawArrow(start, end, transform, arrowPrefab, boundingBox.transform.localScale);
                 ++gradCount;
+                
+                
+                var arrow = DrawingUtility.DrawArrow(start, end, transform, arrowPrefab, boundingBox.transform.localScale);
+                arrow.SetActive(showGradientsOnStartup);
+                
+                if(i % yieldStep == 0) yield return null;
             }
-            
             Debug.Log(gradCount + " gradient vectors created");
-            SetGradientsActive(showGradientsOnStartup);
+            //SetGradientsActive(showGradientsOnStartup);
         }
+        
     }
 }

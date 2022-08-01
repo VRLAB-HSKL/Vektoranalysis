@@ -22,6 +22,7 @@ namespace ProceduralMesh
         // public Vector3 PositionOffset;
         // public Vector3 ScalingVector = Vector3.one;
         public GameObject BoundingBox;
+        
         public bool PositionMeshAtOrigin;
 
         private bool _isMeshTransparent;
@@ -128,7 +129,8 @@ namespace ProceduralMesh
                     // Draw triangles twice to cover both sides
                     var backIndices = GenerateTriangleIndices(displayVertices, true);
                     displayVertices.AddRange(displayVertices);
-                    indices.AddRange(backIndices);
+                    indices.AddRange(backIndices);    
+                    
                     break;
             
                 case MeshTopology.Lines:

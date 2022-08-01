@@ -1,6 +1,4 @@
-using Model;
 using Model.ScriptableObjects;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using Utility;
 

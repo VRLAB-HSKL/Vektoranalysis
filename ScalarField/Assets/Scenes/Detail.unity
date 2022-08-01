@@ -883,7 +883,7 @@ PrefabInstance:
     - target: {fileID: 1700838233594184577, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f650bda1e13dc8a4d8ef6c2a36662cf1, type: 2}
+      objectReference: {fileID: 2100000, guid: beced4fdf99725e42b8391a167886cd2, type: 2}
     - target: {fileID: 1700838233827894145, guid: a4b2ff76c613ad849b9205ff399dc393, type: 3}
       propertyPath: m_Name
       value: ToggleAlgorithmPath

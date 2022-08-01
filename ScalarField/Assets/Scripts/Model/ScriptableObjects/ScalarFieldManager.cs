@@ -5,9 +5,7 @@ using Model.Enums;
 using Model.InitFile;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Model.ScriptableObjects
 {
@@ -159,14 +157,10 @@ namespace Model.ScriptableObjects
                 }
             
                 var grads = field.Data.mesh.Gradients.OrderBy(x => x.Index).ToList();
-                
                 for(var i = 0; i < grads.Count; i++)
                 {
-                    // if (i % 27 != 0)
-                    //     continue;
-                    
                     var gradient = grads[i];
-                    var grad = new Gradient()
+                    var grad = new Gradient
                     {
                         Index = gradient.Index,
                         Direction = new Vector3(gradient.Direction[0], gradient.Direction[1])
