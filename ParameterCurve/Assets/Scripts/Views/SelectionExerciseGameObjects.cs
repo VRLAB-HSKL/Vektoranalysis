@@ -8,6 +8,7 @@ using UnityEngine.PlayerLoop;
 public class SelectionExerciseGameObjects : MonoBehaviour
 {
     public GameObject SelectionRoot;
+    public GameObject TangentNormalRoot;
     
     public Vector3 PillarOffset { get; set; } = Vector3.right;
     public Vector3 CurveOffset { get; set; } = Vector3.zero;
@@ -36,4 +37,9 @@ public class SelectionExerciseGameObjects : MonoBehaviour
     public GameObject leftPillar;
     public GameObject middlePillar;
     public GameObject rightPillar;
+
+    public GameObject TangentNormalPillar;
+
+    public GameObject RetryButton;
+    public GameObject ResetButton;
 }

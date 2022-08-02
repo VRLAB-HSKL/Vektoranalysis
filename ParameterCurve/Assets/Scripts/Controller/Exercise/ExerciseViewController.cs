@@ -330,6 +330,14 @@ namespace Controller.Exercise
             ResetCurrentExercise();
         }
 
+        /// <summary>
+        /// resets height adjustment and sphere positions for a tangent normal exercise
+        /// </summary>
+        public void TangentNormalReset()
+        {
+            _selObjects.TangentNormalPillar.GetComponent<DrawTangentNormal>().resetPositions();
+        }
+
         #endregion Public functions
     }
 }

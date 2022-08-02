@@ -161,6 +161,8 @@ namespace Views
             selObjects.MainDisplayParent.SetActive(true);
             selObjects.ConfirmationDisplayParent.SetActive(false);
             selObjects.ResultsDisplayParent.SetActive(false);
+            selObjects.RetryButton.SetActive(false);
+            selObjects.ResetButton.SetActive(false);
         }
 
         private void ShowSelectionView()
@@ -170,6 +172,8 @@ namespace Views
             selObjects.SelectionParent.SetActive(true);
             selObjects.ConfirmationDisplayParent.SetActive(false);
             selObjects.ResultsDisplayParent.SetActive(false);
+            selObjects.RetryButton.SetActive(false);
+            selObjects.ResetButton.SetActive(true);
         }
         private void ShowConfirmationView()
         {
@@ -177,6 +181,8 @@ namespace Views
             selObjects.SelectionParent.SetActive(false);
             selObjects.ConfirmationDisplayParent.SetActive(true);
             selObjects.ResultsDisplayParent.SetActive(false);
+            selObjects.RetryButton.SetActive(false);
+            selObjects.ResetButton.SetActive(false);
         }
 
         private void ShowResultsView()
@@ -185,6 +191,8 @@ namespace Views
             selObjects.SelectionParent.SetActive(false);
             selObjects.ConfirmationDisplayParent.SetActive(false);
             selObjects.ResultsDisplayParent.SetActive(true);
+            selObjects.RetryButton.SetActive(true);
+            selObjects.ResetButton.SetActive(false);
         }
 
     }

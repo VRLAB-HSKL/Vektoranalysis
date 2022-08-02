@@ -22,6 +22,8 @@ public class DrawTangentNormal : MonoBehaviour
     private GameObject pointSphere;
     private GameObject tangentSphere;
     private GameObject normalSphere;
+    private Vector3 tangentSpherePos;
+    private Vector3 normalSpherePos;
 
     private LineRenderer drawCurveLR;
     private LineRenderer tangentSphereLR;
@@ -134,6 +136,16 @@ public class DrawTangentNormal : MonoBehaviour
     }
 
     /// <summary>
+    /// Move height adjustment object, display, and spheres back to their original positions
+    /// </summary>
+    public void resetPositions()
+    {
+        heightAdjustment.resetPositions();
+        tangentSphere.transform.position = tangentSpherePos;
+        normalSphere.transform.position = normalSpherePos;
+    }
+
+    /// <summary>
     /// Calculate difference between user and data tan/norm lines then show solution
     /// </summary>
     private void compareVectors()
@@ -205,7 +217,6 @@ public class DrawTangentNormal : MonoBehaviour
         float pointSphereX = pointSphere.transform.position.x - this.transform.position.x;   //account for x offset
         float pointSphereY = pointSphere.transform.position.y - this.transform.position.y;  //account for height of axes
         float spawnOffset = 0.6f;
-        Vector3 tangentSpherePos, normalSpherePos;
 
         //sphere positions spawn depending on which XY quadrant they are in
         //1st quadrant: up and right, 2nd quadrant: up and left, 3rd quadrant: down and left, 4th quadrant: down and right
