@@ -1,46 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Model
 {
     /// <summary>
     /// Exercise based on selection execution
     /// </summary>
-    public class SelectionExercise
+    public class SelectionExercise : AbstractExercise
     {
         #region Public members
         
-        /// <summary>
-        /// Exercise title
-        /// </summary>
-        public string Title { get; }
-        
-        /// <summary>
-        /// Exercise description
-        /// </summary>
-        public string Description { get; }
-        
-        /// <summary>
-        /// Amount of sub-exercises in this exercise
-        /// </summary>
-        public int NumberOfSubExercises { get; }
-
-        /// <summary>
-        /// Exercise datasets
-        /// </summary>
-        public List<ExercisePointDataset> Datasets { get; }
-    
-        /// <summary>
-        /// Sub-exercise answers
-        /// </summary>
-        public List<int> CorrectAnswers { get; }
-        
-        /// <summary>
-        /// Answers chosen by the user
-        /// </summary>
-        public List<int> ChosenAnswers { get; }
 
         #endregion Public members
-        
+
         #region Constructors
 
         /// <summary>
@@ -51,19 +24,25 @@ namespace Model
         /// <param name="exercisePointDatasets">Datasets of sub-exercises</param>
         /// <param name="correctAnswers">Correct answers of sub-exercises</param>
         public SelectionExercise(
-            string title, string description, List<ExercisePointDataset> exercisePointDatasets, 
-            List<int> correctAnswers)
+            string title, string description, List<SelectionExerciseDataset> exercisePointDatasets, 
+            List<SelectionExerciseAnswer> correctAnswers) : base(title, description)
         {
-            Title = title;
-            Description = description;
             NumberOfSubExercises = correctAnswers.Count;
 
-            Datasets = exercisePointDatasets;
-            CorrectAnswers = correctAnswers;
-            ChosenAnswers = new List<int>();
-            for(int i = 0; i < NumberOfSubExercises; i++)
+            Datasets = new List<AbstractExerciseDataset>();
+            foreach (var exp in exercisePointDatasets)
+                Datasets.Add(exp);
+            
+            CorrectAnswers = new List<AbstractExerciseAnswer>();
+            foreach (var ca in correctAnswers)
+                CorrectAnswers.Add(ca);
+            
+            ChosenAnswers = new List<AbstractExerciseAnswer>();
+            PreviousAnswers = new List<AbstractExerciseAnswer>();
+            for(var i = 0; i < NumberOfSubExercises; i++)
             {
-                ChosenAnswers.Add(-1);
+                ChosenAnswers.Add(new SelectionExerciseAnswer(-1));
+                PreviousAnswers.Add(new SelectionExerciseAnswer(-1));
             }        
         }
         
@@ -74,14 +53,9 @@ namespace Model
     /// <summary>
     /// Dataset model class for sub-exercise data
     /// </summary>
-    public class ExercisePointDataset
+    public class SelectionExerciseDataset : AbstractExerciseDataset
     {
         #region Public members
-        
-        /// <summary>
-        /// Header text of the dataset
-        /// </summary>
-        public string HeaderText { get; set; }
         
         /// <summary>
         /// Dataset of the left pillar
@@ -109,8 +83,8 @@ namespace Model
         /// <param name="leftDataset">Left pillar dataset</param>
         /// <param name="middleDataset">Middle pillar dataset</param>
         /// <param name="rightDataset">Right pillar dataset</param>
-        public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, 
-            CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
+        public SelectionExerciseDataset(string headerText, CurveInformationDataset leftDataset, 
+            CurveInformationDataset middleDataset, CurveInformationDataset rightDataset) : base(headerText)
         {
             HeaderText = headerText;
             LeftDataset = leftDataset;
@@ -119,5 +93,48 @@ namespace Model
         }
         
         #endregion Constructors
+
+        public override List<CurveInformationDataset> GetCurveData()
+        {
+            return new List<CurveInformationDataset>()
+            {
+                LeftDataset,
+                MiddleDataset,
+                RightDataset
+            };
+        }
+    }
+
+    public class SelectionExerciseAnswer : AbstractExerciseAnswer
+    {
+        public int PillarIndex = -1;
+
+        
+        public SelectionExerciseAnswer(int pillarIndex)
+        {
+            PillarIndex = pillarIndex;
+        }
+
+
+        public override List<float> GetValues()
+        {
+            return new List<float>
+            {
+                PillarIndex
+            };
+        }
+
+        public override void SetValues(List<float> values)
+        {
+            if (values.Any())
+            {
+                PillarIndex = (int) values[0];
+            }
+        }
+
+        public override bool IsValid()
+        {
+            return PillarIndex != -1;
+        }
     }
 }

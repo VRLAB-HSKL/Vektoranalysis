@@ -323,23 +323,33 @@ namespace UI
         
             var pointIndex = view.CurrentPointIndex;
 
-            if (pointIndex > curve.Points.Count) return;
-        
+            if (pointIndex < 0) return;
+            if (pointIndex >= curve.Points.Count) return;
+
+            //Debug.Log("pointIndex: " + pointIndex);
+            
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                // Set info plot travel objects
-                Vector2 tdPosVec = curve.TimeDistancePoints[pointIndex];
-                Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
-                TimeDistanceTravelObject.transform.position =
-                    _initTimeDistTravelPos + tdVec;    
+                if (!(TimeDistanceTravelObject is null))
+                {
+                    // Set info plot travel objects
+                    Vector2 tdPosVec = curve.TimeDistancePoints[pointIndex];
+                    Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
+                
+                    TimeDistanceTravelObject.transform.position =
+                        _initTimeDistTravelPos + tdVec;    
+                }   
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                Vector2 tvPosVec = curve.TimeVelocityPoints[pointIndex];
-                Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
-                TimeVelocityTravelObject.transform.position =
-                    _initTimeVelocityTravelPos + tvVec;    
+                if (!(TimeVelocityTravelObject is null))
+                {
+                    Vector2 tvPosVec = curve.TimeVelocityPoints[pointIndex];
+                    Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
+                    TimeVelocityTravelObject.transform.position =
+                        _initTimeVelocityTravelPos + tvVec;    
+                }
             }
 
         }
@@ -352,30 +362,36 @@ namespace UI
         
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
             {
-                TimeDistLR.positionCount = curve.TimeDistancePoints.Count;
-                for (int i = 0; i < curve.TimeDistancePoints.Count; i++)
+                if (!(TimeDistLR is null))
                 {
-                    Vector2 p = curve.TimeDistancePoints[i];
-                    Vector3 newPos = TimeDistanceStart.transform.position;            
-                    newPos.x += p.x;
-                    newPos.y += p.y;
-                    newPos.z -= Random.Range(0f, 0.005f); // 0.0125f;
-                    TimeDistLR.SetPosition(i, newPos);
-                }    
+                    TimeDistLR.positionCount = curve.TimeDistancePoints.Count;
+                    for (int i = 0; i < curve.TimeDistancePoints.Count; i++)
+                    {
+                        Vector2 p = curve.TimeDistancePoints[i];
+                        Vector3 newPos = TimeDistanceStart.transform.position;            
+                        newPos.x += p.x;
+                        newPos.y += p.y;
+                        newPos.z -= Random.Range(0f, 0.005f); // 0.0125f;
+                        TimeDistLR.SetPosition(i, newPos);
+                    }    
+                }
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                TimeVelocityLR.positionCount = curve.TimeVelocityPoints.Count;
-                for (int i = 0; i < curve.TimeVelocityPoints.Count; i++)
+                if (!(TimeVelocityLR is null))
                 {
-                    Vector2 p = curve.TimeVelocityPoints[i];
-                    Vector3 newPos = TimeVelocityStart.transform.position;
-                    newPos.x += p.x;
-                    newPos.y += p.y;
-                    newPos.z -= Random.Range(0f, 0.005f);
-                    TimeVelocityLR.SetPosition(i, newPos);
-                }    
+                    TimeVelocityLR.positionCount = curve.TimeVelocityPoints.Count;
+                    for (int i = 0; i < curve.TimeVelocityPoints.Count; i++)
+                    {
+                        Vector2 p = curve.TimeVelocityPoints[i];
+                        Vector3 newPos = TimeVelocityStart.transform.position;
+                        newPos.x += p.x;
+                        newPos.y += p.y;
+                        newPos.z -= Random.Range(0f, 0.005f);
+                        TimeVelocityLR.SetPosition(i, newPos);
+                    }    
+                }   
             }
 
         }

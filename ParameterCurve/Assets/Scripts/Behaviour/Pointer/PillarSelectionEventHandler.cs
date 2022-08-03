@@ -1,8 +1,10 @@
 using System.Linq;
 using UnityEngine.EventSystems;
+using UnityEngine;
 
 namespace Behaviour
 {
+
     /// <summary>
     /// Handles the Behaviour of pillars on selection of them using the VR controller
     ///
@@ -19,8 +21,14 @@ namespace Behaviour
                 var newMat = Hovers.Any() ? hoverMat : defaultMat;
                 foreach (var m in MeshRenderers)
                 {
-                    //m.material =  newMat;
+                    m.material =  newMat;
                 }    
+            } else
+            {
+                foreach (var m in MeshRenderers)
+                {
+                    m.material = selectionMat;
+                }
             }
             
         }

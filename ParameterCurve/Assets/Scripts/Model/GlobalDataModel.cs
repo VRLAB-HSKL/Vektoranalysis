@@ -99,7 +99,7 @@ namespace Model
         /// <summary>
         /// Collection of imported selection exercises
         /// </summary>
-        public static readonly List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+        public static readonly List<AbstractExercise> SelectionExercises = new List<AbstractExercise>();
 
         /// <summary>
         /// Index used to access the current selection exercise. This value is modified to switch between main
@@ -204,6 +204,9 @@ namespace Model
                 DisplayCurveDatasets.Add(DataImport.CreatePointDatasetFromCurve(curve));
             }
 
+            if (jsr.Exercises.Count == 0) jsr.ApplicationSettings.TableSettings.ShowQuizButton = false;
+            else jsr.ApplicationSettings.TableSettings.ShowQuizButton = true;
+
             for (var i = 0; i < jsr.Exercises.Count; i++)
             {
                 var ex = jsr.Exercises[i];
@@ -214,13 +217,13 @@ namespace Model
                 // Select3 exercise
                 if (ex.Type.Equals("select3"))
                 {
-                    var subExercises = new List<ExercisePointDataset>();
-                    var correctAnswers = new List<int>();
-                    for (var j = 0; j < ex.SubExercises.Count; j++)
+                    var subExercises = new List<SelectionExerciseDataset>();
+                    var correctAnswers = new List<SelectionExerciseAnswer>();
+                    for (var j = 0; j < ex.selectThreeExercises.Count; j++)
                     {
-                        var subExercise = ex.SubExercises[j];
+                        var subExercise = ex.selectThreeExercises[j];
                         subExercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
-                        correctAnswers.Add(subExercise.CorrectAnswer);
+                        correctAnswers.Add(new SelectionExerciseAnswer(subExercise.CorrectAnswer));
                     }
                 
                     var selExercise = new SelectionExercise(
@@ -233,12 +236,42 @@ namespace Model
                     SelectionExercises.Add(selExercise);
                 }
 
+                // tanNormSelect exercise
+                if (ex.Type.Equals("tanNormSelect"))
+                {
+                    var subExerciseData = new List<TangentNormalExerciseDataset>();
+                    var correctAnswers = new List<TangentNormalExerciseAnswer>();
+
+                    for (var j = 0; j < ex.tangentNormalExercises.Count; j++)
+                    {
+                        var subExercise = ex.tangentNormalExercises[j];
+                        subExerciseData.Add(DataImport.CreateTangentNormalDataFromSubExercise(subExercise));
+                        correctAnswers.Add(new TangentNormalExerciseAnswer(subExercise.CorrectTangents, subExercise.CorrectNormals));
+                    }
+
+                    var tanNormExercise = new TangentNormalExercise(
+                        ex.Title,
+                        ex.Description,
+                        subExerciseData,
+                        correctAnswers
+                    );
+
+                    SelectionExercises.Add(tanNormExercise);
+                }
+
                 ExerciseCurveDatasets.Add(new CurveInformationDataset()
                 {
                     Name = ex.Title,
                     DisplayString = ex.Title,
                 });
             }
+
+            //foreach (var ex in SelectionExercises)
+            //{
+            //    Debug.Log("exercise: " + ex.Title);
+            //    foreach (var sub in ex.Datasets)
+            //        Debug.Log("sub ex: " + sub.HeaderText);
+            //}
         }
         
         #endregion Private functions

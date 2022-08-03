@@ -26,13 +26,15 @@ namespace Views.Exercise
         public bool HasArcLengthTravelPoint { get; protected set; }
     
         public bool ShowMainDisplay { get; set; } = true;
-        
+        public bool ShowConfirmationDisplay { get; set; } = false;
+        public bool ShowResultsDisplay { get; set; } = false;
+
         //public int CurrentSubExerciseIndex { get; set; }
-        
+
         #endregion Public members
-        
+
         #region Protected members
-        
+
         /// <summary>
         /// Type of parent controller
         /// </summary>

@@ -26,17 +26,18 @@ namespace Views.Exercise
             get
             {
                 var selExercise = GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
+                var cd = selExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex].GetCurveData();
                 switch (_pillar)
                 {
                     case PillarIdentifier.Left:
-                        return selExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex].LeftDataset;
+                        return cd[0];
                     
                     default:
                     case PillarIdentifier.Middle:
-                        return selExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex].MiddleDataset;
+                        return cd[1];
                     
                     case PillarIdentifier.Right:
-                        return selExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex].RightDataset;
+                        return cd[2];
                 }
 
             }

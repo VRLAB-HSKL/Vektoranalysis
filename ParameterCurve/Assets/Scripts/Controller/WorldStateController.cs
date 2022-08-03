@@ -6,6 +6,7 @@ using Model;
 using UI;
 using UnityEngine;
 using Views.Display;
+using System.IO;
 
 namespace Controller
 {
@@ -45,7 +46,12 @@ namespace Controller
         /// Game object transform used to visualize arc length parametrization based runs along the world curve display
         /// </summary>
         public Transform worldArcLengthTravelObject;
-        
+
+        /// <summary>
+        /// Display for drawing tangent and normal lines
+        /// </summary>
+        public DrawTangentNormal drawDisplay;
+
         /// <summary>
         /// Root element containing the table prefab and all other related game objects. This differs from
         /// <see cref="tableRootElement"/> by containing all elements, not just the ones related to simple curve
@@ -117,9 +123,14 @@ namespace Controller
         /// <see cref="GlobalDataModel.RunSpeedFactor"/>, the travel object moves to the next point on the curve
         /// </summary>
         private float _updateTimer;
-        
+
+        /// <summary>
+        /// Path to file containing point data for curve, sent to cockpit.
+        /// </summary>
+        private string pathToData = "Assets/Resources/linecoords.txt";
+
         #endregion Private members
-        
+
         #region Public functions
 
         /// <summary>
@@ -239,7 +250,6 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
-        
         }
 
         /// <summary>
@@ -411,9 +421,37 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
         }
-        
+
+        /// <summary>
+        /// Switch to a specific exercise in the current exercise dataset based on given identifier
+        /// </summary>
+        public void SwitchToSpecificExercise(string exerciseIdentifier)
+        {
+            // Stop driving
+            if (GlobalDataModel.IsRunning)
+            {
+                GlobalDataModel.IsRunning = false;
+            }
+
+            if (GlobalDataModel.CurrentDisplayGroup == GlobalDataModel.CurveDisplayGroup.Exercises)
+                GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
+
+            var index = GlobalDataModel.SelectionExercises.FindIndex(
+                x => x.Title.Equals(exerciseIdentifier));
+
+            if (index == -1) return;
+            else if(GlobalDataModel.CurrentExerciseIndex == index) GlobalDataModel.ExerciseCurveController.ResetCurrentExercise();
+            else
+            {
+                GlobalDataModel.CurrentExerciseIndex = index;
+                GlobalDataModel.ExerciseCurveController.NewExercise();
+            }
+            
+            GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
+        }
+
         #endregion Public functions
-        
+
         #region Private functions
 
         /// <summary>
@@ -444,6 +482,8 @@ namespace Controller
 
             // Set plot line renderers
             infoWall.Update();
+
+            CheckForCurve();
         }
 
         /// <summary>
@@ -535,7 +575,22 @@ namespace Controller
                 selObjects.gameObject.transform, selObjects, pillarPrefab, AbstractCurveViewController.CurveControllerType.World);
             GlobalDataModel.ExerciseCurveController.SetViewVisibility(false);    
         }
-        
+
+        private void CheckForCurve()
+        {
+            using (StreamReader reader = new StreamReader(pathToData))
+            {
+                string name = reader.ReadLine();
+
+                //will be null if this is the first time the scene is being loaded
+                //will contain name of curve that was just run in the cockpit scene if not null
+                if (name != null)
+                {
+                    //if curve does not exist, function will just return and load regularly
+                    SwitchToSpecificDataset(name);  
+                }
+            }
+        }
     
         /// <summary>
         /// Static logging operations that are performed every frame, regardless of user interaction

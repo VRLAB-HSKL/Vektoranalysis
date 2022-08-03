@@ -56,7 +56,7 @@ namespace UI.States
                     GlobalDataModel.WorldCurveViewController?.SetViewVisibility(true);
                     break;
                 case GlobalDataModel.CurveDisplayGroup.Exercises:
-                    //GlobalData.ExerciseController.SetViewVisibility(true);
+                    GlobalDataModel.ExerciseCurveController.SetViewVisibility(true);
                     break;
             }
 
@@ -78,8 +78,18 @@ namespace UI.States
                 label.text = pds.DisplayString;
 
                 var b = tmpButton.GetComponent<Button>();
-                b.onClick.AddListener(() => _world.SwitchToSpecificDataset(pds.Name));
+                
+                if(GlobalDataModel.CurrentDisplayGroup == GlobalDataModel.CurveDisplayGroup.Display)
+                {
+                    b.onClick.AddListener(() => _world.SwitchToSpecificDataset(pds.Name));
+                } else
+                {
+                    b.onClick.AddListener(() => _world.SwitchToSpecificExercise(pds.Name));
+                }
+                    
             }
+
+            
         }
 
         /// <summary>
