@@ -19,7 +19,7 @@ namespace Views
         
         private SelectionExerciseGameObjects selObjects { get; set; }
 
-        private SelectionExercise CurrentSelectionExercise => 
+        private AbstractExercise CurrentSelectionExercise => 
             GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
 
         public string CurrentTitle { get; set; }
@@ -28,7 +28,7 @@ namespace Views
         
         public SelectionExerciseCompoundView(
             SelectionExerciseGameObjects selObjects, GameObject pillarPrefab, Transform origin, 
-            ExercisePointDataset initData, AbstractCurveViewController.CurveControllerType type)
+            /* SelectionExerciseDataset initData,*/ AbstractCurveViewController.CurveControllerType type)
             // : base(selObjects, pillarPrefab, origin, initData, type)
         {
             Type = type;
@@ -88,13 +88,25 @@ namespace Views
 
         public override void UpdateView()
         {
-            var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex]; 
+            //Debug.Log(CurrentSelectionExercise.Datasets.Count);
+            var currentSubExercise = CurrentSelectionExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex];
+
+            //Debug.Log("SelExCompoundView - UpdateView() " + GlobalDataModel.CurrentSubExerciseIndex);
+
+            var curveData = currentSubExercise.GetCurveData();
             
-            curveViews[0].ScalingFactor = currentSubExercise.LeftDataset.SelectExercisePillarScalingFactor;
-            curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;
-            curveViews[2].ScalingFactor = currentSubExercise.RightDataset.SelectExercisePillarScalingFactor;
+            if (curveData.Count != 3) return;
+
+            for (var i = 0; i < curveData.Count; i++)
+            {
+                var ds = curveData[i];
+                curveViews[i].ScalingFactor = ds.SelectExercisePillarScalingFactor;    
+            }
+            // curveViews[0].ScalingFactor = currentSubExercise.LeftDataset.SelectExercisePillarScalingFactor;
+            // curveViews[1].ScalingFactor = currentSubExercise.MiddleDataset.SelectExercisePillarScalingFactor;
+            // curveViews[2].ScalingFactor = currentSubExercise.RightDataset.SelectExercisePillarScalingFactor;
             
-            if (showMainDisplay)
+            if (ShowMainDisplay)
             {
                 selObjects.MiddleDisplayText.text = CurrentDescription;
                 selObjects.ExerciseTitle.text = string.Empty;
@@ -102,6 +114,21 @@ namespace Views
                 selObjects.HeaderText.text = string.Empty;
                 
                 ShowMainDisplayView();
+            } else if (ShowConfirmationDisplay)
+            {
+                selObjects.MiddleDisplayText.text = CurrentDescription;
+                selObjects.ExerciseTitle.text = string.Empty;
+                selObjects.SubExerciseIdentifier.text = string.Empty;
+                selObjects.HeaderText.text = string.Empty;
+                ShowConfirmationView();
+            }
+            else if (ShowResultsDisplay)
+            {
+                selObjects.MiddleDisplayText.text = CurrentDescription;
+                selObjects.ExerciseTitle.text = string.Empty;
+                selObjects.SubExerciseIdentifier.text = string.Empty;
+                selObjects.HeaderText.text = string.Empty;
+                ShowResultsView();
             }
             else
             {
@@ -132,6 +159,10 @@ namespace Views
             //Debug.Log("ShowMainDisplayView()");
             selObjects.SelectionParent.SetActive(false);
             selObjects.MainDisplayParent.SetActive(true);
+            selObjects.ConfirmationDisplayParent.SetActive(false);
+            selObjects.ResultsDisplayParent.SetActive(false);
+            selObjects.RetryButton.SetActive(false);
+            selObjects.ResetButton.SetActive(false);
         }
 
         private void ShowSelectionView()
@@ -139,7 +170,30 @@ namespace Views
             //Debug.Log("ShowSelectionView()");
             selObjects.MainDisplayParent.SetActive(false);
             selObjects.SelectionParent.SetActive(true);
+            selObjects.ConfirmationDisplayParent.SetActive(false);
+            selObjects.ResultsDisplayParent.SetActive(false);
+            selObjects.RetryButton.SetActive(false);
+            selObjects.ResetButton.SetActive(true);
         }
-        
+        private void ShowConfirmationView()
+        {
+            selObjects.MainDisplayParent.SetActive(false);
+            selObjects.SelectionParent.SetActive(false);
+            selObjects.ConfirmationDisplayParent.SetActive(true);
+            selObjects.ResultsDisplayParent.SetActive(false);
+            selObjects.RetryButton.SetActive(false);
+            selObjects.ResetButton.SetActive(false);
+        }
+
+        private void ShowResultsView()
+        {
+            selObjects.MainDisplayParent.SetActive(false);
+            selObjects.SelectionParent.SetActive(false);
+            selObjects.ConfirmationDisplayParent.SetActive(false);
+            selObjects.ResultsDisplayParent.SetActive(true);
+            selObjects.RetryButton.SetActive(true);
+            selObjects.ResetButton.SetActive(false);
+        }
+
     }
 }

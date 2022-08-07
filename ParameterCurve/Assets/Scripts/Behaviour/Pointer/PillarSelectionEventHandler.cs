@@ -1,13 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
-using Controller;
-using HTC.UnityPlugin.Vive;
-using Model;
-using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine;
 
 namespace Behaviour
 {
+
     /// <summary>
     /// Handles the Behaviour of pillars on selection of them using the VR controller
     ///
@@ -16,36 +13,42 @@ namespace Behaviour
     public class PillarSelectionEventHandler : AbstractVisualChangeSelectionEventHandler
     {
         //private ExerciseViewController threeSel;
-        
-        
+
         private void Update()
         {
-            // if (IsSelected) return;
-            //
-            // if (_hovers.Any()) return;
-            
-
             if (!IsSelected)
             {
                 var newMat = Hovers.Any() ? hoverMat : defaultMat;
-                
-                //Debug.Log(_hovers.Count);
                 foreach (var m in MeshRenderers)
                 {
-                    //m.material =  newMat;
+                    m.material =  newMat;
                 }    
+            } else
+            {
+                foreach (var m in MeshRenderers)
+                {
+                    m.material = selectionMat;
+                }
             }
             
         }
 
-        protected override void HandlePointerClick(PointerEventData eventData)
-        {
-            //Debug.Log("choice: " + selectionChoice);
-            //GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
-        }
+        /// <summary>
+        /// Handles pointer click event
+        /// </summary>
+        /// <param name="eventData">Event data</param>
+        protected override void HandlePointerClick(PointerEventData eventData) {}
 
-        protected override void HandlePointerEnter(PointerEventData eventData){}
+        /// <summary>
+        /// Handles pointer enter event
+        /// </summary>
+        /// <param name="eventData">Event data</param>
+        protected override void HandlePointerEnter(PointerEventData eventData) {}
 
-        protected override void HandlePointerExit(PointerEventData eventData){}
+        /// <summary>
+        /// Handles pointer exit event
+        /// </summary>
+        /// <param name="eventData">Event data</param>
+        protected override void HandlePointerExit(PointerEventData eventData) {}
     }
 }

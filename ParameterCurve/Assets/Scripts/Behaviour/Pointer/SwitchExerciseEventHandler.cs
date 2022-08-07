@@ -2,20 +2,31 @@ using Model;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviour
+namespace Behaviour.Pointer
 {
     /// <summary>
-    /// Handles the Behaviour of the ingame navigation objects used to switch between exercises     
+    /// Handles the Behaviour of the in-game navigation objects used to switch between exercises     
     /// </summary>
     public class SwitchExerciseEventHandler : AbstractVisualChangeSelectionEventHandler
     {
-        public bool IsIncrement;
+        #region Public members
+        
+        /// <summary>
+        /// Signals whether this handler increments or decrements the index
+        /// </summary> 
+        public bool isIncrement;
 
+        #endregion Public members
+        
+        #region Protected functions
+        
+        /// <summary>
+        /// Handle click event to switch to next/previous exercise
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         protected override void HandlePointerClick(PointerEventData eventData)
         {
-            Debug.Log("SwitchExerciseEventHandler: HandlePointerClick()");
-            
-            if (IsIncrement)
+            if (isIncrement)
             {
                 GlobalDataModel.ExerciseCurveController.NextSubExercise();
             }
@@ -25,14 +36,18 @@ namespace Behaviour
             }
         }
 
-        protected override void HandlePointerEnter(PointerEventData eventData)
-        {
-        
-        }
+        /// <summary>
+        /// Handle click event on pointer enter
+        /// </summary>
+        /// <param name="eventData">Event data</param>
+        protected override void HandlePointerEnter(PointerEventData eventData) {}
 
-        protected override void HandlePointerExit(PointerEventData eventData)
-        {
+        /// <summary>
+        /// Handle click event on pointer exit
+        /// </summary>
+        /// <param name="eventData">Event data</param>
+        protected override void HandlePointerExit(PointerEventData eventData) {}
         
-        }
+        #endregion Protected functions
     }
 }

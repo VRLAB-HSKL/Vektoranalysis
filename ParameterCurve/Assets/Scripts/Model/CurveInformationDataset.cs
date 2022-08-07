@@ -1,102 +1,167 @@
-using System.Collections;
 using System.Collections.Generic;
-using Model;
 using UnityEngine;
 
-public class CurveInformationDataset
+namespace Model
 {
-    public int id = 0;
-    public string Name { get; set; } = string.Empty;
-    public string DisplayString { get; set; } = string.Empty;
-    public string NotebookURL = string.Empty;
-
-    public string View = string.Empty;
-    
-    public Texture2D MenuButtonImage { get; set; }
-
-
-
-
-    public float Distance = 0f;
-
-    public bool Is3DCurve { get; set; }
-
-    
-    public float WorldScalingFactor { get; set; }
-    public float TableScalingFactor { get; set; }
-    public float SelectExercisePillarScalingFactor { get; set; }
-
-    public Color CurveLineColor { get; set; }
-    
-    public Color TravelObjColor { get; set; }
-    
-    public Color ArcTravelObjColor { get; set; }
-    
-    private List<Vector3> ps = new List<Vector3>();
-
-    public List<Vector3> points
+    public class CurveInformationDataset
     {
-        get => ps;
-        set
-        {
-            ps = value;
-            
-            CalculateWorldPoints();
-        }
-    }
+        #region Public members
+        
+        /// <summary>
+        /// Dataset identifier
+        /// </summary>
+        public int ID { get; set; }
+        
+        /// <summary>
+        /// Dataset name
+        /// </summary>
+        public string Name { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// Display string used in GUI
+        /// </summary>
+        public string DisplayString { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// URL to notebook containing dataset information
+        /// </summary>
+        public string NotebookURL = string.Empty;
+
+        /// <summary>
+        /// View type
+        /// </summary>
+        public string View = string.Empty;
     
-    public List<Vector3> worldPoints { get; set; } = new List<Vector3>();
-    public List<float> paramValues { get; set; } = new List<float>();
+        /// <summary>
+        /// Icon texture
+        /// </summary>
+        public Texture2D MenuButtonImage { get; set; }
 
-    //public float ScalingFactor = 1f;
+        /// <summary>
+        /// Signals whether this curve is 2D or 3D
+        /// </summary>
+        public bool Is3DCurve { get; set; }
 
-    public List<Vector2> timeDistancePoints { get; set; } = new List<Vector2>();
-    public List<Vector2> timeVelocityPoints { get; set; } = new List<Vector2>();
+        /// <summary>
+        /// Scaling factor for world curve
+        /// </summary>
+        public float WorldScalingFactor { get; set; }
+        
+        /// <summary>
+        /// Scaling factor for table curve
+        /// </summary>
+        public float TableScalingFactor { get; set; }
+        
+        /// <summary>
+        /// Scaling factor for curves displayed inside exercise pillars
+        /// </summary>
+        public float SelectExercisePillarScalingFactor { get; set; }
 
-    public List<FresnetSerretApparatus> fresnetApparatuses { get; set; } = new List<FresnetSerretApparatus>();
+        /// <summary>
+        /// Curve line color
+        /// </summary>
+        public Color CurveLineColor { get; set; }
+    
+        /// <summary>
+        /// Travel object color
+        /// </summary>
+        public Color TravelObjColor { get; set; }
+    
+        /// <summary>
+        /// Arc travel object color
+        /// </summary>
+        public Color ArcTravelObjColor { get; set; }
 
-    public float arcLength { get; set; } = 0f;
-    public List<Vector3> arcLenghtPoints { get; set; } = new List<Vector3>();
-    public List<Vector3> arcLengthWorldPoints { get; set; } = new List<Vector3>();
-    public List<float> arcLengthParamValues { get; set; } = new List<float>();
+        /// <summary>
+        /// Curve points
+        /// </summary>
+        public List<Vector3> Points { get; } = new List<Vector3>();
 
-    public List<FresnetSerretApparatus> arcLengthFresnetApparatuses { get; set; } = new List<FresnetSerretApparatus>();
+        /// <summary>
+        /// Curve world points
+        /// </summary>
+        public List<Vector3> WorldPoints { get; } = new List<Vector3>();
+        
+        /// <summary>
+        /// Curve parameter values (t)
+        /// </summary>
+        public List<float> ParamValues { get; set; } = new List<float>();
 
+        /// <summary>
+        /// Time-distance plot points
+        /// </summary>
+        public List<Vector2> TimeDistancePoints { get; set; } = new List<Vector2>();
+        
+        /// <summary>
+        /// Time-velocity plot points
+        /// </summary>
+        public List<Vector2> TimeVelocityPoints { get; set; } = new List<Vector2>();
 
-    public void CalculateWorldPoints()
-    {
-        // Calculate world points
-        worldPoints.Clear();
-        for (int i = 0; i < ps.Count; i++)
+        /// <summary>
+        /// Curve fresnet apparatuses
+        /// </summary>
+        public List<FresnetSerretApparatus> FresnetApparatuses { get; set; } = new List<FresnetSerretApparatus>();
+
+        /// <summary>
+        /// Curve arc length
+        /// </summary>
+        public float ArcLength { get; set; }
+        
+        /// <summary>
+        /// Points of arc length parametrization
+        /// </summary>
+        public List<Vector3> ArcLenghtPoints { get; } = new List<Vector3>();
+        
+        /// <summary>
+        /// World points of arc length parametrization
+        /// </summary>
+        public List<Vector3> ArcLengthWorldPoints { get; } = new List<Vector3>();
+        
+        /// <summary>
+        /// Parameter values (t) of arc length parametrization
+        /// </summary>
+        public List<float> ArcLengthParamValues { get; set; } = new List<float>();
+
+        /// <summary>
+        /// Fresnet apparatuses of arc length parametrization
+        /// </summary>
+        public List<FresnetSerretApparatus> ArcLengthFresnetApparatuses { get; } = new List<FresnetSerretApparatus>();
+
+        #endregion Public members
+
+        #region Public functions
+        
+        /// <summary>
+        /// Calculates the world points for the current scene based on root transform
+        /// </summary>
+        public void CalculateWorldPoints()
         {
-            var point = ps[i];
-
-            var swapYZCoordinates = Is3DCurve;
-            
-            var newPoint = swapYZCoordinates ?
-                new Vector3(point.x, point.z, point.y) * GlobalDataModel.PointScaleFactor :
-                new Vector3(point.x, point.y, point.z) * GlobalDataModel.PointScaleFactor;
-
-            if (!Is3DCurve)
+            // Calculate world points
+            WorldPoints.Clear();
+            for(var i = 0; i < Points.Count; i++)
             {
-                //newPoint.z += Random.Range(0f, 0.00125f);
-            }
+                var point = Points[i];
+                var swapYZCoordinates = Is3DCurve;
+                var newPoint = swapYZCoordinates ?
+                    new Vector3(point.x, point.z, point.y) * GlobalDataModel.PointScaleFactor :
+                    new Vector3(point.x, point.y, point.z) * GlobalDataModel.PointScaleFactor;
 
-            worldPoints.Add(newPoint);
+                WorldPoints.Add(newPoint);
+            }
+        
+            // Calculate arc world points
+            ArcLengthWorldPoints.Clear();
+            for(var i = 0; i < ArcLenghtPoints.Count; i++)
+            {
+                var arcPoint = ArcLenghtPoints[i];
+                var swapYZCoordinates = Is3DCurve;
+            
+                ArcLengthWorldPoints.Add(swapYZCoordinates ?
+                    new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalDataModel.PointScaleFactor :
+                    new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalDataModel.PointScaleFactor);
+            }
         }
         
-        // Calculate arc world points
-        arcLengthWorldPoints.Clear();
-        for (int i = 0; i < arcLenghtPoints.Count; i++)
-        {
-            var arcPoint = arcLenghtPoints[i];
-
-            bool swapYZCoordinates = Is3DCurve;
-            
-            arcLengthWorldPoints.Add(swapYZCoordinates ?
-                new Vector3(arcPoint.x, arcPoint.z, arcPoint.y) * GlobalDataModel.PointScaleFactor :
-                new Vector3(arcPoint.x, arcPoint.y, arcPoint.z) * GlobalDataModel.PointScaleFactor);
-
-        }
+        #endregion Public functions
     }
 }

@@ -1,63 +1,81 @@
-﻿using Controller.Curve;
-using Model;
+﻿using Model;
 using UnityEngine;
-using Views.Display;
 
 namespace Views.Exercise
 {
     public class SelectionExerciseView : AbstractExerciseView
     {
+        #region Public members
+        
+        /// <summary>
+        /// Positional identifier for pillars
+        /// </summary>
         public enum PillarIdentifier {Left = 0, Middle = 1, Right = 2}
 
-        public PillarIdentifier Pillar;
+        #endregion Public members
         
-        public new CurveInformationDataset CurrentCurve
+        #region Private members
+        
+        /// <summary>
+        /// Local positional identifier of pillar
+        /// </summary>
+        private readonly PillarIdentifier _pillar;
+
+        private new CurveInformationDataset CurrentCurve
         {
             get
             {
-                var selExerc = GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
-                switch (Pillar)
+                var selExercise = GlobalDataModel.SelectionExercises[GlobalDataModel.CurrentExerciseIndex];
+                var cd = selExercise.Datasets[GlobalDataModel.CurrentSubExerciseIndex].GetCurveData();
+                switch (_pillar)
                 {
                     case PillarIdentifier.Left:
-                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].LeftDataset;
+                        return cd[0];
                     
                     default:
                     case PillarIdentifier.Middle:
-                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].MiddleDataset;
+                        return cd[1];
                     
                     case PillarIdentifier.Right:
-                        return selExerc.Datasets[GlobalDataModel.CurrentSubExerciseIndex].RightDataset;
+                        return cd[2];
                 }
 
             }
         }
+
+        #endregion Private members
         
+        #region Constructors
         
-        public SelectionExerciseView(LineRenderer displayLR, Vector3 rootPos, float scalingFactor, 
+        public SelectionExerciseView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor, 
             PillarIdentifier pid) : 
-            base(displayLR, rootPos, scalingFactor)
+            base(displayLr, rootPos, scalingFactor)
         {
-            Pillar = pid;
+            _pillar = pid;
         }
+        
+        #endregion Constructors
+        
+        #region Public functions
         
         public override void UpdateView()
         {
-            CurveInformationDataset curve = CurrentCurve; 
+            var curve = CurrentCurve; 
         
-            var pointArr = curve.worldPoints.ToArray();
+            var pointArr = curve.WorldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
                 pointArr[i] = MapPointPos(pointArr[i]);
             }
         
-            DisplayLr.positionCount = curve.worldPoints.Count;
+            DisplayLr.positionCount = curve.WorldPoints.Count;
             DisplayLr.SetPositions(pointArr);
         
             DisplayLr.material.color = curve.CurveLineColor;
             DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
-
         }
         
+        #endregion Public functions
         
     }
 }

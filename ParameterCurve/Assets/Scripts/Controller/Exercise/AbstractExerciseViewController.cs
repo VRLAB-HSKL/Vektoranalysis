@@ -16,6 +16,9 @@ namespace Controller.Exercise
         
         #region Public members
 
+        /// <summary>
+        /// Current view on the exercise
+        /// </summary>
         protected AbstractExerciseView CurrentView { get; set; }
 
         #endregion Public members
@@ -51,18 +54,12 @@ namespace Controller.Exercise
         }
 
         /// <summary>
-        /// Root element position in the world, used as the origin for all curve coordinates
-        /// </summary>
-        private readonly Transform _rootElement;
-        
-        /// <summary>
         /// Collection of all views associated with this controller
         /// </summary>
         protected List<AbstractExerciseView> Views;
         
         #endregion Protected members
 
-        
         #region Private members
 
         /// <summary>
@@ -70,11 +67,20 @@ namespace Controller.Exercise
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
         
+        /// <summary>
+        /// Root element position in the world, used as the origin for all curve coordinates
+        /// </summary>
+        private readonly Transform _rootElement;
+        
         #endregion Private members
         
         
         #region Constructors
         
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="root">Root transform</param>
         protected AbstractExerciseViewController(Transform root)
         {
             _rootElement = root;
@@ -88,6 +94,10 @@ namespace Controller.Exercise
 
         #region Public functions
 
+        /// <summary>
+        /// Changes view visibility
+        /// </summary>
+        /// <param name="value">View is visible</param>
         public virtual void SetViewVisibility(bool value)
         {
             for (var i = 0; i < _rootElement.childCount; i++)
@@ -97,10 +107,12 @@ namespace Controller.Exercise
         }
         
         #endregion Public functions
-        
-        
+
         #region Protected functions
         
+        /// <summary>
+        /// Initialize views
+        /// </summary>
         protected void InitViews()
         {
             foreach (var view in Views)
@@ -118,6 +130,10 @@ namespace Controller.Exercise
         
         #region Private functions
 
+        /// <summary>
+        /// Switch to specific view based on index argument 
+        /// </summary>
+        /// <param name="index"></param>
         private void SwitchView(int index)
         {
             if (index < 0 || index >= Views.Count) return;

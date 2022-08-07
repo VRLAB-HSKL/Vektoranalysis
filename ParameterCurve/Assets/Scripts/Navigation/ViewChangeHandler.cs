@@ -1,31 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
 using Controller;
 using Model;
 using UnityEngine;
 
-public class ViewChangeHandler : AbstractButtonCollisionHandler
+namespace Navigation
 {
-    public int ViewIndex;
-
-    public ViewChangeHandler()
+    /// <summary>
+    /// Change view based on set <see cref="viewIndex"/> on collision
+    /// </summary>
+    public class ViewChangeHandler : AbstractButtonCollisionHandler
     {
-        OnHitFunc = HandleCollision;
-    }
+        #region Public members
+        
+        /// <summary>
+        /// Associated view index this handler should change to
+        /// </summary>
+        public int viewIndex;
 
-    private void HandleCollision()
-    {
-        WorldStateController world = Target.GetComponent<WorldStateController>();
-        if (world != null)
+        #endregion Public members
+        
+        #region Public functions
+        
+        /// <summary>
+        /// Assign local function to inherited handler
+        /// </summary>
+        public ViewChangeHandler()
         {
-            GlobalDataModel.WorldCurveViewController.SwitchView(ViewIndex);
-            GlobalDataModel.TableCurveViewController?.SwitchView(ViewIndex);
+            OnHitFunc = HandleCollision;
         }
 
-        MeshRenderer msr = Target.GetComponent<MeshRenderer>();
-        if (msr != null)
+        #endregion Public functions
+        
+        #region Private functions
+        
+        /// <summary>
+        /// Handles collision with target object
+        /// </summary>
+        private void HandleCollision()
         {
-            msr.material = PressedMat;
+            // Logical operation
+            var world = target.GetComponent<WorldStateController>();
+            if (world != null)
+            {
+                GlobalDataModel.WorldCurveViewController.SwitchView(viewIndex);
+                GlobalDataModel.TableCurveViewController?.SwitchView(viewIndex);
+            }
+
+            // Visual update
+            var msr = target.GetComponent<MeshRenderer>();
+            if (msr != null)
+            {
+                msr.material = pressedMat;
+            }
         }
+        
+        #endregion Private functions
     }
 }

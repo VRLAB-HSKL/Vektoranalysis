@@ -273,13 +273,13 @@ namespace UI
                 }
             }
                 
-            if (pointIndex >= curve.points.Count) return;
+            if (pointIndex >= curve.Points.Count) return;
             
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowBasicInfo)
             {
                 SourceLabel.text = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].DisplayString;
                 
-                IndexLabel.text = isRunBasedView ? (pointIndex + 1) + " / " + curve.points.Count : "0 / 0";
+                IndexLabel.text = isRunBasedView ? (pointIndex + 1) + " / " + curve.Points.Count : "0 / 0";
             }
 
             if (!isRunBasedView) return;
@@ -288,24 +288,24 @@ namespace UI
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowPointData)
             {
-                if(pointIndex > curve.points.Count)
-                    Debug.Log("pointIndex: " + pointIndex + " / " + curve.points.Count);
+                if(pointIndex > curve.Points.Count)
+                    Debug.Log("pointIndex: " + pointIndex + " / " + curve.Points.Count);
             
-                TLabel.text = curve?.paramValues[pointIndex].ToString(floatFormat);
-                XLabel.text = curve?.points[pointIndex].x.ToString(floatFormat);
-                YLabel.text = curve?.points[pointIndex].y.ToString(floatFormat);
-                zLabel.text = curve?.points[pointIndex].z.ToString(floatFormat);    
+                TLabel.text = curve?.ParamValues[pointIndex].ToString(floatFormat);
+                XLabel.text = curve?.Points[pointIndex].x.ToString(floatFormat);
+                YLabel.text = curve?.Points[pointIndex].y.ToString(floatFormat);
+                zLabel.text = curve?.Points[pointIndex].z.ToString(floatFormat);    
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowArcLengthData)
             {
-                var arcLength = curve.arcLength.ToString("0.###");
+                var arcLength = curve.ArcLength.ToString("0.###");
                 //Debug.Log("arcLength: " + arcLength);
                 ArcLengthLabel.text = arcLength;
-                ArcTLabel.text = curve?.arcLengthParamValues[pointIndex].ToString(floatFormat);
-                ArcXLabel.text = curve?.arcLenghtPoints[pointIndex].x.ToString(floatFormat);
-                ArcYLabel.text = curve?.arcLenghtPoints[pointIndex].y.ToString(floatFormat);
-                ArcZLabel.text = curve?.arcLenghtPoints[pointIndex].z.ToString(floatFormat);    
+                ArcTLabel.text = curve?.ArcLengthParamValues[pointIndex].ToString(floatFormat);
+                ArcXLabel.text = curve?.ArcLenghtPoints[pointIndex].x.ToString(floatFormat);
+                ArcYLabel.text = curve?.ArcLenghtPoints[pointIndex].y.ToString(floatFormat);
+                ArcZLabel.text = curve?.ArcLenghtPoints[pointIndex].z.ToString(floatFormat);    
             }
         }
 
@@ -323,23 +323,33 @@ namespace UI
         
             var pointIndex = view.CurrentPointIndex;
 
-            if (pointIndex > curve.points.Count) return;
-        
+            if (pointIndex < 0) return;
+            if (pointIndex >= curve.Points.Count) return;
+
+            //Debug.Log("pointIndex: " + pointIndex);
+            
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                // Set info plot travel objects
-                Vector2 tdPosVec = curve.timeDistancePoints[pointIndex];
-                Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
-                TimeDistanceTravelObject.transform.position =
-                    _initTimeDistTravelPos + tdVec;    
+                if (!(TimeDistanceTravelObject is null))
+                {
+                    // Set info plot travel objects
+                    Vector2 tdPosVec = curve.TimeDistancePoints[pointIndex];
+                    Vector3 tdVec = new Vector3(tdPosVec.x, tdPosVec.y, 0f);
+                
+                    TimeDistanceTravelObject.transform.position =
+                        _initTimeDistTravelPos + tdVec;    
+                }   
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                Vector2 tvPosVec = curve.timeVelocityPoints[pointIndex];
-                Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
-                TimeVelocityTravelObject.transform.position =
-                    _initTimeVelocityTravelPos + tvVec;    
+                if (!(TimeVelocityTravelObject is null))
+                {
+                    Vector2 tvPosVec = curve.TimeVelocityPoints[pointIndex];
+                    Vector3 tvVec = new Vector3(tvPosVec.x, tvPosVec.y, 0f);
+                    TimeVelocityTravelObject.transform.position =
+                        _initTimeVelocityTravelPos + tvVec;    
+                }
             }
 
         }
@@ -352,30 +362,36 @@ namespace UI
         
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeDistancePlot)
             {
-                TimeDistLR.positionCount = curve.timeDistancePoints.Count;
-                for (int i = 0; i < curve.timeDistancePoints.Count; i++)
+                if (!(TimeDistLR is null))
                 {
-                    Vector2 p = curve.timeDistancePoints[i];
-                    Vector3 newPos = TimeDistanceStart.transform.position;            
-                    newPos.x += p.x;
-                    newPos.y += p.y;
-                    newPos.z -= Random.Range(0f, 0.005f); // 0.0125f;
-                    TimeDistLR.SetPosition(i, newPos);
-                }    
+                    TimeDistLR.positionCount = curve.TimeDistancePoints.Count;
+                    for (int i = 0; i < curve.TimeDistancePoints.Count; i++)
+                    {
+                        Vector2 p = curve.TimeDistancePoints[i];
+                        Vector3 newPos = TimeDistanceStart.transform.position;            
+                        newPos.x += p.x;
+                        newPos.y += p.y;
+                        newPos.z -= Random.Range(0f, 0.005f); // 0.0125f;
+                        TimeDistLR.SetPosition(i, newPos);
+                    }    
+                }
             }
 
             if (GlobalDataModel.InitFile.ApplicationSettings.InfoSettings.ShowTimeVelocityPlot)
             {
-                TimeVelocityLR.positionCount = curve.timeVelocityPoints.Count;
-                for (int i = 0; i < curve.timeVelocityPoints.Count; i++)
+                if (!(TimeVelocityLR is null))
                 {
-                    Vector2 p = curve.timeVelocityPoints[i];
-                    Vector3 newPos = TimeVelocityStart.transform.position;
-                    newPos.x += p.x;
-                    newPos.y += p.y;
-                    newPos.z -= Random.Range(0f, 0.005f);
-                    TimeVelocityLR.SetPosition(i, newPos);
-                }    
+                    TimeVelocityLR.positionCount = curve.TimeVelocityPoints.Count;
+                    for (int i = 0; i < curve.TimeVelocityPoints.Count; i++)
+                    {
+                        Vector2 p = curve.TimeVelocityPoints[i];
+                        Vector3 newPos = TimeVelocityStart.transform.position;
+                        newPos.x += p.x;
+                        newPos.y += p.y;
+                        newPos.z -= Random.Range(0f, 0.005f);
+                        TimeVelocityLR.SetPosition(i, newPos);
+                    }    
+                }   
             }
 
         }

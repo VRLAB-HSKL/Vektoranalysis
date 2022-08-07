@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using log4net.Appender;
 using Model;
 using Newtonsoft.Json;
 
@@ -229,7 +228,7 @@ namespace Import.InitFile
     public class CurveSettings
     {
         /// <summary>
-        /// Settings related to the ingame display of the curve
+        /// Settings related to the in-game display of the curve
         /// </summary>
         [JsonProperty("display")]
         public DisplaySettings DisplaySettings { get; set; }
@@ -237,30 +236,50 @@ namespace Import.InitFile
     
     
     /// <summary>
-    /// Node class for settings related to the ingame display of curves
+    /// Node class for settings related to the in-game display of curves
     /// </summary>
     [Serializable]
     public class DisplaySettings
     {
+        /// <summary>
+        /// View on the curve
+        /// - view
+        /// - run
+        /// - arc
+        /// </summary>
         [JsonProperty("view")]
         public string View { get; set; }
         
+        /// <summary>
+        /// Curve line color
+        /// </summary>
         [JsonProperty("lineColor")]
         public RGBColor LineColor { get; set; }
         
+        /// <summary>
+        /// Model for object representing run travel object
+        /// </summary>
         [JsonProperty("travelObj")]
         public string TravelObjStr { get; set; }
         
+        /// <summary>
+        /// Color of object representing run travel object
+        /// </summary>
         [JsonProperty("travelObjColor")]
         public RGBColor TravelObjColor { get; set; }
         
+        /// <summary>
+        /// Model for object representing arc travel object
+        /// </summary>
         [JsonProperty("arcTravelObj")]
         public string ArcTravelObjStr { get; set; }
         
+        /// <summary>
+        /// Color of object representing arc travel object
+        /// </summary>
         [JsonProperty("arcTravelObjColor")]
         public RGBColor ArcTravelObjColor { get; set; }
     }
-    
     
     #endregion DisplayCurves
     
@@ -272,121 +291,321 @@ namespace Import.InitFile
     [Serializable]
     public class Exercise
     {
+        /// <summary>
+        /// Unique identifier
+        /// </summary>
         [JsonProperty("identifier")]
         public int Id { get; set; }
         
+        /// <summary>
+        /// Exercise title
+        /// </summary>
         [JsonProperty("title")]
         public string Title { get; set; }
         
+        /// <summary>
+        /// Type of exercise
+        /// - select3
+        /// </summary>
         [JsonProperty("exercise_type")]
         public string Type { get; set; }
         
+        /// <summary>
+        /// Exercise description
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
-        
-        [JsonProperty("sub_exercises")]
-        public List<SubExercise> SubExercises { get; set; }
+
+        ///// <summary>
+        ///// Collection of sub-exercises
+        ///// </summary>
+        //[JsonProperty("sub_exercises")]
+        //public List<SubExercise> SubExercises { get; set; }
+
+        /// <summary>
+        /// Collection of select3 exercises for this exercise
+        /// </summary>
+        [JsonProperty("select_three_exercises")]
+        public List<SelectThree> selectThreeExercises { get; set; }
+
+        /// <summary>
+        /// Collection of select3 exercises for this exercise
+        /// </summary>
+        [JsonProperty("tangent_normal_exercises")]
+        public List<TangentNormal> tangentNormalExercises { get; set; }
     }
-    
+
     /// <summary>
-    /// Node class representing a sub-exercise of a given exercise
+    /// Node class representing the type of exercise "Select 3"
     /// </summary>
     [Serializable]
-    public class SubExercise
+    public class SelectThree
     {
+        /// <summary>
+        /// Sub-exercise title
+        /// </summary>
         [JsonProperty("title")]
         public string Title { get; set; }
-        
+
+        /// <summary>
+        /// Sub-exercise description
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
-        
+
+        /// <summary>
+        /// Correct answer of sub-exercise
+        /// </summary>
         [JsonProperty("correctAnswer")]
         public int CorrectAnswer { get; set; }
-        
+
+        /// <summary>
+        /// Curve designated to the left pillar
+        /// </summary>
         [JsonProperty("leftCurve")]
         public Curve LeftCurve { get; set; }
-        
+
+        /// <summary>
+        /// Curve designated to the middle pillar
+        /// </summary>
         [JsonProperty("middleCurve")]
         public Curve MiddleCurve { get; set; }
-        
+
+        /// <summary>
+        /// Curve designated to the right pillar
+        /// </summary>
         [JsonProperty("rightCurve")]
         public Curve RightCurve { get; set; }
     }
-    
-    
+
+    /// <summary>
+    /// Node class representing the type of exercise "Tangent Normal"
+    /// </summary>
+    [Serializable]
+    public class TangentNormal
+    {
+        /// <summary>
+        /// Sub-exercise title
+        /// </summary>
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Sub-exercise description
+        /// </summary>
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Curve data for tangent normal drawing curve
+        /// </summary>
+        [JsonProperty("curve")]
+        public Curve TangentNormalCurve { get; set; }
+
+        /// <summary>
+        /// Index collection of points on the tangent normal drawing curve
+        /// </summary>
+        [JsonProperty("highlight_points")]
+        public List<int> HighlightPoints { get; set; }
+
+        /// <summary>
+        /// Collection of correct tangents as float arrays (float[2])
+        /// </summary>
+        [JsonProperty("correct_tangents")]
+        public List<float[]> CorrectTangents { get; set; }
+
+        /// <summary>
+        /// Collection of correct normals as float arrays (float[2])
+        /// </summary>
+        [JsonProperty("correct_normals")]
+        public List<float[]> CorrectNormals { get; set; }
+    }
+
+    ///// <summary>
+    ///// Node class representing a sub-exercise of a given exercise
+    ///// </summary>
+    //[Serializable]
+    //public class SubExercise
+    //{
+    //    /// <summary>
+    //    /// Sub-exercise title
+    //    /// </summary>
+    //    [JsonProperty("title")]
+    //    public string Title { get; set; }
+
+    //    /// <summary>
+    //    /// Sub-exercise description
+    //    /// </summary>
+    //    [JsonProperty("description")]
+    //    public string Description { get; set; }
+
+    //    /// <summary>
+    //    /// Correct answer of sub-exercise
+    //    /// </summary>
+    //    [JsonProperty("correctAnswer")]
+    //    public int CorrectAnswer { get; set; }
+
+    //    /// <summary>
+    //    /// Curve designated to the left pillar
+    //    /// </summary>
+    //    [JsonProperty("leftCurve")]
+    //    public Curve LeftCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Curve designated to the middle pillar
+    //    /// </summary>
+    //    [JsonProperty("middleCurve")]
+    //    public Curve MiddleCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Curve designated to the right pillar
+    //    /// </summary>
+    //    [JsonProperty("rightCurve")]
+    //    public Curve RightCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Curve data for tangent normal drawing curve
+    //    /// </summary>
+    //    [JsonProperty("curve")]
+    //    public Curve TangentNormalCurve { get; set; }
+
+    //    /// <summary>
+    //    /// Index collection of points on the tangent normal drawing curve
+    //    /// </summary>
+    //    [JsonProperty("highlight_points")]
+    //    public List<int> HighlightPoints { get; set; }
+
+    //    /// <summary>
+    //    /// Collection of correct tangents as float arrays (float[2])
+    //    /// </summary>
+    //    [JsonProperty("correct_tangents")]
+    //    public List<float[]> CorrectTangents { get; set; }
+
+    //    /// <summary>
+    //    /// Collection of correct normals as float arrays (float[2])
+    //    /// </summary>
+    //    [JsonProperty("correct_normals")]
+    //    public List<float[]> CorrectNormals { get; set; }
+    //}
+
     #endregion
 
     #region ApplicationSettings
-    
+
     /// <summary>
     /// Node class for general, curve-independent application settings
     /// </summary>
     [Serializable]
     public class ApplicationSettings
     {
+        /// <summary>
+        /// Browser wall settings
+        /// </summary>
         [JsonProperty("browser")]
         public BrowserSettings BrowserSettings { get; set; }
         
+        /// <summary>
+        /// Information wall settings
+        /// </summary>
         [JsonProperty("info")]
         public InfoSettings InfoSettings { get; set; }
         
+        /// <summary>
+        /// Curve selection wall settings
+        /// </summary>
         [JsonProperty("selectMenu")]
         public SelectMenuSettings SelectMenuSettings { get; set; }
         
+        /// <summary>
+        /// In-game table settings
+        /// </summary>
         [JsonProperty("table")]
         public TableSettings TableSettings { get; set; }
     }
     
     /// <summary>
-    /// Node class for settings related to the ingame browser application
+    /// Node class for settings related to the in-game browser application
     /// </summary>
     [Serializable]
     public class BrowserSettings
     {
+        /// <summary>
+        /// Signals whether wall is activated in the scene
+        /// </summary>
         [JsonProperty("activated")]
         public bool Activated { get; set; }
         
+        /// <summary>
+        /// Initial url displayed by the browser wall
+        /// </summary>
         [JsonProperty("url")]
         public string Url { get; set; }
     }
     
     /// <summary>
-    /// Node class for settings related to the ingame information wall
+    /// Node class for settings related to the in-game information wall
     /// </summary>
     [Serializable]
     public class InfoSettings
     {
+        /// <summary>
+        /// Signals whether wall is activated in scene
+        /// </summary>
         [JsonProperty("activated")]
         public bool Activated { get; set; }
         
+        /// <summary>
+        /// Signals whether basic curve information is shown
+        /// </summary>
         [JsonProperty("showBasicInfo")]
         public bool ShowBasicInfo { get; set; }
         
+        /// <summary>
+        /// Signals whether point information is shown
+        /// </summary>
         [JsonProperty("showPointData")]
         public bool ShowPointData { get; set; }
         
+        /// <summary>
+        /// Signals whether arc length parametrization information is shown
+        /// </summary>
         [JsonProperty("showArcLengthData")]
         public bool ShowArcLengthData { get; set; }
         
+        /// <summary>
+        /// Signals whether time distance plot is displayed
+        /// </summary>
         [JsonProperty("showTimeDistancePlot")]
         public bool ShowTimeDistancePlot { get; set; }
         
+        /// <summary>
+        /// Signals whether time velocity plot is displayed
+        /// </summary>
         [JsonProperty("showTimeVelocityPlot")]
         public bool ShowTimeVelocityPlot { get; set; }
     }
     
     /// <summary>
-    /// Node class for settings related to the ingame selection menu
+    /// Node class for settings related to the in-game selection menu
     /// </summary>
     [Serializable]
     public class SelectMenuSettings
     {
+        /// <summary>
+        /// Signals whether wall is activated in scene
+        /// </summary>
         [JsonProperty("activated")]
         public bool Activated { get; set; }
         
+        /// <summary>
+        /// Signals whether display curves can be selected in menu
+        /// </summary>
         [JsonProperty("showDisplayCurves")]
         public bool ShowDisplayCurves { get; set; }
         
+        /// <summary>
+        /// Signals whether exercises can be selected in menu
+        /// </summary>
         [JsonProperty("showExercises")]
         public bool ShowExercises { get; set; }
     }
@@ -398,24 +617,51 @@ namespace Import.InitFile
     [Serializable]
     public class TableSettings
     {
+        /// <summary>
+        /// Signals whether table is activated in the scene
+        /// </summary>
         [JsonProperty("activated")]
         public bool Activated { get; set; }
         
+        /// <summary>
+        /// Signals whether navigation buttons are shown
+        /// </summary>
         [JsonProperty("showNavButtons")]
         public bool ShowNavButtons { get; set; }
         
+        /// <summary>
+        /// Signals whether the run button is shown
+        /// </summary>
         [JsonProperty("showRunButton")]
         public bool ShowRunButton { get; set; }
         
+        /// <summary>
+        /// Signals whether view buttons are shown
+        /// </summary>
         [JsonProperty("showViewButtons")]
         public bool ShowViewButtons { get; set; }
-        
+
+        /// <summary>
+        /// Signals whether quiz button is shown
+        /// </summary>
+        [JsonProperty("showQuizButton")]
+        public bool ShowQuizButton { get; set; }
+
+        /// <summary>
+        /// Signals whether slider is shown
+        /// </summary>
         [JsonProperty("showSlider")]
         public bool ShowSlider { get; set; }
         
+        /// <summary>
+        /// Signals whether parameter range on table curve can be modified
+        /// </summary>
         [JsonProperty("allowRangeModify")]
         public bool AllowRangeModify { get; set; }
         
+        /// <summary>
+        /// Signals whether bookmarks can be placed on the table curve parameter range
+        /// </summary>
         [JsonProperty("allowBookmarks")]
         public bool AllowBookmarks { get; set; }
     }

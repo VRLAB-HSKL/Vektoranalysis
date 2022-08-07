@@ -8,9 +8,23 @@ namespace UI.States
     /// </summary>
     public class ExerciseCurvesState : AbstractCurveSelectionState
     {
-        public ExerciseCurvesState(
-            GameObject menuContent, GameObject prefab, WorldStateController world) : base(menuContent, prefab, world) { }
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="menuContent">Menu content</param>
+        /// <param name="prefab">Prefab for instancing</param>
+        /// <param name="world">World instance</param>
+        public ExerciseCurvesState(GameObject menuContent, GameObject prefab, WorldStateController world) 
+            : base(menuContent, prefab, world) { }
 
+        #endregion Constructors
+        
+        #region Public functions
+        
         public override void OnStateUpdate() {}
+        
+        #endregion Public functions
     }
 }

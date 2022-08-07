@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Controller.Curve;
 using Controller.Exercise;
 using Import;
@@ -8,7 +7,6 @@ using Import.InitFile;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using TMPro;
 using UnityEngine;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
@@ -93,7 +91,6 @@ namespace Model
         /// </summary>
         public static int CurrentCurveIndex = 0;
         
-        
         /// <summary>
         /// Imported exercise curves
         /// </summary>
@@ -102,7 +99,7 @@ namespace Model
         /// <summary>
         /// Collection of imported selection exercises
         /// </summary>
-        public static readonly List<SelectionExercise> SelectionExercises = new List<SelectionExercise>();
+        public static readonly List<AbstractExercise> SelectionExercises = new List<AbstractExercise>();
 
         /// <summary>
         /// Index used to access the current selection exercise. This value is modified to switch between main
@@ -149,12 +146,18 @@ namespace Model
         
         #endregion Private members
         
+        #region Public functions
+        
         public static void InitializeData()
         {
             ParseIniFile();
             Log.Debug("Global Data initialized");
         }
+        
+        #endregion Public functions
     
+        #region Private functions
+        
         /// <summary>
         /// Setup configuration of the log4net logging framework
         /// </summary>
@@ -169,8 +172,14 @@ namespace Model
 
         private static void ParseIniFile()
         {
-            var json = Resources.Load(InitFileResourcePath) as TextAsset; //Resources.Load(InitFileResourcePath, typeof(TextAsset) ) as TextAsset;
-        
+            var json = Resources.Load(InitFileResourcePath, typeof(TextAsset) ) as TextAsset;
+
+            if (json != null)
+            {
+                // var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                // sphere.transform.position = Vector3.zero;
+            }
+            
             var errors = new List<string>();
             ITraceWriter tr = new MemoryTraceWriter();
             var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
@@ -186,7 +195,7 @@ namespace Model
                 }
             
             );
-            
+        
             InitFile = jsr;
         
             for (var i = 0; i < jsr.DisplayCurves.Count; i++)
@@ -195,6 +204,9 @@ namespace Model
                 var pd = DataImport.CreatePointDatasetFromCurve(curve);
                 DisplayCurveDatasets.Add(pd);
             }
+
+            if (jsr.Exercises.Count == 0) jsr.ApplicationSettings.TableSettings.ShowQuizButton = false;
+            else jsr.ApplicationSettings.TableSettings.ShowQuizButton = true;
 
             for (var i = 0; i < jsr.Exercises.Count; i++)
             {
@@ -206,13 +218,13 @@ namespace Model
                 // Select3 exercise
                 if (ex.Type.Equals("select3"))
                 {
-                    var subExercises = new List<ExercisePointDataset>();
-                    var correctAnswers = new List<int>();
-                    for (var j = 0; j < ex.SubExercises.Count; j++)
+                    var subExercises = new List<SelectionExerciseDataset>();
+                    var correctAnswers = new List<SelectionExerciseAnswer>();
+                    for (var j = 0; j < ex.selectThreeExercises.Count; j++)
                     {
-                        var subExercise = ex.SubExercises[j];
+                        var subExercise = ex.selectThreeExercises[j];
                         subExercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
-                        correctAnswers.Add(subExercise.CorrectAnswer);
+                        correctAnswers.Add(new SelectionExerciseAnswer(subExercise.CorrectAnswer));
                     }
                 
                     var selExercise = new SelectionExercise(
@@ -225,12 +237,44 @@ namespace Model
                     SelectionExercises.Add(selExercise);
                 }
 
+                // tanNormSelect exercise
+                if (ex.Type.Equals("tanNormSelect"))
+                {
+                    var subExerciseData = new List<TangentNormalExerciseDataset>();
+                    var correctAnswers = new List<TangentNormalExerciseAnswer>();
+
+                    for (var j = 0; j < ex.tangentNormalExercises.Count; j++)
+                    {
+                        var subExercise = ex.tangentNormalExercises[j];
+                        subExerciseData.Add(DataImport.CreateTangentNormalDataFromSubExercise(subExercise));
+                        correctAnswers.Add(new TangentNormalExerciseAnswer(subExercise.CorrectTangents, subExercise.CorrectNormals));
+                    }
+
+                    var tanNormExercise = new TangentNormalExercise(
+                        ex.Title,
+                        ex.Description,
+                        subExerciseData,
+                        correctAnswers
+                    );
+
+                    SelectionExercises.Add(tanNormExercise);
+                }
+
                 ExerciseCurveDatasets.Add(new CurveInformationDataset()
                 {
                     Name = ex.Title,
                     DisplayString = ex.Title,
                 });
             }
+
+            //foreach (var ex in SelectionExercises)
+            //{
+            //    Debug.Log("exercise: " + ex.Title);
+            //    foreach (var sub in ex.Datasets)
+            //        Debug.Log("sub ex: " + sub.HeaderText);
+            //}
         }
+        
+        #endregion Private functions
     }
 }

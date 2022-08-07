@@ -1,4 +1,3 @@
-using UnityEngine;
 using VRKL.MBU;
 
 namespace UI.States
@@ -8,6 +7,10 @@ namespace UI.States
     /// </summary>
     public abstract class StateContext
     {
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="s">Initial state</param>
         protected StateContext(State s)
         {
             //Debug.Log(s.ToString());
@@ -15,23 +18,33 @@ namespace UI.States
     }
 
     /// <summary>
-    /// State context related to the ingame curve selection menu
+    /// State context related to the in-game curve selection menu
     /// </summary>
     public class CurveSelectionStateContext : StateContext
     {
+        /// <summary>
+        /// Private helper variable for <see cref="State"/>
+        /// </summary>
         private AbstractCurveSelectionState _state;
+        
+        /// <summary>
+        /// Current state of the FSM
+        /// </summary>
         public AbstractCurveSelectionState State
         {
             get => _state;
             set
             {
                 _state?.OnStateQuit();
-
                 value.OnStateEntered();
                 _state = value;
             }
         }
 
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="s">Initial state</param>
         public CurveSelectionStateContext(State s) : base(s) {}
     }
 }

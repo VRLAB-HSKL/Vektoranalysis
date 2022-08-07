@@ -7,8 +7,6 @@ namespace Table
     /// This class handles Logic of the Up button 
     /// Source: ImmersiveVolume Project
     /// </summary>
-    /// 
-
     public class MoveTableUpButtonBehaviour : AbstractButtonBehaviour
         //MonoBehaviour, IColliderEventPressEnterHandler
         //, IColliderEventPressExitHandler

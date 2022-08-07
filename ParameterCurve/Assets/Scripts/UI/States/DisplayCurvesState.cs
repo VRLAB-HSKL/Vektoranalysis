@@ -8,44 +8,19 @@ namespace UI.States
     /// </summary>
     public class DisplayCurvesState : AbstractCurveSelectionState
     {
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="content">GUI content</param>
+        /// <param name="prefab">Prefab for instancing</param>
+        /// <param name="world">World instance</param>
         public DisplayCurvesState(GameObject content, GameObject prefab, WorldStateController world) 
-            : base(content, prefab, world)
-        {
+            : base(content, prefab, world) {}
         
-        }
-
-        //public override void OnStateEntered()
-        //{
-        //    //GameObject[] children = new GameObject[CurveMenuContent.transform.childCount];
-
-        //    //// Create buttons        
-        //    //for (int i = 0; i < Dataset.Count; i++)
-        //    //{
-        //    //    PointDataset pds = Dataset[i];
-        //    //    GameObject tmpButton = MonoBehaviour.Instantiate(CurveMenuButtonPrefab, CurveMenuContent.transform);
-
-        //    //    tmpButton.name = pds.Name + "Button";
-
-        //    //    // ToDo: Set button curve icon
-        //    //    RawImage img = tmpButton.GetComponentInChildren<RawImage>();
-        //    //    if (pds.MenuButtonImage != null)
-        //    //    {
-        //    //        img.texture = pds.MenuButtonImage;
-        //    //    }
-
-        //    //    TextMeshProUGUI label = tmpButton.GetComponentInChildren<TextMeshProUGUI>();
-        //    //    label.text = pds.DisplayString;
-
-        //    //    Button b = tmpButton.GetComponent<Button>();
-        //    //    b.onClick.AddListener(() => SwitchToSpecificDataset(pds.Name));
-        //    //}
-        //}
-
-    
-
-        public override void OnStateUpdate()
-        {
+        #endregion Constructors
         
-        }
+        public override void OnStateUpdate() { }
     }
 }

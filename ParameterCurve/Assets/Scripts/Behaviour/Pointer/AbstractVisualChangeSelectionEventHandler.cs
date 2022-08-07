@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using Behaviour.Pointer;
-using Controller;
 using HTC.UnityPlugin.Vive;
 using Model;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Views;
 
 namespace Behaviour
 {
@@ -22,12 +20,28 @@ namespace Behaviour
     {
         #region Public members
         
+        /// <summary>
+        /// Target root game object
+        /// </summary>
         public GameObject visualTarget;
+        
+        /// <summary>
+        /// Signals if renderer objects of children objects should be visually updated
+        /// </summary>
         public bool updateChildrenRenderers;
+        
+        /// <summary>
+        /// Signals whether the game visual state can be toggled on and off, or is simply
+        /// a single visual event that triggers before returning to the original visual state 
+        /// </summary>
         public bool isToggle;
 
         #endregion Public members
 
+        /// <summary>
+        /// Local value that corresponds to the value that can be selected
+        /// using this pillar
+        /// </summary>
         public int selectionChoice;
 
         /// <summary>
@@ -36,7 +50,6 @@ namespace Behaviour
         protected bool IsSelected =>
             selectionChoice ==
             GlobalDataModel.ExerciseCurveController?.SelectionIndices[GlobalDataModel.CurrentSubExerciseIndex];
-
 
         /// <summary>
         /// Default material used for the initial, unselected state
@@ -88,7 +101,7 @@ namespace Behaviour
         /// <summary>
         /// Updates the visual state of the target game object if a click event was registered
         /// </summary>
-        /// <param name="eventData"></param>
+        /// <param name="eventData">Event data</param>
         public new void OnPointerClick(PointerEventData eventData)
         {
             // On button click with a VR controller
@@ -106,9 +119,7 @@ namespace Behaviour
                     {
                         m.material = newMat;
                     }
-
-                    //_isSelected = !_isSelected;
-
+                    
                     GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
 
                     HandlePointerClick(eventData);        
@@ -133,7 +144,6 @@ namespace Behaviour
             else if (eventData  is {button: PointerEventData.InputButton.Left})
             {
                 // Standalone button triggered!
-            
                 if (isToggle)
                 {
                     var newMat = IsSelected ? hoverMat : selectionMat;
@@ -142,8 +152,6 @@ namespace Behaviour
                     {
                         m.material = newMat;
                     }
-            
-                    //_isSelected = !_isSelected;    
                     
                     GlobalDataModel.ExerciseCurveController.SetSelection(IsSelected ? -1 : selectionChoice);
                     
@@ -166,15 +174,15 @@ namespace Behaviour
             }
         }
 
+        /// <summary>
+        /// Updates the visual state of the target game object when a pointer enters the clickable area
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         public new void OnPointerEnter(PointerEventData eventData)
         {
             if (Hovers.Add(eventData) && Hovers.Count == 1)
             {
                 if (isToggle && IsSelected) return;
-                
-                // Debug.Log("IsToggle: " + isToggle);
-                // Debug.Log("IsSelected: " + IsSelected);
-                
                 
                 foreach (var m in MeshRenderers)
                 {
@@ -185,6 +193,10 @@ namespace Behaviour
             }
         }
 
+        /// <summary>
+        /// Updates the visual state of the target game object when a pointer leaves the clickable area
+        /// </summary>
+        /// <param name="eventData">Event data</param>
         public new void OnPointerExit(PointerEventData eventData)
         {
             if (Hovers.Remove(eventData) && Hovers.Count == 0)

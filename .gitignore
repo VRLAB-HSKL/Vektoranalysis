@@ -30,7 +30,16 @@
 **/Assets/MBU/**/*
 **/Assets/MBU/
 **/Assets/MBU.meta
+
+# MBVR package ignorieren
+**/Assets/MBVR/**/*
+**/Assets/MBVR/
+**/Assets/MBVR.meta
+
 **/Assets/Plugins
+
+# Texture map resources in ScalarField
+**/texture_maps/*
 
 # FirstPerson von MVR und von Unity ignorieren
 **/Assets/MiddleVR_First*/*

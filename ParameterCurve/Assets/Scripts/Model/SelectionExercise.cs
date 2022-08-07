@@ -1,50 +1,140 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-//public enum SelectionChoice { None = 0, LeftPillar = 1, MiddlePillar = 2, RightPillar = 3 }
-
-public class SelectionExercise
+namespace Model
 {
-    public string Title = string.Empty;
-    public string Description = string.Empty;
-    public int NumberOfSubExercises;
-
-    public List<ExercisePointDataset> Datasets;
-    
-    public List<int> CorrectAnswers;
-    public List<int> ChosenAnswers { get; set; }
-
-    public SelectionExercise(string title, string description, List<ExercisePointDataset> exercisePointDatasets , List<int> correctAnswers)
+    /// <summary>
+    /// Exercise based on selection execution
+    /// </summary>
+    public class SelectionExercise : AbstractExercise
     {
-        Title = title;
-        Description = description;
-        NumberOfSubExercises = correctAnswers.Count;
+        #region Public members
+        
 
-        Datasets = exercisePointDatasets;
-        CorrectAnswers = correctAnswers;
-        ChosenAnswers = new List<int>();
-        for(int i = 0; i < NumberOfSubExercises; i++)
+        #endregion Public members
+
+        #region Constructors
+
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="title">Title of exercise</param>
+        /// <param name="description">Description of exercise</param>
+        /// <param name="exercisePointDatasets">Datasets of sub-exercises</param>
+        /// <param name="correctAnswers">Correct answers of sub-exercises</param>
+        public SelectionExercise(
+            string title, string description, List<SelectionExerciseDataset> exercisePointDatasets, 
+            List<SelectionExerciseAnswer> correctAnswers) : base(title, description)
         {
-            ChosenAnswers.Add(-1);
-        }        
+            NumberOfSubExercises = correctAnswers.Count;
+
+            Datasets = new List<AbstractExerciseDataset>();
+            foreach (var exp in exercisePointDatasets)
+                Datasets.Add(exp);
+            
+            CorrectAnswers = new List<AbstractExerciseAnswer>();
+            foreach (var ca in correctAnswers)
+                CorrectAnswers.Add(ca);
+            
+            ChosenAnswers = new List<AbstractExerciseAnswer>();
+            PreviousAnswers = new List<AbstractExerciseAnswer>();
+            for(var i = 0; i < NumberOfSubExercises; i++)
+            {
+                ChosenAnswers.Add(new SelectionExerciseAnswer(-1));
+                PreviousAnswers.Add(new SelectionExerciseAnswer(-1));
+            }        
+        }
+        
+        #endregion Constructors
+
     }
 
-}
-
-public class ExercisePointDataset
-{
-    public string HeaderText { get; set; }
-    public CurveInformationDataset LeftDataset { get; set; }
-    public CurveInformationDataset MiddleDataset { get; set; }
-    public CurveInformationDataset RightDataset { get; set; }
-
-    public ExercisePointDataset(string headerText, CurveInformationDataset leftDataset, CurveInformationDataset middleDataset, CurveInformationDataset rightDataset)
+    /// <summary>
+    /// Dataset model class for sub-exercise data
+    /// </summary>
+    public class SelectionExerciseDataset : AbstractExerciseDataset
     {
-        HeaderText = headerText;
-        LeftDataset = leftDataset;
-        MiddleDataset = middleDataset;
-        RightDataset = rightDataset;
+        #region Public members
+        
+        /// <summary>
+        /// Dataset of the left pillar
+        /// </summary>
+        public CurveInformationDataset LeftDataset { get; set; }
+        
+        /// <summary>
+        /// Dataset of the middle pillar
+        /// </summary>
+        public CurveInformationDataset MiddleDataset { get; set; }
+        
+        /// <summary>
+        /// Dataset of the right pillar
+        /// </summary>
+        public CurveInformationDataset RightDataset { get; set; }
+
+        #endregion Public members
+        
+        #region Constructors
+        
+        /// <summary>
+        /// Argument constructor
+        /// </summary>
+        /// <param name="headerText">Header text</param>
+        /// <param name="leftDataset">Left pillar dataset</param>
+        /// <param name="middleDataset">Middle pillar dataset</param>
+        /// <param name="rightDataset">Right pillar dataset</param>
+        public SelectionExerciseDataset(string headerText, CurveInformationDataset leftDataset, 
+            CurveInformationDataset middleDataset, CurveInformationDataset rightDataset) : base(headerText)
+        {
+            HeaderText = headerText;
+            LeftDataset = leftDataset;
+            MiddleDataset = middleDataset;
+            RightDataset = rightDataset;
+        }
+        
+        #endregion Constructors
+
+        public override List<CurveInformationDataset> GetCurveData()
+        {
+            return new List<CurveInformationDataset>()
+            {
+                LeftDataset,
+                MiddleDataset,
+                RightDataset
+            };
+        }
+    }
+
+    public class SelectionExerciseAnswer : AbstractExerciseAnswer
+    {
+        public int PillarIndex = -1;
+
+        
+        public SelectionExerciseAnswer(int pillarIndex)
+        {
+            PillarIndex = pillarIndex;
+        }
+
+
+        public override List<float> GetValues()
+        {
+            return new List<float>
+            {
+                PillarIndex
+            };
+        }
+
+        public override void SetValues(List<float> values)
+        {
+            if (values.Any())
+            {
+                PillarIndex = (int) values[0];
+            }
+        }
+
+        public override bool IsValid()
+        {
+            return PillarIndex != -1;
+        }
     }
 }
-
