@@ -188,7 +188,8 @@ namespace Model
                     Error = delegate(object sender, ErrorEventArgs args)
                     {
                         errors.Add(args.ErrorContext.Error.Message);
-                        Debug.Log("ErrorOccuredJSON");
+                        Debug.Log(args.CurrentObject);
+                        Debug.Log(args.ErrorContext.Path);
                         args.ErrorContext.Handled = true;
                     },
                     TraceWriter = tr

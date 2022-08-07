@@ -365,8 +365,6 @@ MonoBehaviour:
   - {fileID: 7979324662132630566}
   - {fileID: -6264277406470813881}
   - {fileID: 8859777607617770282}
-  - {fileID: 6023201290802603020}
-  - {fileID: 5359295642499132899}
   m_renderMode: 0
   m_depthSubmissionMode: 0
 --- !u!114 &2527095959936930665
