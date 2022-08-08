@@ -23099,6 +23099,7 @@ MonoBehaviour:
   tableParent: {fileID: 1194414362}
   tableRootElement: {fileID: 1559421796}
   tableDisplayLr: {fileID: 1383344264}
+  tableDisplayMesh: {fileID: 822868469}
   tableTravelObject: {fileID: 600575872}
   tableArcLengthTravelObject: {fileID: 1767141613}
   selObjects: {fileID: 1319208613}

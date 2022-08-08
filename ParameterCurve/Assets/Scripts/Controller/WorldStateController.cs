@@ -70,6 +70,8 @@ namespace Controller
         /// Line renderer displaying the table curve
         /// </summary>
         public LineRenderer tableDisplayLr;
+
+        public TubeMesh tableDisplayMesh;
         
         /// <summary>
         /// Game object transform used to visualize runs along the table curve display
@@ -250,6 +252,8 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
+            
+            tableDisplayMesh.GenerateFieldMesh();
         }
 
         /// <summary>
@@ -367,6 +371,8 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
+            
+            tableDisplayMesh.GenerateFieldMesh();
         }
 
         /// <summary>
@@ -424,6 +430,8 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
+            
+            tableDisplayMesh.GenerateFieldMesh();
         }
 
         /// <summary>
