@@ -10,7 +10,7 @@ public class TubeMesh : MonoBehaviour
 {
     public Material TubeMat;
     
-    private float radius = 0.125f;
+    private float radius = 0.1f;
     private int numberOfCirclePoints = 8;
 
     private void Start()
@@ -29,28 +29,58 @@ public class TubeMesh : MonoBehaviour
         };
 
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-
         var curvePoints = curve.WorldPoints; 
         var tubePoints = new List<Vector3>();
-
-        var step = 360f / numberOfCirclePoints;
-        for (var i = 0; i < curvePoints.Count; i++)
+        var degree_step_size = 360f / numberOfCirclePoints;
+        var upperBound = curvePoints.Count;
+        
+        for (var i = 0; i < upperBound; i++)
         {
             var centerPoint = curvePoints[i];
             var normal = curve.FresnetApparatuses[i].Normal;
+            var tangent = curve.FresnetApparatuses[i].Tangent;
 
+
+            // if (i == 121)
+            // {
+            //     // SpawnCube(transform.position + centerPoint, Color.red,
+            //     //     new Vector3(0.05f, 0.05f, 0.05f));
+            //     
+            //     Debug.Log("center: " + centerPoint + 
+            //               ", tan: " + tangent.ToString("F8") + 
+            //               ", norm: " + normal.ToString("F8"));
+            //     SpawnCube(transform.position + centerPoint, Color.black, new Vector3(0.005f, 0.005f, 0.005f),"center_" + i);
+            //     SpawnCube(
+            //         transform.position + centerPoint + normal * radius, Color.green, 
+            //         new Vector3(0.05f, 0.05f, 0.05f), "norm_" + i);
+            //     SpawnCube(transform.position + centerPoint + tangent * radius, Color.red, new Vector3(0.05f, 0.05f, 0.05f),"tan_" + i);
+            // }
+            
+            //  Calculate 3d point of normal target and change vector so the generated circle
+            //  matches the given radius
+            var cpn = normal * radius; //(centerPoint + normal).normalized * radius;
+            
+            // On first point, generate tangent pointing to next point since
+            // we don't have any velocity at the beginning, i.e. the tangent is (0,0,0)
+            if(i == 0)
+                tangent = (curvePoints[i + 1] - centerPoint).normalized * radius;
+            
             for (var j = 0; j < numberOfCirclePoints; j++)
             {
-                var rad = (j * step) * 2f * Mathf.PI / 360;
-                var x = centerPoint.x + Mathf.Cos(rad) * radius;
-                // Debug.Log("rad: " + rad + ", x: " + x);
-                var circlePoint = new Vector3(
-                    x,
-                    centerPoint.y ,
-                    centerPoint.z + Mathf.Sin(rad) * radius
-                );
+                // Generate circle point by rotating the normal vector around the tangent vector
+                // by a certain degree (step size)
+                var quatRot = Quaternion.AngleAxis(j * degree_step_size, tangent);
+                var circlePoint = centerPoint + quatRot * cpn;
+                // Debug.Log("quaternion " + j + ": " + quatRot);
 
+                
                 circlePoint *= curve.TableScalingFactor;
+                
+                // if (i == 121)
+                // {
+                //     SpawnCube(transform.position + circlePoint, Color.blue,
+                //         new Vector3(0.005f, 0.005f, 0.005f), "cp_" + j);    
+                // }
                 
                 tubePoints.Add(circlePoint);    
             }
@@ -76,9 +106,9 @@ public class TubeMesh : MonoBehaviour
                       "Triangle 03: " + tv3.ToString("F8") + "\n"
             );
             
-            SpawnCube(tv1, Color.red);
-            SpawnCube(tv2, Color.green);
-            SpawnCube(tv3, Color.blue);
+            // SpawnCube(tv1, Color.red);
+            // SpawnCube(tv2, Color.green);
+            // SpawnCube(tv3, Color.blue);
             
             beginningLidPoints.Add(tv1);
             beginningLidPoints.Add(tv2);
@@ -86,7 +116,7 @@ public class TubeMesh : MonoBehaviour
             break;
         }
         
-        tubePoints.InsertRange(0, beginningLidPoints);
+        //tubePoints.InsertRange(0, beginningLidPoints);
 
         var lastPoint = curve.WorldPoints.Last();
         var lastCircle = tubePoints.GetRange(tubePoints.Count - numberOfCirclePoints, numberOfCirclePoints);
@@ -98,7 +128,7 @@ public class TubeMesh : MonoBehaviour
             endingLidPoints.Add(lastCircle[i + 1]);
         }
         
-        tubePoints.AddRange(lastCircle);
+        //tubePoints.AddRange(lastCircle);
         
         var topology = MeshTopology.Triangles;
         var indices = new List<int>();
@@ -111,8 +141,8 @@ public class TubeMesh : MonoBehaviour
                 // indices = GenerateTriangleIndices(
                 //     tubePoints, beginningLidPoints.Count
                 // );
-                Debug.Log("lidCount: " + beginningLidPoints.Count);
-                indices = GenerateLidIndices(beginningLidPoints);
+                // Debug.Log("lidCount: " + beginningLidPoints.Count);
+                indices = GenerateTriangleIndices(tubePoints, beginningLidPoints.Count);//GenerateLidIndices(beginningLidPoints);
                 
                 // // Draw triangles twice to cover both sides
                 // var backIndices = GenerateTriangleIndices(displayVertices, true);
@@ -122,7 +152,7 @@ public class TubeMesh : MonoBehaviour
             
         }
 
-        mesh.vertices = beginningLidPoints.ToArray(); //tubePoints.ToArray();
+        mesh.vertices = tubePoints.ToArray(); //beginningLidPoints.ToArray(); //tubePoints.ToArray();
         
         //Debug.Log("Number of points: " + displayVertices.Count);
         
@@ -156,21 +186,21 @@ public class TubeMesh : MonoBehaviour
     {
         var indicesList = new List<int>();
 
-        var firstLid = tubePoints.GetRange(0, lidPointCount);
-        for (var i = 0; i < lidPointCount; i++)
-        {
-            indicesList.Add(i);
-            indicesList.Add(i + 1);
-            indicesList.Add(i + 2);
-        }
+        // var firstLid = tubePoints.GetRange(0, lidPointCount);
+        // for (var i = 0; i < lidPointCount; i++)
+        // {
+        //     indicesList.Add(i);
+        //     indicesList.Add(i + 1);
+        //     indicesList.Add(i + 2);
+        // }
         
         //var prevSet = tubePoints.GetRange(0, numberOfCirclePoints);
-        for (var i = lidPointCount; i < tubePoints.Count - lidPointCount; i += numberOfCirclePoints)
+        for (var i = 0; i < tubePoints.Count - 1; i += numberOfCirclePoints)
         {
             // if (i >= (tubePoints.Count - numberOfCirclePoints - 2)) continue;
             
-            Debug.Log("i: " + i + ", i + numCPs: " + (i+numberOfCirclePoints)
-                + ", tubePointCount: " + tubePoints.Count);
+            // Debug.Log("i: " + i + ", i + numCPs: " + (i+numberOfCirclePoints)
+            //     + ", tubePointCount: " + tubePoints.Count);
             var currSet = tubePoints.GetRange(i, numberOfCirclePoints);
 
             for (var j = 0; j < numberOfCirclePoints; ++j)
@@ -179,12 +209,12 @@ public class TubeMesh : MonoBehaviour
 
                 if (baseIndex >= (tubePoints.Count - numberOfCirclePoints - 1)) continue;
                 
-                Debug.Log(
-                    "baseIndex: " + baseIndex +
-                    ", baseIndex + 1: " + (baseIndex + 1) +
-                    ", baseIndex + Num: " + (baseIndex + numberOfCirclePoints) +
-                    ", baseIndex + Num + 1: " + (baseIndex + numberOfCirclePoints + 1)
-                );
+                // Debug.Log(
+                //     "baseIndex: " + baseIndex +
+                //     ", baseIndex + 1: " + (baseIndex + 1) +
+                //     ", baseIndex + Num: " + (baseIndex + numberOfCirclePoints) +
+                //     ", baseIndex + Num + 1: " + (baseIndex + numberOfCirclePoints + 1)
+                // );
                 
                 // upper right triangle
                 indicesList.Add(baseIndex);
@@ -293,13 +323,13 @@ public class TubeMesh : MonoBehaviour
         var lowerBound = tubePoints.Count - lidPointCount;
         var upperBound = tubePoints.Count;
 
-        var lastLid = tubePoints.GetRange(tubePoints.Count - lidPointCount, lidPointCount);
-        for (var i = lowerBound; i < upperBound; i++)
-        {
-            indicesList.Add(i);
-            indicesList.Add(i + 1);
-            indicesList.Add(i + 2);
-        }
+        // var lastLid = tubePoints.GetRange(tubePoints.Count - lidPointCount, lidPointCount);
+        // for (var i = lowerBound; i < upperBound; i++)
+        // {
+        //     indicesList.Add(i);
+        //     indicesList.Add(i + 1);
+        //     indicesList.Add(i + 2);
+        // }
         
         return indicesList;
     }
@@ -331,12 +361,13 @@ public class TubeMesh : MonoBehaviour
         
     }
 
-    private void SpawnCube(Vector3 pos, Color color)
+    private void SpawnCube(Vector3 pos, Color color, Vector3 scale, string name = "cube")
     {
         var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.parent = transform;
         cube.transform.position = pos;
-        cube.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
-        cube.GetComponent<MeshRenderer>().material.color = color;    
+        cube.transform.localScale = scale; //new Vector3(0.005f, 0.005f, 0.005f);
+        cube.GetComponent<MeshRenderer>().material.color = color;
+        cube.name = name;
     }
 }
