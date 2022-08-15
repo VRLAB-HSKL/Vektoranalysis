@@ -247,7 +247,7 @@ namespace Views.Display
                           " arc_jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
                           " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
                           " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
-
+            
             var nextPos = MapPointPos(CurrentPointIndex < curve.ArcLengthWorldPoints.Count - 1 
                 ? curve.ArcLengthWorldPoints[CurrentPointIndex + 1] 
                 : curve.ArcLengthWorldPoints[CurrentPointIndex]);

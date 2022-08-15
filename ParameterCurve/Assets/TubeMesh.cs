@@ -31,8 +31,6 @@ public class TubeMesh : MonoBehaviour
         _meshFilter = GetComponent<MeshFilter>();
         _meshRenderer = GetComponent<MeshRenderer>();
         
-        
-        
         GenerateFieldMesh();
     }
 
