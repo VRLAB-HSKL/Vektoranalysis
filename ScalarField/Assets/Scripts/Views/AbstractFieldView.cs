@@ -7,6 +7,8 @@ using Utility;
 
 namespace Views
 {
+    // ToDo: This class currently has duplicated code from script SimpleProceduralMesh.
+    // Move all of that stuff here or create static function for mesh generation
     public abstract class AbstractFieldView
     {
         private readonly ScalarFieldManager _data;
@@ -37,17 +39,38 @@ namespace Views
         public virtual void UpdateView()
         {
             //Debug.Log("Generating field mesh...");
-            GenerateFieldMesh();
+            //GenerateFieldMesh();
             
-            if (PositionMeshAtOrigin)
-            {
-                PositionMeshCenterAtOrigin(_tf, _bounds);
-            }   
-        
-            var mat = _mr.material;
-            mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
+            MeshUtility.UpdateMeshComponents(_data.CurrentField, _tf.gameObject, _boundingBox, _bounds);
             
-            mat.mainTexture = _data.CurrentField.MeshTexture;
+            // var mesh = MeshUtility.GenerateFieldMesh(_data.CurrentField, _boundingBox);
+            // // mesh.RecalculateNormals();
+            // // mesh.RecalculateBounds();
+            //
+            // // Set mesh
+            // _mf.mesh = mesh;
+            //
+            // // Assign mesh to collider
+            // //var meshCollider = GetComponent<MeshCollider>();
+            // //collider.convex = true;
+            // _mc.sharedMesh = mesh;
+            //
+            // if (PositionMeshAtOrigin)
+            // {
+            //     PositionMeshCenterAtOrigin(_tf, _bounds);
+            // }   
+            //
+            // var mat = _mr.material;
+            // mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
+            //
+            // mat.mainTexture = _data.CurrentField.MeshTexture;
+            
+            
+            //mat.mainTexture = ScalarFieldManager.CurrentField.MeshTexture;
+            // var texture = Resources.Load<Texture2D>("texture_maps/test/coolwarm");
+            //
+            //
+            // mat.mainTexture = texture;
         }
         
         public bool PositionMeshAtOrigin;
@@ -159,8 +182,10 @@ namespace Views
                 // Map x and z coordinates to texture coordinate space
                 // (z is used because y and z are flipped for display vectors)
                 var x = CalcUtility.MapValueToRange(vertex.x, x_min, x_max, 0f, 1f);
+                var y = CalcUtility.MapValueToRange(vertex.y, y_min, y_max, 0f, 1f);
                 var z = CalcUtility.MapValueToRange(vertex.z, z_min, z_max, 0f, 1f);
-                uvs[i] = new Vector2(x, z);
+                uvs[i] = new Vector2(y, 0.5f);
+                
             }
         
             mesh.uv = uvs;

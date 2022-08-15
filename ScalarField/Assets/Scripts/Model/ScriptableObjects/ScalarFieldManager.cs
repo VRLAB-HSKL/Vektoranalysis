@@ -32,7 +32,6 @@ namespace Model.ScriptableObjects
             set
             {
                 fIds = value;
-                Debug.Log("fIds: " + value);
             }
             
         }
@@ -187,6 +186,18 @@ namespace Model.ScriptableObjects
                     sf.RawPoints.Max(v => v.z)
                 );
 
+                sf.MinDisplayValues = new Vector3(
+                    sf.DisplayPoints.Min(v => v.x),
+                    sf.DisplayPoints.Min(v => v.y),
+                    sf.DisplayPoints.Min(v => v.z)
+                );
+        
+                sf.MaxDisplayValues = new Vector3(
+                    sf.DisplayPoints.Max(v => v.x),
+                    sf.DisplayPoints.Max(v => v.y),
+                    sf.DisplayPoints.Max(v => v.z)
+                );
+                
             
                 sf.ContourLineValues = field.Data.isolines.Values;
 
@@ -206,18 +217,20 @@ namespace Model.ScriptableObjects
                 // Load texture based on chosen identifiers in init file
                 var colorMapId = sf.ColorMapId;
                 var colorMapDataClassesCount = sf.ColorMapDataClassesCount;
-                var textureResourcePath = "texture_maps/" 
-                                          + sf.ID + "/"
-                                          + colorMapId + "/" 
-                                          + colorMapDataClassesCount + "/" 
-                                          + colorMapId + "_" + colorMapDataClassesCount + "_texture";
+                var textureResourcePath = "texture_maps/test/"
+                                          + colorMapId + "_" + colorMapDataClassesCount; // + "/" 
+                                          // + colorMapId + "_" + colorMapDataClassesCount + "_texture";
         
+                
                 var texture = Resources.Load(textureResourcePath) as Texture2D;
                 if (texture is null)
                 {
                     Debug.LogWarning("Unable to find texture map in local resources!");
                 }
         
+                texture.filterMode = FilterMode.Bilinear;
+                texture.wrapModeU = TextureWrapMode.MirrorOnce;
+                
                 sf.MeshTexture = texture;
 
                 //CurrentField = sf;

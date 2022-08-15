@@ -57,6 +57,10 @@ namespace Model
         /// Used to map the point values of the scalar field to different value ranges
         /// </summary>
         public Vector3 MaxRawValues = new Vector3();
+
+        public Vector3 MinDisplayValues = new Vector3();
+
+        public Vector3 MaxDisplayValues = new Vector3();
         
         // ToDo: Replace these with single collection of PointData class
         public List<Vector3> RawPoints { get; } = new List<Vector3>();
