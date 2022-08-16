@@ -17,9 +17,9 @@ namespace Views.Display
         /// <param name="rootPos">Parent game object root position</param>
         /// <param name="scalingFactor">Point vector scaling factor</param>
         /// <param name="controllerType">Type of parent controller</param>
-        public SimpleCurveView(LineRenderer displayLr, Vector3 rootPos, 
+        public SimpleCurveView(LineRenderer displayLr, TubeMesh displayMesh, Vector3 rootPos, 
             float scalingFactor, AbstractCurveViewController.CurveControllerType controllerType) 
-            : base(displayLr, rootPos, scalingFactor, controllerType) 
+            : base(displayLr, displayMesh, rootPos, scalingFactor, controllerType) 
         {
             // Disable all travel points
             HasTravelPoint = false;

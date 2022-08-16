@@ -106,9 +106,10 @@ namespace Views.Display
         /// <param name="scalingFactor">Scaling factor used to scale curve line</param>
         /// <param name="travelObject">Game object used to visualize runs along the curve line</param>
         /// <param name="controllerType">Type of curve controller</param>
-        public SimpleRunCurveView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor, Transform travelObject,
+        public SimpleRunCurveView(LineRenderer displayLr, TubeMesh displayMesh, 
+            Vector3 rootPos, float scalingFactor, Transform travelObject,
             AbstractCurveViewController.CurveControllerType controllerType)
-            : base(displayLr, rootPos, scalingFactor, controllerType)
+            : base(displayLr, displayMesh, rootPos, scalingFactor, controllerType)
         {
             // Set travel object
             TravelObject = travelObject;

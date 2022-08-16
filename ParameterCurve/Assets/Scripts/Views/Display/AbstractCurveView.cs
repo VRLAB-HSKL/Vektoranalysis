@@ -48,7 +48,9 @@ namespace Views.Display
         /// Line renderer to display curve path
         /// </summary>
         protected readonly LineRenderer DisplayLr;
-    
+
+        protected TubeMesh DisplayMesh;
+        
         /// <summary>
         /// Cached material property key to change material color of line on startup
         /// </summary>
@@ -85,12 +87,13 @@ namespace Views.Display
         /// <param name="rootPos">Parent game object root position</param>
         /// <param name="scalingFactor">Point vector scaling factor</param>
         /// <param name="controllerType">Type of parent controller</param>
-        protected AbstractCurveView(LineRenderer displayLr, Vector3 rootPos, 
+        protected AbstractCurveView(LineRenderer displayLr, TubeMesh displayMesh, Vector3 rootPos, 
             float scalingFactor, 
             AbstractCurveViewController.CurveControllerType controllerType)
         {
             Log.Info("AbstractCurveView.ArgumentConstructor()");
-            DisplayLr = displayLr;
+            DisplayMesh = displayMesh;
+            //DisplayLr = displayLr;
             _rootPos = rootPos;
             ScalingFactor = scalingFactor;
             ControllerType = controllerType;
@@ -116,15 +119,23 @@ namespace Views.Display
             }
 
             // Set line renderer positions
-            DisplayLr.positionCount = pointArr.Length;
-            DisplayLr.SetPositions(pointArr);
+            // DisplayLr.positionCount = pointArr.Length;
+            // DisplayLr.SetPositions(pointArr);
         
             // Update material
-            DisplayLr.material.color = curve.CurveLineColor;
-            DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
+            // DisplayLr.material.color = curve.CurveLineColor;
+            // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
-            //_wpm = new WaypointManager(curve.worldPoints.ToArray(), 0.01f, false);
             
+            DisplayMesh.GenerateFieldMesh();
+
+            var rotateCurve
+                = ControllerType == AbstractCurveViewController.CurveControllerType.Table; // && !CurrentCurve.Is3DCurve;
+
+            DisplayMesh.transform.rotation = Quaternion.Euler(rotateCurve ? 90f : 0f, 0f, 0f);
+            
+            //_wpm = new WaypointManager(curve.worldPoints.ToArray(), 0.01f, false);
+
         }
 
         /// <summary>

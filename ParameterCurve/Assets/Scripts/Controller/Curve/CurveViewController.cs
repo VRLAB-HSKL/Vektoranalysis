@@ -12,6 +12,7 @@ namespace Controller.Curve
         #region Public members
 
         public LineRenderer DisplayLr;
+        public TubeMesh MeshObject;
         
         #endregion Public members
         
@@ -44,19 +45,25 @@ namespace Controller.Curve
         /// <param name="arcTravel">Arc travel game object for run based views</param>
         /// <param name="scalingFactor">Scaling factor</param>
         /// <param name="type">Type of controller</param>
-        public CurveViewController(Transform root, LineRenderer displayLineRenderer, Transform travel, 
+        public CurveViewController(Transform root, LineRenderer displayLineRenderer, 
+            TubeMesh displayMesh, Transform travel, 
             Transform arcTravel, float scalingFactor, CurveControllerType type) : base(root)
         {
+            
             DisplayLr = displayLineRenderer;
+            MeshObject = displayMesh;
+
+            MeshObject.ScalingFactor = scalingFactor;
             
             _travelObject = travel;
             _arcLengthTravelObject = arcTravel;
 
             var rootPosition = RootElement.position;
-            var simpleView = new SimpleCurveView(displayLineRenderer, rootPosition, scalingFactor, type);
-            var simpleRunView = new SimpleRunCurveView(displayLineRenderer, rootPosition, scalingFactor, _travelObject, type);
-            var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(displayLineRenderer, rootPosition, 
-                scalingFactor, _travelObject, _arcLengthTravelObject, type);
+            var simpleView = new SimpleCurveView(displayLineRenderer, displayMesh, rootPosition, scalingFactor, type);
+            var simpleRunView = new SimpleRunCurveView(displayLineRenderer, displayMesh, 
+                rootPosition, scalingFactor, _travelObject, type);
+            var simpleRunWithArcLengthView = new SimpleRunCurveWithArcLength(displayLineRenderer, displayMesh, 
+                rootPosition, scalingFactor, _travelObject, _arcLengthTravelObject, type);
         
             Views = new List<AbstractCurveView>
             {

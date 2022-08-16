@@ -67,13 +67,14 @@ namespace Views.Display
         #region Constructors
         
         public SimpleRunCurveWithArcLength(
-            LineRenderer displayLr, 
+            LineRenderer displayLr,
+            TubeMesh displayMesh,
             Vector3 rootPos, 
             float scalingFactor,
             Transform travelObject, 
             Transform arcLengthTravelObject,
             AbstractCurveViewController.CurveControllerType controllerType) 
-            : base(displayLr, rootPos, scalingFactor, travelObject, controllerType)
+            : base(displayLr, displayMesh, rootPos, scalingFactor, travelObject, controllerType)
         {
             ArcLengthTravelObject = arcLengthTravelObject;
 

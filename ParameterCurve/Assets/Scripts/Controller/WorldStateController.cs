@@ -36,6 +36,9 @@ namespace Controller
         /// Line renderer displaying the world curve
         /// </summary>
         public LineRenderer worldDisplayLr;
+
+        public TubeMesh worldDisplayMesh;
+        
         
         /// <summary>
         /// Game object transform used to visualize runs along the world curve display
@@ -253,7 +256,7 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
             
-            tableDisplayMesh.GenerateFieldMesh();
+            //tableDisplayMesh.GenerateFieldMesh();
         }
 
         /// <summary>
@@ -372,7 +375,7 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
             
-            tableDisplayMesh.GenerateFieldMesh();
+            //tableDisplayMesh.GenerateFieldMesh();
         }
 
         /// <summary>
@@ -431,7 +434,7 @@ namespace Controller
             GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
             
-            tableDisplayMesh.GenerateFieldMesh();
+            //tableDisplayMesh.GenerateFieldMesh();
         }
 
         /// <summary>
@@ -564,7 +567,7 @@ namespace Controller
             // World display curve
             var displayCurve = GlobalDataModel.DisplayCurveDatasets[0];
             GlobalDataModel.WorldCurveViewController = new CurveViewController(
-                worldRootElement, worldDisplayLr, 
+                worldRootElement, worldDisplayLr, worldDisplayMesh, 
                 worldTravelObject, worldArcLengthTravelObject, 
                 displayCurve.WorldScalingFactor, AbstractCurveViewController.CurveControllerType.World);
             GlobalDataModel.WorldCurveViewController.SetViewVisibility(true);
@@ -573,7 +576,7 @@ namespace Controller
             if (GlobalDataModel.InitFile.ApplicationSettings.TableSettings.Activated)
             {
                 GlobalDataModel.TableCurveViewController = new CurveViewController(
-                    tableRootElement, tableDisplayLr, 
+                    tableRootElement, tableDisplayLr, tableDisplayMesh,
                     tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
                     AbstractCurveViewController.CurveControllerType.Table);
 
