@@ -6,6 +6,7 @@ Created on Sat Aug 13 18:15:03 2022
 """
 import json
 
+import matplotlib.pyplot
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -78,6 +79,31 @@ def id(x, y):
     return x
 
 
+def export_color_map_texture(cm, data_class=8):
+    n = int(data_class)  # 8
+    m = 2
+    x = np.linspace(0, 1, n)
+    y = np.linspace(0, 1, m)
+    x, y = np.meshgrid(x, y)
+    z = id(x, y)
+
+    # print(z)
+
+    mydpi = 1
+    fig = plt.figure(figsize=(8 / mydpi, 2 / mydpi))
+    fig.set_size_inches(15, 2)
+    ax = plt.axes([0, 0, 1, 1])
+    img = ax.imshow(z, interpolation='nearest', origin='lower')
+    img.set_cmap(cm)  # 'BrBG')
+    plt.axis('off')
+
+    plt.savefig(cm + "_" + str(data_class) + ".png", format='png', bbox_inches='tight',
+                dpi=mydpi,
+                pad_inches=0)
+
+    plt.close(fig)
+
+
 if __name__ == "__main__":
 
     # print(cm_dict)
@@ -85,27 +111,12 @@ if __name__ == "__main__":
     for cm in cm_dict:
         for data_class in cm_dict[cm]:
 
-            print("cm", cm, "dc", data_class)
+            print("colorbrewer cm", cm, "dc", data_class)
 
-            n = int(data_class)  # 8
-            m = 2
-            x = np.linspace(0, 1, n)
-            y = np.linspace(0, 1, m)
-            x, y = np.meshgrid(x, y)
-            z = id(x, y)
+            export_color_map_texture(cm, data_class)
 
-            # print(z)
+    for cm in matplotlib.pyplot.colormaps():
 
-            mydpi = 1
-            fig = plt.figure(figsize=(8 / mydpi, 2 / mydpi))
-            fig.set_size_inches(15, 2)
-            ax = plt.axes([0, 0, 1, 1])
-            img = ax.imshow(z, interpolation='nearest', origin='lower')
-            img.set_cmap(cm)  # 'BrBG')
-            plt.axis('off')
+        print("matplotlib cm", cm)
 
-            plt.savefig(cm + "_" + data_class + ".png", format='png', bbox_inches='tight',
-                        dpi=mydpi,
-                        pad_inches=0)
-
-            plt.close(fig)
+        export_color_map_texture(cm)
