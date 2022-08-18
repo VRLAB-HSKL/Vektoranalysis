@@ -167,6 +167,8 @@ namespace Model.ScriptableObjects
                     sf.Gradients.Add(grad);
                 }
 
+                Debug.Log($"gradCount: {sf.Gradients.Count}");
+
                 sf.SteepestDescentPaths = ParsePath(field.Data.mesh.Paths.SteepestDescent);
                 sf.NelderMeadPaths = ParsePath(field.Data.mesh.Paths.NelderMead);
                 sf.NewtonPaths = ParsePath(field.Data.mesh.Paths.Newton);

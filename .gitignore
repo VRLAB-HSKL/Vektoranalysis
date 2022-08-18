@@ -1,5 +1,5 @@
 # gitignore for Unity projects
-# Keine ignores für VR-Assets wie Steam
+# Keine ignores fï¿½r VR-Assets wie Steam
 
 # Vi and VIM Backup Files
 *~
@@ -14,7 +14,7 @@
 **/Packages/*
 
 # Assets wie MiddleVR, Steam, VRTK oder GitHub
-# Aktuell gehen wir davon aus, dass wir dies rekonstruieren können.
+# Aktuell gehen wir davon aus, dass wir dies rekonstruieren kï¿½nnen.
 # Wenn wir diese Verzeichnisse jedes mal in Git schreiben wird das repo
 # redundante Informationen enthalten, was vermieden werden soll.
 **/Assets/MiddleVR/*
@@ -42,7 +42,7 @@
 **/Assets/MiddleVR.meta
 **/Assets/GoogleVR.meta
 **/Assets/HTC.UnityPlugin.meta
-# Wave3D für Focus Plus ignorieren
+# Wave3D fï¿½r Focus Plus ignorieren
 **/Assets/WaveVR/**/*
 
 # Prerequisites
@@ -115,3 +115,4 @@ sysinfo.txt
 
 #JetBrains Rider
 **/.idea/*
+ScalarField/Assets/Resources/json/init/sf_initFile.json

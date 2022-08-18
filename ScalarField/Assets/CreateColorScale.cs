@@ -12,6 +12,7 @@ public class CreateColorScale : MonoBehaviour
     
     private List<GameObject> _cubes;
     private Bounds _bounds;
+    private List<float[]> _colors;
     
     // Start is called before the first frame update
     void Start()
@@ -19,17 +20,21 @@ public class CreateColorScale : MonoBehaviour
         _bounds = BoundingBox.GetComponent<MeshRenderer>().bounds;
         _cubes = new List<GameObject>();
         
+        _colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
+        _colors.Reverse();
+        
         SetCubes();
     }
 
     public void UpdateScale()
     {
-        var colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
-        if (colors.Count == _cubes.Count)
+        _colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
+        _colors.Reverse();
+        if (_colors.Count == _cubes.Count)
         {
             for(var i = 0; i < _cubes.Count; i++)
             {
-                var color = colors[i];
+                var color = _colors[i];
                 var r = color[0] / 255f;
                 var g = color[1] / 255f;
                 var b = color[2] / 255f;
@@ -44,11 +49,11 @@ public class CreateColorScale : MonoBehaviour
     
     private void SetCubes()
     {
-        var colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
+        //var colors = ScalarFieldManager.InitFile.displayFields[ScalarFieldManager.CurrentFieldIndex].Info.Colors;
         var verticalLength = _bounds.size;
         var floor = _bounds.min.y;
-        var verticalStep = verticalLength.y / (float)colors.Count;
-        var verticalScaleVector = 1f / (float) colors.Count;
+        var verticalStep = verticalLength.y / _colors.Count;
+        var verticalScaleVector = 1f / _colors.Count;
 
         foreach (var cube in _cubes)
         {
@@ -56,7 +61,7 @@ public class CreateColorScale : MonoBehaviour
         }
 
         _cubes.Clear();
-        for (var i = 0; i < colors.Count; i++)
+        for (var i = 0; i < _colors.Count; i++)
         {
             var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var mr = cube.GetComponent<MeshRenderer>();
@@ -71,12 +76,12 @@ public class CreateColorScale : MonoBehaviour
             
             // Scale cube in y direction to fit all cubes inside the scale
             // and slightly in x and z direction to prevent buffer fighting
-            cube.transform.localScale = new Vector3(0.98f, verticalScaleVector, 0.98f);
+            cube.transform.localScale = new Vector3(0.99f, verticalScaleVector, 0.99f);
             
             var y = floor + (i * verticalStep) + verticalStep * 0.5f;
             cube.transform.position = new Vector3(_bounds.center.x, y, _bounds.center.z);
             
-            var currColor = colors[i];
+            var currColor = _colors[i];
             var r = currColor[0] / 255f;
             var g = currColor[1] / 255f;
             var b = currColor[2] / 255f;
