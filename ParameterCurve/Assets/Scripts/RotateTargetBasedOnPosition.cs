@@ -8,13 +8,13 @@ public class RotateTargetBasedOnPosition : MonoBehaviour
     public Transform Target;
     
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         var localPos = transform.localPosition;
         
@@ -28,7 +28,6 @@ public class RotateTargetBasedOnPosition : MonoBehaviour
         //var mappedX = CalcUtil.MapRange(clampedX, -0.45f, 0.45f, -1f, 1f);
 
         var rotDegreeX = mappedX * 360f;
-
 
         if (rotDegreeX != 0f)
         {

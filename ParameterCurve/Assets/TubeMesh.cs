@@ -5,6 +5,7 @@ using System.Linq;
 using Model;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utility;
 
 [RequireComponent(
     typeof(MeshFilter),
@@ -33,12 +34,16 @@ public class TubeMesh : MonoBehaviour
 
     private float _degreeStepSize;
 
-    private void Awake()
+    private int NumberOfSamplingPoints = -1;
+
+    public void Awake()
     {
         _meshCollider = GetComponent<MeshCollider>();
         _meshFilter = GetComponent<MeshFilter>();
         _meshRenderer = GetComponent<MeshRenderer>();
         
+        radius = 0.1f * ScalingFactor;
+
         //GenerateFieldMesh();
     }
 
@@ -50,6 +55,12 @@ public class TubeMesh : MonoBehaviour
         Create();
     }
     
+    public void GenerateFieldMesh(int samplingPoints)
+    {
+        NumberOfSamplingPoints = samplingPoints;
+        Create();
+    }
+
     protected void Create()
     {
         tubePoints.Clear();
@@ -60,11 +71,57 @@ public class TubeMesh : MonoBehaviour
         GenerateTopLidMesh();
     }
     
+    private List<GameObject> spheres = new List<GameObject>();
     private void GenerateCurveMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         var curvePoints = curve.WorldPoints; 
         
+        if(NumberOfSamplingPoints != -1)
+        {
+            var div = curvePoints.Count / NumberOfSamplingPoints;
+            _degreeStepSize = NumberOfSamplingPoints;
+
+            var newPointList = new List<Vector3>();
+            for(var i = 0; i < curvePoints.Count; i++)
+            {
+                if(i % div == 0)
+                {
+                    var p = curvePoints[i];
+
+                    
+
+                    p += transform.position;
+
+                    Debug.Log("cp: " + p + ", tp: " + transform.position + ", np: " + p);
+                    
+                    //p *= ScalingFactor;
+                    newPointList.Add(p);
+                }
+                //newPointList.Add(curvePoints[div * i]);
+            }
+            
+            Debug.Log("pointCount: " + newPointList.Count);
+
+            foreach(var sphere in spheres)
+            {
+                Destroy(sphere);
+            }
+
+            spheres.Clear();
+
+            foreach(var point in newPointList)
+            {
+                var sphere = DrawingUtility.DrawSphere(point * ScalingFactor, transform, Color.black, 
+                    new Vector3(ScalingFactor, ScalingFactor, ScalingFactor));
+
+                spheres.Add(sphere);
+            }
+
+            curvePoints = newPointList;
+        }
+        
+
         for (var i = 0; i < curvePoints.Count; i++)
         {
             var centerPoint = curvePoints[i];
@@ -135,23 +192,100 @@ public class TubeMesh : MonoBehaviour
         // Assign mesh to collider
         //collider.convex = true;
         _meshCollider.sharedMesh = tubeMesh;
-        
-        
-        // for (var i = 0; i < tubePoints.Count; i += numberOfCirclePoints)
-        // {
-        //     for (var j = 0; j < numberOfCirclePoints; j++)
-        //     {
-        //         SpawnCube(
-        //             tubePoints[i + numberOfCirclePoints + j],
-        //             Color.red,
-        //             new Vector3(0.05f, 0.05f, 0.05f),
-        //             "cp_" + i
-        //         );
-        //     }
-        // }
-        
-        
     }
+
+    // private void GenerateCurveMesh()
+    // {
+    //     var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
+    //     var curvePoints = curve.WorldPoints; 
+        
+    //     for (var i = 0; i < curvePoints.Count; i++)
+    //     {
+    //         var centerPoint = curvePoints[i];
+    //         var normal = curve.FresnetApparatuses[i].Normal;
+    //         var tangent = curve.FresnetApparatuses[i].Tangent;
+
+    //         //  Calculate 3d point of normal target and change vector so the generated circle
+    //         //  matches the given radius
+    //         var cpn = normal * radius; //(centerPoint + normal).normalized * radius;
+            
+    //         // On first point, generate tangent pointing to next point since
+    //         // we don't have any velocity at the beginning, i.e. the tangent is (0,0,0)
+    //         if (i == 0)
+    //             tangent = (curvePoints[i + 1] - centerPoint).normalized;// * radius;
+            
+    //         // Generate circle points
+    //         for (var j = 0; j < numberOfCirclePoints; j++)
+    //         {
+    //             // Generate circle point by rotating the normal vector around the tangent vector
+    //             // by a certain degree (step size)
+    //             var quatRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
+    //             var circlePoint = centerPoint + quatRot * cpn;
+    //             circlePoint *= ScalingFactor;//curve.TableScalingFactor;
+                
+    //             tubePoints.Add(circlePoint);    
+    //         }
+            
+    //     }
+        
+    //     var topology = MeshTopology.Triangles;
+    //     var indices = new List<int>();
+
+    //     // Generate topology indices based on chosen topology
+    //     switch (topology)
+    //     {
+    //         default:
+    //         case MeshTopology.Triangles:
+    //             // indices = GenerateTriangleIndices(
+    //             //     tubePoints, beginningLidPoints.Count
+    //             // );
+    //             // Debug.Log("lidCount: " + beginningLidPoints.Count);
+    //             indices = GenerateCurveMeshTriangleIndices(tubePoints, true);//GenerateLidIndices(beginningLidPoints);
+                
+    //             // // Draw triangles twice to cover both sides
+    //             // var backIndices = GenerateTriangleIndices(displayVertices, true);
+    //             // displayVertices.AddRange(displayVertices);
+    //             // indices.AddRange(backIndices);
+    //             break;
+            
+    //     }
+
+    //     tubeMesh = new Mesh
+    //     {
+    //         name= "Tube mesh",
+    //         vertices = tubePoints.ToArray()
+    //     };
+        
+    //     tubeMesh.SetIndices(indices.ToArray(), topology, 0);
+    //     tubeMesh.RecalculateNormals();
+
+        
+        
+    //     GetComponent<MeshRenderer>().material = TubeMat;
+
+    //     // Set mesh
+    //     _meshFilter.mesh = tubeMesh;
+        
+    //     // Assign mesh to collider
+    //     //collider.convex = true;
+    //     _meshCollider.sharedMesh = tubeMesh;
+        
+        
+    //     // for (var i = 0; i < tubePoints.Count; i += numberOfCirclePoints)
+    //     // {
+    //     //     for (var j = 0; j < numberOfCirclePoints; j++)
+    //     //     {
+    //     //         SpawnCube(
+    //     //             tubePoints[i + numberOfCirclePoints + j],
+    //     //             Color.red,
+    //     //             new Vector3(0.05f, 0.05f, 0.05f),
+    //     //             "cp_" + i
+    //     //         );
+    //     //     }
+    //     // }
+        
+        
+    // }
 
     private void GenerateBottomLidMesh()
     {
