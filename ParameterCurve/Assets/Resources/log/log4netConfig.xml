@@ -1,5 +1,18 @@
 <log4net>
 
+	<!-- <configuration> -->
+		<!-- <system.diagnostics> -->
+		  <!-- <trace autoflush="true"> -->
+			<!-- <listeners> -->
+			  <!-- <add  -->
+				<!-- name="textWriterTraceListener"  -->
+				<!-- type="System.Diagnostics.TextWriterTraceListener"  -->
+				<!-- initializeData="C:\tmp\log4net.txt" /> -->
+			<!-- </listeners> -->
+		  <!-- </trace> -->
+		<!-- </system.diagnostics> -->
+	<!-- </configuration> -->
+
 	<appender name="consoleAppender" type="log4net.Appender.ConsoleAppender">
 		<layout type="log4net.Layout.PatternLayout">
 			<!-- Print the data in ISO 8601 -->
@@ -7,18 +20,28 @@
 		</layout>
 	</appender>
 	
-	<appender name="unityAppender" type="UnityAppender" >
+	<appender name="unityAppender" type="Logging.UnityAppender" >
 		<layout type="log4net.Layout.PatternLayout">
 			<conversionPattern value="[%date{dd.MM.yyyy HH:mm:ss fff}][%timestamp] %-5level %logger{1}:%method:%line - %message%newline" />
 		</layout>
 	</appender>
 	
+	<appender name="FileAppender" type="log4net.Appender.FileAppender">
+		<file value="C:\Users\saerota\Desktop\logTest\log-file.txt" />
+		<appendToFile value="true" />
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%date [%thread] %-5level %logger [%property{NDC}] - %message%newline" />
+		</layout>
+	</appender>
+	
 	<root>
-		<level value="DEBUG" />
-		
 		<appender-ref ref="consoleAppender" />
 		<!-- <appender-ref ref="rollingFileAppender" /> -->
 		<appender-ref ref="unityAppender" />
+		<appender-ref ref="FileAppender" />
+		
+		<level value="DEBUG" />
 	</root>
 
 </log4net>
+

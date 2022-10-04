@@ -1,4 +1,4 @@
-<log4net>
+<!-- <log4net>
   
   <!--CustomAppender-->
   <appender name="UnityConsoleAppender" type="UnityConsoleAppender">
@@ -63,4 +63,4 @@
     <level value="FATAL"/>
   </root>
   
-</log4net>
+</log4net> -->

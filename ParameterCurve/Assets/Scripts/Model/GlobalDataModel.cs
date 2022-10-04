@@ -167,7 +167,21 @@ namespace Model
             var path = $"{Application.dataPath}/Resources/log/log4netConfig.xml";
             var configFile = new FileInfo(path);
         
+            // System.Diagnostics.Trace.Listeners.Add(
+            //     new TL()
+            // );
+
+            //log4net.Util.LogLog.InternalDebugging = true;
+
             log4net.Config.XmlConfigurator.Configure(configFile);
+
+            var messages = log4net.LogManager.GetRepository().ConfigurationMessages; //.Cast<log4net.Util.LogLog>();
+            foreach(
+                log4net.Util.LogLog message in messages)
+            {
+                // evaluate configuration message
+                //Debug.Log(message.Message);
+            }
         }
 
         private static void ParseIniFile()
@@ -277,5 +291,20 @@ namespace Model
         }
         
         #endregion Private functions
+    }
+
+
+}
+
+public class TL : System.Diagnostics.TraceListener
+{
+    public override void Write(string message)
+    {
+        Debug.Log(message);
+    }
+
+    public override void WriteLine(string message)
+    {
+        Debug.Log(message + System.Environment.NewLine);
     }
 }

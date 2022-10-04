@@ -23,7 +23,7 @@ namespace Logging
         protected override void Append(LoggingEvent loggingEvent)
         {
             //if (!ShowLogging) return;
-            Debug.Log("test123");
+            //Debug.Log("test123");
             Debug.Log(RenderLoggingEvent(loggingEvent));
         }
     

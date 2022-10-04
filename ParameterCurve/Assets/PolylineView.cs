@@ -14,7 +14,7 @@ public class PolylineView : MonoBehaviour
 
     public void OnValidate()
     {
-        _mesh.GenerateFieldMesh(NumberOfSamplingPoints);
+        //_mesh.GenerateFieldMesh(NumberOfSamplingPoints);
     }
 
     // Start is called before the first frame update
