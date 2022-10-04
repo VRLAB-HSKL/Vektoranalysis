@@ -63,6 +63,9 @@ public class TubeMesh : MonoBehaviour
 
     protected void Create()
     {
+        if(GlobalDataModel.DisplayCurveDatasets == null) return;
+        if(GlobalDataModel.DisplayCurveDatasets.Count == 0) return;
+
         tubePoints.Clear();
         _degreeStepSize = 360f / numberOfCirclePoints;
         
@@ -76,7 +79,7 @@ public class TubeMesh : MonoBehaviour
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         var curvePoints = curve.WorldPoints; 
-        
+
         if(NumberOfSamplingPoints != -1)
         {
             var div = curvePoints.Count / NumberOfSamplingPoints;
@@ -88,9 +91,6 @@ public class TubeMesh : MonoBehaviour
                 if(i % div == 0)
                 {
                     var p = curvePoints[i];
-
-                    
-
                     p += transform.position;
 
                     Debug.Log("cp: " + p + ", tp: " + transform.position + ", np: " + p);
@@ -98,7 +98,6 @@ public class TubeMesh : MonoBehaviour
                     //p *= ScalingFactor;
                     newPointList.Add(p);
                 }
-                //newPointList.Add(curvePoints[div * i]);
             }
             
             Debug.Log("pointCount: " + newPointList.Count);
