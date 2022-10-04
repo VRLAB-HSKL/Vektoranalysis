@@ -22,8 +22,8 @@ namespace Controller
         /// <summary>
         /// Controls pose logging for every frame. If true, the player pose is logged using the log4net logger object
         /// </summary>
-        [Header("Options")]
-        public bool activatePoseLogging;
+        //[Header("Options")]
+        //public bool activatePoseLogging;
         
         /// <summary>
         /// Root element position of the world curve display. This should be an empty parent game object containing
@@ -538,11 +538,11 @@ namespace Controller
                 StartRun();
             }
         
-            // Log pose if activated
-            if (activatePoseLogging)
-            {
-                StaticLogging();
-            }
+            // // Log pose if activated
+            // if (activatePoseLogging)
+            // {
+            //     StaticLogging();
+            // }
 
         }
 
@@ -620,35 +620,7 @@ namespace Controller
             }
         }
     
-        /// <summary>
-        /// Static logging operations that are performed every frame, regardless of user interaction
-        /// </summary>
-        private static void StaticLogging()
-        {
-            // Head pose
-            var headPose = VivePose.GetPoseEx(BodyRole.Head);
-            Log.Info("Head position: " + headPose.pos);
-            Log.Info("Head rotation: " + headPose.rot);
-            Log.Info("Head up: " + headPose.up);
-            Log.Info("Head forward: " + headPose.forward);
-            Log.Info("Head right: " + headPose.right);
-
-            // Left hand pose
-            var leftPose = VivePose.GetPoseEx(HandRole.LeftHand);
-            Log.Info("Left hand position: " + leftPose.pos);
-            Log.Info("Left hand rotation: " + leftPose.rot);
-            Log.Info("Left hand up: " + leftPose.up);
-            Log.Info("Left hand forward: " + leftPose.forward);
-            Log.Info("Left hand right: " + leftPose.right);
         
-            // Right hand pose
-            var rightPose = VivePose.GetPoseEx(HandRole.RightHand);
-            Log.Info("Right hand position: " + rightPose.pos);
-            Log.Info("Right hand rotation: " + rightPose.rot);
-            Log.Info("Right hand up: " + rightPose.up);
-            Log.Info("Right hand forward: " + rightPose.forward);
-            Log.Info("Right hand right: " + rightPose.right);
-        }
 
         #endregion Private functions
     }

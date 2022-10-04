@@ -14,7 +14,7 @@ namespace Logging
         /// <summary>
         /// Toggles logging to unity console
         /// </summary>
-        private const bool ShowLogging = false;
+        private const bool ShowLogging = true;
 
         #endregion Private members
     
@@ -22,7 +22,8 @@ namespace Logging
     
         protected override void Append(LoggingEvent loggingEvent)
         {
-            if (!ShowLogging) return;
+            //if (!ShowLogging) return;
+            Debug.Log("test123");
             Debug.Log(RenderLoggingEvent(loggingEvent));
         }
     

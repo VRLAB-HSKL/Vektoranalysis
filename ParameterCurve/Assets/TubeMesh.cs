@@ -103,7 +103,7 @@ public class TubeMesh : MonoBehaviour
                 }
             }
             
-            Debug.Log("pointCount: " + newPointList.Count);
+            //Debug.Log("pointCount: " + newPointList.Count);
 
             foreach(var sphere in spheres)
             {
