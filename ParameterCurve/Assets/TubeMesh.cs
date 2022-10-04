@@ -15,6 +15,8 @@ public class TubeMesh : MonoBehaviour
 {
     public Material TubeMat;
 
+    public Material SphereMat;
+
     public float ScalingFactor = 1f;
     
     private float radius = 0.1f;
@@ -75,6 +77,7 @@ public class TubeMesh : MonoBehaviour
     }
     
     private List<GameObject> spheres = new List<GameObject>();
+    
     private void GenerateCurveMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
@@ -93,7 +96,7 @@ public class TubeMesh : MonoBehaviour
                     var p = curvePoints[i];
                     p += transform.position;
 
-                    Debug.Log("cp: " + p + ", tp: " + transform.position + ", np: " + p);
+                    //Debug.Log("cp: " + p + ", tp: " + transform.position + ", np: " + p);
                     
                     //p *= ScalingFactor;
                     newPointList.Add(p);
@@ -112,7 +115,7 @@ public class TubeMesh : MonoBehaviour
             foreach(var point in newPointList)
             {
                 var sphere = DrawingUtility.DrawSphere(point * ScalingFactor, transform, Color.black, 
-                    new Vector3(ScalingFactor, ScalingFactor, ScalingFactor));
+                    new Vector3(ScalingFactor, ScalingFactor, ScalingFactor), SphereMat);
 
                 spheres.Add(sphere);
             }

@@ -19,6 +19,8 @@ public class DrawTangentNormal : MonoBehaviour
     public LineRenderer normalSolutionLine;
     public GameObject heightAdjustmentObject;
 
+    public Material SphereMat;
+
     private GameObject pointSphere;
     private GameObject tangentSphere;
     private GameObject normalSphere;
@@ -246,8 +248,8 @@ public class DrawTangentNormal : MonoBehaviour
         }
 
         //create spheres at parent object positions
-        tangentSphere = Utility.DrawingUtility.DrawSphere(tangentSpherePos, tangentSphereParent.transform, Color.red, bbDimensions);
-        normalSphere = Utility.DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.green, bbDimensions);
+        tangentSphere = Utility.DrawingUtility.DrawSphere(tangentSpherePos, tangentSphereParent.transform, Color.red, bbDimensions, SphereMat);
+        normalSphere = Utility.DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.green, bbDimensions, SphereMat);
 
         //make the new spheres grabbable
         tangentGrab = tangentSphere.AddComponent<BasicGrabbable>();
