@@ -26,6 +26,18 @@ public class HMDTracker : MonoBehaviour
         _stringBuilder.AppendLine("Head forward: " + headPose.forward);
         _stringBuilder.AppendLine("Head right: " + headPose.right);
 
+        // Head gaze
+        var hitPoint = Vector3.positiveInfinity;
+        if(Physics.Raycast(new Ray(headPose.pos, headPose.forward), out RaycastHit hit, float.MaxValue))
+        {
+            hitPoint = hit.point;
+        }
+
+        _stringBuilder.AppendLine("Gaze point: " + hitPoint);
+
+        // ToDo: Log eye gaze if hardware supports it
+
+
         Log.Info(_stringBuilder.ToString());
         _stringBuilder.Clear();
     }
