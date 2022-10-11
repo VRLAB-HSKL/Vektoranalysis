@@ -13,40 +13,88 @@ using Utility;
     typeof(MeshCollider))]
 public class TubeMesh : MonoBehaviour
 {
+    /// <summary>
+    /// Material used for the surface of the tube
+    /// </summary>
     public Material TubeMat;
 
+    /// <summary>
+    /// Material used for the highlighting spheres on the tube
+    /// </summary>
     public Material SphereMat;
 
+    /// <summary>
+    /// General scaling factor applied to the tube mesh
+    /// </summary>
     public float ScalingFactor = 1f;
+
     
+    /// <summary>
+    /// Radius of the final tube
+    /// </summary>
     private float radius = 0.1f;
+    
+    /// <summary>
+    /// Number of point used to sample the flat circle around every curve point, making up the outside of the tube mesh
+    /// </summary>
     private int numberOfCirclePoints = 8;
 
+    /// <summary>
+    /// Sub-mesh for the outer surface of the tube along the curve
+    /// </summary>
     private Mesh tubeMesh;
+    
+    /// <summary>
+    /// Sub-mesh for the bottom lid of the tube, facing outward
+    /// </summary>
     private Mesh bottomLidMesh;
+    
+    /// <summary>
+    /// Sub-mesh for the top lid of the tube, facing outward
+    /// </summary>
     private Mesh topLidMesh;
     
+    /// <summary>
+    /// Number of points making up the mesh
+    /// </summary>
     private List<Vector3> tubePoints = new List<Vector3>();
-    private MeshRenderer _meshRenderer;
-    private MeshFilter _meshFilter;
-    private MeshCollider _meshCollider;
-
+    
+    /// <summary>
+    /// Number of spheres highlighting the points on the curve
+    /// </summary>
+    private List<GameObject> spheres = new List<GameObject>();
+    
+    /// <summary>
+    /// Game object for the bottom lid mesh
+    /// </summary>
     private GameObject _bottomLidGameObject;
+    
+    /// <summary>
+    /// Game object for the top lid mesh
+    /// </summary>
     private GameObject _topLidGameObject;
 
+    /// <summary>
+    /// Calculated amount of degrees between the points along the circle surrounding each curve point
+    /// </summary>
     private float _degreeStepSize;
 
     private int NumberOfSamplingPoints = -1;
 
+    private MeshRenderer _meshRenderer;
+    private MeshFilter _meshFilter;
+    private MeshCollider _meshCollider;
+    
+    
     public void Awake()
     {
+        // Cache components
         _meshCollider = GetComponent<MeshCollider>();
         _meshFilter = GetComponent<MeshFilter>();
         _meshRenderer = GetComponent<MeshRenderer>();
         
+        // Set tube radius based on scaling factor
         radius = 0.1f * ScalingFactor;
-
-        //GenerateFieldMesh();
     }
 
     /// <summary>
@@ -54,16 +102,23 @@ public class TubeMesh : MonoBehaviour
     /// </summary>
     public void GenerateFieldMesh()
     {
-        Create();
+        CalculateMesh();
     }
     
-    public void GenerateFieldMesh(int samplingPoints)
+    /// <summary>
+    /// Creates the mesh using a given amount of points to sample the curve
+    /// </summary>
+    /// <param name="sampleCount">Sample count</param>
+    public void GenerateFieldMesh(int sampleCount)
     {
-        NumberOfSamplingPoints = samplingPoints;
-        Create();
+        NumberOfSamplingPoints = sampleCount;
+        CalculateMesh();
     }
 
-    protected void Create()
+    /// <summary>
+    /// Mesh calculation function
+    /// </summary>
+    private void CalculateMesh()
     {
         if(GlobalDataModel.DisplayCurveDatasets == null) return;
         if(GlobalDataModel.DisplayCurveDatasets.Count == 0) return;
@@ -76,13 +131,16 @@ public class TubeMesh : MonoBehaviour
         GenerateTopLidMesh();
     }
     
-    private List<GameObject> spheres = new List<GameObject>();
     
+    /// <summary>
+    /// Generates the main surface around the curve points
+    /// </summary>
     private void GenerateCurveMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         var curvePoints = curve.WorldPoints; 
 
+        // When a sample count was given, sample curve
         if(NumberOfSamplingPoints != -1)
         {
             var div = curvePoints.Count / NumberOfSamplingPoints;
@@ -123,9 +181,10 @@ public class TubeMesh : MonoBehaviour
             curvePoints = newPointList;
         }
         
-
+        // Calculate surface mesh points
         for (var i = 0; i < curvePoints.Count; i++)
         {
+            // Get curve point and direction vectors
             var centerPoint = curvePoints[i];
             var normal = curve.FresnetApparatuses[i].Normal;
             var tangent = curve.FresnetApparatuses[i].Tangent;
@@ -144,8 +203,8 @@ public class TubeMesh : MonoBehaviour
             {
                 // Generate circle point by rotating the normal vector around the tangent vector
                 // by a certain degree (step size)
-                var quatRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
-                var circlePoint = centerPoint + quatRot * cpn;
+                var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
+                var circlePoint = centerPoint + quaternionRot * cpn;
                 circlePoint *= ScalingFactor;//curve.TableScalingFactor;
                 
                 tubePoints.Add(circlePoint);    
@@ -183,11 +242,10 @@ public class TubeMesh : MonoBehaviour
         
         tubeMesh.SetIndices(indices.ToArray(), topology, 0);
         tubeMesh.RecalculateNormals();
-
         
+        //GetComponent<MeshRenderer>().material = TubeMat;
+        _meshRenderer.material = TubeMat;
         
-        GetComponent<MeshRenderer>().material = TubeMat;
-
         // Set mesh
         _meshFilter.mesh = tubeMesh;
         
@@ -365,10 +423,6 @@ public class TubeMesh : MonoBehaviour
         // Assign mesh to collider
         _topLidGameObject.GetComponent<MeshCollider>().sharedMesh = topLidMesh;
         //collider.convex = true;
-
-
-
-
         
         //var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         
@@ -614,13 +668,13 @@ public class TubeMesh : MonoBehaviour
     }
 
 
-    private void SpawnCube(Vector3 pos, Color color, Vector3 scale, string name = "cube")
-    {
-        var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.parent = transform;
-        cube.transform.position = pos;
-        cube.transform.localScale = scale; //new Vector3(0.005f, 0.005f, 0.005f);
-        cube.GetComponent<MeshRenderer>().material.color = color;
-        cube.name = name;
-    }
+    // private void SpawnCube(Vector3 pos, Color color, Vector3 scale, string name = "cube")
+    // {
+    //     var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    //     cube.transform.parent = transform;
+    //     cube.transform.position = pos;
+    //     cube.transform.localScale = scale; //new Vector3(0.005f, 0.005f, 0.005f);
+    //     cube.GetComponent<MeshRenderer>().material.color = color;
+    //     cube.name = name;
+    // }
 }

@@ -1,31 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PolylineView : MonoBehaviour
 {
+    /// <summary>
+    /// Mesh controller class
+    /// </summary>
     public TubeMesh _mesh;
-
-    private int _numSamplingPoints;
-
+    
+    /// <summary>
+    /// Curve sample count
+    /// </summary>
     [Range(20, 200)]
     public int NumberOfSamplingPoints = 20;
 
-
-    public void OnValidate()
-    {
-        //_mesh.GenerateFieldMesh(NumberOfSamplingPoints);
-    }
+    /// <summary>
+    /// Curve sample count
+    /// </summary>
+    private int _numSamplingPoints;
 
     // Start is called before the first frame update
     public void Start()
     {
         _mesh.GenerateFieldMesh(NumberOfSamplingPoints);
-    }
-
-    // Update is called once per frame
-    public void Update()
-    {
-        
     }
 }

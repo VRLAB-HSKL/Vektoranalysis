@@ -120,3 +120,5 @@ if __name__ == "__main__":
         print("matplotlib cm", cm)
 
         export_color_map_texture(cm)
+
+    print("Done!")
