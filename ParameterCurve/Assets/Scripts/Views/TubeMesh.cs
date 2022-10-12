@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Model;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,7 +27,9 @@ public class TubeMesh : MonoBehaviour
     /// <summary>
     /// General scaling factor applied to the tube mesh
     /// </summary>
-    public float ScalingFactor = 1f;
+    public float TubeMeshScalingFactor = 1f;
+
+    private float SphereScalingFactor = 2f;
 
     
     /// <summary>
@@ -54,6 +57,9 @@ public class TubeMesh : MonoBehaviour
     /// </summary>
     private Mesh topLidMesh;
     
+
+    private List<Vector3> _curvePoints = new List<Vector3>();
+
     /// <summary>
     /// Number of points making up the mesh
     /// </summary>
@@ -94,7 +100,8 @@ public class TubeMesh : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         
         // Set tube radius based on scaling factor
-        radius = 0.1f * ScalingFactor;
+        radius = 0.05f * TubeMeshScalingFactor;
+        SphereScalingFactor = 0.125f * TubeMeshScalingFactor;
     }
 
     /// <summary>
@@ -149,11 +156,13 @@ public class TubeMesh : MonoBehaviour
             var newPointList = new List<Vector3>();
             for(var i = 0; i < curvePoints.Count; i++)
             {
+                // Only sample every nth point
                 if(i % div == 0)
                 {
                     var p = curvePoints[i];
-                    p += transform.position;
+                    //p += transform.position;
 
+                    
                     //Debug.Log("cp: " + p + ", tp: " + transform.position + ", np: " + p);
                     
                     //p *= ScalingFactor;
@@ -170,10 +179,27 @@ public class TubeMesh : MonoBehaviour
 
             spheres.Clear();
 
+
+
             foreach(var point in newPointList)
             {
-                var sphere = DrawingUtility.DrawSphere(point * ScalingFactor, transform, Color.black, 
-                    new Vector3(ScalingFactor, ScalingFactor, ScalingFactor), SphereMat);
+                var calcPoint = point;
+                if(!curve.Is3DCurve)
+                {
+                    calcPoint = new Vector3(point.x, point.y, 0f);
+                }
+                
+                calcPoint *= TubeMeshScalingFactor;
+                var spherePoint = this.transform.position + calcPoint;
+
+                var sphere = DrawingUtility.DrawSphereScaled(spherePoint, transform, Color.black, 
+                    SphereScalingFactor,
+                    SphereMat);
+
+                // Debug.Log("tfpos: " + this.transform.position + ", point: " + calcPoint + ", sum: " + spherePoint + 
+                // ", spherePos: " + sphere.transform.position);
+
+                sphere.GetComponent<MeshRenderer>().sharedMaterial = SphereMat;
 
                 spheres.Add(sphere);
             }
@@ -188,6 +214,8 @@ public class TubeMesh : MonoBehaviour
             var centerPoint = curvePoints[i];
             var normal = curve.FresnetApparatuses[i].Normal;
             var tangent = curve.FresnetApparatuses[i].Tangent;
+
+            _curvePoints.Add(centerPoint);
 
             //  Calculate 3d point of normal target and change vector so the generated circle
             //  matches the given radius
@@ -205,10 +233,10 @@ public class TubeMesh : MonoBehaviour
                 // by a certain degree (step size)
                 var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
                 var circlePoint = centerPoint + quaternionRot * cpn;
-                circlePoint *= ScalingFactor;//curve.TableScalingFactor;
+                circlePoint *= TubeMeshScalingFactor;//curve.TableScalingFactor;
                 
                 tubePoints.Add(circlePoint);    
-            }
+            }            
             
         }
         
@@ -353,6 +381,14 @@ public class TubeMesh : MonoBehaviour
         var firstPoint = curve.WorldPoints[0];
         var firstCircle = tubePoints.GetRange(0, numberOfCirclePoints);
         
+        // var sb = new StringBuilder();
+        //
+        // for(var i = 0; i < curve.WorldPoints.Count(); i++)
+        // {
+        //     sb.AppendLine(i + ": " + curve.WorldPoints[i]);
+        // }
+        // Debug.Log("WorldPoints:\n" + sb.ToString());
+
         bottomLidMesh = GenerateLidMesh(firstPoint, firstCircle);
         bottomLidMesh.name = "bottom lid mesh";
         
@@ -364,6 +400,8 @@ public class TubeMesh : MonoBehaviour
             });    
             
             _bottomLidGameObject.transform.parent = transform;
+            _bottomLidGameObject.transform.position = _curvePoints[0]; //transform.position;
+            //_bottomLidGameObject.transform.localPosition = Vector3.zero;
         }
 
         _bottomLidGameObject.GetComponent<MeshRenderer>().material = TubeMat;
@@ -379,7 +417,7 @@ public class TubeMesh : MonoBehaviour
     private void GenerateTopLidMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-        var lastPoint = curve.WorldPoints.Last();
+        var lastPoint = curve.WorldPoints[curve.WorldPoints.Count - 1];
         var lastCircle = tubePoints.GetRange(
             tubePoints.Count - numberOfCirclePoints - 1, numberOfCirclePoints);
 
@@ -441,46 +479,95 @@ public class TubeMesh : MonoBehaviour
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         var pos = transform.position;
-        var centerPoint = pos + center * ScalingFactor;//curve.TableScalingFactor;
+        var centerPoint = pos + center; // * TubeMeshScalingFactor;
+        //curve.TableScalingFactor;
         //centerPoint *= curve.TableScalingFactor;
         
+        // string s = "";
+        // for(var i = 0; i < circlePoints.Count; i++)
+        // {
+        //     s += circlePoints[i].ToString("0.0000000") + "\n";
+        // }
+        //
+        // Debug.Log("tfname: " + transform.gameObject.name + ", center: " + center + ", pos: " + transform.position + ", centerPoint: " + centerPoint
+        // + "\n" + s);
+
         var beginningLidPoints = new List<Vector3>();
         for (var i = 0; i < circlePoints.Count - 1; i++)
         {
-            // Transform point to local coordinate system since center point is not port of the tube mesh,
+            // Transform point to local coordinate system since center point is not part of the tube mesh,
             // i.e. it's position has not been transformed to the local mesh coordinate system
-
-             //transform.InverseTransformPoint(firstPoint) ;
-            var tv2 = pos + circlePoints[i]; //(firstCircle[i] - firstPoint).normalized * radius;
-            var tv3 = pos + circlePoints[i + 1];//(firstCircle[i + 1] - firstPoint).normalized * radius;
-
-            // tv1 *= curve.TableScalingFactor;
-            // tv2 *= curve.TableScalingFactor;
-            // tv3 *= curve.TableScalingFactor;
-
-            
-            
-            // Debug.Log("Triangle 01: " + centerPoint.ToString("F8") + "\n" +
-            //           "Triangle 02: " + tv2.ToString("F8") + "\n" +
-            //           "Triangle 03: " + tv3.ToString("F8") + "\n"
-            // );
-            
-            // SpawnCube(centerPoint, Color.red, new Vector3(0.005f, 0.005f, 0.005f), "center_" + i);
-            // SpawnCube(tv2, Color.green, new Vector3(0.005f, 0.005f, 0.005f), "cp_" + i);
-            // SpawnCube(tv3, Color.blue, new Vector3(0.005f, 0.005f, 0.005f), "cp_" + (i+1));
+            var tv2 = pos + circlePoints[i];
+            var tv3 = pos + circlePoints[i + 1];
             
             beginningLidPoints.Add(centerPoint);
             beginningLidPoints.Add(tv2);
             beginningLidPoints.Add(tv3);
         }
 
+        var reverseList = beginningLidPoints.AsEnumerable().Reverse();
+        
         // Add last triangle that connects to the first circle point
         beginningLidPoints.Add(centerPoint);
-        beginningLidPoints.Add(pos + circlePoints.Last());
-        beginningLidPoints.Add(pos + circlePoints.First());
+        beginningLidPoints.Add(pos + circlePoints[circlePoints.Count - 1]); //.Last());
+        beginningLidPoints.Add(pos + circlePoints[0]);//.First());
         
+        //Debug.Log("lidPointCount: " + beginningLidPoints.Count);
+
+        // for (var i = 0; i < beginningLidPoints.Count; i++)
+        // {
+        //     var sphere = 
+        //         DrawingUtility.DrawSphereScaled(beginningLidPoints[i], transform, Color.blue, 0.025f, SphereMat);
+        //     sphere.name = "lidPoint_" + i;
+        // }
         
-        var beginningLidIndices = GenerateBottomLidTriangleIndices(beginningLidPoints);
+        beginningLidPoints.AddRange(reverseList);
+        
+        beginningLidPoints.Add(centerPoint);
+        beginningLidPoints.Add(pos + circlePoints[0]);//.First());
+        beginningLidPoints.Add(pos + circlePoints[circlePoints.Count - 1]); //.Last());
+        
+        // var centerSphere = DrawingUtility.DrawSphereScaled(centerPoint, transform, Color.blue, 0.125f, SphereMat);
+        // centerSphere.name = "centerSphere_" + transform.gameObject.name;
+
+        // Triangle 01
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[0]);
+        // beginningLidPoints.Add(pos + circlePoints[1]);
+        //
+        // // Triangle 02
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[1]);
+        // beginningLidPoints.Add(pos + circlePoints[2]);
+        //
+        // // Triangle 03
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[2]);
+        // beginningLidPoints.Add(pos + circlePoints[3]);
+        //
+        // // Triangle 04
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[3]);
+        // beginningLidPoints.Add(pos + circlePoints[4]);
+        //
+        // // Triangle 05
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[4]);
+        // beginningLidPoints.Add(pos + circlePoints[5]);
+        //
+        // // Triangle 06
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[5]);
+        // beginningLidPoints.Add(pos + circlePoints[6]);
+        //
+        // // Triangle 07
+        // beginningLidPoints.Add(centerPoint);
+        // beginningLidPoints.Add(pos + circlePoints[6]);
+        // beginningLidPoints.Add(pos + circlePoints[7]);
+        //
+
+        
+        var beginningLidIndices = GenerateLidTriangleIndices(beginningLidPoints);
         
         bottomLidMesh = new Mesh
         {
@@ -655,14 +742,43 @@ public class TubeMesh : MonoBehaviour
         return indicesList;
     }
 
-    private List<int> GenerateBottomLidTriangleIndices(List<Vector3> lidPoints)
+    private List<int> GenerateLidTriangleIndices(List<Vector3> lidPoints)
     {
-        var indicesList = new List<int>();
+        var indicesList = new List<int>()
+        {
+            //0, 1, 2, 
+            //3, 4, 5, 
+            // 6, 7, 8,
+            // 9, 10, 11,
+            // 12, 13, 14,
+            // 15, 16, 17,
+            // 18, 19, 20,
 
+            // 0, 1, 2,
+            // 0, 2, 3,
+            // 0, 3, 4,
+            // 0, 4, 5,
+            // 0, 5, 6,
+            // 0, 6, 7,
+            // 0, 7, 1,
+            //
+            // 0, 7, 6,
+            // 0, 6, 5,
+            // 0, 5, 4,
+            // 0, 4, 3,
+            // 0, 3, 2,
+            // 0, 2, 1,
+            // 0, 1, 7
+        };
+
+        // var s = new StringBuilder();
         for (var i = 0; i < lidPoints.Count; i++)
         {
+            //s.AppendLine(i + "");
             indicesList.Add(i);
         }    
+        //
+        // Debug.Log(s.ToString());
         
         return indicesList;
     }

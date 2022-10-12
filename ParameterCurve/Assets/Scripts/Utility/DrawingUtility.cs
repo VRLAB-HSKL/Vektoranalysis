@@ -80,6 +80,35 @@ namespace Utility
             return arrow;
         }
 
+        // ToDo: Create single public interface function
+        public static GameObject DrawSphereScaled(
+            Vector3 point, Transform parent, Color color, float scale, Material mat
+        )
+        {
+            var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.name = "Sphere_point_" + point;
+            sphere.transform.parent = parent;
+
+            //sphere.GetComponent<MeshRenderer>().sharedMaterial.color = Color.white;
+
+            //var bbScale = BoundingBox.transform.localScale;
+            //var maxScaleFactor = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
+            //var maxVector = new Vector3(maxScaleFactor, maxScaleFactor, maxScaleFactor);
+            // float divX = 1f / maxScale;
+            // float divY = 1f / maxScale;
+            // float divZ = 1f / maxScale;
+            // var divScale = new Vector3(divX, divY, divZ);
+            var newScale = Vector3.one * scale; //maxVector * 0.025f; // * 1f; //0.05f;
+
+            sphere.transform.localScale = Vector3.Scale(Vector3.one, newScale);
+
+            sphere.GetComponent<MeshRenderer>().sharedMaterial = mat; // .color = color;
+
+            sphere.transform.position = point;
+
+            return sphere;
+        }
+
         public static GameObject DrawSphere
         (Vector3 point, Transform parent, Color color, Vector3 bbScale,
          Material mat)
