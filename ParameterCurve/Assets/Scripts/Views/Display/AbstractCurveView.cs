@@ -126,7 +126,7 @@ namespace Views.Display
             // DisplayLr.material.color = curve.CurveLineColor;
             // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
-            
+            DisplayMesh.SetScalingFactor(ScalingFactor);
             DisplayMesh.GenerateFieldMesh();
 
             var rotateCurve

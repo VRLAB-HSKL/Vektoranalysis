@@ -9791,7 +9791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TubeMat: {fileID: 2100000, guid: 033167f6ba517c4458ad98c19cef5523, type: 2}
-  SphereMat: {fileID: 0}
+  SphereMat: {fileID: 2100000, guid: bd5012f95b3d5624fb5ca874a345ade2, type: 2}
   TubeMeshScalingFactor: 1
 --- !u!64 &822868470
 MeshCollider:
