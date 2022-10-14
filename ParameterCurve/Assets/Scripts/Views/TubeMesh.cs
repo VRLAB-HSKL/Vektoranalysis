@@ -92,7 +92,7 @@ public class TubeMesh : MonoBehaviour
     private MeshFilter _meshFilter;
     private MeshCollider _meshCollider;
 
-    private float ScalingFactor;
+    private float ScalingFactor = 1f;
     
     public void Awake()
     {
