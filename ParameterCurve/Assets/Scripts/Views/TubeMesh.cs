@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Model;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Utility;
 
 [RequireComponent(
@@ -14,62 +10,66 @@ using Utility;
     typeof(MeshCollider))]
 public class TubeMesh : MonoBehaviour
 {
+    # region Public members
     
     /// <summary>
     /// Material used for the surface of the tube
     /// </summary>
-    public Material TubeMat;
+    public Material tubeMat;
 
     /// <summary>
     /// Material used for the highlighting spheres on the tube
     /// </summary>
-    public Material SphereMat;
+    public Material sphereMat;
 
     /// <summary>
     /// General scaling factor applied to the tube mesh
     /// </summary>
-    public float TubeMeshScalingFactor = 1f;
+    public float tubeMeshScalingFactor = 1f;
 
-    private float SphereScalingFactor = 2f;
+    #endregion Public members
+    
+    
+    #region Private members 
+    
+    
+    private float _sphereScalingFactor = 2f;
 
     
     /// <summary>
     /// Radius of the final tube
     /// </summary>
-    private float radius = 0.1f;
-    
+    private float _radius = 0.1f;
+
     /// <summary>
     /// Number of point used to sample the flat circle around every curve point, making up the outside of the tube mesh
     /// </summary>
-    private int numberOfCirclePoints = 8;
+    private const int NumberOfCirclePoints = 8;
 
     /// <summary>
     /// Sub-mesh for the outer surface of the tube along the curve
     /// </summary>
-    private Mesh tubeMesh;
+    private Mesh _tubeMesh;
     
     /// <summary>
     /// Sub-mesh for the bottom lid of the tube, facing outward
     /// </summary>
-    private Mesh bottomLidMesh;
+    private Mesh _bottomLidMesh;
     
     /// <summary>
     /// Sub-mesh for the top lid of the tube, facing outward
     /// </summary>
-    private Mesh topLidMesh;
-    
-
-    private List<Vector3> _curvePoints = new List<Vector3>();
+    private Mesh _topLidMesh;
 
     /// <summary>
     /// Number of points making up the mesh
     /// </summary>
-    private List<Vector3> tubePoints = new List<Vector3>();
+    private readonly List<Vector3> _tubePoints = new List<Vector3>();
     
     /// <summary>
     /// Number of spheres highlighting the points on the curve
     /// </summary>
-    private List<GameObject> spheres = new List<GameObject>();
+    private readonly List<GameObject> _spheres = new List<GameObject>();
     
     /// <summary>
     /// Game object for the bottom lid mesh
@@ -86,15 +86,43 @@ public class TubeMesh : MonoBehaviour
     /// </summary>
     private float _degreeStepSize;
 
-    private int NumberOfSamplingPoints = -1;
+    /// <summary>
+    /// Custom number of sampling points for a curve. Can be used to visualize the difference
+    /// in differing sampling counts
+    /// </summary>
+    private int _numberOfSamplingPoints = -1;
+    
+    /// <summary>
+    /// Signals whether the curve points are visualized along the curve using small spheres
+    /// </summary>
+    private bool _visualizePoints = false;
 
+    /// <summary>
+    /// Cached mesh renderer component
+    /// </summary>
     private MeshRenderer _meshRenderer;
+    
+    /// <summary>
+    /// Cached mesh filter component
+    /// </summary>
     private MeshFilter _meshFilter;
+    
+    /// <summary>
+    /// Cached mesh collider component
+    /// </summary>
     private MeshCollider _meshCollider;
 
-    private float ScalingFactor = 1f;
+    /// <summary>
+    /// Curve scaling factor. Changed by <see cref="SetScalingFactor"/>
+    /// </summary>
+    private float _scalingFactor = 1f;
     
-    public void Awake()
+    #endregion Private members
+    
+    
+    #region Public functions
+    
+    private void Awake()
     {
         // Cache components
         _meshCollider = GetComponent<MeshCollider>();
@@ -102,13 +130,13 @@ public class TubeMesh : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         
         // Set tube radius based on scaling factor
-        radius = 0.05f * TubeMeshScalingFactor;
-        SphereScalingFactor = 0.125f * TubeMeshScalingFactor;
+        _radius = 0.05f * tubeMeshScalingFactor;
+        _sphereScalingFactor = 0.125f * tubeMeshScalingFactor;
     }
 
     public void SetScalingFactor(float val)
     {
-        ScalingFactor = val;
+        _scalingFactor = val;
     }
     
     /// <summary>
@@ -125,10 +153,12 @@ public class TubeMesh : MonoBehaviour
     /// <param name="sampleCount">Sample count</param>
     public void GenerateFieldMesh(int sampleCount)
     {
-        NumberOfSamplingPoints = sampleCount;
+        _numberOfSamplingPoints = sampleCount;
         CalculateMesh();
     }
 
+    #endregion Public functions
+    
     /// <summary>
     /// Mesh calculation function
     /// </summary>
@@ -137,14 +167,13 @@ public class TubeMesh : MonoBehaviour
         if(GlobalDataModel.DisplayCurveDatasets == null) return;
         if(GlobalDataModel.DisplayCurveDatasets.Count == 0) return;
 
-        tubePoints.Clear();
-        _degreeStepSize = 360f / numberOfCirclePoints;
+        _tubePoints.Clear();
+        _degreeStepSize = 360f / NumberOfCirclePoints;
         
         GenerateCurveMesh();
         GenerateBottomLidMesh();
         GenerateTopLidMesh();
     }
-    
     
     /// <summary>
     /// Generates the main surface around the curve points
@@ -155,10 +184,10 @@ public class TubeMesh : MonoBehaviour
         var curvePoints = curve.WorldPoints; 
 
         // When a sample count was given, sample curve
-        if(NumberOfSamplingPoints != -1)
+        if(_numberOfSamplingPoints != -1)
         {
-            var div = curvePoints.Count / NumberOfSamplingPoints;
-            _degreeStepSize = NumberOfSamplingPoints;
+            var div = curvePoints.Count / _numberOfSamplingPoints;
+            _degreeStepSize = _numberOfSamplingPoints;
 
             var newPointList = new List<Vector3>();
             for(var i = 0; i < curvePoints.Count; i++)
@@ -167,27 +196,17 @@ public class TubeMesh : MonoBehaviour
                 if(i % div == 0)
                 {
                     var p = curvePoints[i];
-                    //p += transform.position;
-
-                    
-                    //Debug.Log("cp: " + p + ", tp: " + transform.position + ", np: " + p);
-                    
-                    //p *= ScalingFactor;
                     newPointList.Add(p);
                 }
             }
             
-            //Debug.Log("pointCount: " + newPointList.Count);
-
-            foreach(var sphere in spheres)
+            foreach(var sphere in _spheres)
             {
                 Destroy(sphere);
             }
 
-            spheres.Clear();
-
-
-
+            _spheres.Clear();
+            
             foreach(var point in newPointList)
             {
                 var calcPoint = point;
@@ -196,19 +215,20 @@ public class TubeMesh : MonoBehaviour
                     calcPoint = new Vector3(point.x, point.y, 0f);
                 }
                 
-                calcPoint *= TubeMeshScalingFactor;
-                var spherePoint = this.transform.position + calcPoint;
+                calcPoint *= tubeMeshScalingFactor;
+                var spherePoint = transform.position + calcPoint;
 
-                var sphere = DrawingUtility.DrawSphereScaled(spherePoint, transform, Color.black, 
-                    SphereScalingFactor,
-                    SphereMat);
+                if (_visualizePoints)
+                {
+                    var sphere = DrawingUtility.DrawSphereScaled(spherePoint, transform, Color.black, 
+                        _sphereScalingFactor,
+                        sphereMat);
 
-                // Debug.Log("tfpos: " + this.transform.position + ", point: " + calcPoint + ", sum: " + spherePoint + 
-                // ", spherePos: " + sphere.transform.position);
+                    sphere.GetComponent<MeshRenderer>().sharedMaterial = sphereMat;
 
-                sphere.GetComponent<MeshRenderer>().sharedMaterial = SphereMat;
-
-                spheres.Add(sphere);
+                    _spheres.Add(sphere);    
+                }
+                
             }
 
             curvePoints = newPointList;
@@ -219,57 +239,55 @@ public class TubeMesh : MonoBehaviour
         {
             // Get curve point and direction vectors
             var centerPoint = curvePoints[i];
-            var normal = curve.FresnetApparatuses[i].Normal;
             var tangent = curve.FresnetApparatuses[i].Tangent;
-            var binormal = curve.FresnetApparatuses[i].Binormal;
-            
-            _curvePoints.Add(centerPoint);
+            var biNormal = curve.FresnetApparatuses[i].Binormal;
             
             // On first point, generate tangent pointing to next point since
             // we don't have any velocity at the beginning, i.e. the tangent is (0,0,0)
             if (i == 0)
             {
                 tangent = (curvePoints[i + 1] - centerPoint).normalized;// * radius;
-                binormal = curve.FresnetApparatuses[i + 1].Binormal;
+                biNormal = curve.FresnetApparatuses[i + 1].Binormal;
             }
             
             // We need a vector to rotate around the curve point to generate a surface
             // around the curve point. For this, we pick the bi-normal of the given
             // curve point.
-            // ToDo: Fix case where bi-normal is parallel to tangent !
-            var perpendicularVec = binormal;
-            var cpn = perpendicularVec.normalized * radius;
+            // ToDo: Fix edge case where bi-normal is parallel to tangent !
+            var perpendicularVec = biNormal;
+            var cpn = perpendicularVec.normalized * _radius;
+
+            // tubePoints = CalcUtil.CalculateCircleFacingDirection(
+            //     centerPoint, tangent, cpn, numberOfCirclePoints
+            // );
             
+            //tubePoints.ForEach(delegate(Vector3 vector3) { vector3 = vector3 * TubeMeshScalingFactor;  });
             
-                
             // Generate circle points
-            for (var j = 0; j < numberOfCirclePoints; j++)
+            for (var j = 0; j < NumberOfCirclePoints; j++)
             {
-                // Generate circle point by rotating the normal vector around the tangent vector
-                // by a certain degree (step size)
-                var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
-                var rotatedVector = (quaternionRot * cpn);
-                var circlePoint = centerPoint + rotatedVector;
-                circlePoint *= TubeMeshScalingFactor;
-                
-                tubePoints.Add(circlePoint);    
+                 //Generate circle point by rotating the bi-normal vector around the tangent vector
+                 //by a certain degree (step size)
+                 var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
+                 var rotatedVector = (quaternionRot * cpn);
+                 var circlePoint = centerPoint + rotatedVector;
+                 circlePoint *= tubeMeshScalingFactor;
+            
+                //tubePoints[i] *= TubeMeshScalingFactor;
+            
+                _tubePoints.Add(circlePoint);    
             }            
             
         }
         
-        var topology = MeshTopology.Triangles;
-        var indices = new List<int>();
+        const MeshTopology topology = MeshTopology.Triangles;
+        List<int> indices;
 
         // Generate topology indices based on chosen topology
         switch (topology)
         {
-            default:
             case MeshTopology.Triangles:
-                // indices = GenerateTriangleIndices(
-                //     tubePoints, beginningLidPoints.Count
-                // );
-                // Debug.Log("lidCount: " + beginningLidPoints.Count);
-                indices = GenerateCurveMeshTriangleIndices(tubePoints, true);//GenerateLidIndices(beginningLidPoints);
+                indices = GenerateCurveMeshTriangleIndices(_tubePoints, true);
                 
                 // // Draw triangles twice to cover both sides
                 // var backIndices = GenerateTriangleIndices(displayVertices, true);
@@ -279,65 +297,53 @@ public class TubeMesh : MonoBehaviour
             
         }
 
-        tubeMesh = new Mesh
+        _tubeMesh = new Mesh
         {
             name= "Tube mesh",
-            vertices = tubePoints.ToArray()
+            vertices = _tubePoints.ToArray()
         };
         
-        tubeMesh.SetIndices(indices.ToArray(), topology, 0);
-        tubeMesh.RecalculateNormals();
+        _tubeMesh.SetIndices(indices.ToArray(), topology, 0);
+        _tubeMesh.RecalculateNormals();
         
-        _meshRenderer.material = TubeMat;
+        _meshRenderer.material = tubeMat;
         
         // Set mesh
-        _meshFilter.mesh = tubeMesh;
+        _meshFilter.mesh = _tubeMesh;
         
         // Assign mesh to collider
         //collider.convex = true;
-        _meshCollider.sharedMesh = tubeMesh;
+        _meshCollider.sharedMesh = _tubeMesh;
     }
 
     private void GenerateBottomLidMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-        var firstPoint = curve.WorldPoints[0] * ScalingFactor;
-        var firstCircle = tubePoints.GetRange(0, numberOfCirclePoints);
+        var firstPoint = curve.WorldPoints[0] * _scalingFactor;
+        var firstCircle = _tubePoints.GetRange(0, NumberOfCirclePoints);
         
-        // var sb = new StringBuilder();
-        //
-        // for(var i = 0; i < curve.WorldPoints.Count(); i++)
-        // {
-        //     sb.AppendLine(i + ": " + curve.WorldPoints[i]);
-        // }
-        // Debug.Log("WorldPoints:\n" + sb.ToString());
-
-        if (transform.gameObject.name == "TableMesh")
+        _bottomLidMesh = GenerateLidMesh(firstPoint, firstCircle);
+        _bottomLidMesh.name = "bottom lid mesh";
+        
+        // Generate game object if none is present
+        _bottomLidGameObject ??= new GameObject("Bottom Lid", new[]
         {
-            var sd = 0;
-        }
-        
-        bottomLidMesh = GenerateLidMesh(firstPoint, firstCircle);
-        bottomLidMesh.name = "bottom lid mesh";
-        
-        if (_bottomLidGameObject is null)
+            typeof(MeshRenderer), typeof(MeshFilter), typeof(MeshCollider)
+        })
         {
-            _bottomLidGameObject = new GameObject("Bottom Lid", new[]
+            transform =
             {
-                typeof(MeshRenderer), typeof(MeshFilter), typeof(MeshCollider)
-            });    
-            
-            _bottomLidGameObject.transform.parent = transform;
-            //_bottomLidGameObject.transform.localPosition = Vector3.zero;
-        }
+                parent = transform
+            }
+        };
 
-        _bottomLidGameObject.GetComponent<MeshRenderer>().material = TubeMat;
+        _bottomLidGameObject.GetComponent<MeshRenderer>().material = tubeMat;
 
         // Set mesh
-        _bottomLidGameObject.GetComponent<MeshFilter>().mesh = bottomLidMesh;
+        _bottomLidGameObject.GetComponent<MeshFilter>().mesh = _bottomLidMesh;
         
         // Assign mesh to collider
-        _bottomLidGameObject.GetComponent<MeshCollider>().sharedMesh = bottomLidMesh;
+        _bottomLidGameObject.GetComponent<MeshCollider>().sharedMesh = _bottomLidMesh;
         
         // Move game object to first curve point
         //_bottomLidGameObject.transform.position = firstPoint; //_curvePoints[0]; //transform.position;
@@ -346,55 +352,40 @@ public class TubeMesh : MonoBehaviour
     private void GenerateTopLidMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-        var lastPoint = curve.WorldPoints[curve.WorldPoints.Count - 1] * ScalingFactor;
-        var lastCircle = tubePoints.GetRange(
-            tubePoints.Count - numberOfCirclePoints - 1, numberOfCirclePoints);
-
-        if (transform.gameObject.name == "TableMesh")
-        {
-            var sd = 0;
-        }
+        var lastPoint = curve.WorldPoints[curve.WorldPoints.Count - 1] * _scalingFactor;
+        var lastCircle = _tubePoints.GetRange(
+            _tubePoints.Count - NumberOfCirclePoints - 1, NumberOfCirclePoints);
         
-        topLidMesh = GenerateLidMesh(lastPoint, lastCircle);
+        _topLidMesh = GenerateLidMesh(lastPoint, lastCircle);
 
-        topLidMesh.name = "top lid mesh";
+        _topLidMesh.name = "top lid mesh";
         
-        if (_topLidGameObject is null)
+        // Generate game object if none is present
+        _topLidGameObject ??= new GameObject("Top Lid", new[]
         {
-            _topLidGameObject = new GameObject("Top Lid", new[]
+            typeof(MeshRenderer), typeof(MeshFilter), typeof(MeshCollider)
+        })
+        {
+            transform =
             {
-                typeof(MeshRenderer), typeof(MeshFilter), typeof(MeshCollider)
-            });    
-            
-            _topLidGameObject.transform.parent = transform;
-        }
+                parent = transform
+            }
+        };
 
-        _topLidGameObject.GetComponent<MeshRenderer>().material = TubeMat;
+        _topLidGameObject.GetComponent<MeshRenderer>().material = tubeMat;
 
         // Set mesh
-        _topLidGameObject.GetComponent<MeshFilter>().mesh = topLidMesh;
+        _topLidGameObject.GetComponent<MeshFilter>().mesh = _topLidMesh;
         
         // Assign mesh to collider
-        _topLidGameObject.GetComponent<MeshCollider>().sharedMesh = topLidMesh;
+        _topLidGameObject.GetComponent<MeshCollider>().sharedMesh = _topLidMesh;
     }
 
     private Mesh GenerateLidMesh(Vector3 center, List<Vector3> circlePoints)
     {
-        var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         var pos = transform.position;
         var centerPoint = pos + center; // * TubeMeshScalingFactor;
-        //curve.TableScalingFactor;
-        //centerPoint *= curve.TableScalingFactor;
         
-        // string s = "";
-        // for(var i = 0; i < circlePoints.Count; i++)
-        // {
-        //     s += circlePoints[i].ToString("0.0000000") + "\n";
-        // }
-        //
-        // Debug.Log("tfname: " + transform.gameObject.name + ", center: " + center + ", pos: " + transform.position + ", centerPoint: " + centerPoint
-        // + "\n" + s);
-
         var beginningLidPoints = new List<Vector3>();
         for (var i = 0; i < circlePoints.Count - 1; i++)
         {
@@ -423,30 +414,28 @@ public class TubeMesh : MonoBehaviour
         
         var beginningLidIndices = GenerateLidTriangleIndices(beginningLidPoints);
         
-        bottomLidMesh = new Mesh
+        _bottomLidMesh = new Mesh
         {
             vertices = beginningLidPoints.ToArray(),
         };
 
-        bottomLidMesh.SetIndices(beginningLidIndices, MeshTopology.Triangles, 0);
-        bottomLidMesh.RecalculateNormals();
+        _bottomLidMesh.SetIndices(beginningLidIndices, MeshTopology.Triangles, 0);
+        _bottomLidMesh.RecalculateNormals();
         
-        return bottomLidMesh;
+        return _bottomLidMesh;
     }
     
     
     private List<int> GenerateCurveMeshTriangleIndices(List<Vector3> tubePoints, bool windClockwise)
     {
         var indicesList = new List<int>();
-        for (var i = 0; i < tubePoints.Count - 1; i += numberOfCirclePoints)
+        for (var i = 0; i < tubePoints.Count - 1; i += NumberOfCirclePoints)
         {
-            var currSet = tubePoints.GetRange(i, numberOfCirclePoints);
-
-            for (var j = 0; j < numberOfCirclePoints; ++j)
+            for (var j = 0; j < NumberOfCirclePoints; ++j)
             {
                 var baseIndex = i + j;
 
-                if (baseIndex >= (tubePoints.Count - numberOfCirclePoints - 1)) continue;
+                if (baseIndex >= (tubePoints.Count - NumberOfCirclePoints - 1)) continue;
                 
                 // Debug.Log(
                 //     "baseIndex: " + baseIndex +
@@ -460,13 +449,13 @@ public class TubeMesh : MonoBehaviour
 
                 if (windClockwise)
                 {
-                    indicesList.Add(baseIndex + numberOfCirclePoints + 1);
-                    indicesList.Add(baseIndex + numberOfCirclePoints);
+                    indicesList.Add(baseIndex + NumberOfCirclePoints + 1);
+                    indicesList.Add(baseIndex + NumberOfCirclePoints);
                 }
                 else
                 {
-                    indicesList.Add(baseIndex + numberOfCirclePoints);
-                    indicesList.Add(baseIndex + numberOfCirclePoints + 1);    
+                    indicesList.Add(baseIndex + NumberOfCirclePoints);
+                    indicesList.Add(baseIndex + NumberOfCirclePoints + 1);    
                 }
                 
                 // lower left triangle
@@ -475,11 +464,11 @@ public class TubeMesh : MonoBehaviour
                 if (windClockwise)
                 {
                     indicesList.Add(baseIndex + 1);
-                    indicesList.Add(baseIndex + numberOfCirclePoints + 1);
+                    indicesList.Add(baseIndex + NumberOfCirclePoints + 1);
                 }
                 else
                 {
-                    indicesList.Add(baseIndex + numberOfCirclePoints + 1);
+                    indicesList.Add(baseIndex + NumberOfCirclePoints + 1);
                     indicesList.Add(baseIndex + 1);
                 }
             }

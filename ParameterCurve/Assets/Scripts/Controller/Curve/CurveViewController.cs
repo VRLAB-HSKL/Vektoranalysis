@@ -53,7 +53,7 @@ namespace Controller.Curve
             DisplayLr = displayLineRenderer;
             MeshObject = displayMesh;
 
-            MeshObject.TubeMeshScalingFactor = scalingFactor;
+            MeshObject.tubeMeshScalingFactor = scalingFactor;
             
             _travelObject = travel;
             _arcLengthTravelObject = arcTravel;

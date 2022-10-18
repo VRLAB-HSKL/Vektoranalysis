@@ -47,6 +47,23 @@ namespace Utility
 
             return v2;
         }
+
+        public static List<Vector3> CalculateCircleFacingDirection(
+            Vector3 origin, Vector3 direction, Vector3 perpendicularVector, int stepCount)
+        {
+            var degreeStepSize = 360f / stepCount;
+            var circlePoints = new List<Vector3>();
+            for (var i = 0; i < stepCount; i++)
+            {
+                var quaternionRot = Quaternion.AngleAxis(i * degreeStepSize, direction);
+                var rotatedVector = (quaternionRot * perpendicularVector);
+                var circlePoint = origin + rotatedVector;    
+                circlePoints.Add(circlePoint);
+            }
+            //Debug.Log("count: " + circlePoints.Count);
+            return circlePoints;
+        }
+        
         
         /// <summary>
         /// Maps a value form one range to another range.
