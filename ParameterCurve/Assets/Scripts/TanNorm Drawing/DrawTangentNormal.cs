@@ -45,12 +45,14 @@ public class DrawTangentNormal : MonoBehaviour
         heightAdjustment = heightAdjustmentObject.GetComponent<VRMoveWithObject>();
         tangentDrawn = false;
         normalDrawn = false;
-        generateCurve();
+        //generateCurve();
     }
 
     // Update is called once per frame
     void Update()
     {
+        return;
+        
         //show solution on grip press
         if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Grip))
         {
@@ -104,7 +106,8 @@ public class DrawTangentNormal : MonoBehaviour
         //dataset for first curve in first sub exercise of tangent normal exercise
         CurveInformationDataset data = GlobalDataModel.SelectionExercises[2].Datasets[0].GetCurveData()[0];
 
-        Vector3 parentPosOffset = this.transform.position;
+        Vector3 parentPosOffset = transform.position;
+        drawCurveLR.positionCount = data.Points.Count;
         for(var i = 0; i < data.Points.Count; i++)
         {
             float x = data.Points[i].x * data.WorldScalingFactor/2f + parentPosOffset.x;

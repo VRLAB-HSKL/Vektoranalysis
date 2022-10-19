@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model;
@@ -117,6 +118,8 @@ public class TubeMesh : MonoBehaviour
     /// </summary>
     private float _scalingFactor = 1f;
     
+    private const float CircleDegree = 1f / 360f;
+    
     #endregion Private members
     
     
@@ -137,6 +140,10 @@ public class TubeMesh : MonoBehaviour
     public void SetScalingFactor(float val)
     {
         _scalingFactor = val;
+        tubeMeshScalingFactor = _scalingFactor;
+        _radius = Mathf.Clamp(0.05f * _scalingFactor, 0.1f, 0.25f);
+        
+        _sphereScalingFactor = 0.125f * _scalingFactor;
     }
     
     /// <summary>
@@ -210,10 +217,10 @@ public class TubeMesh : MonoBehaviour
             foreach(var point in newPointList)
             {
                 var calcPoint = point;
-                if(!curve.Is3DCurve)
-                {
-                    calcPoint = new Vector3(point.x, point.y, 0f);
-                }
+                // if(!curve.Is3DCurve)
+                // {
+                //     calcPoint = new Vector3(point.x, point.y, 0f);
+                // }
                 
                 calcPoint *= tubeMeshScalingFactor;
                 var spherePoint = transform.position + calcPoint;
@@ -343,7 +350,7 @@ public class TubeMesh : MonoBehaviour
         _bottomLidGameObject.GetComponent<MeshFilter>().mesh = _bottomLidMesh;
         
         // Assign mesh to collider
-        _bottomLidGameObject.GetComponent<MeshCollider>().sharedMesh = _bottomLidMesh;
+        //_bottomLidGameObject.GetComponent<MeshCollider>().sharedMesh = _bottomLidMesh;
         
         // Move game object to first curve point
         //_bottomLidGameObject.transform.position = firstPoint; //_curvePoints[0]; //transform.position;
@@ -376,9 +383,18 @@ public class TubeMesh : MonoBehaviour
 
         // Set mesh
         _topLidGameObject.GetComponent<MeshFilter>().mesh = _topLidMesh;
+
+        try
+        {
+            // Assign mesh to collider
+            //_topLidGameObject.GetComponent<MeshCollider>().sharedMesh = _topLidMesh;
+        }
+        catch (Exception e)
+        {
+            
+        }
         
-        // Assign mesh to collider
-        _topLidGameObject.GetComponent<MeshCollider>().sharedMesh = _topLidMesh;
+        
     }
 
     private Mesh GenerateLidMesh(Vector3 center, List<Vector3> circlePoints)

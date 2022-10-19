@@ -54,7 +54,7 @@ public class CockpitTravel : MonoBehaviour
     private Vector3 _initTimeDistTravelPos;
     private Vector3 _initTimeVelTravelPos;
 
-    private string path = "Assets/Resources/linecoords.txt";
+    //private string path = "Assets/Resources/linecoords.txt";
     private float minThreshold = 0.02f; //fastest travel
     private float maxThreshold = 0.15f;  //slowest travel
 
@@ -75,11 +75,16 @@ public class CockpitTravel : MonoBehaviour
         _initTimeDistTravelPos = TimeDistanceTravelObject.transform.localPosition;
         _initTimeVelTravelPos = TimeVelocityTravelObject.transform.localPosition;
 
+        // ToDo: Remove this!
+        var path = "";
+        
         using (StreamReader reader = new StreamReader(path))
         {
             //change center display image on cockpit to current curve
             string imgName = reader.ReadLine();
-            Texture2D img = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Resources/img/" + imgName + ".png", typeof(Texture2D));
+            Texture2D img = (Texture2D)Resources.Load("/img/" + imgName + ".png", typeof(Texture2D));
+                
+                //(Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Resources/img/" + imgName + ".png", typeof(Texture2D));
             CockpitImageDisplay.texture = img;
 
             if (int.Parse(reader.ReadLine()) == 3)
@@ -242,6 +247,6 @@ public class CockpitTravel : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        File.WriteAllText(path, "");
+        //File.WriteAllText(path, "");
     }
 }

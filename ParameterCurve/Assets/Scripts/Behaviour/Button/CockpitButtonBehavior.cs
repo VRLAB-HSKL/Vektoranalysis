@@ -38,7 +38,7 @@ namespace Behaviour.Button
         /// <summary>
         /// Path to text file
         /// </summary>
-        private string path = "Assets/Resources/linecoords.txt";
+        //private string path = "Assets/Resources/linecoords.txt";
 
 
         /// <summary>
@@ -64,6 +64,9 @@ namespace Behaviour.Button
 
         IEnumerator WriteCoordsData()
         {
+            // ToDo: Remove this!
+            var path = "";
+            
             bool is3D = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].Is3DCurve;
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -152,7 +155,7 @@ namespace Behaviour.Button
 
         private void exit()
         {
-            StartCoroutine(WriteCoordsData());
+            //StartCoroutine(WriteCoordsData());
         }
 
         private void cancel()
@@ -164,7 +167,7 @@ namespace Behaviour.Button
         private void OnApplicationQuit()
         {
             //clear curve data when application stops running
-            File.WriteAllText(path, "");
+            //File.WriteAllText(path, "");
         }
     }
 }

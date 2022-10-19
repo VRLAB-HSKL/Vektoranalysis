@@ -132,7 +132,7 @@ namespace Views.Display
             var rotateCurve
                 = ControllerType == AbstractCurveViewController.CurveControllerType.Table; // && !CurrentCurve.Is3DCurve;
 
-            DisplayMesh.transform.rotation = Quaternion.Euler(rotateCurve ? 90f : 0f, 0f, 0f);
+            //DisplayMesh.transform.rotation = Quaternion.Euler(rotateCurve ? 90f : 0f, 0f, 0f);
             
             //_wpm = new WaypointManager(curve.worldPoints.ToArray(), 0.01f, false);
 
@@ -155,8 +155,8 @@ namespace Views.Display
         protected Vector3 MapPointPos(Vector3 point)//, bool is3d)
         {
             // Flip curve upright based on controller type and dimension
-            var flip = 
-                ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
+            var flip = false;
+                //ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
         
             // Calculate new point
             var newVector = flip 

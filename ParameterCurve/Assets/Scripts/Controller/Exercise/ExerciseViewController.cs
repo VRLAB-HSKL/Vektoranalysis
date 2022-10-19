@@ -44,7 +44,7 @@ namespace Controller.Exercise
         private SelectionExerciseGameObjects _selObjects;
 
         //path to text file storing chosen answers for each attempt
-        private string path = "Assets/Resources/exerciseresults.txt";
+        private string path = Application.persistentDataPath + ("exerciseresults.txt"); //"Assets/Resources/exerciseresults.txt";
 
         #endregion Private members
 
@@ -91,7 +91,13 @@ namespace Controller.Exercise
             CurrentView.UpdateView();
 
             //reset recorded answers on each new world state load
-            File.WriteAllText(path, "");
+            
+            // if (!File.Exists(path))
+            // {
+            //     File.CreateText(path);
+            // }
+            //
+            // File. WriteAllText(path, "");
         }
        
         #endregion Constructors

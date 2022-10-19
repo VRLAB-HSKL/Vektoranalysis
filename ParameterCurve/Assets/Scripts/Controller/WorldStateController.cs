@@ -7,6 +7,7 @@ using UI;
 using UnityEngine;
 using Views.Display;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Controller
 {
@@ -606,18 +607,29 @@ namespace Controller
 
         private void CheckForCurve()
         {
-            using (StreamReader reader = new StreamReader(pathToData))
+            //pathToData = Application.Path Resources.Load() "Assets/Resources/linecoords.txt"; 
+            var file = Resources.Load<TextAsset>("linecoords.txt");
+            if (file)
             {
-                string name = reader.ReadLine();
-
-                //will be null if this is the first time the scene is being loaded
-                //will contain name of curve that was just run in the cockpit scene if not null
-                if (name != null)
+                var lines = Regex.Split(file.text, "\n|\r|\r\n");
+                if (lines.Length > 0)
                 {
-                    //if curve does not exist, function will just return and load regularly
-                    SwitchToSpecificDataset(name);  
+                    SwitchToSpecificDataset(lines[0]);
                 }
             }
+            
+            // using (StreamReader reader = new StreamReader(pathToData))
+            // {
+            //     string name = reader.ReadLine();
+            //
+            //     //will be null if this is the first time the scene is being loaded
+            //     //will contain name of curve that was just run in the cockpit scene if not null
+            //     if (name != null)
+            //     {
+            //         //if curve does not exist, function will just return and load regularly
+            //         SwitchToSpecificDataset(name);  
+            //     }
+            // }
         }
     
         
