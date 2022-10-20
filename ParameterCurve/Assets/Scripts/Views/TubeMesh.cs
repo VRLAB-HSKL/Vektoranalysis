@@ -133,16 +133,16 @@ public class TubeMesh : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         
         // Set tube radius based on scaling factor
-        _radius = 0.05f * tubeMeshScalingFactor;
+        _radius = 0.1f;//0.05f * tubeMeshScalingFactor;
         _sphereScalingFactor = 0.125f * tubeMeshScalingFactor;
+        
     }
 
     public void SetScalingFactor(float val)
     {
         _scalingFactor = val;
         tubeMeshScalingFactor = _scalingFactor;
-        _radius = Mathf.Clamp(0.05f * _scalingFactor, 0.1f, 0.25f);
-        
+        _radius = 0.1f; //Mathf.Clamp(0.05f * _scalingFactor, 0.1f, 0.1f);
         _sphereScalingFactor = 0.125f * _scalingFactor;
     }
     
@@ -191,6 +191,7 @@ public class TubeMesh : MonoBehaviour
         var curvePoints = curve.WorldPoints; 
 
         // When a sample count was given, sample curve
+        // ToDo: Refactor this into second view / subclass
         if(_numberOfSamplingPoints != -1)
         {
             var div = curvePoints.Count / _numberOfSamplingPoints;
@@ -263,25 +264,18 @@ public class TubeMesh : MonoBehaviour
             // ToDo: Fix edge case where bi-normal is parallel to tangent !
             var perpendicularVec = biNormal;
             var cpn = perpendicularVec.normalized * _radius;
-
-            // tubePoints = CalcUtil.CalculateCircleFacingDirection(
-            //     centerPoint, tangent, cpn, numberOfCirclePoints
-            // );
-            
-            //tubePoints.ForEach(delegate(Vector3 vector3) { vector3 = vector3 * TubeMeshScalingFactor;  });
             
             // Generate circle points
             for (var j = 0; j < NumberOfCirclePoints; j++)
             {
                  //Generate circle point by rotating the bi-normal vector around the tangent vector
-                 //by a certain degree (step size)
+                 //by a certain degree (step size). This generates points forming a circle around
+                 //the curve point, facing in the direction of the following curve point (tangent direction)
                  var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
-                 var rotatedVector = (quaternionRot * cpn);
+                 var rotatedVector = quaternionRot * cpn;
                  var circlePoint = centerPoint + rotatedVector;
                  circlePoint *= tubeMeshScalingFactor;
-            
-                //tubePoints[i] *= TubeMeshScalingFactor;
-            
+                 
                 _tubePoints.Add(circlePoint);    
             }            
             
@@ -319,7 +313,6 @@ public class TubeMesh : MonoBehaviour
         _meshFilter.mesh = _tubeMesh;
         
         // Assign mesh to collider
-        //collider.convex = true;
         _meshCollider.sharedMesh = _tubeMesh;
     }
 
