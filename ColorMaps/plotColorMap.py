@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Aug 13 18:15:03 2022
+Create Bitmaps of Colormaps from ColorBrewer and other sources
+for use in our VR applications.
 
 @author: brill
 """
