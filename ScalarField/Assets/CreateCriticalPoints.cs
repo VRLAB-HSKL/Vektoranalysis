@@ -1,3 +1,4 @@
+using System.Linq;
 using Model.Enums;
 using Model.ScriptableObjects;
 using UnityEngine;
@@ -31,6 +32,14 @@ public class CreateCriticalPoints : MonoBehaviour
         var bbScale = BoundingBox.transform.lossyScale;
         var points = ScalarFieldManager.CurrentField.MeshPoints;
         var cps = ScalarFieldManager.CurrentField.CriticalPoints;
+
+        //var maxCpIndex = cps.Max(x => x.PointIndex);
+
+        // while (cps.Count - 1 < maxCpIndex)
+        // {
+        //     var x = 0;
+        // }
+        
         for(var i = 0; i < cps.Count; i++)
         {
             var cp = cps[i];

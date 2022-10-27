@@ -39,7 +39,7 @@ namespace Views
         public virtual void UpdateView()
         {
             //Debug.Log("Generating field mesh...");
-            //GenerateFieldMesh();
+            GenerateFieldMesh();
             
             MeshUtility.UpdateMeshComponents(_data.CurrentField, _tf.gameObject, _boundingBox, _bounds);
             

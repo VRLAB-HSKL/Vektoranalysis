@@ -54,6 +54,14 @@ namespace FieldGeneration
 
             var yieldStep = Mathf.FloorToInt(scalarFieldManager.CurrentField.Gradients.Count * 0.001f);
             Debug.Log($"gradientCount: {scalarFieldManager.CurrentField.Gradients.Count}");
+
+            // var maxGradIndex = scalarFieldManager.CurrentField.Gradients.Max(x => x.Index);
+            //
+            // while (meshVectors.Count - 1 < maxGradIndex)
+            // {
+            //     yield return null;
+            // }
+            //
             for(var i = 0; i < scalarFieldManager.CurrentField.Gradients.Count; i++)
             {
                 //if (i % stepsBetweenArrows != 0) continue;
