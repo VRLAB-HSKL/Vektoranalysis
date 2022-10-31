@@ -1,5 +1,5 @@
 ﻿using Controller.Curve;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using Views.Display;
@@ -70,7 +70,7 @@ namespace Views.Exercise
         /// <summary>
         /// Static log4net logger
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
         
         #endregion Private members
         
@@ -90,7 +90,7 @@ namespace Views.Exercise
         /// <param name="controllerType">Type of parent controller</param>
         protected AbstractExerciseView(LineRenderer displayLr, Vector3 rootPos, float scalingFactor)
         {
-            Log.Info("AbstractCurveView.ArgumentConstructor()");
+            //Log.Info("AbstractCurveView.ArgumentConstructor()");
             //ControllerType = controllerType;
             DisplayLr = displayLr;
             _rootPos = rootPos;

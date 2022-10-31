@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using Views.Display;
@@ -65,7 +65,7 @@ namespace Controller.Exercise
         /// <summary>
         /// Static log4net logger instance
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
         
         /// <summary>
         /// Root element position in the world, used as the origin for all curve coordinates

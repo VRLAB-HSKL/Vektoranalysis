@@ -1,5 +1,5 @@
 using Controller.Curve;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using VRKL.MBU;
@@ -92,7 +92,7 @@ namespace Views.Display
         /// <summary>
         /// Static log4net logger
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
         
         #endregion Private members
         
@@ -192,7 +192,7 @@ namespace Views.Display
             if (CurrentPointIndex != CurrentCurve.Points.Count - 1) return;
             
             GlobalDataModel.IsRunning = false;
-            Log.Debug("Stopping run...!");
+            //Log.Debug("Stopping run...!");
             
             
         }
@@ -310,15 +310,15 @@ namespace Views.Display
             BinormalLr.SetPositions(_binormalArr);
             BinormalLr.widthMultiplier = _initBinormalLrWidth * ScalingFactor;
         
-            Log.Debug("objPos: " + travelObjPosition +
-                      " jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
-                      " tangentArr: [" + _tangentArr[0] + ", " + _tangentArr[1] + "]" +
-                      " length: " + (_tangentArr[1] - _tangentArr[0]).magnitude + "\n" + 
-                      " normalArr: [" + _normalArr[0] + ", " + _normalArr[1] + "]" +
-                      " length: " + (_normalArr[1] - _normalArr[0]).magnitude + "\n" + 
-                      " jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
-                      " binormalArr: [" + _binormalArr[0] + ", " + _binormalArr[1] + "]" +
-                      " length: " + (_binormalArr[1] - _binormalArr[0]).magnitude);
+            // Log.Debug("objPos: " + travelObjPosition +
+            //           " jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
+            //           " tangentArr: [" + _tangentArr[0] + ", " + _tangentArr[1] + "]" +
+            //           " length: " + (_tangentArr[1] - _tangentArr[0]).magnitude + "\n" + 
+            //           " normalArr: [" + _normalArr[0] + ", " + _normalArr[1] + "]" +
+            //           " length: " + (_normalArr[1] - _normalArr[0]).magnitude + "\n" + 
+            //           " jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
+            //           " binormalArr: [" + _binormalArr[0] + ", " + _binormalArr[1] + "]" +
+            //           " length: " + (_binormalArr[1] - _binormalArr[0]).magnitude);
 
             // Make sure object is facing in the correct direction
             var nextPos = MapPointPos(CurrentPointIndex < curve.WorldPoints.Count - 1

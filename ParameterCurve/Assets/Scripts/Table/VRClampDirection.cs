@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
-using UnityEngine.XR.OpenXR.Features.Interactions;
+//using UnityEngine.XR.OpenXR.Features.Interactions;
 
 
 public class VRClampDirection : MonoBehaviour

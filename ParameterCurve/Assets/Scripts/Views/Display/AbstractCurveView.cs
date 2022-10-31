@@ -1,5 +1,5 @@
 using Controller.Curve;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using VRKL.MBU;
@@ -72,7 +72,7 @@ namespace Views.Display
         /// <summary>
         /// Static log4net logger
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
         
         
         
@@ -91,7 +91,7 @@ namespace Views.Display
             float scalingFactor, 
             AbstractCurveViewController.CurveControllerType controllerType)
         {
-            Log.Info("AbstractCurveView.ArgumentConstructor()");
+            //Log.Info("AbstractCurveView.ArgumentConstructor()");
             DisplayMesh = displayMesh;
             //DisplayLr = displayLr;
             _rootPos = rootPos;

@@ -1,9 +1,9 @@
-using log4net;
+//using log4net;
 using UnityEngine;
 
 public class PositionTracker : MonoBehaviour
 {
-    private static readonly ILog Log = LogManager.GetLogger(typeof(PositionTracker));
+    //private static readonly ILog Log = LogManager.GetLogger(typeof(PositionTracker));
 
     private Transform playerTransform;
 
@@ -16,9 +16,9 @@ public class PositionTracker : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Log.Info(
-            "Frame: " + Time.frameCount + "\n" +
-            "Player position: " + playerTransform.position
-        );
+        // Log.Info(
+        //     "Frame: " + Time.frameCount + "\n" +
+        //     "Player position: " + playerTransform.position
+        // );
     }
 }

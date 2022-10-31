@@ -1,5 +1,5 @@
 using Controller.Curve;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using VRKL.MBU;
@@ -57,7 +57,7 @@ namespace Views.Display
         /// <summary>
         /// Static log4net logger
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
 
         public WaypointManager _arcWpm;
         
@@ -239,15 +239,15 @@ namespace Views.Display
             ArcLengthBinormalLr.SetPositions(arcBinormalArr);
             ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * (ScalingFactor * 0.5f);
 
-            Log.Debug("arcObjPos: " + arcObjPos +
-                          " arc_jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
-                          " arc_tangentArr: [" + arcTangentArr[0] + ", " + arcTangentArr[1] + "]" +
-                          " length: " + (arcTangentArr[1] - arcTangentArr[0]).magnitude + "\n" + 
-                          " arc_normalArr: [" + arcNormalArr[0] + ", " + arcNormalArr[1] + "]" +
-                          " length: " + (arcNormalArr[1] - arcNormalArr[0]).magnitude + "\n" + 
-                          " arc_jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
-                          " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
-                          " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
+            // Log.Debug("arcObjPos: " + arcObjPos +
+            //               " arc_jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
+            //               " arc_tangentArr: [" + arcTangentArr[0] + ", " + arcTangentArr[1] + "]" +
+            //               " length: " + (arcTangentArr[1] - arcTangentArr[0]).magnitude + "\n" + 
+            //               " arc_normalArr: [" + arcNormalArr[0] + ", " + arcNormalArr[1] + "]" +
+            //               " length: " + (arcNormalArr[1] - arcNormalArr[0]).magnitude + "\n" + 
+            //               " arc_jsonBinormalPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Binormal + "] " +
+            //               " arc_binormalArr: [" + arcBinormalArr[0] + ", " + arcBinormalArr[1] + "]" +
+            //               " length: " + (arcBinormalArr[1] - arcBinormalArr[0]).magnitude);
             
             var nextPos = MapPointPos(CurrentPointIndex < curve.ArcLengthWorldPoints.Count - 1 
                 ? curve.ArcLengthWorldPoints[CurrentPointIndex + 1] 
