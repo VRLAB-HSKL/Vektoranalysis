@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 using Controller.Curve;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using Views;
@@ -39,7 +39,7 @@ namespace Controller.Exercise
         /// <summary>
         /// Static log4net logger instance
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
 
         private SelectionExerciseGameObjects _selObjects;
 

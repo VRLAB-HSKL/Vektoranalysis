@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using HTC.UnityPlugin.Vive;
-using log4net;
+//using log4net;
 using UnityEngine;
 
 public class HandTracker : MonoBehaviour
@@ -12,7 +12,7 @@ public class HandTracker : MonoBehaviour
     public HandEnum Hand; 
 
 
-    private static readonly ILog Log = LogManager.GetLogger(typeof(HandTracker));
+    //private static readonly ILog Log = LogManager.GetLogger(typeof(HandTracker));
 
     private HandRole _role;
     private string _prefix;
@@ -48,7 +48,7 @@ public class HandTracker : MonoBehaviour
         _stringBuilder.AppendLine(_prefix + " hand forward: " + handPose.forward);
         _stringBuilder.AppendLine(_prefix + " hand right: " + handPose.right);
 
-        Log.Info(_stringBuilder.ToString());
+        //Log.Info(_stringBuilder.ToString());
         _stringBuilder.Clear();
     }
 }

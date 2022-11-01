@@ -188,22 +188,22 @@ public class TubeMesh : MonoBehaviour
     private void GenerateCurveMesh()
     {
         var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-        var curvePoints = curve.WorldPoints; 
+        var polyline = curve.WorldPoints; 
 
         // When a sample count was given, sample curve
         // ToDo: Refactor this into second view / subclass
         if(_numberOfSamplingPoints != -1)
         {
-            var div = curvePoints.Count / _numberOfSamplingPoints;
+            var div = polyline.Count / _numberOfSamplingPoints;
             _degreeStepSize = _numberOfSamplingPoints;
 
             var newPointList = new List<Vector3>();
-            for(var i = 0; i < curvePoints.Count; i++)
+            for(var i = 0; i < polyline.Count; i++)
             {
                 // Only sample every nth point
                 if(i % div == 0)
                 {
-                    var p = curvePoints[i];
+                    var p = polyline[i];
                     newPointList.Add(p);
                 }
             }
@@ -239,14 +239,14 @@ public class TubeMesh : MonoBehaviour
                 
             }
 
-            curvePoints = newPointList;
+            polyline = newPointList;
         }
         
         // Calculate surface mesh points
-        for (var i = 0; i < curvePoints.Count; i++)
+        for (var i = 0; i < polyline.Count; i++)
         {
             // Get curve point and direction vectors
-            var centerPoint = curvePoints[i];
+            var centerPoint = polyline[i];
             var tangent = curve.FresnetApparatuses[i].Tangent;
             var biNormal = curve.FresnetApparatuses[i].Binormal;
             
@@ -254,7 +254,7 @@ public class TubeMesh : MonoBehaviour
             // we don't have any velocity at the beginning, i.e. the tangent is (0,0,0)
             if (i == 0)
             {
-                tangent = (curvePoints[i + 1] - centerPoint).normalized;// * radius;
+                tangent = (polyline[i + 1] - centerPoint).normalized;// * radius;
                 biNormal = curve.FresnetApparatuses[i + 1].Binormal;
             }
             

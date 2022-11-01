@@ -1,11 +1,11 @@
-using log4net;
+//using log4net;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using System.Text;
 
 public class HMDTracker : MonoBehaviour
 {
-    private static readonly ILog Log = LogManager.GetLogger(typeof(HMDTracker));
+    //private static readonly ILog Log = LogManager.GetLogger(typeof(HMDTracker));
 
     private StringBuilder _stringBuilder;
 
@@ -38,7 +38,7 @@ public class HMDTracker : MonoBehaviour
         // ToDo: Log eye gaze if hardware supports it
 
 
-        Log.Info(_stringBuilder.ToString());
+        //Log.Info(_stringBuilder.ToString());
         _stringBuilder.Clear();
     }
 }

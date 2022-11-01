@@ -1,7 +1,7 @@
 using Controller.Curve;
 using Controller.Exercise;
 using HTC.UnityPlugin.Vive;
-using log4net;
+//using log4net;
 using Model;
 using UI;
 using UnityEngine;
@@ -122,7 +122,7 @@ namespace Controller
         /// <summary>
         /// Static log4net Logger 
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(WorldStateController));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(WorldStateController));
 
         /// <summary>
         /// Time passed since last traversal to the current point. Once this value is greater than
@@ -144,7 +144,6 @@ namespace Controller
         /// </summary>
         public static void StartRun()
         {
-            Log.Info("Starting curve run");
             GlobalDataModel.IsRunning = true;        
             GlobalDataModel.WorldCurveViewController.StartRun();
             GlobalDataModel.TableCurveViewController?.StartRun();
@@ -270,7 +269,7 @@ namespace Controller
             {
                 if(GlobalDataModel.WorldCurveViewController.CurrentView is null)
                 {
-                    Log.Warn("ViewEmpty");
+                    //Log.Warn("ViewEmpty");
                 }
 
                 GlobalDataModel.IsRunning = false;
@@ -516,10 +515,10 @@ namespace Controller
             {
                 // Update time since last point step
                 _updateTimer += Time.deltaTime;
-                Log.Debug("deltaTime: " + Time.deltaTime + 
-                          ", updateTimer: " + _updateTimer + 
-                          ", pointStepDuration: " + GlobalDataModel.RunSpeedFactor +
-                          " - " + (_updateTimer >= GlobalDataModel.RunSpeedFactor));
+                // Log.Debug("deltaTime: " + Time.deltaTime + 
+                //           ", updateTimer: " + _updateTimer + 
+                //           ", pointStepDuration: " + GlobalDataModel.RunSpeedFactor +
+                //           " - " + (_updateTimer >= GlobalDataModel.RunSpeedFactor));
                 
                 // If the time threshold has been reached, traverse to next point
                 if(_updateTimer >= GlobalDataModel.RunSpeedFactor)
@@ -535,7 +534,7 @@ namespace Controller
             // Start run on trigger press
             if (ViveInput.GetPressUp(HandRole.RightHand, ControllerButton.Grip))
             {
-                Log.Debug("Run started with controller button!");
+                //Log.Debug("Run started with controller button!");
                 StartRun();
             }
         

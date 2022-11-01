@@ -4,7 +4,7 @@ using Controller.Curve;
 using Controller.Exercise;
 using Import;
 using Import.InitFile;
-using log4net;
+//using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
@@ -142,7 +142,7 @@ namespace Model
         /// <summary>
         /// Static log4net logger
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(GlobalDataModel));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(GlobalDataModel));
         
         #endregion Private members
         
@@ -151,7 +151,7 @@ namespace Model
         public static void InitializeData()
         {
             ParseIniFile();
-            Log.Debug("Global Data initialized");
+            //Log.Debug("Global Data initialized");
         }
         
         #endregion Public functions
@@ -296,15 +296,15 @@ namespace Model
 
 }
 
-public class TL : System.Diagnostics.TraceListener
-{
-    public override void Write(string message)
-    {
-        Debug.Log(message);
-    }
-
-    public override void WriteLine(string message)
-    {
-        Debug.Log(message + System.Environment.NewLine);
-    }
-}
+// public class TL : System.Diagnostics.TraceListener
+// {
+//     public override void Write(string message)
+//     {
+//         Debug.Log(message);
+//     }
+//
+//     public override void WriteLine(string message)
+//     {
+//         Debug.Log(message + System.Environment.NewLine);
+//     }
+// }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using log4net;
+//using log4net;
 using Model;
 using UnityEngine;
 using Views.Display;
@@ -77,7 +77,7 @@ namespace Controller.Curve
         /// <summary>
         /// Static log4net logger instance
         /// </summary>
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveViewController));
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveViewController));
         
         #endregion Private members
         
@@ -126,7 +126,7 @@ namespace Controller.Curve
         {
             if (index < 0 || index >= Views.Count) return;
             
-            Log.Debug("Switching to view with index: " + index);
+            //Log.Debug("Switching to view with index: " + index);
             
             CurrentView = Views[index];
         }
