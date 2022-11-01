@@ -1,23 +1,89 @@
 {
-    "m_SelectedDeviceId": "FA014AZ00030",
+    "m_SelectedDeviceId": "FA97GAZ00035",
     "m_SelectedPackage": {
-        "deviceId": "FA014AZ00030",
-        "name": "com.DefaultCompany.ParameterCurve",
-        "processId": 3835,
+        "deviceId": "FA97GAZ00035",
+        "name": "com.HochschuleKaiserslautern.ParamCurve",
+        "processId": 4745,
         "exited": false
     },
-    "m_SelectedPriority": 3,
+    "m_SelectedPriority": 4,
     "m_KnownPackagesForSerialization": [
         {
-            "deviceId": "FA014AZ00030",
+            "deviceId": "FA97GAZ00069",
             "name": "com.htc.mobilevr.launcher",
-            "processId": 2244,
+            "processId": 2208,
             "exited": false
         },
         {
-            "deviceId": "FA014AZ00030",
-            "name": "com.DefaultCompany.ParameterCurve",
-            "processId": 3835,
+            "deviceId": "FA97GAZ00069",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 5877,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00069",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 7148,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00069",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 7952,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00069",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 8430,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00069",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 9058,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 4401,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.htc.mobilevr.launcher",
+            "processId": 2229,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 6041,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 6923,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.htc.mobilevr.launcher",
+            "processId": 2232,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 3645,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.HochschuleKaiserslautern.ParamCurve",
+            "processId": 4745,
             "exited": false
         }
     ],

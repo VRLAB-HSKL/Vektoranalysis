@@ -144,6 +144,7 @@ namespace Controller
         /// </summary>
         public static void StartRun()
         {
+            //Log.Info("Starting curve run");
             GlobalDataModel.IsRunning = true;        
             GlobalDataModel.WorldCurveViewController.StartRun();
             GlobalDataModel.TableCurveViewController?.StartRun();
@@ -515,10 +516,10 @@ namespace Controller
             {
                 // Update time since last point step
                 _updateTimer += Time.deltaTime;
-                // Log.Debug("deltaTime: " + Time.deltaTime + 
-                //           ", updateTimer: " + _updateTimer + 
-                //           ", pointStepDuration: " + GlobalDataModel.RunSpeedFactor +
-                //           " - " + (_updateTimer >= GlobalDataModel.RunSpeedFactor));
+                //Log.Debug("deltaTime: " + Time.deltaTime + 
+                //          ", updateTimer: " + _updateTimer + 
+                //          ", pointStepDuration: " + GlobalDataModel.RunSpeedFactor +
+                //          " - " + (_updateTimer >= GlobalDataModel.RunSpeedFactor));
                 
                 // If the time threshold has been reached, traverse to next point
                 if(_updateTimer >= GlobalDataModel.RunSpeedFactor)

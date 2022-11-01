@@ -164,24 +164,24 @@ namespace Model
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void ConfigureLogging()
         {
-            var path = $"{Application.dataPath}/Resources/log/log4netConfig.xml";
-            var configFile = new FileInfo(path);
-        
-            // System.Diagnostics.Trace.Listeners.Add(
-            //     new TL()
-            // );
-
-            //log4net.Util.LogLog.InternalDebugging = true;
-
-            log4net.Config.XmlConfigurator.Configure(configFile);
-
-            var messages = log4net.LogManager.GetRepository().ConfigurationMessages; //.Cast<log4net.Util.LogLog>();
-            foreach(
-                log4net.Util.LogLog message in messages)
-            {
-                // evaluate configuration message
-                //Debug.Log(message.Message);
-            }
+            // var path = $"{Application.dataPath}/Resources/log/log4netConfig.xml";
+            // var configFile = new FileInfo(path);
+            //
+            // // System.Diagnostics.Trace.Listeners.Add(
+            // //     new TL()
+            // // );
+            //
+            // //log4net.Util.LogLog.InternalDebugging = true;
+            //
+            // log4net.Config.XmlConfigurator.Configure(configFile);
+            //
+            // var messages = log4net.LogManager.GetRepository().ConfigurationMessages; //.Cast<log4net.Util.LogLog>();
+            // foreach(
+            //     log4net.Util.LogLog message in messages)
+            // {
+            //     // evaluate configuration message
+            //     //Debug.Log(message.Message);
+            // }
         }
 
         private static void ParseIniFile()

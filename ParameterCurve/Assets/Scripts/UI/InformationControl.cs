@@ -252,6 +252,7 @@ namespace UI
 
             var curve = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
             
+            
             var view = ObserevedCurveViewController.CurrentView;
 
             //Debug.Log("test");
