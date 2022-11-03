@@ -107,7 +107,18 @@ namespace FieldGeneration
                 lr.SetPositions(newPointList.ToArray());
 
                 var tube = _tubeObjects[i].GetComponent<TubeMesh>();
-                tube.GenerateFieldMesh(newPointList);
+                var isActive = tube.gameObject.activeSelf;
+                if (!isActive)
+                {
+                    tube.gameObject.SetActive(true);
+                    tube.GenerateFieldMesh(newPointList);
+                    tube.gameObject.SetActive(false);
+                }
+                else
+                {
+                    tube.GenerateFieldMesh(newPointList);
+                }
+                
             }
         
         }
