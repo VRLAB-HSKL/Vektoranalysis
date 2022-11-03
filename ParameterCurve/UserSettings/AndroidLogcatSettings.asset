@@ -1,9 +1,9 @@
 {
     "m_SelectedDeviceId": "FA97GAZ00035",
     "m_SelectedPackage": {
-        "deviceId": "FA97GAZ00035",
-        "name": "com.HochschuleKaiserslautern.ParamCurve",
-        "processId": 4745,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 4,
