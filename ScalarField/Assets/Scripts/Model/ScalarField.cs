@@ -30,7 +30,7 @@ namespace Model
         /// <see cref="ColorMapId"/> and <see cref="ColorMapDataClassesCount"/>
         /// </summary>
         public Texture2D MeshTexture { get; set; }
-        
+
         /// <summary>
         /// Lower and upper bound of the parameter interval of the x parameter
         /// </summary>

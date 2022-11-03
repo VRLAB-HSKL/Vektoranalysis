@@ -35,6 +35,7 @@ namespace FieldGeneration
         
         private Vector3 _bbExtents;
         private readonly List<GameObject> _contourLineObjects = new List<GameObject>();
+        private readonly List<GameObject> _tubeObjects = new List<GameObject>();
         private List<List<PointData>> isolineDisplayPointLists;
         private Vector3 parentOrigin;
     
@@ -104,6 +105,9 @@ namespace FieldGeneration
                 var lr = _contourLineObjects[i].GetComponent<LineRenderer>();
                 lr.positionCount = newPointList.Count;
                 lr.SetPositions(newPointList.ToArray());
+
+                var tube = _tubeObjects[i].GetComponent<TubeMesh>();
+                tube.GenerateFieldMesh(newPointList);
             }
         
         }
@@ -151,6 +155,11 @@ namespace FieldGeneration
             {
                 line.gameObject.SetActive(isVisible);
             }
+
+            foreach (var tube in _tubeObjects)
+            {
+                tube.gameObject.SetActive(isVisible);
+            }
         }
         
         private void CalculateContourLines()
@@ -183,9 +192,11 @@ namespace FieldGeneration
                     finalPointList.Add(pd);
                 }
             
+                finalPointList.Add(finalPointList.First());
+                
                 isolineDisplayPointLists.Add(finalPointList);
             }
-        
+            
             for (var i = 0; i < isolineDisplayPointLists.Count; i++)
             {
                 var pointList = isolineDisplayPointLists[i];
@@ -199,9 +210,21 @@ namespace FieldGeneration
                 // ToDo: Set contour line color based on color map value color
                 lr.material = lineMat;
                 lr.widthMultiplier = lineThicknessMultiplier;
-                lr.loop = true;
+                //lr.loop = true;
             
                 _contourLineObjects.Add(go);
+                
+                
+                // TubeMesh
+                var goTube = new GameObject("TubeMesh_" + contourValues[i]);
+                goTube.transform.SetParent(transform);
+
+                var tube = goTube.AddComponent<TubeMesh>();
+                tube.tubeMat = lineMat;
+                //tube.SetScalingFactor(0.25f);
+                //tube.GenerateFieldMesh();
+
+                _tubeObjects.Add(goTube);
             }
 
             MapVerticalLinePositionsToMesh(showLinesVerticallyInMesh);

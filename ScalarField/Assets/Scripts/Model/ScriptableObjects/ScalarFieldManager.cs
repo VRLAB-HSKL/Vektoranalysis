@@ -48,6 +48,9 @@ namespace Model.ScriptableObjects
         public InitFileRoot InitFile { get; private set; }
 
 
+        
+        public static Texture2D TransparentTexture { get; set; }
+     
         public void OnEnable()
         {
             ParseInitFile();
@@ -239,6 +242,8 @@ namespace Model.ScriptableObjects
 
                 ScalarFields.Add(sf);
             }
+            
+            TransparentTexture = Resources.Load("texture_maps/test/transparent_texture") as Texture2D;
             
             //Debug.Log("idx: " + CurrentFieldIndex + ", sf count: " + ScalarFields.Count);
             // Set index to 0 on application start

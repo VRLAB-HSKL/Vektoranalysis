@@ -37,10 +37,16 @@ namespace ProceduralMesh
         
         private void SetMeshTransparency(float attenuation)
         {
-            var mr = GetComponent<MeshRenderer>();
-            var mat = mr.material;
-            mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, attenuation);
-            mr.material = mat;
+            // var mr = GetComponent<MeshRenderer>();
+            // var mat = mr.material;
+            // mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, attenuation);
+            // mr.material = mat;
+
+            
+            GetComponent<MeshRenderer>().material.mainTexture = 
+                attenuation < 1f ? 
+                    ScalarFieldManager.TransparentTexture : 
+                    ScalarFieldManager.CurrentField.MeshTexture;
         }
         
         
