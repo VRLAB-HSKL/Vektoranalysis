@@ -1,0 +1,65 @@
+# gitignore für latex, R und Python/Spyder
+
+# directories for pdf-files
+**/[Ff]ertig/
+**/[Aa]rchiv*/
+**/*.pdf
+**/*.synctex
+**/*.synctex(busy)
+
+# winedt project files
+**/*.bak
+**/*.prj
+
+/installs/
+**/*.aux
+**/*.glo
+**/*.idx
+**/*.log
+**/*.toc
+**/*.ist
+**/*.acn
+**/*.acr
+**/*.alg
+**/*.bbl
+**/*.blg
+**/*.dvi
+**/*.glg
+**/*.gls
+**/*.ilg
+**/*.ind
+**/*.lof
+**/*.lot
+**/*.maf
+**/*.mtc
+**/*.mtc1
+**/*.out
+**/*.nav
+**/*.smn
+**/*.snm
+**/*.out
+**/*.ps
+**/*.synctex
+**/*.synctex.gz
+**/*.vrb
+
+# vi backups
+**/*~
+
+# Lockfiles OpenOffice
+**/*~lock.*
+
+# R und RStudio Files
+**/.Rhistory
+**/*.Rproj
+.Rproj.user
+**/.RData
+
+# Ignores für python in src
+**/src/**/images/
+**/__pycache__/
+**/.spyproject/
+**/config/
+**/*.ini
+**/untitled.ipynb
+**/.ipynb_checkpoints/*.*

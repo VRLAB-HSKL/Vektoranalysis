@@ -2,7 +2,7 @@
 
 ![AVR Logo](http://webhome.hs-kl.de/~brill/Assets/images/compuMath.png)
 
-für die Visualisierung von skalaren Attributen verwenden wir 1D-Texturen. Im aktuellen Verzeichnis
+Für die Visualisierung von skalaren Attributen verwenden wir 1D-Texturen. Im aktuellen Verzeichnis
 finden wir eine Python-Datei, mit deren Hilfe wir diese Texturen erstellen. Dabei verwenden
 wir die Paletten wie ColorBrewer oder Matplotlib, die auch auf den Folien der Vorlesung verwendet werden.
 
