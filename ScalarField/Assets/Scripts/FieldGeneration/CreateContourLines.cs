@@ -106,17 +106,19 @@ namespace FieldGeneration
                 lr.positionCount = newPointList.Count;
                 lr.SetPositions(newPointList.ToArray());
 
+                var tanPerpVectors = Enumerable.Repeat(Vector3.up, newPointList.Count).ToList();
+                
                 var tube = _tubeObjects[i].GetComponent<TubeMesh>();
                 var isActive = tube.gameObject.activeSelf;
                 if (!isActive)
                 {
                     tube.gameObject.SetActive(true);
-                    tube.GenerateFieldMesh(newPointList);
+                    tube.GenerateFieldMesh(newPointList, tanPerpVectors);
                     tube.gameObject.SetActive(false);
                 }
                 else
                 {
-                    tube.GenerateFieldMesh(newPointList);
+                    tube.GenerateFieldMesh(newPointList, tanPerpVectors);
                 }
                 
             }

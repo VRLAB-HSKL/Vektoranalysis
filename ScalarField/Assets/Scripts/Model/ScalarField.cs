@@ -84,6 +84,8 @@ namespace Model
         /// </summary>
         public List<float> ContourLineValues { get; set; } = new List<float>();
 
+        public List<List<Vector3>> ContourLineSegments { get; set; } = new List<List<Vector3>>();
+
         /// <summary>
         /// Point vector collections of the individual contour lines
         /// </summary>
