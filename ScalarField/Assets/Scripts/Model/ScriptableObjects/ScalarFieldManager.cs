@@ -170,7 +170,7 @@ namespace Model.ScriptableObjects
                     sf.Gradients.Add(grad);
                 }
 
-                Debug.Log($"gradCount: {sf.Gradients.Count}");
+                //Debug.Log($"gradCount: {sf.Gradients.Count}");
 
                 sf.SteepestDescentPaths = ParsePath(field.Data.mesh.Paths.SteepestDescent);
                 sf.NelderMeadPaths = ParsePath(field.Data.mesh.Paths.NelderMead);
@@ -206,17 +206,30 @@ namespace Model.ScriptableObjects
             
                 sf.ContourLineValues = field.Data.isolines.Values;
 
+                // var lst = new List<List<Vector3>>();
+                // foreach (var line in field.Data.isolines.ConvexHulls)
+                // {
+                //     var vecList = new List<Vector3>();
+                //     foreach (var point in line)
+                //     {
+                //         vecList.Add(new Vector3(point[0], point[1], point[2]));
+                //     }
+                //     lst.Add(vecList);
+                // }
+
                 var lst = new List<List<Vector3>>();
-                foreach (var line in field.Data.isolines.ConvexHulls)
+                foreach (var line in field.Data.isolines.LineSegments)
                 {
                     var vecList = new List<Vector3>();
+                    
                     foreach (var point in line)
-                    {
+                    {   
+                        //Debug.Log("pointsize: " + point.Length);
                         vecList.Add(new Vector3(point[0], point[1], point[2]));
                     }
                     lst.Add(vecList);
                 }
-
+                
                 sf.ContourLinePoints = lst;
 
                 // Load texture based on chosen identifiers in init file

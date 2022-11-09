@@ -191,20 +191,34 @@ namespace FieldGeneration
                     continue;
                 }
             
-                var hullPointList = CalcUtility.GetConvexHull(importedPointList);
+                // var hullPointList = CalcUtility.GetConvexHull(importedPointList);
+                // var finalPointList = new List<PointData>();
+                //
+                // foreach (var point in hullPointList)
+                // {
+                //     var index = importedPointList.IndexOf(point);
+                //     var pd = new PointData
+                //     {
+                //         Raw = importedPointList[index],
+                //         Display = scalarFieldManager.CurrentField.DisplayPoints.Find(p => p == point)  
+                //     };
+                //     finalPointList.Add(pd);
+                // }
+                
                 var finalPointList = new List<PointData>();
-            
-                foreach (var point in hullPointList)
-                {
-                    var index = importedPointList.IndexOf(point);
-                    var pd = new PointData
-                    {
-                        Raw = importedPointList[index],
-                        Display = scalarFieldManager.CurrentField.DisplayPoints.Find(p => p == point)  
-                    };
-                    finalPointList.Add(pd);
-                }
-            
+
+                 for(var j = 0; j < importedPointList.Count; j++)
+                 {
+                     var point = importedPointList[j];
+                     var pd = new PointData
+                     {
+                         Raw = point,
+                         Display = scalarFieldManager.CurrentField.DisplayPoints.Find(p => p == point)
+                     };
+                         
+                     finalPointList.Add(pd);
+                 }
+                
                 finalPointList.Add(finalPointList.First());
                 
                 isolineDisplayPointLists.Add(finalPointList);

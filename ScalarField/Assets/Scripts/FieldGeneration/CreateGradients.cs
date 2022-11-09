@@ -82,10 +82,10 @@ namespace FieldGeneration
                 var gradient = scalarFieldManager.CurrentField.Gradients[i];
                 // flip coordinates to match display vector ordering
                 var gradientDirection = new Vector3(gradient.Direction.x, gradient.Direction.z, gradient.Direction.y);
-                Debug.Log($"{i}_gradDir: {gradientDirection}");
-                Debug.Log("testAbc");
+                // Debug.Log($"{i}_gradDir: {gradientDirection}");
+                // Debug.Log("testAbc");
                 var start = scalarFieldManager.CurrentField.MeshPoints[gradient.Index];
-                Debug.Log("test0");
+                // Debug.Log("test0");
                 var end = start + gradientDirection.normalized;
 
                 // Debug.Log(
@@ -109,13 +109,13 @@ namespace FieldGeneration
                 var similarPointsInMesh = meshVectors.Where(p => Mathf.Abs(p.x - end.x) < tolerance)
                     .Where(p => Mathf.Abs(p.z - end.z) < tolerance).ToList();
 
-                Debug.Log("test1");
+                //Debug.Log("test1");
                 
                 if (similarPointsInMesh.Any())
                 {
                     //Debug.Log("Found points with approximately the same x and z coordinate");
                     var index = meshVectors.IndexOf(similarPointsInMesh[0]);
-                    Debug.Log("test2");
+                    //Debug.Log("test2");
                     end = new Vector3(end.x, meshVectors[index].y, end.z);
                     
                 }

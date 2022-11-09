@@ -1005,7 +1005,7 @@ public class TubeMesh : MonoBehaviour
                 //     ", baseIndex + Num + 1: " + (baseIndex + numberOfCirclePoints + 1)
                 // );
                 
-                Debug.Log("baseIndex: " + i + ", " + j);
+                //Debug.Log("baseIndex: " + i + ", " + j);
                 
                 // upper right triangle
                 indicesList.Add(baseIndex);

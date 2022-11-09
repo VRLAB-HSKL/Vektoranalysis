@@ -37,7 +37,7 @@ namespace Travel
             var estimatedIndex = TravelManager.EstimatedIndex;
             var finalPoint = ScalarFieldManager.CurrentField.MeshPoints[estimatedIndex];
             
-            Debug.Log("estimated index: " + estimatedIndex + ", finalPoint: " + finalPoint);
+            //Debug.Log("estimated index: " + estimatedIndex + ", finalPoint: " + finalPoint);
             
             // // var initValues = ScalarFieldManager.CurrentField.MeshPoints[estimatedIndex];
             // //

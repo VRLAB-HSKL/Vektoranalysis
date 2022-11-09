@@ -139,6 +139,9 @@ namespace Model.InitFile
         [JsonProperty("convex_hulls")]
         public List<List<float[]>> ConvexHulls { get; set; }
         
+        [JsonProperty("isoline_segments")]
+        public List<List<float[]>> LineSegments { get; set; }
+        
     }
 
     public class InitFileGizmos
