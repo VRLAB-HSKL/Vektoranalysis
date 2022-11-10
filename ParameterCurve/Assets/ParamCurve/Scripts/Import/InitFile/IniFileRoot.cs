@@ -64,6 +64,12 @@ namespace Import.InitFile
         public List<List<float>> AccVec { get; set; }
         
         /// <summary>
+        /// Normal vectors
+        /// </summary>
+        [JsonProperty("norm_vec")]
+        public List<List<float>> NormVec { get; set; }
+        
+        /// <summary>
         /// Arc length parametrization based parameter values
         /// </summary>
         [JsonProperty("arc_t")]
@@ -219,6 +225,7 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("data")]
         public PointData Data { get; set; }
+        
     }
     
     /// <summary>

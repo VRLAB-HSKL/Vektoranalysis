@@ -109,9 +109,9 @@ namespace Import
                         pd.Is3DCurve ? curve.Data.Data.VelVec[j][2] : 0f
                     ).normalized,
                     Normal = new Vector3(
-                        curve.Data.Data.AccVec[j][0],
-                        curve.Data.Data.AccVec[j][1],
-                        pd.Is3DCurve ? curve.Data.Data.AccVec[j][2] : 0f
+                        curve.Data.Data.NormVec[j][0],
+                        curve.Data.Data.NormVec[j][1],
+                        pd.Is3DCurve ? curve.Data.Data.NormVec[j][2] : 0f
                     ).normalized
                 };
 

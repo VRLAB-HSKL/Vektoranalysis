@@ -1,3 +1,4 @@
+using System.Linq;
 using Controller.Curve;
 //using log4net;
 using Model;
@@ -127,7 +128,10 @@ namespace Views.Display
             // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
             DisplayMesh.SetScalingFactor(ScalingFactor);
-            DisplayMesh.GenerateFieldMesh();
+
+            var binormals = curve.FresnetApparatuses.Select(point => point.Binormal).ToList();
+            
+            DisplayMesh.GenerateFieldMesh(curve.WorldPoints, binormals);
 
             var rotateCurve
                 = ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
