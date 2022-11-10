@@ -253,7 +253,7 @@ namespace Controller
             // Update info wall
             infoWall.Update();
 
-            GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
+            //GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
             GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
             
@@ -373,7 +373,7 @@ namespace Controller
 
             
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
-            GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
+            GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
             
             //tableDisplayMesh.GenerateFieldMesh();
@@ -573,6 +573,8 @@ namespace Controller
                 displayCurve.WorldScalingFactor, AbstractCurveViewController.CurveControllerType.World);
             GlobalDataModel.WorldCurveViewController.SetViewVisibility(true);
             
+            GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
+            
             // Table display curve (if activated)
             if (GlobalDataModel.InitFile.ApplicationSettings.TableSettings.Activated)
             {
@@ -581,6 +583,7 @@ namespace Controller
                     tableTravelObject, tableArcLengthTravelObject, displayCurve.TableScalingFactor, 
                     AbstractCurveViewController.CurveControllerType.Table);
 
+                GlobalDataModel.TableCurveViewController.CurrentView.UpdateView();
                 
                 // // Add global position of parent object into points
                 // var lrPositions = new Vector3[tableDisplayLr.positionCount]; 

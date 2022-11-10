@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.htc.upm.vive-input-utility": "1.17.0",
+    "com.htc.upm.vive-input-utility": "1.15.0",
     "com.htc.upm.wave.xrsdk": "5.0.2-r.16",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
