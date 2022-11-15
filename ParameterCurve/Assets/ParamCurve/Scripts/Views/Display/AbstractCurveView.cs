@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Controller.Curve;
 //using log4net;
@@ -17,7 +18,7 @@ namespace Views.Display
         /// <summary>
         /// Scaling factor, applied to all points in the view
         /// </summary>
-        public float ScalingFactor;
+        public float ScalingFactor = 1f;
     
         /// <summary>
         /// True if this view has a game object to display runs 
@@ -96,7 +97,10 @@ namespace Views.Display
             DisplayMesh = displayMesh;
             //DisplayLr = displayLr;
             _rootPos = rootPos;
+            
+            
             ScalingFactor = scalingFactor;
+            
             ControllerType = controllerType;
         }
         
@@ -127,11 +131,12 @@ namespace Views.Display
             // DisplayLr.material.color = curve.CurveLineColor;
             // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
-            DisplayMesh.SetScalingFactor(ScalingFactor);
+            if(ControllerType == AbstractCurveViewController.CurveControllerType.Table)
+                DisplayMesh.SetScalingFactor(ScalingFactor);
 
-            var binormals = curve.FresnetApparatuses.Select(point => point.Binormal).ToList();
+            var normals = curve.FresnetApparatuses.Select(point => point.Normal).ToList();
             
-            DisplayMesh.GenerateFieldMesh(curve.WorldPoints, binormals);
+            DisplayMesh.GenerateFieldMesh(curve.WorldPoints, normals);
 
             var rotateCurve
                 = ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
@@ -165,7 +170,17 @@ namespace Views.Display
             var newVector = flip 
                 ? new Vector3(point.x, point.z, point.y) 
                 : new Vector3(point.x, point.y, point.z);
-            newVector = _rootPos + newVector * ScalingFactor;
+
+
+            if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
+            {
+                newVector = _rootPos + newVector * ScalingFactor;
+            }
+            else
+            {
+                newVector = _rootPos + newVector; //;ScalingFactor;    
+            }
+            
             return newVector;
         }
 
