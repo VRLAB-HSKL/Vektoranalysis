@@ -1,37 +1,13 @@
 {
-    "m_SelectedDeviceId": "FA97GAZ00035",
+    "m_SelectedDeviceId": "FA97FAZ00245",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "FA97FAZ00245",
+        "name": "com.DefaultCompany.ParameterCurve",
+        "processId": 3237,
         "exited": false
     },
     "m_SelectedPriority": 4,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "FA97GAZ00069",
-            "name": "com.htc.mobilevr.launcher",
-            "processId": 2208,
-            "exited": false
-        },
-        {
-            "deviceId": "FA97GAZ00069",
-            "name": "com.HochschuleKaiserslautern.ParamCurve",
-            "processId": 5877,
-            "exited": true
-        },
-        {
-            "deviceId": "FA97GAZ00069",
-            "name": "com.HochschuleKaiserslautern.ParamCurve",
-            "processId": 7148,
-            "exited": true
-        },
-        {
-            "deviceId": "FA97GAZ00069",
-            "name": "com.HochschuleKaiserslautern.ParamCurve",
-            "processId": 7952,
-            "exited": true
-        },
         {
             "deviceId": "FA97GAZ00069",
             "name": "com.HochschuleKaiserslautern.ParamCurve",
@@ -42,7 +18,19 @@
             "deviceId": "FA97GAZ00069",
             "name": "com.HochschuleKaiserslautern.ParamCurve",
             "processId": 9058,
-            "exited": false
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00069",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3623,
+            "exited": true
+        },
+        {
+            "deviceId": "FA97GAZ00069",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3386,
+            "exited": true
         },
         {
             "deviceId": "FA97GAZ00035",
@@ -84,6 +72,48 @@
             "deviceId": "FA97GAZ00035",
             "name": "com.HochschuleKaiserslautern.ParamCurve",
             "processId": 4745,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97GAZ00035",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3215,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97FAZ00245",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3316,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97FAZ00245",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3189,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97FAZ00245",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3237,
+            "exited": false
+        },
+        {
+            "deviceId": "FA014AZ00072",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3299,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97FAZ00114",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3005,
+            "exited": false
+        },
+        {
+            "deviceId": "FA97GAZ00077",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 3179,
             "exited": false
         }
     ],

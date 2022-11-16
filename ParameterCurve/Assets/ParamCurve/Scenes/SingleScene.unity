@@ -3927,7 +3927,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &265566058
 Transform:
   m_ObjectHideFlags: 0
@@ -11063,7 +11063,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2416570217cbfa4796f0d0a9f4abae0, type: 2}
+  - {fileID: 2100000, guid: b37e6b620cf91c94388e06e7c7667423, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20266,7 +20266,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1591126573
 Transform:
   m_ObjectHideFlags: 0
@@ -24651,6 +24651,10 @@ PrefabInstance:
     - target: {fileID: 1010487433757556669, guid: dab699966c39c4d458e3749ba099a08e, type: 3}
       propertyPath: m_Name
       value: TangentNormal
+      objectReference: {fileID: 0}
+    - target: {fileID: 1010487433757556669, guid: dab699966c39c4d458e3749ba099a08e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2381332214163707151, guid: dab699966c39c4d458e3749ba099a08e, type: 3}
       propertyPath: SphereMat
