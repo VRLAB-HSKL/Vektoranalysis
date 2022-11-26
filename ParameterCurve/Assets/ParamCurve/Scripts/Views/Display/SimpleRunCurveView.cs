@@ -329,7 +329,6 @@ namespace Views.Display
                 ? new Vector3(0f, 0f, -1f) 
                 : Vector3.up;
         
-            //(binormalArr[0] + binormalArr[1]).normalized);
             TravelObject.transform.LookAt(nextPos, worldUp);
         }
         

@@ -81,5 +81,37 @@ namespace Utility
             // b1 + (s - a1) * (b2 - b1) / (a2 - a1);
             return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
         }
+        
+        
+        // Source: raylib.h math utility c header
+        // https://github.com/raysan5/raylib/blob/master/src/raymath.h
+        public static Vector3 Vector3Perpendicular(Vector3 v)
+        {
+            Vector3 result = Vector3.zero;
+
+            float min = Mathf.Abs(v.x);
+            Vector3 cardinalAxis = new Vector3(1.0f, 0.0f, 0.0f);
+
+            if (Mathf.Abs(v.y) < min)
+            {
+                min = Mathf.Abs(v.y);
+                Vector3 tmp = new Vector3(0.0f, 1.0f, 0.0f);
+                cardinalAxis = tmp;
+            }
+
+            if (Mathf.Abs(v.z) < min)
+            {
+                Vector3 tmp = new Vector3(0.0f, 0.0f, 1.0f);
+                cardinalAxis = tmp;
+            }
+
+            // Cross product between vectors
+            result.x = v.y*cardinalAxis.z - v.z*cardinalAxis.y;
+            result.y = v.z*cardinalAxis.x - v.x*cardinalAxis.z;
+            result.z = v.x*cardinalAxis.y - v.y*cardinalAxis.x;
+
+            return result;
+        }
+        
     }
 }

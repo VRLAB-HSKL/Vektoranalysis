@@ -674,7 +674,7 @@ public class TubeMesh : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         
         // Set tube radius based on scaling factor
-        _radius = 0.025f;//0.05f * tubeMeshScalingFactor;
+        _radius = 0.0375f;//0.05f * tubeMeshScalingFactor;
         _sphereScalingFactor = 0.125f * tubeMeshScalingFactor;
         
     }
@@ -683,7 +683,7 @@ public class TubeMesh : MonoBehaviour
     {
         _scalingFactor = val;
         tubeMeshScalingFactor = _scalingFactor;
-        _radius = 0.025f; //Mathf.Clamp(0.05f * _scalingFactor, 0.1f, 0.1f);
+        _radius = 0.0375f; //Mathf.Clamp(0.05f * _scalingFactor, 0.1f, 0.1f);
         _sphereScalingFactor = 0.125f * _scalingFactor;
     }
     

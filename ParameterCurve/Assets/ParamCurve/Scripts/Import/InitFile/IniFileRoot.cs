@@ -70,6 +70,12 @@ namespace Import.InitFile
         public List<List<float>> NormVec { get; set; }
         
         /// <summary>
+        /// Binormal vectors
+        /// </summary>
+        [JsonProperty("binorm_vec")]
+        public List<List<float>> BinormVec { get; set; }
+        
+        /// <summary>
         /// Arc length parametrization based parameter values
         /// </summary>
         [JsonProperty("arc_t")]

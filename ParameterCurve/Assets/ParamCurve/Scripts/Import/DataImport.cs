@@ -112,12 +112,26 @@ namespace Import
                         curve.Data.Data.NormVec[j][0],
                         curve.Data.Data.NormVec[j][1],
                         pd.Is3DCurve ? curve.Data.Data.NormVec[j][2] : 0f
+                    ).normalized,
+                    Binormal = new Vector3(
+                        curve.Data.Data.BinormVec[j][0],
+                        curve.Data.Data.BinormVec[j][1],
+                        pd.Is3DCurve ? curve.Data.Data.BinormVec[j][2] : 0f
                     ).normalized
+                    
                 };
+                
 
-                var bin = Vector3.Cross(fsr.Tangent, fsr.Normal);
-                fsr.Binormal = new Vector3(bin.x, bin.y, -Mathf.Abs(bin.z));
+                // var bin = Vector3.Cross(fsr.Tangent, fsr.Normal);
+                // fsr.Binormal = new Vector3(bin.x, bin.y, -Mathf.Abs(bin.z));
 
+                // if (j == 10 && pd.Name == "helix")
+                // {
+                //     Debug.Log(pd.Name + "_j10: " + 
+                //               fsr.Binormal[0].ToString("#0.00000000") + " " +
+                //               fsr.Binormal[1].ToString("#0.00000000") + " " +
+                //               fsr.Binormal[2].ToString("#0.00000000"));
+                // }
 
                 pd.FresnetApparatuses.Add(fsr);
                 pd.ArcLengthParamValues = curve.Data.Data.ArcT;
@@ -142,7 +156,7 @@ namespace Import
                 };
 
                 var arcBin = Vector3.Cross(fsr.Tangent, fsr.Normal);
-                arcFsr.Binormal = new Vector3(arcBin.x, arcBin.y, -Mathf.Abs(arcBin.z));
+                //arcFsr.Binormal = new Vector3(arcBin.x, arcBin.y, -Mathf.Abs(arcBin.z));
                 // Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
 
                 pd.ArcLengthFresnetApparatuses.Add(arcFsr);

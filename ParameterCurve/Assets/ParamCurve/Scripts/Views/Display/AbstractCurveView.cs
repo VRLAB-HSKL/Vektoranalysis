@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Controller.Curve;
 //using log4net;
 using Model;
 using UnityEngine;
+using Utility;
 using VRKL.MBU;
 
 namespace Views.Display
@@ -14,11 +16,15 @@ namespace Views.Display
     public abstract class AbstractCurveView
     {
         #region Public members
-    
+
         /// <summary>
         /// Scaling factor, applied to all points in the view
         /// </summary>
-        public float ScalingFactor = 1f;
+        public float ScalingFactor
+        {
+            get;
+            set;
+        } = 1f;
     
         /// <summary>
         /// True if this view has a game object to display runs 
@@ -107,36 +113,57 @@ namespace Views.Display
         #endregion Constructors
 
         #region Public functions
-        
+
         /// <summary>
         /// Update view with current information
         /// </summary>
         public virtual void UpdateView()
         {
-            var curve = CurrentCurve; 
-        
+            var curve = CurrentCurve;
+
             // Map points to world space location
             var pointArr = curve.WorldPoints.ToArray();
             for (var i = 0; i < pointArr.Length; i++)
             {
                 var point = pointArr[i];
-                pointArr[i] = MapPointPos(point);//, curve.Is3DCurve);
+                pointArr[i] = MapPointPos(point); //, curve.Is3DCurve);
             }
 
             // Set line renderer positions
             // DisplayLr.positionCount = pointArr.Length;
             // DisplayLr.SetPositions(pointArr);
-        
+
             // Update material
             // DisplayLr.material.color = curve.CurveLineColor;
             // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
-            if(ControllerType == AbstractCurveViewController.CurveControllerType.Table)
-                DisplayMesh.SetScalingFactor(ScalingFactor);
 
-            var normals = curve.FresnetApparatuses.Select(point => point.Normal).ToList();
+            if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
+            {
+                // Debug.Log(ScalingFactor);
+                DisplayMesh.SetScalingFactor(curve.TableScalingFactor);
+            }
+        
+        // Debug.Log(curve.Name);
+            // if (curve.Name.Equals("l02_2"))
+            // {
+            //     DisplayMesh.SetScalingFactor(ScalingFactor);
+            //     Debug.Log("hit!");
+            // }
+                
             
-            DisplayMesh.GenerateFieldMesh(curve.WorldPoints, normals);
+            // var tangents = curve.FresnetApparatuses.Select(point => point.Tangent).ToList();
+            // var perpVectors = new List<Vector3>();
+            // for (var i = 0; i < tangents.Count; i++)
+            // {
+            //     var tan = tangents[i];
+            //     var perpVec = CalcUtil.Vector3Perpendicular(tan); 
+            //     perpVectors.Append(perpVec);
+            // }
+            
+            var perpVectors = curve.FresnetApparatuses.Select(point => point.Normal).ToList();
+            
+            DisplayMesh.GenerateFieldMesh(curve.WorldPoints, perpVectors);
 
             var rotateCurve
                 = ControllerType == AbstractCurveViewController.CurveControllerType.Table && !CurrentCurve.Is3DCurve;
