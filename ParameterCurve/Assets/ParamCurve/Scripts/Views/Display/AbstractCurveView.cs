@@ -137,6 +137,11 @@ namespace Views.Display
             // DisplayLr.material.color = curve.CurveLineColor;
             // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
+            if (ControllerType == AbstractCurveViewController.CurveControllerType.World)
+            {
+                // Debug.Log(ScalingFactor);
+                DisplayMesh.SetScalingFactor(curve.WorldScalingFactor);
+            }    
 
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
             {
@@ -201,11 +206,11 @@ namespace Views.Display
 
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
             {
-                newVector = _rootPos + newVector * ScalingFactor;
+                newVector = _rootPos + newVector * CurrentCurve.TableScalingFactor;  //ScalingFactor;
             }
             else
             {
-                newVector = _rootPos + newVector; //;ScalingFactor;    
+                newVector = _rootPos + newVector * CurrentCurve.WorldScalingFactor; //;ScalingFactor;    
             }
             
             return newVector;
