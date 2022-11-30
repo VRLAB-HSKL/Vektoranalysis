@@ -792,6 +792,10 @@ public class TubeMesh : MonoBehaviour
             
             // Get curve point and direction vectors
             var centerPoint = polyline[i];
+
+            // DrawingUtility.DrawSphere(centerPoint, transform, Color.blue, 
+            //     new Vector3(0.1f, 0.1f, 0.1f), sphereMat);
+            
             Vector3 tangent; // = curve.FresnetApparatuses[i].Tangent;
             Vector3 biNormal; // = curve.FresnetApparatuses[i].Binormal;
             
@@ -808,7 +812,6 @@ public class TubeMesh : MonoBehaviour
                 //biNormal = Vector3.down;
             }
 
-            biNormal = _tanPerpendicularVectors[i];
             
             //yield return null;
             
@@ -816,21 +819,30 @@ public class TubeMesh : MonoBehaviour
             // around the curve point. For this, we pick the bi-normal of the given
             // curve point.
             // ToDo: Fix edge case where bi-normal is parallel to tangent !
-            var perpendicularVec = biNormal;
+            var perpendicularVec = _tanPerpendicularVectors[i];
             var cpn = perpendicularVec.normalized * _radius;
             
             // Generate circle points
             for (var j = 0; j < NumberOfCirclePoints; j++)
             {
+                
                  //Generate circle point by rotating the bi-normal vector around the tangent vector
                  //by a certain degree (step size). This generates points forming a circle around
                  //the curve point, facing in the direction of the following curve point (tangent direction)
                  var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
                  var rotatedVector = quaternionRot * cpn;
+                 
+                 
                  var circlePoint = centerPoint + rotatedVector;
                  circlePoint *= tubeMeshScalingFactor;
                  
                 _tubePoints.Add(circlePoint);
+
+                //print(i + "_" + j + ": " + j * _degreeStepSize + " - " + rotatedVector.ToString("#0.000000"));
+                
+                //Debug.DrawLine(centerPoint, circlePoint, Color.magenta, 20f);
+
+                
                 
                 // if(i % 10 == 0)
                 //     yield return null;
@@ -838,8 +850,12 @@ public class TubeMesh : MonoBehaviour
             
             //Debug.Log("point_i: " + i);
             //yield return null;
+        
+            
             
         }
+        
+        
         
         const MeshTopology topology = MeshTopology.Triangles;
         List<int> indices;

@@ -234,40 +234,39 @@ namespace Views.Display
             var normal = curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Normal.normalized;
             var binormal = curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized;
         
-            // Prevent z-buffer fighting
-            tangent.z += 0.001f;
-            normal.z += 0.001f;
-            binormal.z += 0.001f;
-            
-            // Custom axis flip on examination table
-            if (ControllerType == AbstractCurveViewController.CurveControllerType.Table && !curve.Is3DCurve)
+            // Flip axis to match unity coordinate system
+            if (ControllerType == AbstractCurveViewController.CurveControllerType.Table || curve.Is3DCurve )
             {
                 tangent = new Vector3(tangent.x, tangent.z, tangent.y);
                 normal = new Vector3(normal.x, normal.z, normal.y);
-                binormal = new Vector3(binormal.x, binormal.z, binormal.y);
+                binormal = new Vector3(binormal.x, binormal.z, binormal.y);    
             }
-
+            
+            // // Prevent z-buffer fighting
+            // tangent.z += 0.001f;
+            // normal.z += 0.001f;
+            // binormal.z += 0.001f;
             
             // Scale moving frame points
-            tangent *= ScalingFactor;
-            normal *= ScalingFactor;
-            binormal *= ScalingFactor;
+            tangent *= ScalingFactor * 3f;
+            normal *= ScalingFactor * 3f;
+            binormal *= ScalingFactor * 3f;
     
             // Calculate moving frame points
             _arcTangentArr[0] = travelObjPosition;
             _arcTangentArr[1] = travelObjPosition + tangent;
             ArcLengthTangentLr.SetPositions(_arcTangentArr);
-            ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * ScalingFactor;
+            ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * ScalingFactor * 2f;
                 
             _arcNormalArr[0] = travelObjPosition;
             _arcNormalArr[1] = (travelObjPosition + normal); 
             ArcLengthNormalLr.SetPositions(_arcNormalArr);
-            ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * ScalingFactor;
+            ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * ScalingFactor * 2f;
                 
             _arcBinormalArr[0] = travelObjPosition;
             _arcBinormalArr[1] = travelObjPosition + binormal;
             ArcLengthBinormalLr.SetPositions(_arcBinormalArr);
-            ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * ScalingFactor;
+            ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * ScalingFactor * 2f;
             
             
             // var arcTangentArr = new Vector3[2];
@@ -311,6 +310,11 @@ namespace Views.Display
             var worldUp = ControllerType == AbstractCurveViewController.CurveControllerType.World 
                 ? new Vector3(0f, 0f, -1f) 
                 : Vector3.up;
+            
+            if (curve.Is3DCurve)
+            {
+                worldUp = binormal;
+            }
             
             ArcLengthTravelObject.transform.LookAt(nextPos, worldUp);
         }

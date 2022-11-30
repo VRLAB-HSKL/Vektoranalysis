@@ -137,18 +137,21 @@ namespace Views.Display
             // DisplayLr.material.color = curve.CurveLineColor;
             // DisplayLr.material.SetColor(EmissionColor, curve.CurveLineColor);
 
+
+            
             if (ControllerType == AbstractCurveViewController.CurveControllerType.World)
             {
                 // Debug.Log(ScalingFactor);
                 DisplayMesh.SetScalingFactor(curve.WorldScalingFactor);
             }    
-
+            
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
             {
                 // Debug.Log(ScalingFactor);
                 DisplayMesh.SetScalingFactor(curve.TableScalingFactor);
-            }
-        
+            }    
+            //
+            
         // Debug.Log(curve.Name);
             // if (curve.Name.Equals("l02_2"))
             // {
@@ -206,13 +209,13 @@ namespace Views.Display
 
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
             {
-                newVector = _rootPos + newVector * CurrentCurve.TableScalingFactor;  //ScalingFactor;
+                newVector = _rootPos + newVector * CurrentCurve.TableScalingFactor;
             }
             else
             {
                 newVector = _rootPos + newVector * CurrentCurve.WorldScalingFactor; //;ScalingFactor;    
             }
-            
+            //
             return newVector;
         }
 

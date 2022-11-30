@@ -10829,7 +10829,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 1, y: 0, z: 0}
+  - {x: 0, y: -1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.025
@@ -12994,7 +12994,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 1, y: 0, z: 0}
+  - {x: 0, y: -1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.025
@@ -13320,7 +13320,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fa65ef9800812fb428262c4ea35cd626, type: 2}
+  - {fileID: 2100000, guid: a1ead639f3aaa7148b402fdb3c278c9d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13792,7 +13792,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4241a5aee4da0f24fad78619bee0d97b, type: 2}
+  - {fileID: 2100000, guid: 070c0f67d808f394cbfc137fb4e3612c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22051,7 +22051,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 1, y: 0, z: 0}
+  - {x: 0, y: -1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.025
@@ -26628,7 +26628,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 396501320970400409d488274317c844, type: 2}
+  - {fileID: 2100000, guid: 359ad7b7830d84348978596e9c410c25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

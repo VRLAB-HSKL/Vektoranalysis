@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Import.InitFile;
 using Model;
+using Newtonsoft.Json;
 using UnityEngine;
 using Utility;
 
@@ -120,6 +121,8 @@ namespace Import
                     ).normalized
                     
                 };
+
+                
                 
 
                 // var bin = Vector3.Cross(fsr.Tangent, fsr.Normal);
@@ -162,6 +165,18 @@ namespace Import
                 pd.ArcLengthFresnetApparatuses.Add(arcFsr);
             }
 
+            // if (curve.Info.Name.Equals("helix"))
+            // {
+            //     for (var index = 0; index < curve.Data.Data.NormVec.Count; index++)
+            //     {
+            //         var normal = curve.Data.Data.NormVec[index];
+            //         Debug.Log("normal_ " + index + ": "
+            //                   + normal[0].ToString("0.00000000000000000000000000000000000000") + " "
+            //                   + normal[1].ToString("0.00000000000000000000000000000000000000") + " "
+            //                   + normal[2].ToString("0.00000000000000000000000000000000000000"));
+            //     }
+            // }
+            
             pd.CalculateWorldPoints();
 
             return pd;
