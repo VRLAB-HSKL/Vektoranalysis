@@ -81,6 +81,13 @@ namespace Views.Display
         /// </summary>
         private readonly Vector3[] _binormalArr = new Vector3[2];
 
+
+        private readonly GameObject _tangentArrow;
+        
+        private readonly GameObject _normalArrow;
+        
+        private readonly GameObject _binormalArrow;
+        
         /// <summary>
         /// Current point index. Stored locally to enable views running independent of each other
         /// </summary>
@@ -124,12 +131,12 @@ namespace Views.Display
 
             // Set travel object color based on init file values
             var curve = CurrentCurve;
-            var renderers = TravelObject.GetComponentsInChildren<MeshRenderer>();
-            foreach (var r in renderers)
-            {
-                r.material.color = curve.TravelObjColor;
-                r.material.SetColor(EmissionColor, curve.TravelObjColor);    
-            }
+            // var renderers = TravelObject.GetComponentsInChildren<MeshRenderer>();
+            // foreach (var r in renderers)
+            // {
+            //     r.material.color = curve.TravelObjColor;
+            //     r.material.SetColor(EmissionColor, curve.TravelObjColor);    
+            // }
         
             // Setup travel object line renderers        
             if (TravelObject.childCount > 0)
@@ -155,6 +162,25 @@ namespace Views.Display
             BinormalLr.positionCount = 2;
             _initBinormalLrWidth = BinormalLr.widthMultiplier;
 
+            for (var i = 0; i < TravelObject.transform.childCount; i++)
+            {
+                var child = TravelObject.transform.GetChild(i).gameObject;
+                switch (child.name)
+                {
+                    case "TanVector":
+                        _tangentArrow = child;
+                        break;
+                        
+                    case "NormVector":
+                        _normalArrow = child;
+                        break;
+                    
+                    case "BinormVector":
+                        _binormalArrow = child;
+                        break;
+                }
+            }
+            
 
             _wpm = new WaypointManager();  //new Vector3[1], 0.01f, false);
         }
@@ -300,17 +326,28 @@ namespace Views.Display
             _tangentArr[1] = travelObjPosition + tangent;
             TangentLr.SetPositions(_tangentArr);
             TangentLr.widthMultiplier = _initTangentLrWidth * ScalingFactor * 2f;
-                
+
+            TangentLr.widthMultiplier = 0f;
+            _tangentArrow.transform.LookAt(_tangentArr[1]);
+            
             _normalArr[0] = travelObjPosition;
             _normalArr[1] = (travelObjPosition + normal); 
             NormalLr.SetPositions(_normalArr);
             NormalLr.widthMultiplier = _initNormalLrWidth * ScalingFactor * 2f;
                 
+            NormalLr.widthMultiplier = 0f;
+            
+            _normalArrow.transform.LookAt(_normalArr[1]);
+            
             _binormalArr[0] = travelObjPosition;
             _binormalArr[1] = travelObjPosition + binormal;
             BinormalLr.SetPositions(_binormalArr);
             BinormalLr.widthMultiplier = _initBinormalLrWidth * ScalingFactor * 2f;
         
+            BinormalLr.widthMultiplier = 0f;
+            
+            _binormalArrow.transform.LookAt(_binormalArr[1]);
+            
             // Debug.Log("index: " + CurrentPointIndex + "\n" +
             //           " objPos: " + travelObjPosition +
             //           " jsonTangentPoint: [" + curve.FresnetApparatuses[CurrentPointIndex].Tangent + "] " +
@@ -339,6 +376,28 @@ namespace Views.Display
             }
             
             TravelObject.transform.LookAt(nextPos, worldUp);
+            
+            // if (TangentLr.gameObject.transform.childCount > 0)
+            // {
+            //     var tan_vec_prefab = TangentLr.gameObject.transform.GetChild(0).gameObject;
+            //     tan_vec_prefab.transform.LookAt(_tangentArr[1]); //, worldUp);    
+            // }
+            
+            // if (NormalLr.gameObject.transform.childCount > 0)
+            // {
+            //     var norm_vec_prefab = NormalLr.gameObject.transform.GetChild(0).gameObject;
+            //     norm_vec_prefab.transform.LookAt(_normalArr[1]); //, worldUp);    
+            // }
+            //
+            // if (BinormalLr.gameObject.transform.childCount > 0)
+            // {
+            //     var binorm_vec_prefab = BinormalLr.gameObject.transform.GetChild(0).gameObject;
+            //     binorm_vec_prefab.transform.LookAt(_binormalArr[1]); //, worldUp);    
+            // }
+
+            _binormalArrow.SetActive(curve.Is3DCurve);
+            
+            
         }
         
         

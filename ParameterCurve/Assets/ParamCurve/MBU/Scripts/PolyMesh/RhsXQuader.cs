@@ -5,9 +5,9 @@ using UnityEngine;
 namespace VRKL.MBU
 {
     /// <summary>
-    /// Klasse für die Erzeugung eines Quaders in x-Richtung eines rechtshändigen Koordinatensystems.
+    /// Klasse fï¿½r die Erzeugung eines Quaders in x-Richtung eines rechtshï¿½ndigen Koordinatensystems.
     /// <remarks>
-    /// Da wir das rechtshändige Koordinaten in Unity (verwendet ein LHS) verwenden und die Pfad-Animation
+    /// Da wir das rechtshï¿½ndige Koordinaten in Unity (verwendet ein LHS) verwenden und die Pfad-Animation
     /// mit Hilfe von MoveToward realisiert wird entspricht die visualiserte x-Richtung, die Tangente,
     /// der forward-Richtung in Unity - also der z-Achse in Unity.
     /// </remarks>
@@ -15,15 +15,15 @@ namespace VRKL.MBU
     public class RhsXQuader : PolyMesh
     {
         /// <summary>
-        /// Wir erzeugen für jedes Face des Quaders ein SubMesh.
-        /// Auch das Material muss anschließend für jedes SubMesh erzeugt
-        /// und zugewiesen werden. Das könnte verwendet werden um
-        /// für jedes Face ein eigenes Material zu verwenden.
+        /// Wir erzeugen fï¿½r jedes Face des Quaders ein SubMesh.
+        /// Auch das Material muss anschlieï¿½end fï¿½r jedes SubMesh erzeugt
+        /// und zugewiesen werden. Das kï¿½nnte verwendet werden um
+        /// fï¿½r jedes Face ein eigenes Material zu verwenden.
         ///
         /// Der Quader wurde von der Klasse Hexaeder abgeleitet und
-        /// die x-Koordinaten wurden verändert. Der Quader startet
+        /// die x-Koordinaten wurden verï¿½ndert. Der Quader startet
         /// bei x=0 und endet bei x=1. Die y- und z-Koordinaten
-        /// wurden verkleinert, da wir eine Achse visualisieren möchten.
+        /// wurden verkleinert, da wir eine Achse visualisieren mï¿½chten.
         /// </summary>
         protected override void Create()
         {
@@ -45,7 +45,7 @@ namespace VRKL.MBU
             for (var i = 0; i < numberOfVertices; i++)
                 vertices[i] *= ScalingFactor;
             
-            // Die Einträge in der Topologie beziehen sich auf 
+            // Die Eintrï¿½ge in der Topologie beziehen sich auf 
             // die Indizes der Eckpunkte.
             topology[0] = new int[3] { 0, 2, 1 };
             topology[1] = new int[3] { 2, 0, 3 };
@@ -61,7 +61,7 @@ namespace VRKL.MBU
             topology[11] = new int[3] { 7, 2, 3 };
 
             // Polygonales Netz erzeugen, Geometrie und Topologie zuweisen
-            // Es wäre möglich weniger als vier SubMeshes zu erzeugen,
+            // Es wï¿½re mï¿½glich weniger als vier SubMeshes zu erzeugen,
             // solange wir keine Dreiecke in einem Submesh haben, die eine
             // gemeinsame Kante aufweisen!
             Mesh simpleMesh = new Mesh()
@@ -71,6 +71,7 @@ namespace VRKL.MBU
             };
             // Wir nutzen nicht aus, dass wir pro Submesh ein eigenes
             // Material verwenden.
+            var meshMaterial = CreateMaterial();
             for (var i = 0; i < numberOfSubMeshes; i++)
             {
                 simpleMesh.SetTriangles(topology[i], i);
@@ -82,7 +83,7 @@ namespace VRKL.MBU
             simpleMesh.RecalculateBounds();
             simpleMesh.OptimizeIndexBuffers();
 
-            // Zuweisungen für die erzeugten Komponenten
+            // Zuweisungen fï¿½r die erzeugten Komponenten
             this.objectFilter.mesh = simpleMesh;
             this.objectRenderer.materials = materials;
         }

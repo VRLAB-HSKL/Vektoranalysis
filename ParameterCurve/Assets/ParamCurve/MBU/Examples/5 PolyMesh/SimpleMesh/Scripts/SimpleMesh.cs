@@ -52,7 +52,7 @@ public class SimpleMesh : VRKL.MBU.PolyMesh
 
         // Wir nutzen nicht aus, dass wir pro Submesh ein eigenes
         // Material verwenden.
-        materials[0] = meshMaterial;
+        materials[0] = CreateMaterial();
 
         // Unity die Normalenvektoren und die Bounding-Box berechnen lassen.
         simpleMesh.RecalculateNormals();
