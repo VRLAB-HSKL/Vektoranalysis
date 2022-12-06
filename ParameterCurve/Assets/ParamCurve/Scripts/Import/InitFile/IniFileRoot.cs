@@ -98,6 +98,14 @@ namespace Import.InitFile
         /// </summary>
         [JsonProperty("arc_acc_vec")]
         public List<List<float>> ArcAccVec { get; set; }
+        
+        
+        [JsonProperty("arc_norm_vec")]
+        public List<List<float>> ArcNormVec { get; set; }
+        
+        [JsonProperty("arc_binorm_vec")]
+        public List<List<float>> ArcBinormVec { get; set; }
+        
     }
 
     /// <summary>

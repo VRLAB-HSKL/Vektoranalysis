@@ -152,13 +152,18 @@ namespace Import
                         pd.Is3DCurve ? curve.Data.Data.ArcVelVec[j][2] : 0f
                     ).normalized,
                     Normal = new Vector3(
-                        curve.Data.Data.ArcAccVec[j][0],
-                        curve.Data.Data.ArcAccVec[j][1],
-                        pd.Is3DCurve ? curve.Data.Data.ArcAccVec[j][2] : 0f
-                    ).normalized
+                        curve.Data.Data.ArcNormVec[j][0],
+                        curve.Data.Data.ArcNormVec[j][1],
+                        pd.Is3DCurve ? curve.Data.Data.ArcNormVec[j][2] : 0f
+                    ).normalized,
+                    Binormal = new Vector3(
+                    curve.Data.Data.ArcBinormVec[j][0],
+                    curve.Data.Data.ArcBinormVec[j][1],
+                    pd.Is3DCurve ? curve.Data.Data.ArcBinormVec[j][2] : 0f
+                        ).normalized
                 };
 
-                var arcBin = Vector3.Cross(fsr.Tangent, fsr.Normal);
+                //var arcBin = Vector3.Cross(fsr.Tangent, fsr.Normal);
                 //arcFsr.Binormal = new Vector3(arcBin.x, arcBin.y, -Mathf.Abs(arcBin.z));
                 // Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
 

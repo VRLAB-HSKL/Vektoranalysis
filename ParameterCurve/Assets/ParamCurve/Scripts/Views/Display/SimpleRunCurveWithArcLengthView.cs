@@ -54,6 +54,12 @@ namespace Views.Display
         /// </summary>
         private readonly float _initArcBinormalLrWidth;
     
+        private readonly GameObject _arcTangentArrow;
+        
+        private readonly GameObject _arcNormalArrow;
+        
+        private readonly GameObject _arcBinormalArrow;
+        
         /// <summary>
         /// Static log4net logger
         /// </summary>
@@ -96,12 +102,24 @@ namespace Views.Display
             HasArcLengthTravelPoint = true;
 
             CurveInformationDataset curve = CurrentCurve;
-            var renderers = ArcLengthTravelObject.GetComponentsInChildren<MeshRenderer>();
-            foreach (var r in renderers)
+            // var renderers = ArcLengthTravelObject.GetComponentsInChildren<MeshRenderer>();
+            // foreach (var r in renderers)
+            // {
+            //     r.material.color = curve.ArcTravelObjColor;
+            //     r.material.SetColor(EmissionColor, curve.ArcTravelObjColor);    
+            // }
+            for (var i = 0; i < ArcLengthTravelObject.childCount; i++)
             {
-                r.material.color = curve.ArcTravelObjColor;
-                r.material.SetColor(EmissionColor, curve.ArcTravelObjColor);    
+                var child = ArcLengthTravelObject.transform.GetChild(i);
+                var r = child.GetComponent<MeshRenderer>(); 
+                if (r != null)
+                {
+                    r.material.color = curve.ArcTravelObjColor;
+                    r.material.SetColor(EmissionColor, curve.ArcTravelObjColor);    
+                }
             }
+            
+            
 
             // Setup arc length travel object
             if (ArcLengthTravelObject.childCount > 0)
@@ -127,6 +145,26 @@ namespace Views.Display
             ArcLengthBinormalLr.positionCount = 2;
             _initArcBinormalLrWidth = ArcLengthBinormalLr.widthMultiplier;
 
+            for (var i = 0; i < ArcLengthTravelObject.transform.childCount; i++)
+            {
+                var child = ArcLengthTravelObject.transform.GetChild(i).gameObject;
+                switch (child.name)
+                {
+                    case "TanVector":
+                        _arcTangentArrow = child;
+                        break;
+                        
+                    case "NormVector":
+                        _arcNormalArrow = child;
+                        break;
+                    
+                    case "BinormVector":
+                        _arcBinormalArrow = child;
+                        break;
+                }
+            }
+            
+            
             _arcWpm = new WaypointManager();
         }
         
@@ -235,6 +273,7 @@ namespace Views.Display
             var binormal = curve.ArcLengthFresnetApparatuses[CurrentPointIndex].Binormal.normalized;
         
             // Flip axis to match unity coordinate system
+            //if (ControllerType == AbstractCurveViewController.CurveControllerType.World || !curve.Is3DCurve )
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table || curve.Is3DCurve )
             {
                 tangent = new Vector3(tangent.x, tangent.z, tangent.y);
@@ -255,18 +294,25 @@ namespace Views.Display
             // Calculate moving frame points
             _arcTangentArr[0] = travelObjPosition;
             _arcTangentArr[1] = travelObjPosition + tangent;
-            ArcLengthTangentLr.SetPositions(_arcTangentArr);
-            ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * ScalingFactor * 2f;
+            _arcTangentArrow.transform.position = _arcTangentArr[0];
+            _arcTangentArrow.transform.LookAt(_arcTangentArr[1]);
+            // ArcLengthTangentLr.SetPositions(_arcTangentArr);
+            // ArcLengthTangentLr.widthMultiplier = _initArcTangentLrWidth * ScalingFactor * 2f;
                 
             _arcNormalArr[0] = travelObjPosition;
-            _arcNormalArr[1] = (travelObjPosition + normal); 
-            ArcLengthNormalLr.SetPositions(_arcNormalArr);
-            ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * ScalingFactor * 2f;
+            _arcNormalArr[1] = (travelObjPosition + normal);
+            _arcNormalArrow.transform.position = _arcNormalArr[0];
+            _arcNormalArrow.transform.LookAt(_arcNormalArr[1]);
+            
+            // ArcLengthNormalLr.SetPositions(_arcNormalArr);
+            // ArcLengthNormalLr.widthMultiplier = _initArcNormalLrWidth * ScalingFactor * 2f;
                 
             _arcBinormalArr[0] = travelObjPosition;
             _arcBinormalArr[1] = travelObjPosition + binormal;
-            ArcLengthBinormalLr.SetPositions(_arcBinormalArr);
-            ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * ScalingFactor * 2f;
+            _arcBinormalArrow.transform.position = _arcBinormalArr[0];
+            _arcBinormalArrow.transform.LookAt(_arcBinormalArr[1]);
+            // ArcLengthBinormalLr.SetPositions(_arcBinormalArr);
+            // ArcLengthBinormalLr.widthMultiplier = _initArcBinormalLrWidth * ScalingFactor * 2f;
             
             
             // var arcTangentArr = new Vector3[2];
@@ -317,6 +363,8 @@ namespace Views.Display
             }
             
             ArcLengthTravelObject.transform.LookAt(nextPos, worldUp);
+            
+            _arcBinormalArrow.SetActive(curve.Is3DCurve);
         }
         
         #endregion Public functions
