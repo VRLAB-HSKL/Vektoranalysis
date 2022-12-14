@@ -673,6 +673,8 @@ public class TubeMesh : MonoBehaviour
         _meshFilter = GetComponent<MeshFilter>();
         _meshRenderer = GetComponent<MeshRenderer>();
         
+        _tubeMesh = new Mesh {name = "tube mesh"};
+        
         // Set tube radius based on scaling factor
         _radius = 0.0375f;//0.05f * tubeMeshScalingFactor;
         _sphereScalingFactor = 0.125f * tubeMeshScalingFactor;
@@ -717,6 +719,7 @@ public class TubeMesh : MonoBehaviour
         // if(GlobalDataModel.DisplayCurveDatasets == null) return;
         // if(GlobalDataModel.DisplayCurveDatasets.Count == 0) return;
 
+        _tubeMesh.Clear();
         _tubePoints.Clear();
         _degreeStepSize = 360f / NumberOfCirclePoints;
 
@@ -730,23 +733,23 @@ public class TubeMesh : MonoBehaviour
     private IEnumerator GenerateCurveMesh()
     {
         //var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-        var polyline = _polyline; //curve.WorldPoints;
+        //var polyline = _polyline; //curve.WorldPoints;
         
         
         // When a sample count was given, sample curve
         // ToDo: Refactor this into second view / subclass
         if(_numberOfSamplingPoints != -1)
         {
-            var div = polyline.Count / _numberOfSamplingPoints;
+            var div = _polyline.Count / _numberOfSamplingPoints;
             _degreeStepSize = _numberOfSamplingPoints;
 
             var newPointList = new List<Vector3>();
-            for(var i = 0; i < polyline.Count; i++)
+            for(var i = 0; i < _polyline.Count; i++)
             {
                 // Only sample every nth point
                 if(i % div == 0)
                 {
-                    var p = polyline[i];
+                    var p = _polyline[i];
                     newPointList.Add(p);
                 }
             }
@@ -782,16 +785,16 @@ public class TubeMesh : MonoBehaviour
                 
             }
 
-            polyline = newPointList;
+            _polyline = newPointList;
         }
         
         // Calculate surface mesh points
-        for (var i = 0; i < polyline.Count; i++)
+        for (var i = 0; i < _polyline.Count; i++)
         {
             //yield return null;
             
             // Get curve point and direction vectors
-            var centerPoint = polyline[i];
+            var centerPoint = _polyline[i];
 
             // DrawingUtility.DrawSphere(centerPoint, transform, Color.blue, 
             //     new Vector3(0.1f, 0.1f, 0.1f), sphereMat);
@@ -801,14 +804,14 @@ public class TubeMesh : MonoBehaviour
             
             // On first point, generate tangent pointing to next point since
             // we don't have any velocity at the beginning, i.e. the tangent is (0,0,0)
-            if (i < polyline.Count - 1)
+            if (i < _polyline.Count - 1)
             {
-                tangent = (polyline[i + 1] - centerPoint).normalized;// * radius;
+                tangent = (_polyline[i + 1] - centerPoint).normalized;// * radius;
                 //biNormal = Vector3.down; //curve.FresnetApparatuses[i + 1].Binormal;
             }
             else
             {
-                tangent = (polyline[i - 1] - centerPoint).normalized;
+                tangent = (_polyline[i - 1] - centerPoint).normalized;
                 //biNormal = Vector3.down;
             }
 
@@ -825,16 +828,14 @@ public class TubeMesh : MonoBehaviour
             // Generate circle points
             for (var j = 0; j < NumberOfCirclePoints; j++)
             {
-                
-                 //Generate circle point by rotating the bi-normal vector around the tangent vector
-                 //by a certain degree (step size). This generates points forming a circle around
-                 //the curve point, facing in the direction of the following curve point (tangent direction)
-                 var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
-                 var rotatedVector = quaternionRot * cpn;
+                //Generate circle point by rotating the bi-normal vector around the tangent vector
+                //by a certain degree (step size). This generates points forming a circle around
+                //the curve point, facing in the direction of the following curve point (tangent direction)
+                var quaternionRot = Quaternion.AngleAxis(j * _degreeStepSize, tangent);
+                var rotatedVector = quaternionRot * cpn;
                  
-                 
-                 var circlePoint = centerPoint + rotatedVector;
-                 circlePoint *= tubeMeshScalingFactor;
+                var circlePoint = centerPoint + rotatedVector;
+                circlePoint *= tubeMeshScalingFactor;
                  
                 _tubePoints.Add(circlePoint);
 
@@ -850,13 +851,8 @@ public class TubeMesh : MonoBehaviour
             
             //Debug.Log("point_i: " + i);
             //yield return null;
-        
-            
-            
         }
-        
-        
-        
+
         const MeshTopology topology = MeshTopology.Triangles;
         List<int> indices;
 
@@ -1003,9 +999,11 @@ public class TubeMesh : MonoBehaviour
 
     //private List<int> indicesList = new List<int>();
     
+    private readonly List<int> indicesList  = new List<int>();
+    
     private IEnumerator GenerateCurveMeshTriangleIndices(List<Vector3> tubePoints, bool windClockwise)
     {
-        var indicesList  = new List<int>();
+        indicesList.Clear();
         for (var i = 0; i < tubePoints.Count - 1; i += NumberOfCirclePoints)
         {
             for (var j = 0; j < NumberOfCirclePoints; ++j)
@@ -1054,15 +1052,19 @@ public class TubeMesh : MonoBehaviour
 
         }
         
-        _tubeMesh = new Mesh
-        {
-            name= "Tube mesh",
-            vertices = _tubePoints.ToArray()
-        };
+        // _tubeMesh = new Mesh
+        // {
+        //     name= "Tube mesh",
+        //     vertices = _tubePoints.ToArray()
+        // };
+
+        _tubeMesh.vertices = _tubePoints.ToArray();
         
         _tubeMesh.SetIndices(indicesList.ToArray(), MeshTopology.Triangles, 0);
         
         _tubeMesh.RecalculateNormals();
+        
+        
         
         _meshRenderer.material = tubeMat;
         

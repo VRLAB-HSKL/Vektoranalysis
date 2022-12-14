@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "FA97FAZ00245",
+    "m_SelectedDeviceId": "1WMHH844XM1263",
     "m_SelectedPackage": {
-        "deviceId": "FA97FAZ00245",
+        "deviceId": "1WMHH844XM1263",
         "name": "com.DefaultCompany.ParameterCurve",
-        "processId": 3237,
+        "processId": 25284,
         "exited": false
     },
     "m_SelectedPriority": 4,
@@ -114,6 +114,12 @@
             "deviceId": "FA97GAZ00077",
             "name": "com.DefaultCompany.ParameterCurve",
             "processId": 3179,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHH844XM1263",
+            "name": "com.DefaultCompany.ParameterCurve",
+            "processId": 25284,
             "exited": false
         }
     ],
