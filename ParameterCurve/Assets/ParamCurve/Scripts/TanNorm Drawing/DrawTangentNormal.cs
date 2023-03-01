@@ -1,10 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using HTC.UnityPlugin.Vive;
 using Model;
-using ImmersiveVolumeGraphics.ModelEdit;
+using ParamCurve.Scripts.Model;
+using ParamCurve.Scripts.Table.ModelEdit;
+using ParamCurve.Scripts.Utility;
 
 /// <summary>
 /// Script to be applied to TangentNormalPillar GameObject
@@ -214,7 +215,7 @@ public class DrawTangentNormal : MonoBehaviour
         Vector3 bbDimensions = new Vector3(2.5f, 2.5f, 2.5f);
 
         //generate sphere on curve
-        pointSphere = Utility.DrawingUtility.DrawSphereOnLine(drawCurveDisplay, pointIndex, bbDimensions);
+        pointSphere = DrawingUtility.DrawSphereOnLine(drawCurveDisplay, pointIndex, bbDimensions);
         //make sure sphere cannot be grabbed with tangent/normal spheres
         pointSphere.GetComponent<SphereCollider>().enabled = false;
 
@@ -251,8 +252,8 @@ public class DrawTangentNormal : MonoBehaviour
         }
 
         //create spheres at parent object positions
-        tangentSphere = Utility.DrawingUtility.DrawSphere(tangentSpherePos, tangentSphereParent.transform, Color.red, bbDimensions, SphereMat);
-        normalSphere = Utility.DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.green, bbDimensions, SphereMat);
+        tangentSphere = DrawingUtility.DrawSphere(tangentSpherePos, tangentSphereParent.transform, Color.red, bbDimensions, SphereMat);
+        normalSphere = DrawingUtility.DrawSphere(normalSpherePos, normalSphereParent.transform, Color.green, bbDimensions, SphereMat);
 
         //make the new spheres grabbable
         tangentGrab = tangentSphere.AddComponent<BasicGrabbable>();

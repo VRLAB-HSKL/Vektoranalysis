@@ -2,13 +2,12 @@ using System;
 using HTC.UnityPlugin.ColliderEvent;
 using UnityEngine;
 
-namespace Navigation
+namespace ParamCurve.Scripts.Navigation
 {
     public abstract class AbstractButtonCollisionHandler : MonoBehaviour,
         IColliderEventHoverEnterHandler,
         IColliderEventHoverExitHandler
     {
-
         #region Public members
         
         /// <summary>

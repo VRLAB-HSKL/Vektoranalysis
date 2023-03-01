@@ -1,44 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class PosAndRotConstraint : MonoBehaviour
+namespace ParamCurve.Scripts
 {
-    public GameObject leftBorderCube;
-    public GameObject rightBorderCube;
-
-    private Vector3 initPos;
-    private Vector3 lastPos;
-    private Vector3 leftBorderPos;
-    private Vector3 rightBorderPos;
-
-    private void Start()
+    public class PosAndRotConstraint : MonoBehaviour
     {
-        initPos = transform.position;
-        lastPos = initPos;
-        leftBorderPos = leftBorderCube.transform.position + leftBorderCube.GetComponent<MeshRenderer>().bounds.extents;
-        rightBorderPos = rightBorderCube.transform.position - rightBorderCube.GetComponent<MeshRenderer>().bounds.extents;
-    }
+        public GameObject leftBorderCube;
+        public GameObject rightBorderCube;
 
-    private void Update()
-    {
-        transform.rotation = Quaternion.identity;
+        private Vector3 initPos;
+        private Vector3 lastPos;
+        private Vector3 leftBorderPos;
+        private Vector3 rightBorderPos;
 
-        float xValue = 0f;
-        if(transform.position.x < leftBorderPos.x ||
-           transform.position.x > rightBorderPos.x)
+        private void Start()
         {
-            xValue = lastPos.x;            
-        }
-        else
-        {
-            xValue = transform.position.x;
+            initPos = transform.position;
+            lastPos = initPos;
+            leftBorderPos = leftBorderCube.transform.position + leftBorderCube.GetComponent<MeshRenderer>().bounds.extents;
+            rightBorderPos = rightBorderCube.transform.position - rightBorderCube.GetComponent<MeshRenderer>().bounds.extents;
         }
 
-        transform.position = new Vector3(xValue, initPos.y, initPos.z);
+        private void Update()
+        {
+            transform.rotation = Quaternion.identity;
 
-        lastPos = transform.position;
+            float xValue = 0f;
+            if(transform.position.x < leftBorderPos.x ||
+               transform.position.x > rightBorderPos.x)
+            {
+                xValue = lastPos.x;            
+            }
+            else
+            {
+                xValue = transform.position.x;
+            }
+
+            transform.position = new Vector3(xValue, initPos.y, initPos.z);
+
+            lastPos = transform.position;
+        }
+
     }
-
 }

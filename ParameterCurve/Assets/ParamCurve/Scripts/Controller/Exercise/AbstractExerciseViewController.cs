@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-//using log4net;
 using Model;
+using ParamCurve.Scripts.Views.Exercise;
 using UnityEngine;
-using Views.Display;
-using Views.Exercise;
 
-namespace Controller.Exercise
+//using log4net;
+
+namespace ParamCurve.Scripts.Controller.Exercise
 {
     /// <summary>
     /// Abstract base class for all view controllers related to displaying curve data in global data model
@@ -62,9 +62,9 @@ namespace Controller.Exercise
 
         #region Private members
 
-        /// <summary>
-        /// Static log4net logger instance
-        /// </summary>
+        // <summary>
+        // Static log4net logger instance
+        // </summary>
         //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractExerciseViewController));
         
         /// <summary>

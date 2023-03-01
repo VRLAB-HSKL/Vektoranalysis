@@ -1,11 +1,11 @@
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VRKL.MBU;
 
-namespace UI.States
+namespace ParamCurve.Scripts.UI.States
 {
     /// <summary>
     /// Abstract class representing a state related to the in-game curve selection menu

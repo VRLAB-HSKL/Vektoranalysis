@@ -1,15 +1,16 @@
-using Controller.Curve;
-using Controller.Exercise;
-using HTC.UnityPlugin.Vive;
-//using log4net;
-using Model;
-using UI;
-using UnityEngine;
-using Views.Display;
-using System.IO;
 using System.Text.RegularExpressions;
+using HTC.UnityPlugin.Vive;
+using Model;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Controller.Exercise;
+using ParamCurve.Scripts.UI;
+using ParamCurve.Scripts.Views;
+using ParamCurve.Scripts.Views.Display;
+using UnityEngine;
 
-namespace Controller
+//using log4net;
+
+namespace ParamCurve.Scripts.Controller
 {
     /// <summary>
     /// Controls global game state of the scene. This class initializes important utilities like the global data
@@ -20,9 +21,9 @@ namespace Controller
     {
         #region Public members
         
-        /// <summary>
-        /// Controls pose logging for every frame. If true, the player pose is logged using the log4net logger object
-        /// </summary>
+        // <summary>
+        // Controls pose logging for every frame. If true, the player pose is logged using the log4net logger object
+        // </summary>
         //[Header("Options")]
         //public bool activatePoseLogging;
         
@@ -119,9 +120,9 @@ namespace Controller
 
         #region Private members
         
-        /// <summary>
-        /// Static log4net Logger 
-        /// </summary>
+        // <summary>
+        // Static log4net Logger 
+        // </summary>
         //private static readonly ILog Log = LogManager.GetLogger(typeof(WorldStateController));
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace Controller
         /// <summary>
         /// Path to file containing point data for curve, sent to cockpit.
         /// </summary>
-        private string pathToData = "Assets/Resources/linecoords.txt";
+        private string _pathToData = "Assets/Resources/linecoords.txt";
 
         #endregion Private members
 
@@ -333,11 +334,8 @@ namespace Controller
             var tableView = GlobalDataModel.TableCurveViewController?.CurrentView;
             if (tableView != null)
             {
-                var rootPos = tableView._rootPos;
-                //
-                // GlobalDataModel.TableCurveViewController.
-                
-                tableView.ScalingFactor = GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TableScalingFactor;
+                tableView.ScalingFactor = 
+                    GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex].TableScalingFactor;
                 if (tableView.GetType() == typeof(SimpleRunCurveView) ||
                     tableView.GetType() == typeof(SimpleRunCurveWithArcLength))
                 {
@@ -373,7 +371,7 @@ namespace Controller
 
             
             GlobalDataModel.WorldCurveViewController.UpdateViewsDelegate();
-            GlobalDataModel.WorldCurveViewController.CurrentView.UpdateView();
+            GlobalDataModel.WorldCurveViewController.CurrentView?.UpdateView();
             GlobalDataModel.TableCurveViewController?.CurrentView.UpdateView();
             
             //tableDisplayMesh.GenerateFieldMesh();

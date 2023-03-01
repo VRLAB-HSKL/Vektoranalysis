@@ -1,17 +1,20 @@
 using System.Collections.Generic;
-using System.IO;
-using Controller.Curve;
-using Controller.Exercise;
-using Import;
-using Import.InitFile;
+using System.Diagnostics;
 //using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Controller.Exercise;
+using ParamCurve.Scripts.Import;
+using ParamCurve.Scripts.Import.InitFile;
+using ParamCurve.Scripts.Model;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace Model
 {
+    // ToDo: Remove this global singleton with scriptable objects architecture
     /// <summary>
     /// Static global data model. This singular model is used as the single access point of imported data and static
     /// application settings.
@@ -195,7 +198,10 @@ namespace Model
             }
             
             var errors = new List<string>();
-            ITraceWriter tr = new MemoryTraceWriter();
+            ITraceWriter tr = new MemoryTraceWriter
+            {
+                LevelFilter = TraceLevel.Off
+            };
             var jsr = JsonConvert.DeserializeObject<InitFileRoot>(json.text,
                 new JsonSerializerSettings()
                 {
@@ -235,9 +241,9 @@ namespace Model
                 {
                     var subExercises = new List<SelectionExerciseDataset>();
                     var correctAnswers = new List<SelectionExerciseAnswer>();
-                    for (var j = 0; j < ex.selectThreeExercises.Count; j++)
+                    for (var j = 0; j < ex.SelectThreeExercises.Count; j++)
                     {
-                        var subExercise = ex.selectThreeExercises[j];
+                        var subExercise = ex.SelectThreeExercises[j];
                         subExercises.Add(DataImport.CreateExercisePointDatasetFromSubExercise(subExercise));
                         correctAnswers.Add(new SelectionExerciseAnswer(subExercise.CorrectAnswer));
                     }
@@ -258,9 +264,9 @@ namespace Model
                     var subExerciseData = new List<TangentNormalExerciseDataset>();
                     var correctAnswers = new List<TangentNormalExerciseAnswer>();
 
-                    for (var j = 0; j < ex.tangentNormalExercises.Count; j++)
+                    for (var j = 0; j < ex.TangentNormalExercises.Count; j++)
                     {
-                        var subExercise = ex.tangentNormalExercises[j];
+                        var subExercise = ex.TangentNormalExercises[j];
                         subExerciseData.Add(DataImport.CreateTangentNormalDataFromSubExercise(subExercise));
                         correctAnswers.Add(new TangentNormalExerciseAnswer(subExercise.CorrectTangents, subExercise.CorrectNormals));
                     }

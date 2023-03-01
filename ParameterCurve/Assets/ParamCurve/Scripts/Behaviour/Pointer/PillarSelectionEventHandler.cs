@@ -1,8 +1,8 @@
 using System.Linq;
+using Behaviour;
 using UnityEngine.EventSystems;
-using UnityEngine;
 
-namespace Behaviour
+namespace ParamCurve.Scripts.Behaviour.Pointer
 {
 
     /// <summary>

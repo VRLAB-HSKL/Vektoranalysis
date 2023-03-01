@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Controller.Curve;
+﻿using System.Collections.Generic;
 using Model;
-using TMPro;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Model;
+using ParamCurve.Scripts.Views.Exercise;
 using UnityEngine;
-using Views.Display;
-using Views.Exercise;
 
-namespace Views
+namespace ParamCurve.Scripts.Views
 {
     public class SelectionExerciseCompoundView : AbstractExerciseView
     {
@@ -151,8 +149,6 @@ namespace Views
                 v.UpdateView();
             }
         }
-
-
 
         private void ShowMainDisplayView()
         {

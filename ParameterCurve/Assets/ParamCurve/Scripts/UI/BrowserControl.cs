@@ -3,7 +3,7 @@
 using Model;
 using UnityEngine;
 
-namespace UI
+namespace ParamCurve.Scripts.UI
 {
     /// <summary>
     /// Control class for the in-game browser

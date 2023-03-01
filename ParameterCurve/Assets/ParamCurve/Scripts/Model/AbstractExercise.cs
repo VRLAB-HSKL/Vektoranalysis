@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Model;
 
-namespace Model
+namespace ParamCurve.Scripts.Model
 {
     public abstract class AbstractExercise
     {
@@ -44,17 +45,17 @@ namespace Model
         /// <summary>
         /// Number of correct answers in directly previous attempt
         /// </summary>
-        public int previousScore { get; set; }
+        public int PreviousScore { get; set; }
 
         /// <summary>
         /// Number of correct answers in current attempt
         /// </summary>
-        public int currentScore { get; set; }
+        public int CurrentScore { get; set; }
 
         /// <summary>
         /// Number of times the exercise has been attempted
         /// </summary>
-        public int numAttempts { get; set; }
+        public int NumAttempts { get; set; }
 
         #endregion Public members
 
@@ -65,8 +66,6 @@ namespace Model
         /// </summary>
         /// <param name="title">Title of exercise</param>
         /// <param name="description">Description of exercise</param>
-        /// <param name="exercisePointDatasets">Datasets of sub-exercises</param>
-        /// <param name="correctAnswers">Correct answers of sub-exercises</param>
         protected AbstractExercise(string title, string description)
         {
             Title = title;
@@ -78,7 +77,7 @@ namespace Model
             // ChosenAnswers = new List<int>();
             // PreviousAnswers = new List<int>();
             
-            previousScore = -1;
+            PreviousScore = -1;
             // for(int i = 0; i < NumberOfSubExercises; i++)
             // {
             //     ChosenAnswers.Add(-1);

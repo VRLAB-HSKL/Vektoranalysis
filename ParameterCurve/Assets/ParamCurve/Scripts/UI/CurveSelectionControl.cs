@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
+using ParamCurve.Scripts.UI.States;
 using TMPro;
-using UI.States;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace ParamCurve.Scripts.UI
 {
     /// <summary>
     /// Control class for the curve selection menu
@@ -99,12 +99,12 @@ namespace UI
                 mainMenuParent.SetActive(false);
                 curveMenuParent.SetActive(false);
                 return;
-            };
+            }
         
             var displayGroups = Enum.GetNames(typeof(GlobalDataModel.CurveDisplayGroup));
         
-            var displayGrpValues = 
-                (GlobalDataModel.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalDataModel.CurveDisplayGroup));
+            // var displayGrpValues = 
+            //     (GlobalDataModel.CurveDisplayGroup[])Enum.GetValues(typeof(GlobalDataModel.CurveDisplayGroup));
             for (var i = 0; i < displayGroups.Length; i++)
             {
                 // Get current group name
@@ -132,7 +132,7 @@ namespace UI
                 }
             
                 // Create instance of button prefab
-                var dgrpVal = displayGrpValues[i];
+                //var displayGrpVal = displayGrpValues[i];
                 var tmpButton = Instantiate(mainMenuButtonPrefab, mainMenuContent.transform);
                 tmpButton.name = curveDisplayGroupName + "GrpButton";
                 Destroy(tmpButton.GetComponent<RawImage>());
@@ -143,7 +143,6 @@ namespace UI
                 var b = tmpButton.GetComponent<Button>();
                 switch(i)
                 {
-                    default:
                     case 0:
                         b.onClick.AddListener(() => SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display));
                         break;

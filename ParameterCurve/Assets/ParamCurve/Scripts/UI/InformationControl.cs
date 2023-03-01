@@ -1,11 +1,11 @@
-using Controller.Curve;
-using Import;
 using Model;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Import;
+using ParamCurve.Scripts.Views.Display;
 using TMPro;
 using UnityEngine;
-using Views.Display;
 
-namespace UI
+namespace ParamCurve.Scripts.UI
 {
     /// <summary>
     /// Control class for the information wall

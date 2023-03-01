@@ -1,54 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using HTC.UnityPlugin.Vive;
-//using log4net;
 using UnityEngine;
+//using log4net;
 
-public class HandTracker : MonoBehaviour
+namespace ParamCurve.Scripts.Logging
 {
-    public enum HandEnum { RIGHT = 0, LEFT = 1};
-
-    public HandEnum Hand; 
-
-
-    //private static readonly ILog Log = LogManager.GetLogger(typeof(HandTracker));
-
-    private HandRole _role;
-    private string _prefix;
-
-    private StringBuilder _stringBuilder;
-
-
-    private void Start()
+    public class HandTracker : MonoBehaviour
     {
-        _stringBuilder = new StringBuilder();
+        public enum HandEnum { Right = 0, Left = 1};
 
-        switch(Hand)
+        public HandEnum hand; 
+
+        private HandRole _role;
+        private string _prefix;
+
+        private StringBuilder _stringBuilder;
+        
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(HandTracker));
+
+        private void Start()
         {
-            case HandEnum.LEFT:
-                _prefix = "Left";
-                _role = HandRole.LeftHand;
-                break;
+            _stringBuilder = new StringBuilder();
 
-            case HandEnum.RIGHT:
-                _prefix = "Right";
-                _role = HandRole.RightHand;
-                break;
+            switch(hand)
+            {
+                case HandEnum.Left:
+                    _prefix = "Left";
+                    _role = HandRole.LeftHand;
+                    break;
+
+                case HandEnum.Right:
+                    _prefix = "Right";
+                    _role = HandRole.RightHand;
+                    break;
+            }
         }
-    }
 
-    void Update()
-    {
-        var handPose = VivePose.GetPoseEx(_role);
-        _stringBuilder.AppendLine("Frame: " + Time.frameCount);
-        _stringBuilder.AppendLine(_prefix + " hand position: " + handPose.pos);
-        _stringBuilder.AppendLine(_prefix + " hand rotation: " + handPose.rot);
-        _stringBuilder.AppendLine(_prefix + " hand up: " + handPose.up);
-        _stringBuilder.AppendLine(_prefix + " hand forward: " + handPose.forward);
-        _stringBuilder.AppendLine(_prefix + " hand right: " + handPose.right);
+        void Update()
+        {
+            var handPose = VivePose.GetPoseEx(_role);
+            _stringBuilder.AppendLine("Frame: " + Time.frameCount);
+            _stringBuilder.AppendLine(_prefix + " hand position: " + handPose.pos);
+            _stringBuilder.AppendLine(_prefix + " hand rotation: " + handPose.rot);
+            _stringBuilder.AppendLine(_prefix + " hand up: " + handPose.up);
+            _stringBuilder.AppendLine(_prefix + " hand forward: " + handPose.forward);
+            _stringBuilder.AppendLine(_prefix + " hand right: " + handPose.right);
 
-        //Log.Info(_stringBuilder.ToString());
-        _stringBuilder.Clear();
+            //Log.Info(_stringBuilder.ToString());
+            _stringBuilder.Clear();
+        }
     }
 }

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 
-namespace Model
+namespace ParamCurve.Scripts.Model
 {
     public class CurveInformationDataset
     {

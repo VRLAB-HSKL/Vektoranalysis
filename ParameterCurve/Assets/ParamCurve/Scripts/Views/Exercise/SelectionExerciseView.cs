@@ -1,7 +1,8 @@
 ﻿using Model;
+using ParamCurve.Scripts.Model;
 using UnityEngine;
 
-namespace Views.Exercise
+namespace ParamCurve.Scripts.Views.Exercise
 {
     public class SelectionExerciseView : AbstractExerciseView
     {

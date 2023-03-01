@@ -1,8 +1,8 @@
-using Controller;
 using HTC.UnityPlugin.ColliderEvent;
+using ParamCurve.Scripts.Controller;
 using UnityEngine;
 
-namespace Navigation
+namespace ParamCurve.Scripts.Navigation
 {
     /// <summary>
     /// Switches to next data set on object collision

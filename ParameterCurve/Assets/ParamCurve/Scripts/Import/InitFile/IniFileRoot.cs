@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Model;
 using Newtonsoft.Json;
 
-namespace Import.InitFile
+namespace ParamCurve.Scripts.Import.InitFile
 {
     /// <summary>
     /// Root of the tree like structure the information of the init file is parsed into
@@ -347,13 +347,13 @@ namespace Import.InitFile
         /// Collection of select3 exercises for this exercise
         /// </summary>
         [JsonProperty("select_three_exercises")]
-        public List<SelectThree> selectThreeExercises { get; set; }
+        public List<SelectThree> SelectThreeExercises { get; set; }
 
         /// <summary>
         /// Collection of select3 exercises for this exercise
         /// </summary>
         [JsonProperty("tangent_normal_exercises")]
-        public List<TangentNormal> tangentNormalExercises { get; set; }
+        public List<TangentNormal> TangentNormalExercises { get; set; }
     }
 
     /// <summary>

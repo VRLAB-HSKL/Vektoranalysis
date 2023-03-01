@@ -1,9 +1,8 @@
-using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Events;
 using HTC.UnityPlugin.Vive;
+using UnityEngine;
 
-namespace ImmersiveVolumeGraphics
+namespace ParamCurve.Scripts.Table
 {
     namespace ModelEdit
     {
@@ -133,7 +132,7 @@ namespace ImmersiveVolumeGraphics
             /// <ul>
             /// <li>Check whether the first Object exists or not</li>
             /// <li>Check in which direction the translation happens</li>
-            /// <li>Set the first Object´s localPosition to the position of the second Object (in the correct direction) </li>
+            /// <li>Set the first Objectï¿½s localPosition to the position of the second Object (in the correct direction) </li>
             /// <li>Find  the Objects when the first Object doesnt exist (updating Objectreference)  </li>
             /// </ul> 
             /// </remarks>

@@ -1,10 +1,12 @@
-using Controller.Curve;
 //using log4net;
+
 using Model;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Model;
 using UnityEngine;
 using VRKL.MBU;
 
-namespace Views.Display
+namespace ParamCurve.Scripts.Views.Display
 {
     /// <summary>
     /// View on curve data with an attached game object to display runs along the arc length parametrization based

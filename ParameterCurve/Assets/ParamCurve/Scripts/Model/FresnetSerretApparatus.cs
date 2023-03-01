@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Model
+namespace ParamCurve.Scripts.Model
 {
     public class FresnetSerretApparatus
     {

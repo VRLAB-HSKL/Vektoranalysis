@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Behaviour.Pointer;
 using HTC.UnityPlugin.Vive;
 using Model;
+using ParamCurve.Scripts.Behaviour.Pointer;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

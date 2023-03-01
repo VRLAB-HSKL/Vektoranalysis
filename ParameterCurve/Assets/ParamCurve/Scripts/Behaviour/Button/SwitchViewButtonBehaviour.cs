@@ -1,7 +1,7 @@
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to switch to another view on curve displays.

@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Model
+namespace ParamCurve.Scripts.Model
 {
     /// <summary>
     /// Exercise based on drawing tangent and normal lines
@@ -146,12 +147,23 @@ namespace Model
         public override bool IsValid()
         {
             bool allValid = true;
-
+            float tolerance = 0.001f;
+            
             //check for each highlight point
             for(var i = 0; i < TangentPos.Count; i++)
             {
-                if (TangentPos[i][0] == -1 && TangentPos[i][1] == -1) { allValid = false; break; }
-                if (NormalPos[i][0] == -1 && NormalPos[i][1] == -1) { allValid = false; break; }
+
+                if (Math.Abs(TangentPos[i][0] - (-1)) < tolerance && 
+                    Math.Abs(TangentPos[i][1] - (-1)) < tolerance)
+                {
+                    allValid = false; break; 
+                }
+
+                if (Math.Abs(NormalPos[i][0] - (-1)) < tolerance && 
+                    Math.Abs(NormalPos[i][1] - (-1)) < tolerance)
+                {
+                    allValid = false; break;
+                }
             }
 
             return allValid;

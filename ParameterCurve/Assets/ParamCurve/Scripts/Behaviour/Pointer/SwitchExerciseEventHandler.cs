@@ -1,8 +1,8 @@
+using Behaviour;
 using Model;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviour.Pointer
+namespace ParamCurve.Scripts.Behaviour.Pointer
 {
     /// <summary>
     /// Handles the Behaviour of the in-game navigation objects used to switch between exercises     

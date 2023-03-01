@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Controller.Curve;
-//using log4net;
 using Model;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Model;
+using ParamCurve.Scripts.Views;
+using ParamCurve.Scripts.Views.Exercise;
 using UnityEngine;
-using Views;
-using Views.Exercise;
-using System.IO;
 
-namespace Controller.Exercise
+//using log4net;
+
+namespace ParamCurve.Scripts.Controller.Exercise
 {
     /// <summary>
     /// Controller for in-game views of exercise related data structures
@@ -23,7 +26,7 @@ namespace Controller.Exercise
         /// </summary>
         public List<int> SelectionIndices = new List<int>();
 
-        public bool confirmedAnswers { get; set; } = false;
+        public bool ConfirmedAnswers { get; set; }
 
         #endregion Public members
         
@@ -44,7 +47,7 @@ namespace Controller.Exercise
         private SelectionExerciseGameObjects _selObjects;
 
         //path to text file storing chosen answers for each attempt
-        private string path = Application.persistentDataPath + ("exerciseresults.txt"); //"Assets/Resources/exerciseresults.txt";
+        private readonly string _path = Application.persistentDataPath + "exerciseresults.txt";
 
         #endregion Private members
 
@@ -120,21 +123,21 @@ namespace Controller.Exercise
             // Once user navigates right past the confirmation display, show results
             if (CurrentView.ShowConfirmationDisplay)
             {
-                CurrentExercise.numAttempts++;
+                CurrentExercise.NumAttempts++;
 
                 // Print result summary and log it
-                using (StreamWriter writer = new StreamWriter(path, append: true))
+                using (StreamWriter writer = new StreamWriter(_path, append: true))
                 {
                     var previousText = new StringBuilder("Previous Answer:\n");
                     var chosenText = new StringBuilder("Chosen Answer:\n");
                     var correctText = new StringBuilder("\n");
                     var resultText = new StringBuilder("");
 
-                    CurrentExercise.currentScore = 0;
+                    CurrentExercise.CurrentScore = 0;
                     
                     //logging name and attempt number into text file
                     writer.WriteLine(CurrentExercise.Title);
-                    writer.WriteLine("attempt" + CurrentExercise.numAttempts);
+                    writer.WriteLine("attempt" + CurrentExercise.NumAttempts);
 
                     for (var i = 0; i < CurrentExercise.CorrectAnswers.Count; i++)
                     {
@@ -155,9 +158,9 @@ namespace Controller.Exercise
                             //Undecided what will be displayed for TangentNormal
                         }
 
-                        string str = "";
+                        var str = String.Empty;
                         //if first attempt, no previous to compare to
-                        if (CurrentExercise.numAttempts == 1)
+                        if (CurrentExercise.NumAttempts == 1)
                         {
                             if (chosenAnswer.Equals(correctAnswer)) str = "<font=\"LiberationSans SDF\"><mark=#46d53a80>Correct</mark></font>";
                             else str = "<font=\"LiberationSans SDF\"><mark=#fa414180>Incorrect</mark></font>";
@@ -194,20 +197,20 @@ namespace Controller.Exercise
                         //log previous, chosen, and correct answers into text file
                         writer.WriteLine(previousAnsText + " " + chosenAnsText + " " + correctAnsText);
 
-                        if (chosenAnswer.Equals(correctAnswer)) ++CurrentExercise.currentScore;
+                        if (chosenAnswer.Equals(correctAnswer)) ++CurrentExercise.CurrentScore;
                     }
 
                     //if anything past first attempt, there is a previous score to show
-                    if (CurrentExercise.numAttempts != 1)
+                    if (CurrentExercise.NumAttempts != 1)
                     {
-                        resultText.Append("Previous result: [" + CurrentExercise.previousScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!\n");
+                        resultText.Append("Previous result: [" + CurrentExercise.PreviousScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!\n");
                     } else
                     {
                         resultText.Append("Previous result: none\n");
                     }
 
-                    resultText.Append("Current result: [" + CurrentExercise.currentScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
-                    writer.WriteLine(CurrentExercise.currentScore + "/" + CurrentExercise.CorrectAnswers.Count);
+                    resultText.Append("Current result: [" + CurrentExercise.CurrentScore + "/" + CurrentExercise.CorrectAnswers.Count + "] correct!");
+                    writer.WriteLine(CurrentExercise.CurrentScore + "/" + CurrentExercise.CorrectAnswers.Count);
 
                     _selObjects.PreviousAnswerText.text = previousText.ToString();
                     _selObjects.ChosenAnswerText.text = chosenText.ToString();
@@ -215,7 +218,7 @@ namespace Controller.Exercise
                     _selObjects.OverallResultText.text = resultText.ToString();
                 }
 
-                confirmedAnswers = true;
+                ConfirmedAnswers = true;
                 CurrentView.ShowConfirmationDisplay = false;
                 CurrentView.ShowResultsDisplay = true;
                 CurrentView.UpdateView();
@@ -223,7 +226,7 @@ namespace Controller.Exercise
             }
 
             // If user is trying to submit answers for the first time, go to confirmation display
-            if (!confirmedAnswers && GlobalDataModel.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
+            if (!ConfirmedAnswers && GlobalDataModel.CurrentSubExerciseIndex == CurrentExercise.Datasets.Count - 1)
             {
                 CurrentView.ShowConfirmationDisplay = true;
                 CurrentView.UpdateView();
@@ -231,7 +234,7 @@ namespace Controller.Exercise
             }
 
             //cannot go further after getting results
-            if (!confirmedAnswers)
+            if (!ConfirmedAnswers)
             {
                 ++GlobalDataModel.CurrentSubExerciseIndex;
                 CurrentView.UpdateView();
@@ -260,7 +263,7 @@ namespace Controller.Exercise
             }
 
             //can go backwards from any of the exercises or on the confirmation, but cannot once results are displayed
-            if (!confirmedAnswers)
+            if (!ConfirmedAnswers)
             {
                 --GlobalDataModel.CurrentSubExerciseIndex;
                 CurrentView.UpdateView();
@@ -305,14 +308,14 @@ namespace Controller.Exercise
             for (int i = 0; i < CurrentExercise.NumberOfSubExercises; i++)
             {
                 CurrentExercise.PreviousAnswers[i] = CurrentExercise.ChosenAnswers[i];
-                CurrentExercise.previousScore = CurrentExercise.currentScore;
+                CurrentExercise.PreviousScore = CurrentExercise.CurrentScore;
                 SelectionIndices[i] = -1;
                 CurrentExercise.ChosenAnswers[i].SetValues(new List<float> { -1 });
             }
 
             //start at main display again
             GlobalDataModel.CurrentSubExerciseIndex = 0;
-            confirmedAnswers = false;
+            ConfirmedAnswers = false;
             CurrentView.ShowMainDisplay = true;
             CurrentView.ShowResultsDisplay = false;
             CurrentView.ShowConfirmationDisplay = false;

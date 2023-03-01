@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-namespace Model
+namespace ParamCurve.Scripts.Model
 {
     /// <summary>
     /// Exercise based on selection execution
@@ -107,8 +106,12 @@ namespace Model
 
     public class SelectionExerciseAnswer : AbstractExerciseAnswer
     {
-        public int PillarIndex = -1;
+        public int PillarIndex;
 
+        public SelectionExerciseAnswer()
+        {
+            PillarIndex = -1;
+        }
         
         public SelectionExerciseAnswer(int pillarIndex)
         {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Utility
+namespace ParamCurve.Scripts.Utility
 {
     /// <summary>
     /// Static class containing polar coordinates based utility calculation functions used in the application

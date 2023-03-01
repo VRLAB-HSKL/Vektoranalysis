@@ -1,7 +1,7 @@
-using Controller.Curve;
+using ParamCurve.Scripts.Controller.Curve;
 using UnityEngine;
 
-namespace Views.Display
+namespace ParamCurve.Scripts.Views.Display
 {
     /// <summary>
     /// Basic view on a display curve
@@ -14,6 +14,7 @@ namespace Views.Display
         /// Argument constructor
         /// </summary>
         /// <param name="displayLr">Line renderer to display curve path</param>
+        /// <param name="displayMesh">Generated mesh to display curve path</param>
         /// <param name="rootPos">Parent game object root position</param>
         /// <param name="scalingFactor">Point vector scaling factor</param>
         /// <param name="controllerType">Type of parent controller</param>

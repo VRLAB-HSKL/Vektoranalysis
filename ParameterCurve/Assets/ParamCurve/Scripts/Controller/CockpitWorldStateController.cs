@@ -1,7 +1,7 @@
 ﻿using Model;
 using UnityEngine;
 
-namespace Controller
+namespace ParamCurve.Scripts.Controller
 {
     /// <summary>
     /// World state controller for the cockpit scene
@@ -35,10 +35,5 @@ namespace Controller
             // Initialize global model
             GlobalDataModel.InitializeData();
         }
-        
-        
-      
-        
-        
     }
 }

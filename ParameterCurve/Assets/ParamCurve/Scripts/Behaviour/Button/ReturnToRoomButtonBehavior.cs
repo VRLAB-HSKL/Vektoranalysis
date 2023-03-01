@@ -1,12 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
+using ParamCurve.Scripts.Controller;
 using UnityEngine;
-using HTC.UnityPlugin.Vive;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Controller;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button that will return to main display room from cockpit view
@@ -23,18 +20,13 @@ namespace Behaviour.Button
         protected new void Start()
         {
             base.Start();
-            YesButton.onClick.AddListener(exit);
-            CancelButton.onClick.AddListener(cancel);
+            YesButton.onClick.AddListener(Exit);
+            CancelButton.onClick.AddListener(Cancel);
         }
 
         protected override void HandleButtonEvent()
         {
             ExitConfirmationPanel.SetActive(true);
-        }
-
-        private void exit()
-        {
-            StartCoroutine(LoadSceneAsync("SingleScene"));
         }
 
         private static IEnumerator LoadSceneAsync(string sceneName)
@@ -49,7 +41,12 @@ namespace Behaviour.Button
             }
         }
 
-        private void cancel()
+        private void Exit()
+        {
+            StartCoroutine(LoadSceneAsync("SingleScene"));
+        }
+        
+        private void Cancel()
         {
             ExitConfirmationPanel.SetActive(false);
         }

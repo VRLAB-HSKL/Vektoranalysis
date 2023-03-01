@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility
+namespace ParamCurve.Scripts.Utility
 {
     /// <summary>
     /// Static class containing utility calculation functions used in the application

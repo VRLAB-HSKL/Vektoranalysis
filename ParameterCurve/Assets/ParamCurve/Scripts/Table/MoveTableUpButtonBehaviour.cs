@@ -1,7 +1,7 @@
-using Behaviour.Button;
+using ParamCurve.Scripts.Behaviour.Button;
 using UnityEngine;
 
-namespace Table
+namespace ParamCurve.Scripts.Table
 {
     /// <summary>
     /// This class handles Logic of the Up button 

@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility
+namespace ParamCurve.Scripts.Utility
 {
     /// <summary>
     /// Static utility class containing frequently used functions related to drawing simple primitives
@@ -59,7 +58,7 @@ namespace Utility
 
             var point = linePoints[pointIndex];
 
-            var arrow = GameObject.Instantiate(arrowPrefab, obj.transform);
+            var arrow = Object.Instantiate(arrowPrefab, obj.transform);
             arrow.name = "Arrow_" + line.name + "_" + pointIndex;
             arrow.transform.position = point;
             //arrow.GetComponent<ArrowController>().PointTowards(direction);
@@ -137,9 +136,9 @@ namespace Utility
             return sphere;
         }
 
-        public static void DrawArrow(Vector3 start, Vector3 target, Transform parent, GameObject ArrowPrefab, Vector3 bbScale)
+        public static void DrawArrow(Vector3 start, Vector3 target, Transform parent, GameObject arrowPrefab, Vector3 bbScale)
         {
-            var arrow = Object.Instantiate(ArrowPrefab, parent);
+            var arrow = Object.Instantiate(arrowPrefab, parent);
             arrow.name = "Arrow_" + start + "_to_" + target;
             arrow.transform.position = start; //Vector3.Lerp(start, target, 0.5f);
             //arrow.GetComponent<ArrowController>().PointTowards(direction);
@@ -150,12 +149,14 @@ namespace Utility
             // var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
             var maxVector = new Vector3(maxScale, maxScale, maxScale);
             var newScale = maxVector * 0.05f;
-            arrow.transform.localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
+            //var localScale = arrow.transform.localScale;
+            var localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
 
-            var scale = arrow.transform.localScale;
+            var scale = localScale;
             var zScale = Vector3.Distance(start, target);
 
-            arrow.transform.localScale = new Vector3(scale.x, scale.y, zScale);
+            localScale = new Vector3(scale.x, scale.y, zScale);
+            arrow.transform.localScale = localScale;
 
             //var direction = target - start;
 

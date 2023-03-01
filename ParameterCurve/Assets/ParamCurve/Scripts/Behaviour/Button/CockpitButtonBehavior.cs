@@ -1,12 +1,12 @@
-using Controller;
-using Model;
-using UnityEngine;
-using System.IO;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using HTC.UnityPlugin.Vive;
+using System.IO;
+using Model;
+using ParamCurve.Scripts.Controller;
+using ParamCurve.Scripts.Model;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to move from main display room to cockpit view
@@ -35,11 +35,6 @@ namespace Behaviour.Button
         /// </summary>
         public GameObject DisplayViewParent;
 
-        /// <summary>
-        /// Path to text file
-        /// </summary>
-        //private string path = "Assets/Resources/linecoords.txt";
-
 
         /// <summary>
         /// Unity Start function
@@ -51,8 +46,8 @@ namespace Behaviour.Button
         {
             base.Start();
             //gameObject.SetActive(GlobalDataModel.InitFile.ApplicationSettings.TableSettings.ShowNavButtons);
-            YesButton.onClick.AddListener(exit);
-            CancelButton.onClick.AddListener(cancel);
+            YesButton.onClick.AddListener(Exit);
+            CancelButton.onClick.AddListener(Cancel);
         }
 
         #region Clicked
@@ -153,21 +148,16 @@ namespace Behaviour.Button
         }
         #endregion
 
-        private void exit()
+        private void Exit()
         {
             //StartCoroutine(WriteCoordsData());
         }
 
-        private void cancel()
+        private void Cancel()
         {
             ExitConfirmationPanel.SetActive(false);
             DisplayViewParent.SetActive(true);
         }
 
-        private void OnApplicationQuit()
-        {
-            //clear curve data when application stops running
-            //File.WriteAllText(path, "");
-        }
     }
 }

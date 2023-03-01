@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Model;
+using ParamCurve.Scripts.Views;
+using ParamCurve.Scripts.Views.Display;
 using UnityEngine;
-using Views.Display;
-namespace Controller.Curve
+
+namespace ParamCurve.Scripts.Controller.Curve
 {
     /// <summary>
     /// View controller for all views related to displaying curve data
@@ -41,6 +43,7 @@ namespace Controller.Curve
         /// </summary>
         /// <param name="root">Root game position</param>
         /// <param name="displayLineRenderer">Line renderer used for curve display</param>
+        /// <param name="displayMesh">Generate mesh used to display the curve</param>
         /// <param name="travel">Travel game object for run based views</param>
         /// <param name="arcTravel">Arc travel game object for run based views</param>
         /// <param name="scalingFactor">Scaling factor</param>

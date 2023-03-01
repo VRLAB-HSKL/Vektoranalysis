@@ -1,7 +1,7 @@
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to start runs of travel objects along the curve line

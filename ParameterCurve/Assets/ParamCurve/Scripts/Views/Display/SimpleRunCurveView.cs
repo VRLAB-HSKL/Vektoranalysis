@@ -1,10 +1,11 @@
-using Controller.Curve;
 //using log4net;
+
 using Model;
+using ParamCurve.Scripts.Controller.Curve;
 using UnityEngine;
 using VRKL.MBU;
 
-namespace Views.Display
+namespace ParamCurve.Scripts.Views.Display
 {
     /// <summary>
     /// View on curve data with an attached game object to display runs along the curve line.
@@ -96,9 +97,9 @@ namespace Views.Display
         public WaypointManager _wpm { get; set; }
         
         
-        /// <summary>
-        /// Static log4net logger
-        /// </summary>
+        // <summary>
+        // Static log4net logger
+        // </summary>
         //private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleRunCurveView));
         
         #endregion Private members
@@ -109,6 +110,7 @@ namespace Views.Display
         /// Argument constructor
         /// </summary>
         /// <param name="displayLr">Line renderer used to display curve line</param>
+        /// <param name="displayMesh">Generated mesh to display curve path</param>
         /// <param name="rootPos">Origin of curve points</param>
         /// <param name="scalingFactor">Scaling factor used to scale curve line</param>
         /// <param name="travelObject">Game object used to visualize runs along the curve line</param>

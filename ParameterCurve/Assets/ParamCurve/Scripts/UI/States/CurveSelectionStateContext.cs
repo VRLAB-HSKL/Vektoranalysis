@@ -1,6 +1,6 @@
 using VRKL.MBU;
 
-namespace UI.States
+namespace ParamCurve.Scripts.UI.States
 {
     /// <summary>
     /// Abstract state context

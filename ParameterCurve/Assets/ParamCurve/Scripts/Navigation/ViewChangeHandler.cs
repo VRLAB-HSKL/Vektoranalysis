@@ -1,8 +1,8 @@
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
 using UnityEngine;
 
-namespace Navigation
+namespace ParamCurve.Scripts.Navigation
 {
     /// <summary>
     /// Change view based on set <see cref="viewIndex"/> on collision

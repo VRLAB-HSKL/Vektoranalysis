@@ -1,10 +1,11 @@
-﻿using Controller.Curve;
-//using log4net;
-using Model;
-using UnityEngine;
-using Views.Display;
+﻿//using log4net;
 
-namespace Views.Exercise
+using Model;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Model;
+using UnityEngine;
+
+namespace ParamCurve.Scripts.Views.Exercise
 {
     public class AbstractExerciseView
     {

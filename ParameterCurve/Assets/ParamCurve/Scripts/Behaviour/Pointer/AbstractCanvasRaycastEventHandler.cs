@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Behaviour.Pointer
+namespace ParamCurve.Scripts.Behaviour.Pointer
 {
     /// <summary>
     /// Abstract raycast handler to map event handling of collision and click events between canvas elements

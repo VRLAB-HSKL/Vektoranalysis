@@ -1,13 +1,9 @@
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
+using ParamCurve.Scripts.UI;
 using UnityEngine;
-using System.IO;
-using UnityEngine.SceneManagement;
-using System.Collections;
-using HTC.UnityPlugin.Vive;
-using UI;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to return from exercise room to main display room
@@ -41,9 +37,9 @@ namespace Behaviour.Button
         protected override void HandleButtonEvent()
         {
             //new room is +20 units in z direction from main room
-            VR.transform.position = VR.transform.position + new Vector3(0, 0, -20);
+            VR.transform.position += new Vector3(0, 0, -20);
             //move menu parent object back as well
-            curveControl.curveMenuParent.transform.parent.gameObject.transform.position = curveControl.curveMenuParent.transform.parent.gameObject.transform.position + new Vector3(0, 0, -20);
+            curveControl.curveMenuParent.transform.parent.gameObject.transform.position += new Vector3(0, 0, -20);
 
             curveControl.SwitchCurveGroup(GlobalDataModel.CurveDisplayGroup.Display);
             GlobalDataModel.ExerciseCurveController.ResetCurrentExercise();

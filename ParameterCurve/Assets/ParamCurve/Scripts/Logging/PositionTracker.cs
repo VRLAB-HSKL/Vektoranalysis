@@ -1,24 +1,27 @@
 //using log4net;
+
 using UnityEngine;
 
-public class PositionTracker : MonoBehaviour
+namespace ParamCurve.Scripts.Logging
 {
-    //private static readonly ILog Log = LogManager.GetLogger(typeof(PositionTracker));
-
-    private Transform playerTransform;
-
-    private void Start()
+    public class PositionTracker : MonoBehaviour
     {
-        var cam = FindObjectOfType<Camera>();
-        playerTransform = cam.transform;
-    }
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(PositionTracker));
 
-    // Update is called once per frame
-    private void Update()
-    {
-        // Log.Info(
-        //     "Frame: " + Time.frameCount + "\n" +
-        //     "Player position: " + playerTransform.position
-        // );
+        private Transform playerTransform;
+
+        private void Start()
+        {
+            var cam = FindObjectOfType<Camera>();
+            playerTransform = cam.transform;
+        }
+
+        private void Update()
+        {
+            // Log.Info(
+            //     "Frame: " + Time.frameCount + "\n" +
+            //     "Player position: " + playerTransform.position
+            // );
+        }
     }
 }

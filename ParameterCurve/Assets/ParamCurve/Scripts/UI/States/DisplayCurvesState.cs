@@ -1,7 +1,7 @@
-using Controller;
+using ParamCurve.Scripts.Controller;
 using UnityEngine;
 
-namespace UI.States
+namespace ParamCurve.Scripts.UI.States
 {
     /// <summary>
     /// Curve state used during selection and interaction of display curves

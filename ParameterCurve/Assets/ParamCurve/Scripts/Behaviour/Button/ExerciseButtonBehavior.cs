@@ -1,13 +1,9 @@
-using Controller;
 using Model;
+using ParamCurve.Scripts.Controller;
+using ParamCurve.Scripts.UI;
 using UnityEngine;
-using System.IO;
-using UnityEngine.SceneManagement;
-using System.Collections;
-using HTC.UnityPlugin.Vive;
-using UI;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button Behaviour used to travel from main display room to exercise room

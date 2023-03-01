@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using HTC.UnityPlugin.Vive;
+using UnityEngine;
 
-namespace Controller
+namespace ParamCurve.Scripts.Cockpit
 {
     public class GraphDisplayControl : MonoBehaviour
     {
-
         public GameObject TimeVelocityDiagramCanvas;
         public GameObject TimeDistanceDiagramCanvas;
         private bool diagramsVisible;

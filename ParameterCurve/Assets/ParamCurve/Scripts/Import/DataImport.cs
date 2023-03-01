@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Import.InitFile;
 using Model;
-using Newtonsoft.Json;
+using ParamCurve.Scripts.Import.InitFile;
+using ParamCurve.Scripts.Model;
+using ParamCurve.Scripts.Utility;
 using UnityEngine;
-using Utility;
 
-namespace Import
+namespace ParamCurve.Scripts.Import
 {
     /// <summary>
     /// Import class used to import and save data from the generated .json init file
@@ -122,20 +122,6 @@ namespace Import
                     
                 };
 
-                
-                
-
-                // var bin = Vector3.Cross(fsr.Tangent, fsr.Normal);
-                // fsr.Binormal = new Vector3(bin.x, bin.y, -Mathf.Abs(bin.z));
-
-                // if (j == 10 && pd.Name == "helix")
-                // {
-                //     Debug.Log(pd.Name + "_j10: " + 
-                //               fsr.Binormal[0].ToString("#0.00000000") + " " +
-                //               fsr.Binormal[1].ToString("#0.00000000") + " " +
-                //               fsr.Binormal[2].ToString("#0.00000000"));
-                // }
-
                 pd.FresnetApparatuses.Add(fsr);
                 pd.ArcLengthParamValues = curve.Data.Data.ArcT;
                 pd.ArcLenghtPoints.Add(new Vector3(
@@ -163,32 +149,16 @@ namespace Import
                         ).normalized
                 };
 
-                //var arcBin = Vector3.Cross(fsr.Tangent, fsr.Normal);
-                //arcFsr.Binormal = new Vector3(arcBin.x, arcBin.y, -Mathf.Abs(arcBin.z));
-                // Vector3.Cross(arcFsr.Tangent, arcFsr.Normal);
-
                 pd.ArcLengthFresnetApparatuses.Add(arcFsr);
             }
 
-            // if (curve.Info.Name.Equals("helix"))
-            // {
-            //     for (var index = 0; index < curve.Data.Data.NormVec.Count; index++)
-            //     {
-            //         var normal = curve.Data.Data.NormVec[index];
-            //         Debug.Log("normal_ " + index + ": "
-            //                   + normal[0].ToString("0.00000000000000000000000000000000000000") + " "
-            //                   + normal[1].ToString("0.00000000000000000000000000000000000000") + " "
-            //                   + normal[2].ToString("0.00000000000000000000000000000000000000"));
-            //     }
-            // }
-            
             pd.CalculateWorldPoints();
 
             return pd;
         }
 
         /// <summary>
-        /// Generate a local exercise dataset from a <see cref="SubExercise"/> node that was generated during initial
+        /// Generate a local exercise dataset from a sub exercise node that was generated during initial
         /// parsing of the init file.
         /// </summary>
         /// <param name="sub">Sub exercise node</param>
@@ -204,7 +174,7 @@ namespace Import
         }
 
         /// <summary>
-        /// Generate a local exercise dataset from a <see cref="SubExercise"/> node that was generated during initial
+        /// Generate a local exercise dataset from a sub exercise node that was generated during initial
         /// parsing of the init file.
         /// </summary>
         /// <param name="sub">Sub exercise node</param>

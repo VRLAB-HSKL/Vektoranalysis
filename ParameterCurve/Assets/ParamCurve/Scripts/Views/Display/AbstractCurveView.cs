@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Controller.Curve;
-//using log4net;
 using Model;
+using ParamCurve.Scripts.Controller.Curve;
+using ParamCurve.Scripts.Model;
 using UnityEngine;
-using Utility;
-using VRKL.MBU;
+//using log4net;
 
-namespace Views.Display
+
+namespace ParamCurve.Scripts.Views.Display
 {
     /// <summary>
     /// Abstract base class for all views on curve data
@@ -24,7 +22,7 @@ namespace Views.Display
         {
             get;
             set;
-        } = 1f;
+        }
     
         /// <summary>
         /// True if this view has a game object to display runs 
@@ -52,10 +50,10 @@ namespace Views.Display
         protected static CurveInformationDataset CurrentCurve => 
             GlobalDataModel.CurrentDataset[GlobalDataModel.CurrentCurveIndex];
         
-        /// <summary>
-        /// Line renderer to display curve path
-        /// </summary>
-        protected readonly LineRenderer DisplayLr;
+        // <summary>
+        // Line renderer to display curve path
+        // </summary>
+        //protected readonly LineRenderer DisplayLr;
 
         protected TubeMesh DisplayMesh;
         
@@ -63,8 +61,6 @@ namespace Views.Display
         /// Cached material property key to change material color of line on startup
         /// </summary>
         protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
-
-        
         
         #endregion Protected members
         
@@ -73,13 +69,13 @@ namespace Views.Display
         /// <summary>
         /// Position of root object, used to translate point vectors
         /// </summary>
-        public readonly Vector3 _rootPos;
+        public readonly Vector3 RootPos;
 
         
         
-        /// <summary>
-        /// Static log4net logger
-        /// </summary>
+        // <summary>
+        // Static log4net logger
+        // </summary>
         //private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractCurveView));
         
         
@@ -92,6 +88,7 @@ namespace Views.Display
         /// Argument constructor
         /// </summary>
         /// <param name="displayLr">Line renderer to display curve path</param>
+        /// <param name="displayMesh">Generated mesh to display curve path</param>
         /// <param name="rootPos">Parent game object root position</param>
         /// <param name="scalingFactor">Point vector scaling factor</param>
         /// <param name="controllerType">Type of parent controller</param>
@@ -102,11 +99,8 @@ namespace Views.Display
             //Log.Info("AbstractCurveView.ArgumentConstructor()");
             DisplayMesh = displayMesh;
             //DisplayLr = displayLr;
-            _rootPos = rootPos;
-            
-            
+            RootPos = rootPos;
             ScalingFactor = scalingFactor;
-            
             ControllerType = controllerType;
         }
         
@@ -209,11 +203,11 @@ namespace Views.Display
 
             if (ControllerType == AbstractCurveViewController.CurveControllerType.Table)
             {
-                newVector = _rootPos + newVector * CurrentCurve.TableScalingFactor;
+                newVector = RootPos + newVector * CurrentCurve.TableScalingFactor;
             }
             else
             {
-                newVector = _rootPos + newVector * CurrentCurve.WorldScalingFactor; //;ScalingFactor;    
+                newVector = RootPos + newVector * CurrentCurve.WorldScalingFactor; //;ScalingFactor;    
             }
             //
             return newVector;

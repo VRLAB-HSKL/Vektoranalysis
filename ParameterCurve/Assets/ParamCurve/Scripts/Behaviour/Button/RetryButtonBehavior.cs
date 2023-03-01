@@ -1,13 +1,6 @@
-using Controller;
 using Model;
-using UnityEngine;
-using System.IO;
-using UnityEngine.SceneManagement;
-using System.Collections;
-using HTC.UnityPlugin.Vive;
-using UI;
 
-namespace Behaviour.Button
+namespace ParamCurve.Scripts.Behaviour.Button
 {
     /// <summary>
     /// Button that will start over current exercise
