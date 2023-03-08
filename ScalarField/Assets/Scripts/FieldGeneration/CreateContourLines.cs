@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Model;
@@ -20,7 +21,6 @@ namespace FieldGeneration
         public ScalarFieldManager scalarFieldManager;
         
         [Header("Dependencies")]
-        public GameObject Field;
         public GameObject boundingBox;
         public List<float> contourValues = new List<float>();
         public Material lineMat;
@@ -36,8 +36,8 @@ namespace FieldGeneration
         private Vector3 _bbExtents;
         private readonly List<GameObject> _contourLineObjects = new List<GameObject>();
         private readonly List<GameObject> _tubeObjects = new List<GameObject>();
-        private List<List<PointData>> isolineDisplayPointLists;
-        private Vector3 parentOrigin;
+        private List<List<PointData>> _isolineDisplayPointLists;
+        private Vector3 _parentOrigin;
     
         #endregion Private members
         
@@ -56,9 +56,9 @@ namespace FieldGeneration
         /// <param name="mapToVertical"></param>
         public void MapVerticalLinePositionsToMesh(bool mapToVertical)
         {
-            for (var i = 0; i < isolineDisplayPointLists.Count; i++)
+            for (var i = 0; i < _isolineDisplayPointLists.Count; i++)
             {
-                var pointList = isolineDisplayPointLists[i];
+                var pointList = _isolineDisplayPointLists[i];
                 var newPointList = new List<Vector3>();
             
                 for (var j = 0; j < pointList.Count; j++)
@@ -86,7 +86,7 @@ namespace FieldGeneration
                 
                     if (mapToVertical)
                     {
-                        scaledVector += parentOrigin + new Vector3(0f, 0.25f, 0f);
+                        scaledVector += _parentOrigin + new Vector3(0f, 0.25f, 0f);
                     }
                     else
                     {
@@ -94,7 +94,7 @@ namespace FieldGeneration
                         scaledVector = new Vector3(scaledVector.x, 0f, scaledVector.z);
                     
                         // Move contour point to game object origin + custom offset
-                        scaledVector += parentOrigin + positionOffset;    
+                        scaledVector += _parentOrigin + positionOffset;    
                     }
 
                     // Add changed point to list
@@ -149,12 +149,12 @@ namespace FieldGeneration
         
             foreach (var contourVal in contourValues)
             {
-                sb.AppendLine(contourVal.ToString());
+                sb.AppendLine(contourVal.ToString(CultureInfo.InvariantCulture));
             }
         
             Debug.Log(sb);
         
-            parentOrigin = transform.parent.position;
+            _parentOrigin = transform.parent.position;
             _bbExtents = boundingBox.GetComponent<MeshRenderer>().bounds.extents;
             
             CalculateContourLines();
@@ -177,11 +177,11 @@ namespace FieldGeneration
         
         private void CalculateContourLines()
         {
-            isolineDisplayPointLists = new List<List<PointData>>();
+            _isolineDisplayPointLists = new List<List<PointData>>();
             
             for (var i = 0; i < contourValues.Count; i++)
             {
-                var isoValue = contourValues[i];
+                var isoValue = scalarFieldManager.CurrentField.ContourLineValues[i]; //contourValues[i];
                 var importedPointList = scalarFieldManager.CurrentField.ContourLinePoints[i];
             
                 // Skip convex hull algorithm and the rest on empty point list
@@ -221,12 +221,12 @@ namespace FieldGeneration
                 
                 finalPointList.Add(finalPointList.First());
                 
-                isolineDisplayPointLists.Add(finalPointList);
+                _isolineDisplayPointLists.Add(finalPointList);
             }
             
-            for (var i = 0; i < isolineDisplayPointLists.Count; i++)
+            for (var i = 0; i < _isolineDisplayPointLists.Count; i++)
             {
-                var pointList = isolineDisplayPointLists[i];
+                var pointList = _isolineDisplayPointLists[i];
                 if (pointList.Count == 0) continue;
             
                 var go = new GameObject("ContourLine_" + contourValues[i]);

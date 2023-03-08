@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using JetBrains.Annotations;
-using Unity.Collections;
-using Unity.Jobs;
 using UnityEditor;
 using UnityEngine;
 
@@ -62,7 +59,7 @@ namespace Utility
 
             var point = linePoints[pointIndex];
 
-            var arrow = GameObject.Instantiate(arrowPrefab, obj.transform);
+            var arrow = Object.Instantiate(arrowPrefab, obj.transform);
             arrow.name = "Arrow_" + line.name + "_" + pointIndex;
             arrow.transform.position = point;
             //arrow.GetComponent<ArrowController>().PointTowards(direction);
@@ -105,9 +102,13 @@ namespace Utility
             sphere.transform.position = point;
         }
 
-        public static GameObject DrawArrow(Vector3 start, Vector3 target, Transform parent, GameObject ArrowPrefab, Vector3 bbScale)
+        public static GameObject DrawArrow(
+            Vector3 start, Vector3 target, Transform parent, GameObject arrowPrefab, Vector3 bbScale)
         {
-            var arrow = PrefabUtility.InstantiatePrefab(ArrowPrefab, parent) as GameObject; //Object.Instantiate(ArrowPrefab, parent);
+            var arrow = PrefabUtility.InstantiatePrefab(arrowPrefab, parent) as GameObject;
+            if (arrow is null)
+                return null;
+            
             arrow.name = "Arrow_" + start + "_to_" + target;
             arrow.transform.position = start; 
             
@@ -117,13 +118,14 @@ namespace Utility
             // var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
             var maxVector = new Vector3(maxScale, maxScale, maxScale);
             var newScale = maxVector * 0.05f;
-            arrow.transform.localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
+            var localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
 
-            var scale = arrow.transform.localScale;
+            var scale = localScale;
             var zScale = Vector3.Distance(start, target);
 
-            arrow.transform.localScale = new Vector3(scale.x, scale.y, zScale);
-            
+            localScale = new Vector3(scale.x, scale.y, zScale);
+            arrow.transform.localScale = localScale;
+
             //var direction = target - start;
             
             //ToDo: Scale arrow length wise based on distance
@@ -139,9 +141,6 @@ namespace Utility
 
             return arrow;
         }
-        
-        
-        
         
         public static void DrawPath(List<Vector3> points, Transform parent, GameObject arrowPrefab, Vector3 bbScale)
         {
@@ -183,53 +182,6 @@ namespace Utility
                         DrawArrow(points[i], points[i + 1], path.transform,arrowPrefab, bbScale);
                 }
             }
-            
         }
     }
-
-    // public struct TestJob : IJobParallelFor
-    // {
-    //     public GameObject ArrowPrefab;
-    //     public Transform parent;
-    //     public Vector3 bbScale;
-    //     
-    //     public NativeArray<Vector3> startValues;
-    //     public NativeArray<Vector3> targetValues;
-    //
-    //     public void Execute(int index)
-    //     {
-    //         var start = startValues[index];
-    //         var target = targetValues[index];
-    //         
-    //         var arrow = PrefabUtility.InstantiatePrefab(ArrowPrefab, parent) as GameObject; //Object.Instantiate(ArrowPrefab, parent);
-    //         arrow.name = "Arrow_" + start + "_to_" + target;
-    //         arrow.transform.position = start; 
-    //         
-    //         // Scale arrow to about 5% the size of the bounding box
-    //         //var bbScale = BoundingBox.transform.localScale;
-    //         var maxScale = Mathf.Max(bbScale.x, bbScale.y, bbScale.z);
-    //         // var newScale = new Vector3(1f / maxScale, 1f / maxScale, 1f / maxScale);
-    //         var maxVector = new Vector3(maxScale, maxScale, maxScale);
-    //         var newScale = maxVector * 0.05f;
-    //         arrow.transform.localScale = Vector3.Scale(Vector3.one, newScale); //newScale;
-    //
-    //         var scale = arrow.transform.localScale;
-    //         var zScale = Vector3.Distance(start, target);
-    //
-    //         arrow.transform.localScale = new Vector3(scale.x, scale.y, zScale);
-    //         
-    //         //var direction = target - start;
-    //         
-    //         //ToDo: Scale arrow length wise based on distance
-    //         // var dirMag = direction.magnitude;
-    //         // arrow.transform.localScale = Vector3.Scale(arrow.transform.localScale, new Vector3(1f, 1f, dirMag));
-    //
-    //         //var centerPos = (start + target) * 0.5f;
-    //         
-    //         //arrow.transform.localScale = Vector3.Scale(arrow.transform.localScale, new Vector3(1f, 1f, scaleZ));
-    //
-    //         //var lookPoint = start + direction;
-    //         arrow.transform.LookAt(target);
-    //     }
-    // }
 }

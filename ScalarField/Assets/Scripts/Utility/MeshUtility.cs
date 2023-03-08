@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Model;
-using Model.ScriptableObjects;
 using UnityEngine;
 
 namespace Utility
@@ -43,18 +41,17 @@ namespace Utility
         public static Mesh GenerateFieldMesh(ScalarField sf, GameObject boundingBox)
         {
             var dVertices = sf.DisplayPoints;
-            var y_min = sf.MinDisplayValues.y;//dVertices.Min(v => v.y);
-            var y_max = sf.MaxDisplayValues.y;//dVertices.Max(v => v.y);
+            var yMin = sf.MinDisplayValues.y;//dVertices.Min(v => v.y);
+            var yMax = sf.MaxDisplayValues.y;//dVertices.Max(v => v.y);
             var bounds = boundingBox.GetComponent<MeshRenderer>().bounds;
             var displayVertices = CalcUtility.MapDisplayVectors(dVertices, bounds, boundingBox.transform);
             
             var topology = MeshTopology.Triangles;
-            var indices = new List<int>();
+            List<int> indices = new List<int>();
 
             // Generate topology indices based on chosen topology
             switch (topology)
             {
-                default:
                 case MeshTopology.Triangles:
                     indices = GenerateTriangleIndices(displayVertices, false, sf.SampleCount);
                     // Draw triangles twice to cover both sides
@@ -76,7 +73,7 @@ namespace Utility
             var uvs = new Vector2[displayVertices.Count];
             for (var i = 0; i < dVertices.Count; i++)
             {   
-                var y = CalcUtility.MapValueToRange(dVertices[i].y, y_min, y_max, 0f, 1f);
+                var y = CalcUtility.MapValueToRange(dVertices[i].y, yMin, yMax, 0f, 1f);
                 uvs[i] = new Vector2(y, 0.5f);
             }
         
@@ -219,13 +216,14 @@ namespace Utility
 
             return indices;
         }
-    
+
         /// <summary>
         /// Calculates the normals for each vertex in the mesh
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="indices"></param>
         /// <param name="topology"></param>
+        /// <param name="sampleCount"></param>
         /// <returns></returns>
         private static List<Vector3> CalculateNormals(
             List<Vector3> vertices, List<int> indices, MeshTopology topology, int sampleCount)    
@@ -324,81 +322,7 @@ namespace Utility
             //     |         |
             //     +---------+
             //     1         4
-        
             return Vector3.Cross(p3 - p2, p1 - p2).normalized;
         }
-
-        /// <summary>
-        /// Generates colors for a given value range of a collection of vertices
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <returns></returns>
-        // private List<Color> GenerateColors(List<Vector3> vertices)
-        // {
-        //     var maxz = vertices.Max(v => v.z);
-        //     var minz = vertices.Min(v => v.z);
-        //     var rangeZ = math.abs(maxz - minz);
-        //     //var step = rangeZ / 255f;
-        //     var colorList = new List<Color>();
-        //
-        //     for (int i = 0; i < vertices.Count; i++)
-        //     {
-        //         var z = vertices[i].z;
-        //
-        //         if (z > 0)
-        //         {
-        //             var redVal = z / maxz; //rangeZ;
-        //             colorList.Add(new Color(redVal, 0f, 0f));    
-        //         }
-        //         else
-        //         {
-        //             var blueVal = z / minz;
-        //             colorList.Add(new Color(0f, 0f, blueVal));
-        //         }
-        //     
-        //     }
-        //
-        //     return colorList;
-        // }
-
-
-        // private Color[] colors = new[]
-        // {
-        //     Color.black,
-        //     Color.blue,
-        //     Color.magenta,
-        //     Color.red,
-        //     Color.white
-        // };
-
-        // /// <summary>
-        // /// Implementation of a color transfer function that maps a value in a given range
-        // /// to a discrete index value by rounding down float values (floor())
-        // /// </summary>
-        // /// <param name="vertices"></param>
-        // /// <returns></returns>
-        // private static List<Color> ColorTransferFunction(List<Vector3> vertices)
-        // {
-        //     var maxz = vertices.Max(v => v.z);
-        //     var minz = vertices.Min(v => v.z);
-        //
-        //     //Debug.Log("min: " + minz + ", max: " + maxz);
-        //
-        //     var rangeZ = math.abs(maxz - minz);
-        //     //var step = rangeZ / 255f;
-        //     var colorList = new List<Color>();
-        //
-        //     var n = colors.Length;
-        //
-        //     for (int i = 0; i < vertices.Count; i++)
-        //     {
-        //         var z = vertices[i].z;
-        //         float raw_ts = ((z - minz) / (maxz - minz)) * (n - 1);
-        //         int ts = (int) raw_ts;
-        //         colorList.Add(colors[ts]);
-        //     }
-        //
-        //     return colorList;
-        // }
     }
 }

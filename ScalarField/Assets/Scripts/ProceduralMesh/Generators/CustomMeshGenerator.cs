@@ -12,10 +12,6 @@ namespace ProceduralMesh.Generators
         public void Execute<TS>(int i, TS streams) where TS : struct, IMeshStreams
         {
             throw new System.NotImplementedException();
-            
-            
-            
-            
         }
     }
 }

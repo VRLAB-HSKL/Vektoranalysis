@@ -1,8 +1,5 @@
-using System.Linq;
-using Model;
 using Model.ScriptableObjects;
 using UnityEngine;
-using Utility;
 
 namespace Travel
 {
@@ -34,7 +31,7 @@ namespace Travel
 
             if (user is null) return;
 
-            var estimatedIndex = TravelManager.EstimatedIndex;
+            var estimatedIndex = TravelManager.estimatedIndex;
             var finalPoint = ScalarFieldManager.CurrentField.MeshPoints[estimatedIndex];
             
             //Debug.Log("estimated index: " + estimatedIndex + ", finalPoint: " + finalPoint);
@@ -114,12 +111,7 @@ namespace Travel
             else
             {
                 user.transform.position = finalPoint;
-                //Cockpit.transform.position = finalPoint; // + CockpitOffset;    
             }
-        
-            //DrawMainPoint();
-            //DrawArrow(Vector3.up, 10f);
-        
         }
     }
 }

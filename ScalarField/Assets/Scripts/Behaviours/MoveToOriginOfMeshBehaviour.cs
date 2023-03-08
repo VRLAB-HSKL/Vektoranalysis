@@ -50,7 +50,7 @@ namespace Behaviours
             _boundsCenter = boundingBox.bounds.center;
         }
 
-        private GameObject HintText;
+        private GameObject _hintText;
         
         protected new void Update()
         {

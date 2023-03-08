@@ -38,39 +38,8 @@ namespace Views
         
         public virtual void UpdateView()
         {
-            //Debug.Log("Generating field mesh...");
             GenerateFieldMesh();
-            
             MeshUtility.UpdateMeshComponents(_data.CurrentField, _tf.gameObject, _boundingBox, _bounds);
-            
-            // var mesh = MeshUtility.GenerateFieldMesh(_data.CurrentField, _boundingBox);
-            // // mesh.RecalculateNormals();
-            // // mesh.RecalculateBounds();
-            //
-            // // Set mesh
-            // _mf.mesh = mesh;
-            //
-            // // Assign mesh to collider
-            // //var meshCollider = GetComponent<MeshCollider>();
-            // //collider.convex = true;
-            // _mc.sharedMesh = mesh;
-            //
-            // if (PositionMeshAtOrigin)
-            // {
-            //     PositionMeshCenterAtOrigin(_tf, _bounds);
-            // }   
-            //
-            // var mat = _mr.material;
-            // mat.color = new Color(r: 0.75f, g: 0.75f, b: 0.75f, a: 1f);
-            //
-            // mat.mainTexture = _data.CurrentField.MeshTexture;
-            
-            
-            //mat.mainTexture = ScalarFieldManager.CurrentField.MeshTexture;
-            // var texture = Resources.Load<Texture2D>("texture_maps/test/coolwarm");
-            //
-            //
-            // mat.mainTexture = texture;
         }
         
         public bool PositionMeshAtOrigin;
@@ -104,44 +73,26 @@ namespace Views
                 name="Scalar field mesh",
             };
         
-            
             var sf = _data.CurrentField;
 
             
             var dVertices = sf.DisplayPoints;
-            // var displayVertices = new List<Vector3>();
-            //
-            var x_min = dVertices.Min(v => v.x);
-            var x_max = dVertices.Max(v => v.x);
-            var y_min = dVertices.Min(v => v.y);
-            var y_max = dVertices.Max(v => v.y);
-            var z_min = dVertices.Min(v => v.z);
-            var z_max = dVertices.Max(v => v.z);    
+        
+            var xMin = dVertices.Min(v => v.x);
+            var xMax = dVertices.Max(v => v.x);
+            var yMin = dVertices.Min(v => v.y);
+            var yMax = dVertices.Max(v => v.y);
+            var zMin = dVertices.Min(v => v.z);
+            var zMax = dVertices.Max(v => v.z);    
 
             var bounds = _boundingBox.GetComponent<MeshRenderer>().bounds;
             var displayVertices = CalcUtility.MapDisplayVectors(dVertices, bounds, _boundingBox.transform);
-            
-            // var log = false;
-            // var sb = new StringBuilder();
-            // for (int i = 0; i < displayVertices.Count; i++)
-            // {
-            //     sb.AppendLine(displayVertices[i].ToString());
-            // }
-            //
-            // if (log)
-            // {
-            //     Debug.Log("Init vertices List:" + displayVertices.Count + "\n" + sb);
-            // }
-            
-            //sb.Clear();
-
             var topology = MeshTopology.Triangles;
             var indices = new List<int>();
 
             // Generate topology indices based on chosen topology
             switch (topology)
             {
-                default:
                 case MeshTopology.Triangles:
                     indices = GenerateTriangleIndices(displayVertices, false);
                     // Draw triangles twice to cover both sides
@@ -156,8 +107,6 @@ namespace Views
             }
             
             mesh.vertices = displayVertices.ToArray();
-            
-            //Debug.Log("Number of points: " + displayVertices.Count);
             
             mesh.SetIndices(indices.ToArray(), topology, 0, true);
 
@@ -181,9 +130,9 @@ namespace Views
                 
                 // Map x and z coordinates to texture coordinate space
                 // (z is used because y and z are flipped for display vectors)
-                var x = CalcUtility.MapValueToRange(vertex.x, x_min, x_max, 0f, 1f);
-                var y = CalcUtility.MapValueToRange(vertex.y, y_min, y_max, 0f, 1f);
-                var z = CalcUtility.MapValueToRange(vertex.z, z_min, z_max, 0f, 1f);
+                //var x = CalcUtility.MapValueToRange(vertex.x, xMin, xMax, 0f, 1f);
+                var y = CalcUtility.MapValueToRange(vertex.y, yMin, yMax, 0f, 1f);
+                //var z = CalcUtility.MapValueToRange(vertex.z, zMin, zMax, 0f, 1f);
                 uvs[i] = new Vector2(y, 0.5f);
                 
             }

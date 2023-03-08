@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Calculation
+namespace Utility
 {
     public static class TextureUtility
     {

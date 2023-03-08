@@ -32,13 +32,8 @@ namespace Travel
             var contact = collision.GetContact(0);
         
             if (collision.gameObject != PointerObject.gameObject)
-            {
-                // Debug.Log("collObjName: " + collision.gameObject.name +
-                //           ", pointerObjName: " + PointerObject.name);
-            
                 return;
-            }
-
+            
             if (sphere != null)
             {
                 Destroy(sphere);
@@ -58,38 +53,20 @@ namespace Travel
             var horizontalCoordinate = transformedPoint.z;
             var verticalCoordinate = transformedPoint.x;
 
-            var xRangeMin = ScalarFieldManager.CurrentField.ParameterRangeX.Item1; //ScalarFieldManager.InitFile.points.Min(p => p[0]);
-            var xRangeMax = ScalarFieldManager.CurrentField.ParameterRangeX.Item2; //ScalarFieldManager.InitFile.points.Max(p => p[0]);
-
+            var xRangeMin = ScalarFieldManager.CurrentField.ParameterRangeX.Item1; 
+            var xRangeMax = ScalarFieldManager.CurrentField.ParameterRangeX.Item2; 
+            
             var yRangeMin = ScalarFieldManager.CurrentField.ParameterRangeY.Item1;
             var yRangeMax = ScalarFieldManager.CurrentField.ParameterRangeY.Item2;
 
             var mappedX = CalcUtility.MapValueToRange(horizontalCoordinate, -0.5f, 0.5f, xRangeMin, xRangeMax);
             var mappedY = CalcUtility.MapValueToRange(verticalCoordinate, -0.5f, 0.5f, yRangeMin, yRangeMax);
         
-            // var mappedX = CalcUtility.MapRange(x, )
-            //
-            // var tmp = CalcUtility.MapRange()
-
-        
-        
-            
-        
-        
-        
-
-            // var finalIndex = 0;
-        
             var closestPointIndex = int.MaxValue;
             var minDist = float.MaxValue;
             for(var i = 0; i < ScalarFieldManager.CurrentField.RawPoints.Count; i++)
             {
                 var point = ScalarFieldManager.CurrentField.RawPoints[i];
-                // var differenceX = Mathf.Abs(point[0] - mappedX);
-                // var differenceY = Mathf.Abs(point[1] - mappedY);
-                //
-                // var difference = differenceX + differenceY;
-
                 var dist = Vector3.Distance(point, new Vector3(mappedX, mappedY));
                 
                 if (minDist > dist)
@@ -99,67 +76,13 @@ namespace Travel
                 }
             }
 
-            TravelManager.EstimatedIndex = closestPointIndex;
+            TravelManager.estimatedIndex = closestPointIndex;
         
-            Debug.Log("contact point: " + contact.point + // ", transformed point: " + transformedPoint +
+            Debug.Log("contact point: " + contact.point + 
                       ", mapped values: (" + mappedX + ", " + mappedY + ")" + 
                       ", ParamX(" + xRangeMin + ", " + xRangeMax + ")" +
                       ", ParamY(" + yRangeMin + ", " + yRangeMax + ")" +
-                      ", estimated index: " + TravelManager.EstimatedIndex);
-        
-            //Debug.Log();
-
-            // var x = transformedPoint.x;
-            // var y = transformedPoint.y;
-            // var z = transformedPoint.z;
-
-            //x += 0.5f;
-            //y += 0.5f;
-
-            //var finalPoint = transformedPoint;
-        
-            //Debug.Log("final point: " + finalPoint);
-        
-        
-
-            //var closestPoint = Physics.ClosestPoint(contact.point, collision.collider, collision.collider.transform.position,
-            //    collision.collider.transform.rotation);
-
-            //ScalarFieldManager.ClosestPointOnMesh = transformedPoint; //closestPoint;
-
-            // if(Physics.Raycast(new Ray(contact.point, Vector3.down), out RaycastHit hit))
-            // {
-            //     if (hit.collider is MeshCollider)
-            //     {
-            //         Debug.Log("Raycast Hit!");
-            //         var collider = hit.collider as MeshCollider;
-            //         var mesh = collider.sharedMesh;
-            //         
-            //         Debug.Log("Triangle: " + hit.triangleIndex + " / " + mesh.triangles.Length);
-            //         var p0 = mesh.vertices[mesh.triangles[hit.triangleIndex]];
-            //         var p1 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 1];
-            //         var p2 = mesh.vertices[mesh.triangles[hit.triangleIndex] + 2];
-            //
-            //         var p = p0.y > p1.y ? p0 : p1;
-            //         p = p2.y > p.y ? p2 : p;
-            //             
-            //         //ScalarFieldManager.ClosestPointOnMesh = hit.collider.transform.TransformPoint(p);
-            //         ScalarFieldManager.EstimatedIndex = mesh.triangles[hit.triangleIndex];
-            //     }
-            // }
-
-            // var mesh = GetComponent<MeshFilter>().mesh;
-            // for (int i = 0; i < mesh.vertices.Length; i++)
-            // {
-            //     var point = mesh.vertices[i];
-            //     var pointVec = transform.TransformPoint(point); //new Vector3(point.x, point.y, point.z);
-            //     if (pointVec == contact.point)
-            //     {
-            //         Debug.Log("Collided point: " + contact.point);
-            //         break;
-            //     }
-            // }
-
+                      ", estimated index: " + TravelManager.estimatedIndex);
         }
     }
 }

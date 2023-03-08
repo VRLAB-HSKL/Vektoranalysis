@@ -836,8 +836,7 @@ public class TubeMesh : MonoBehaviour
                     yield return null;
             }            
             
-            Debug.Log("point_i: " + i);
-            //yield return null;
+            //Debug.Log("point_i: " + i);
             
         }
         
@@ -866,7 +865,6 @@ public class TubeMesh : MonoBehaviour
         //var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
         var firstPoint = _polyline[0] * _scalingFactor;
         var firstCircle = _tubePoints.GetRange(0, NumberOfCirclePoints);
-
         
         _bottomLidMesh = GenerateLidMesh(firstPoint, firstCircle);
         _bottomLidMesh.name = "bottom lid mesh";

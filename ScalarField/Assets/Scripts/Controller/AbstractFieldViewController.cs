@@ -54,7 +54,6 @@ namespace Controller
             Views = new List<AbstractFieldView>();
         }
         
-        
         /// <summary>
         /// Switch to the view associated with the given index
         /// </summary>
@@ -68,27 +67,6 @@ namespace Controller
             CurrentView = Views[index];
         }
         
-        /// <summary>
-        /// Initialize views delegate
-        /// </summary>
-        private void InitViews()
-        {
-            foreach (var view in Views)
-            {
-                RawUpdateViewsDelegate += view.UpdateView;
-            }
-
-            if(Views.Count > 0)
-                UpdateViewsDelegate();
-
-            if (UpdateViewsDelegate is null)
-            {
-                Debug.Log("delegate is null");    
-            }
-            
-            
-            SwitchView(0);
-        }
 
     }
 }

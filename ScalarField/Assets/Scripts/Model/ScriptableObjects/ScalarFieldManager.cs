@@ -21,17 +21,17 @@ namespace Model.ScriptableObjects
         /// </summary>
         public ScalarField CurrentField => ScalarFields[CurrentFieldIndex];
 
-        private int fIds;
+        private int _fieldIdx;
 
         public int CurrentFieldIndex
         {
             get
             {
-                return fIds;
+                return _fieldIdx;
             }
             set
             {
-                fIds = value;
+                _fieldIdx = value;
             }
             
         }
@@ -139,19 +139,19 @@ namespace Model.ScriptableObjects
                     switch (type)
                     {
                         default:
-                            cp.Type = CriticalPointType.CRITICAL_POINT;
+                            cp.Type = CriticalPointType.CriticalPoint;
                             break;
                     
                         case "LOCAL_MINIMUM":
-                            cp.Type = CriticalPointType.LOCAL_MINIMUM;
+                            cp.Type = CriticalPointType.LocalMinimum;
                             break;
                     
                         case "LOCAL_MAXIMUM":
-                            cp.Type = CriticalPointType.LOCAL_MAXIMUM;
+                            cp.Type = CriticalPointType.LocalMaximum;
                             break;
                     
                         case "SADDLE_POINT":
-                            cp.Type = CriticalPointType.SADDLE_POINT;
+                            cp.Type = CriticalPointType.SaddlePoint;
                             break;
                     }
 
@@ -245,23 +245,19 @@ namespace Model.ScriptableObjects
                 {
                     Debug.LogWarning("Unable to find texture map in local resources!");
                 }
-        
-                texture.filterMode = FilterMode.Bilinear;
-                texture.wrapModeU = TextureWrapMode.MirrorOnce;
-                
+                else
+                {
+                    texture.filterMode = FilterMode.Bilinear;
+                    texture.wrapModeU = TextureWrapMode.MirrorOnce;    
+                }
+
                 sf.MeshTexture = texture;
-
-                //CurrentField = sf;
-
+                
                 ScalarFields.Add(sf);
             }
             
             TransparentTexture = Resources.Load("texture_maps/test/transparent_texture") as Texture2D;
             
-            //Debug.Log("idx: " + CurrentFieldIndex + ", sf count: " + ScalarFields.Count);
-            // Set index to 0 on application start
-            //CurrentFieldIndex = 0;
-
             if (CurrentFieldIndex >= ScalarFields.Count)
             {
                 CurrentFieldIndex = 0;
@@ -271,20 +267,12 @@ namespace Model.ScriptableObjects
         private List<List<Vector3>> ParsePath(List<List<float[]>> paths)
         {
             var retList = new List<List<Vector3>>();
-            for (var i = 0; i < paths.Count; i++)
+            foreach (var currPath in paths)
             {
-                var currPath = paths[i];
-                var vecList = new List<Vector3>();
-                for (var j = 0; j < currPath.Count; j++)
-                {
-                    var pathPoint = currPath[j];
-                    var vec = new Vector3(pathPoint[0], pathPoint[1], 0f);
-                    vecList.Add(vec);
-                }
-
+                var vecList = currPath.Select(p => new Vector3(p[0], p[1], 0f)).ToList();
                 retList.Add(vecList);
             }
-
+            
             return retList;
         }
     }

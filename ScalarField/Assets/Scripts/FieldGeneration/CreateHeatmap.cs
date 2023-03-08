@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Model;
 using Model.ScriptableObjects;
 using UnityEngine;
 using Utility;
@@ -69,6 +68,5 @@ namespace FieldGeneration
         
             gameObject.SetActive(ShowOnStartup);
         }
-
     }
 }

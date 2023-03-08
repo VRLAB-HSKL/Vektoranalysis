@@ -1,6 +1,6 @@
-using Calculation;
 using Model.ScriptableObjects;
 using UnityEngine;
+using Utility;
 
 namespace FieldGeneration
 {

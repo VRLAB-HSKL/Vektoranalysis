@@ -48,17 +48,17 @@ public class CreateCriticalPoints : MonoBehaviour
 
             switch (cp.Type)
             {
-                case CriticalPointType.CRITICAL_POINT:
+                case CriticalPointType.CriticalPoint:
                     DrawingUtility.DrawSphere(pos, transform, Color.blue, bbScale);
                     break;
                 
-                case CriticalPointType.LOCAL_MINIMUM:
+                case CriticalPointType.LocalMinimum:
                     DrawingUtility.DrawSphere(pos, transform, Color.black, bbScale);
                     break;
-                case CriticalPointType.LOCAL_MAXIMUM:
+                case CriticalPointType.LocalMaximum:
                     DrawingUtility.DrawSphere(pos, transform, Color.white, bbScale);
                     break;
-                case CriticalPointType.SADDLE_POINT:
+                case CriticalPointType.SaddlePoint:
                     DrawingUtility.DrawSphere(pos, transform, Color.gray, bbScale);
                     break;
             }

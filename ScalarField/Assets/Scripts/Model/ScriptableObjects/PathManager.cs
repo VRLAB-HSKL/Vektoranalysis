@@ -12,7 +12,6 @@ namespace Model.ScriptableObjects
         /// Path to the init file resource
         /// </summary>
         public const string InitFileResourcePath = "json/init/sf_initFile";
-
         public const string FormulaImageResourcePath = "img/latex/";    
     }
 }

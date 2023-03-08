@@ -2,9 +2,9 @@
 {
     public enum CriticalPointType
     {
-        CRITICAL_POINT = 0,
-        LOCAL_MINIMUM = 1,
-        LOCAL_MAXIMUM = 2,
-        SADDLE_POINT = 3
+        CriticalPoint = 0,
+        LocalMinimum = 1,
+        LocalMaximum = 2,
+        SaddlePoint = 3
     }
 }

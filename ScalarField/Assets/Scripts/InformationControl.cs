@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using Model;
 using Model.ScriptableObjects;
 using TMPro;
 using UnityEngine;
@@ -16,7 +12,6 @@ public class InformationControl : MonoBehaviour
     [Header("Dependencies")]
     public Image FormulaImage;
     public TextMeshProUGUI NameValueText;
-    
     
     void Start()
     {

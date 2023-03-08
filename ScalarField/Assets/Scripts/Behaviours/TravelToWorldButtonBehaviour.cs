@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VR.Scripts.Behaviours.Button;
@@ -37,8 +36,6 @@ namespace Behaviours
         /// <returns>Enumerator for the coroutine</returns>
         private IEnumerator LoadSceneAsync(string sceneName)
         {
-            //DontDestroyOnLoad(this);
-            
             // Load next scene asynchronously
             var asyncOp = SceneManager.LoadSceneAsync(sceneName);
 
