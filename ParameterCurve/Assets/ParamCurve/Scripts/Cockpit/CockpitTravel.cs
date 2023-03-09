@@ -75,7 +75,7 @@ namespace ParamCurve.Scripts.Cockpit
             _initTimeVelTravelPos = TimeVelocityTravelObject.transform.localPosition;
 
             // ToDo: Remove this!
-            var path = string.Empty;
+            var path = Application.persistentDataPath  + "/linecoords.txt";;
         
             using (StreamReader reader = new StreamReader(path))
             {

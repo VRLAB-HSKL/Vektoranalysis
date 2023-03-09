@@ -209,17 +209,14 @@ namespace ParamCurve.Scripts.UI
             }
         }
 
-
         private void FindObjectsInScene()
         {
             mainMenuParent ??= GameObject.Find("MainMenu");
             mainMenuContent ??= GameObject.Find("MainMenuContent");
-            //mainMenuButtonPrefab ??= 
-
+            
             curveMenuParent ??= GameObject.Find("CurveMenu");
             curveMenuContent ??= GameObject.Find("CurveMenuContent");
         }
-
 
         #endregion Private functions
     }
