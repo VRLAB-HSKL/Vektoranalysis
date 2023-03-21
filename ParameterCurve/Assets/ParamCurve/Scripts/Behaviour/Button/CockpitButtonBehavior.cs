@@ -3,6 +3,7 @@ using System.IO;
 using Model;
 using ParamCurve.Scripts.Controller;
 using ParamCurve.Scripts.Model;
+using ParamCurve.Scripts.Views;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,6 +24,9 @@ namespace ParamCurve.Scripts.Behaviour.Button
         /// </summary>
         public LineRenderer line;
 
+        public TubeMesh lineMesh;
+        
+        
         /// <summary>
         /// Panel confirming that the user wants to enter cockpit mode, contains yes and cancel buttons
         /// </summary>
@@ -79,21 +83,21 @@ namespace ParamCurve.Scripts.Behaviour.Button
                     writer.WriteLine("2");
                 }                
         
-                writer.WriteLine(line.positionCount);
+                writer.WriteLine(lineMesh.polyline.Count);
         
                 //write points of current linerenderer to text file to be read by new line renderer
-                for (int i = 0; i < line.positionCount; i++)
+                for (int i = 0; i < lineMesh.polyline.Count; i++)
                 {
-                    var x = line.GetPosition(i).x;
+                    var x = lineMesh.polyline[i].x;
                     //subtract 1 to offset parent TableCurve height
-                    var y = line.GetPosition(i).y - 1;
+                    var y = lineMesh.polyline[i].y - 1;
                     //add 2.5 to offset table position 
-                    var z = line.GetPosition(i).z + 2.5f;
+                    var z = lineMesh.polyline[i].z + 2.5f;
         
                     //writer.WriteLine(x + " " + y + " " + z);
                     //table display is already flat, no need to rotate
                     //scale up size to match cockpit
-                    var scaleFactor = 35f;
+                    var scaleFactor = 1f;//35f;
                     writer.WriteLine(scaleFactor * x + " " + scaleFactor * y + " " + scaleFactor * z);
         
                     FresnetSerretApparatus fsr = 

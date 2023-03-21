@@ -107,7 +107,10 @@ namespace ParamCurve.Scripts.Cockpit
                     //read in current point xyz coordinates
                     str = reader.ReadLine();
                     string[] xyz = str.Split(' ');
-                    Vector3 coords = new Vector3(float.Parse(xyz[0]), float.Parse(xyz[1]), float.Parse(xyz[2]));
+                    Vector3 coords = new Vector3(
+                        float.Parse(xyz[0]), 
+                        float.Parse(xyz[is3D ? 1 : 2]), 
+                        float.Parse(xyz[is3D ? 2 : 1]));
                     CurveLine.SetPosition(i, coords);
                     curvePoints.Add(coords);
 

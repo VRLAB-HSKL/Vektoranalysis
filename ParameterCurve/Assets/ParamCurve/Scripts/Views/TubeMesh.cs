@@ -28,6 +28,8 @@ namespace ParamCurve.Scripts.Views
         /// </summary>
         public float tubeMeshScalingFactor = 1f;
 
+        public List<Vector3> polyline = new List<Vector3>();
+        
         #endregion Public members
     
     
@@ -120,7 +122,7 @@ namespace ParamCurve.Scripts.Views
     
         private const float CircleDegree = 1f / 360f;
 
-        private List<Vector3> _polyline = new List<Vector3>();
+
         private List<Vector3> _tanPerpendicularVectors = new List<Vector3>();
     
         #endregion Private members
@@ -143,6 +145,7 @@ namespace ParamCurve.Scripts.Views
         
         }
 
+        
         public void SetScalingFactor(float val)
         {
             _scalingFactor = val;
@@ -156,7 +159,7 @@ namespace ParamCurve.Scripts.Views
         /// </summary>
         public void GenerateFieldMesh(List<Vector3> polyline, List<Vector3> tanPerpendicularVectors)
         {
-            _polyline = polyline;
+            this.polyline = polyline;
             _tanPerpendicularVectors = tanPerpendicularVectors;
             CalculateMesh();
         }
@@ -202,16 +205,16 @@ namespace ParamCurve.Scripts.Views
             // ToDo: Refactor this into second view / subclass
             if(_numberOfSamplingPoints != -1)
             {
-                var div = _polyline.Count / _numberOfSamplingPoints;
+                var div = polyline.Count / _numberOfSamplingPoints;
                 _degreeStepSize = _numberOfSamplingPoints;
 
                 var newPointList = new List<Vector3>();
-                for(var i = 0; i < _polyline.Count; i++)
+                for(var i = 0; i < polyline.Count; i++)
                 {
                     // Only sample every nth point
                     if(i % div == 0)
                     {
-                        var p = _polyline[i];
+                        var p = polyline[i];
                         newPointList.Add(p);
                     }
                 }
@@ -247,16 +250,16 @@ namespace ParamCurve.Scripts.Views
                 
                 }
 
-                _polyline = newPointList;
+                polyline = newPointList;
             }
         
             // Calculate surface mesh points
-            for (var i = 0; i < _polyline.Count; i++)
+            for (var i = 0; i < polyline.Count; i++)
             {
                 //yield return null;
             
                 // Get curve point and direction vectors
-                var centerPoint = _polyline[i];
+                var centerPoint = polyline[i];
 
                 // DrawingUtility.DrawSphere(centerPoint, transform, Color.blue, 
                 //     new Vector3(0.1f, 0.1f, 0.1f), sphereMat);
@@ -266,14 +269,14 @@ namespace ParamCurve.Scripts.Views
             
                 // On first point, generate tangent pointing to next point since
                 // we don't have any velocity at the beginning, i.e. the tangent is (0,0,0)
-                if (i < _polyline.Count - 1)
+                if (i < polyline.Count - 1)
                 {
-                    tangent = (_polyline[i + 1] - centerPoint).normalized;// * radius;
+                    tangent = (polyline[i + 1] - centerPoint).normalized;// * radius;
                     //biNormal = Vector3.down; //curve.FresnetApparatuses[i + 1].Binormal;
                 }
                 else
                 {
-                    tangent = (_polyline[i - 1] - centerPoint).normalized;
+                    tangent = (polyline[i - 1] - centerPoint).normalized;
                     //biNormal = Vector3.down;
                 }
 
@@ -338,7 +341,7 @@ namespace ParamCurve.Scripts.Views
         private IEnumerator GenerateBottomLidMesh()
         {
             //var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-            var firstPoint = _polyline[0] * _scalingFactor;
+            var firstPoint = polyline[0] * _scalingFactor;
             var firstCircle = _tubePoints.GetRange(0, NumberOfCirclePoints);
 
         
@@ -374,7 +377,7 @@ namespace ParamCurve.Scripts.Views
         private IEnumerator GenerateTopLidMesh()
         {
             //var curve = GlobalDataModel.DisplayCurveDatasets[GlobalDataModel.CurrentCurveIndex];
-            var lastPoint = _polyline[_polyline.Count - 1] * _scalingFactor;
+            var lastPoint = polyline[polyline.Count - 1] * _scalingFactor;
             var lastCircle = _tubePoints.GetRange(
                 _tubePoints.Count - NumberOfCirclePoints - 1, NumberOfCirclePoints);
         
